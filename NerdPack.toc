@@ -13,11 +13,10 @@ interface\alert.lua
 interface\status.lua
 interface\info.lua
 interface\config.lua
-interface\overlays.lua
+system\ObjectCache.lua
 system\Tracker.lua
 system\Extras.lua
 system\Overlays.lua
-system\ObjectCache.lua
 system\Libs\core.lua
 system\Libs\priest.lua
 system\Libs\dk.lua

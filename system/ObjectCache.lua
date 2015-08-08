@@ -73,6 +73,20 @@ local oresIDs = {
 	232541,
 }
 
+local fishIDs = {
+	229072,
+	229073,
+	229069,
+	229068,
+	243325,
+	243354,
+	229070,
+	229067,
+	236756,
+	237295,
+	229071,
+}
+
 --[[-----------------------------------------------
 	ID's to display Herbs IDs
 	Used for overlays.
@@ -251,7 +265,7 @@ local firehackOM = function()
 							local ObjectID = tonumber(_id)
 		
 							-- Lumbermill
-							if NeP.Core.PeFetch("npconf_Overlays", "objectsLM") then
+							if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
 								for k,v in pairs(lumbermillIDs) do
 									if ObjectID == v then
 										NeP.ObjectManager.objectsCacheTotal = NeP.ObjectManager.objectsCacheTotal + 1
@@ -261,7 +275,7 @@ local firehackOM = function()
 								end
 							end	
 							-- Ores
-							if NeP.Core.PeFetch("npconf_Overlays", "objectsOres") then
+							if NeP.Core.PeFetch("NePconf_Overlays", "objectsOres") then
 								for k,v in pairs(oresIDs) do
 									if ObjectID == v then
 										NeP.ObjectManager.objectsCacheTotal = NeP.ObjectManager.objectsCacheTotal + 1
@@ -271,7 +285,7 @@ local firehackOM = function()
 								end
 							end
 							-- Herbs
-							if NeP.Core.PeFetch("npconf_Overlays", "objectsHerbs") then
+							if NeP.Core.PeFetch("NePconf_Overlays", "objectsHerbs") then
 								for k,v in pairs(herbsIDs) do
 									if ObjectID == v then
 										NeP.ObjectManager.objectsCacheTotal = NeP.ObjectManager.objectsCacheTotal + 1
@@ -280,7 +294,17 @@ local firehackOM = function()
 									end
 								end
 							end
-										
+							-- Fish
+							if NeP.Core.PeFetch("NePconf_Overlays", "objectsFishs") then
+								for k,v in pairs(fishIDs) do
+									if ObjectID == v then
+										NeP.ObjectManager.objectsCacheTotal = NeP.ObjectManager.objectsCacheTotal + 1
+										table.insert(NeP.ObjectManager.objectsCache, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='Fish'})
+										table.sort(NeP.ObjectManager.objectsCache, function(a,b) return a.distance < b.distance end)
+									end
+								end
+							end
+
 						-- Units OM
 						elseif ObjectIsType(object, ObjectTypes.Unit) and ProbablyEngine.condition["alive"](object) then
 							if not BlacklistedDebuffs(object) then
@@ -288,6 +312,7 @@ local firehackOM = function()
 								local health = math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100)
 								local maxHealth = UnitHealthMax(object)
 								local actualHealth = UnitHealth(object)
+								local _class = UnitClassification(object)
 												
 								-- Friendly Cache
 								if UnitIsFriend("player", object) then
@@ -309,7 +334,7 @@ local firehackOM = function()
 									-- Enabled on GUI and unit affecting combat
 									if NeP.Core.PeFetch("ObjectCache", "EU") then
 										NeP.ObjectManager.unitCacheTotal = NeP.ObjectManager.unitCacheTotal + 1
-										table.insert(NeP.ObjectManager.unitCache, {key=object, distance=objectDistance, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=ObjectName})
+										table.insert(NeP.ObjectManager.unitCache, {key=object, distance=objectDistance, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=ObjectName, class=_class})
 										table.sort(NeP.ObjectManager.unitCache, function(a,b) return a.distance < b.distance end)
 									end
 								end			
