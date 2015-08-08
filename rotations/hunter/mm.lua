@@ -1,134 +1,142 @@
 local lib = function()
 	NeP.Splash()
+	ProbablyEngine.toggle.create(
+		'ressPet', 
+		'Interface\\Icons\\Inv_misc_head_tiger_01.png', 
+		'Auto Ress Pet', 
+		'Automatically ress your pet when it dies.')
 end
 
-local inCombat = {
-	
-	-- SPECIAL
-		{ "!53351", (function() return NeP.Lib.AutoDots(53351, 0, 20) end) },-- Kill Shot
-	
-	{{-- Interrumpt
-		{ "147362" }, -- Counter Shot
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+local _ALL = {
+	-- Pause
+	{ "pause", "player.buff(5384)" }, -- Pause for Feign Death
+	-- Keybinds
+	{ "82939", "modifier.alt", "target.ground" }, -- Explosive Trap
+	{ "60192", "modifier.shift", "target.ground" }, -- Freezing Trap
+	{ "82941", "modifier.shift", "target.ground" }, -- Ice Trap
+	-- Buffs
+	{"77769", "!player.buff(77769)"}, -- Trap Launcher
+		-- Aspect of the Cheetah
+		{ "/cancelaura Aspect of the Cheetah", { 
+			"player.buff(5118)",
+			"!player.glyph(692)", 
+			"!player.moving"
+		}},
+		{ "/cancelaura Aspect of the Cheetah", { 
+			"player.buff(5118)",
+			"!player.glyph(692)", 
+			"player.aggro >= 100"
+		}},
+		{ "5118", {
+			"!player.buff(5118)", 
+			"player.movingfor >= 3",
+			"!player.aggro >= 100"
+		}},
+	-- Missdirect // Focus
+	{ "34477", { 
+		"focus.exists", 
+		"!player.buff(35079)", 
+		"target.threat > 60" 
+	}, "focus" },
+}
 
-	-- PET
-		{ "34477", { -- Misdirect on [[ Focus ]]
-			"focus.exists", 
-			"!player.buff(35079)", 
-			"target.threat > 60" 
-		}, "focus" },
-		{ "34477", { -- Misdirect on [[ Pet ]]
-			"pet.exists", 
-			"!pet.dead", 
+local Pet = {
+  	{{ -- Pet Dead
+		{ "55709", "!player.debuff(55711)"}, -- Heart of the Phoenix
+		{ "982" } -- Revive Pet
+	}, {"pet.dead", "toggle.ressPet"}},
+  	{{ -- Pet Alive
+		{ "53271", "player.state.stun" }, -- Master's Call
+		{ "53271", "player.state.root" }, -- Master's Call
+		{ "53271", { -- Master's Call
+			"player.state.snare", 
+			"!player.debuff(Dazed)" 
+		}},
+		{ "53271", "player.state.disorient" }, -- Master's Call
+		{ "136", { -- Mend Pet
+			"pet.health <= 75", 
+			"!pet.buff(136)" 
+		}}, 
+		{ "34477", { -- Missdirect // PET 
 			"!player.buff(35079)", 
 			"!focus.exists", 
 			"target.threat > 85" 
 		}, "pet" },
-		{{	-- Master's Call when stuck
-		    { "53271", "player.state.stun" }, -- Use when Stunned
-		    { "53271", "player.state.root" }, -- Use when Rooted
-		    { "53271", "player.state.snare" }, -- Use when Snared
-		}, "!talent(7,3)" },
-		{ "136", {  -- Mend Pet
-			"pet.health <= 95", 
-			"pet.exists", 
-			"!pet.dead", 
-			"!pet.buff(136)", 
-			"!talent(7,3)" 
-		} --[[  No Target  ]] },
-		{ "!/cast [@pet,dead] Revive Pet; Call Pet 1", {
-			"!pet.alive",
-			"toggle.resspet"
-		}, "!talent(7,3)" },
-
-	{{ -- Cooldowns
-      { "Stampede", "player.buff(Rapid Fire)" },
-      { "Lifeblood" },
-      { "Berserking" },
-      { "Blood Fury" },
-      { "Bear Hug" },
-    }, "modifier.cooldowns" },
-
-    -- Items
-    	--{ "#trinket1" },
-      	--{ "#trinket2" },
-
-	-- Survival
-		{ "Deterrence", "player.health <= 25" }, -- Deterrence as a last resort!
-		{ "#5512", "player.health < 40" }, -- Healthstone
-	
-	-- Keybinds / Traps
-		{ "82939", "modifier.lshift", "target.ground" }, -- Explosive Trap
-	  	{ "82941", "modifier.lshift", "target.ground" }, -- Ice Trap
-		{ "19386", "modifier.lalt", "mouseover" }, -- Wyvern Sting	
-		{ "60192", "modifier.lalt", "mouseover.ground" }, -- Freeze Trap
-		{ "77769", "!player.buff(77769)" }, -- Trap Launcher
-	
-  	-- Aggro
-  		{ "5384", "player.aggro >= 100" }, -- Feign Death
-		{ "pause", "player.buff(5384)" }, -- Pause for Feign Death
-
-	-- AoE
-		{{-- Fallback Aoe
-			{ "82939", nil, "target.ground" }, -- Explosive Trap
-			{ "2643" }, -- Multi-Shot
-		}, "modifier.multitarget" },
-		{ "82939", "player.area(35).enemies > 4", "target.ground" }, -- Explosive Trap
-		{ "2643", "player.area(35).enemies > 4", "target" }, -- Multi-Shot
-		{ "Barrage" },
-
-	-- SINGLE TARGET
-	    { "A Murder of Crows" },
-	    { "Glaive Toss" },
-	    { "Chimaera Shot" }, 
-		    {{-- Careful Aim // 80% heaçth
-				{ "Aimed Shot", "player.focus >= 35", "target" },
-				{ "Focusing Shot", "player.timetomax > 4", "target" },
-				{ "Steady Shot" },
-			}, "target.health >= 80" },
-			{{-- Careful Aim // Buff Rapid Fire
-				{ "Aimed Shot", "player.focus >= 35", "target" },
-				{ "Focusing Shot", "player.timetomax > 4", "target" },
-				{ "Steady Shot" },
-			}, "player.buff(Rapid Fire)" },
-		    { "Dire Beast", "player.timetomax > 3" },
-		    { "Powershot", "player.timetomax > 2.5", "target" },
-		    { "Barrage" },
-		    { "Steady Shot", "player.timetomax > player.spell(Rapid Fire).cooldown", "target" },
-		    { "Focusing Shot", "player.focus < 50", "target" },
-		    { "Steady Shot", { 
-		    	"player.buff(Steady Focus)", 
-		    	"player.timetomax > 5" 
-		    }, "target" },
-		    { "Aimed Shot", "player.spell(Focusing Shot).exists", "target" },
-		    { "Aimed Shot", "player.focus > 80", "target" },
-		    { "Aimed Shot", { 
-		    	"player.buff(34720)", 
-		    	"player.focus > 60" 
-		    }, "target" },
-		    { "Focusing Shot", "player.focus < 50", "target" },
-		    { "Steady Shot" },
-
+	}, "pet.alive" },
 }
 
-
-local outCombat = {
-
-	{ "136", {  -- Mend Pet
-		"pet.health <= 95", 
-		"pet.exists", 
-		"!pet.dead", 
-		"!pet.buff(136)", 
-		"!talent(7,3)" }},
-	
-	
-	-- Keybinds / Traps
-	{ "19386", "modifier.lalt", "mouseover" }, -- Wyvern Sting	
-	{ "60192", "modifier.lalt", "mouseover.ground" }, -- Freeze Trap
-	{ "77769", "!player.buff(77769)" }, -- Trap Launcher		
-		
+local Cooldowns = {
+	{ "121818", "player.proc.any" }, -- Stampede
+	{ "121818", "player.hashero" }, -- Stampede
+	{ "121818", "player.buff(19615).count >= 4" }, --Stampede w/ Frenzy
+	{ "131894" }, -- A Murder of Crows
+	{ "Lifeblood" },
+	{ "Berserking" },
+	{ "Blood Fury" },
+	{ "#trinket1" },
+	{ "#trinket2" },
 }
 
+local Survival = {
+	{ "5384", { "player.aggro >= 100", "modifier.party", "!player.moving" }}, -- Fake death
+	{ "109304", "player.health < 50" }, -- Exhiliration
+	{ "Deterrence", "player.health < 10" }, -- Deterrence as a last resort
+	{ "#109223", "player.health < 40" }, -- Healing Tonic
+	{ "#5512", "player.health < 40" }, -- Healthstone
+	{ "#109223", "player.health < 40" }, -- Healing Tonic
+}
 
-ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksmanship'), 
-	inCombat, outCombat, lib)
+local focusFire = {	
+	{ "82692", {
+		"player.buff(19615).count = 5",  -- Frenzy
+		"player.spell(19574).cooldown <= 10", -- Bestial Wrath
+	}},
+	{ "82692", {
+		"player.buff(19615).count = 5", -- Frenzy
+		"player.spell(19574).cooldown >= 19", -- Bestial Wrath
+	}},
+	{ "82692", "player.buff(19574).duration >= 3" }, -- Bestial Wrath
+	{ "!82692", "player.buff(19615).duration <= 1" }, -- Frenzy
+	{ "82692", "player.spell(121818).cooldown >= 260" }, -- Stampede
+	{ "82692", {
+		"player.spell(19574).cooldown = 0", -- Bestial Wrath
+		"!player.buff(19574)" -- Bestial Wrath
+	}},
+}
+
+local inCombat = {
+	{{ -- Steady Focus // TALENT
+		{ "Steady Shot", "player.buff(177667).duration < 3", "target" }, -- Cobra Shot
+	}, { "talent(4,1)", "lastcast(77767)"} },
+	{ "157708", (function() return NeP.Lib.AutoDots(157708, 35) end) },-- Kill Shot
+	{ "53209" }, -- Chimaera Shot
+	{ "117050" }, -- Glaive Toss // TALENT
+	{{ -- AoE
+		{ "2643", "player.focus > 60", "target" }, -- Multi-Shot
+	}, "modifier.multitarget" },
+	{ "19434", "player.focus > 60", "target" }, -- Aimed Shot
+	{ "163485" }, -- Focusing Shot // TALENT
+	{ "Steady Shot" }
+}
+
+ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksmanship'),
+	{ -- In-Combat
+		{_ALL},
+		{{-- Interrupts
+			{ "147362" }, -- Counter Shot
+			{ "19577" }, -- Intimidation
+			{ "19386" }, -- Wyrven Sting
+		}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+		{{ -- General Conditions
+			{Survival, "player.health < 100"},
+			{Cooldowns, "modifier.cooldowns"},
+			{Pet, { "player.alive", "pet.exists" }},
+			{focusFire, { 
+				"pet.exists", 
+				"!player.buff(Focus Fire)", 
+				"!lastcast(Cobra Shot)", 
+				"player.buff(19615).count >= 1" 
+			}},
+			{inCombat, { "target.exists", "target.range <= 40" }},
+		}, "!player.channeling" }
+	}, _All, lib)
