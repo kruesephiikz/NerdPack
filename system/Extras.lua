@@ -10,7 +10,6 @@ DESC: Moves to a unit.
 
 Build By: MTS
 ---------------------------------------------------]]
-local _moving = 0
 function NeP.Extras.MoveTo()
 	local _classRange = {
 		["HUNTER"] = {style = "ranged", Range = 30},
@@ -27,21 +26,20 @@ function NeP.Extras.MoveTo()
 	}
 	local _class, _className = UnitClass('player')
 	local _range = _classRange[_className]
+	local unitSpeed, _ = GetUnitSpeed('player')
   	if NeP.Core.PeFetch('npconf', 'AutoMove') then
   		if UnitExists('target') 
 		and UnitIsVisible('target') 
 		and not UnitChannelInfo("player") then
-			local name = GetUnitName('target', false)
 			if FireHack then
-				if ((_range.style == "ranged" and NeP.Lib.Distance("player", 'target') <= _range.Range - 5)
-				or (_range.style == "melee" and NeP.Lib.Distance("player", 'target') <= _range.Range))
-				and _moving == 1 then 
-					_moving = 0
+				-- Stop Moving
+				if ((_range.style == "ranged" and NeP.Lib.Distance("player", 'target') < _range.Range - 5)
+				or (_range.style == "melee" and NeP.Lib.Distance("player", 'target') < _range.Range))
+				and unitSpeed ~= 0 then 
 					MoveTo(ObjectPosition('player'))
-				elseif NeP.Lib.Distance("player", 'target') > _range.Range
-				and _moving == 0 then
-					NeP.Alert('Moving to: '..name) 
-					_moving = 1
+				-- Start Moving
+				elseif NeP.Lib.Distance("player", 'target') > _range.Range then
+					NeP.Alert('Moving to: '..GetUnitName('target', false)) 
 					MoveTo(ObjectPosition('target'))
 				end
 			end
@@ -58,7 +56,8 @@ Build By: MTS
 function NeP.Extras.FaceTo()
 	if NeP.Core.PeFetch('npconf', 'AutoFace') then
 		local unitSpeed, _ = GetUnitSpeed('player')
-		if UnitExists('target') and UnitIsVisible('target') 
+		if UnitExists('target') 
+		and UnitIsVisible('target') 
 		and unitSpeed == 0 
 		and not UnitChannelInfo("player") then
 			local name = GetUnitName('target', false)
