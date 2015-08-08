@@ -12,22 +12,16 @@ Build By: MTS
 ---------------------------------------------------]]
 function NeP.Extras.MoveTo()
   	if NeP.Core.PeFetch('npconf', 'AutoMove') then
-  		if UnitExists('target') and UnitIsVisible('target') then
+  		if UnitExists('target') and UnitIsVisible('target') and not UnitChannelInfo("player") then
 			local name = GetUnitName('target', false)
 			if FireHack then
-				local aX, aY, aZ = ObjectPosition('target')
-				if NeP.Lib.Distance("player", 'target') >= 6 + (UnitCombatReach('player') + UnitCombatReach('target')) then
-					NeP.Alert('Moving to: '..name) 
-					MoveTo(aX, aY, aZ)
-				end
-			elseif WOWSX_ISLOADED then
 				local aX, aY, aZ = ObjectPosition('target')
 				if NeP.Lib.Distance("player", 'target') >= 6 then
 					NeP.Alert('Moving to: '..name) 
 					MoveTo(aX, aY, aZ)
 				end
 			end
-	  	end
+		end
 	end
 end
 
@@ -40,19 +34,12 @@ Build By: MTS
 function NeP.Extras.FaceTo()
 	if NeP.Core.PeFetch('npconf', 'AutoFace') then
 	local unitSpeed, _ = GetUnitSpeed('player')
-	  	if UnitExists('target') and UnitIsVisible('target') and unitSpeed == 0 and not UnitChannelInfo("player") then
+			if UnitExists('target') and UnitIsVisible('target') and unitSpeed == 0 and not UnitChannelInfo("player") then
 			local name = GetUnitName('target', false)
 			if not NeP.Lib.Infront('target') then
 				if FireHack then
 					NeP.Alert('Facing: '..name) 
 					FaceUnit('target')
-				elseif oexecute then
-					NeP.Alert('Facing: '..name) 
-					FaceToUnit('target')
-				elseif WOWSX_ISLOADED then
-					local radian = ObjectFacing("target")
-					NeP.Alert('Facing: '..name) 
-					Face(radian+PI)
 				end
 			end
 		end
@@ -66,14 +53,69 @@ DESC: Checks if unit can/should be targeted.
 Build By: MTS & StinkyTwitch
 ---------------------------------------------------]]
 function NeP.Extras.autoTarget(unit, name)
+	local _forceTarget = {
+		-- WOD DUNGEONS/RAIDS
+		75966,      -- Defiled Spirit (Shadowmoon Burial Grounds)
+		76220,      -- Blazing Trickster (Auchindoun Normal)
+		76222,      -- Rallying Banner (UBRS Black Iron Grunt)
+		76267,      -- Solar Zealot (Skyreach)
+		76518,      -- Ritual of Bones (Shadowmoon Burial Grounds)
+		77252,      -- Ore Crate (BRF Oregorger)
+		77665,      -- Iron Bomber (BRF Blackhand)
+		77891,      -- Grasping Earth (BRF Kromog)
+		77893,      -- Grasping Earth (BRF Kromog)
+		86752,      -- Stone Pillars (BRF Mythic Kromog)
+		78583,      -- Dominator Turret (BRF Iron Maidens)
+		78584,      -- Dominator Turret (BRF Iron Maidens)
+		79504,      -- Ore Crate (BRF Oregorger)
+		79511,      -- Blazing Trickster (Auchindoun Heroic)
+		81638,      -- Aqueous Globule (The Everbloom)
+		86644,      -- Ore Crate (BRF Oregorger)
+		94873,      -- Felfire Flamebelcher (HFC)
+		90432,      -- Felfire Flamebelcher (HFC)
+		95586,      -- Felfire Demolisher (HFC)
+		93851,      -- Felfire Crusher (HFC)
+		90410,      -- Felfire Crusher (HFC)
+		94840,      -- Felfire Artillery (HFC)
+		90485,      -- Felfire Artillery (HFC)
+		93435,      -- Felfire Transporter (HFC)
+		93717,      -- Volatile Firebomb (HFC)
+		188293,     -- Reinforced Firebomb (HFC)
+		94865,      -- Grasping Hand (HFC)
+		93838,      -- Grasping Hand (HFC)
+		93839,      -- Dragging Hand (HFC)
+		91368,      -- Crushing Hand (HFC)
+		94455,      -- Blademaster Jubei'thos (HFC)
+		90387,      -- Shadowy Construct (HFC)
+		90508,      -- Gorebound Construct (HFC)
+		90568,      -- Gorebound Essence (HFC)
+		94996,      -- Fragment of the Crone (HFC)
+		95656,      -- Carrion Swarm (HFC)
+		91540,      -- Illusionary Outcast (HFC)
+	}
 	if NeP.Core.PeFetch('npconf', 'AutoTarget') then
 		if UnitExists("target") and not UnitIsFriend("player", "target") and not UnitIsDeadOrGhost("target") then
 			-- Do nothing
 		else
 			for i=1,#NeP.ObjectManager.unitCache do
-				if NeP.ObjectManager.unitCache[i].name ~= UnitName("player") then
-					NeP.Alert('Targeting: '..NeP.ObjectManager.unitCache[i].name) 
-					Macro("/target "..NeP.ObjectManager.unitCache[i].key)
+				local _object = NeP.ObjectManager.unitCache[i]
+				if UnitExists(_object.key) and UnitAffectingCombat(_object.key) then
+					if _object.distance <= 40 then
+						local _,_,_,_,_,unitID = strsplit("-", UnitGUID(_object.key))
+						for k,v in pairs(_forceTarget) do
+							if tonumber(unitID) == v then 
+								NeP.Alert('Targeting: '.._object.name) 
+								Macro("/target ".._object.key)
+								NeP.Core.Print(_object.name)
+								break
+							end
+						end
+						if NeP.ObjectManager.unitCache[i].name ~= UnitName("player") then
+							NeP.Alert('Targeting: '.._object.name) 
+							Macro("/target ".._object.key)
+							break
+						end
+					end
 				end
 			end
 		end
@@ -100,13 +142,15 @@ function NeP.Extras.autoMilling()
 		109128, -- Nagrand Arrowbloom
 		109129 -- Talador Orchid
 	}
+	local _millSpell = 51005
 	if NeP.AutoMilling then
-		if IsSpellKnown(51005) then
+		if IsSpellKnown(_millSpell) then
 			for i=1,#Milling_Herbs do
-				if GetItemCount(Milling_Herbs[i],false,false) >= 5 then 
-					Cast(51005) 
+				if GetItemCount(Milling_Herbs[i], false, false) >= 5 then 
+					Cast(_millSpell) 
 					UseItem(Milling_Herbs[i])
 					NeP.Core.Print('Milling '..Milling_Herbs[i])
+					break
 				else	
 					NeP.AutoMilling = false
 					NeP.Core.Print('Stoped milling, you dont have enough mats.')
