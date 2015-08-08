@@ -32,15 +32,20 @@ function NeP.Extras.MoveTo()
 		and UnitIsVisible('target') 
 		and not UnitChannelInfo("player") then
 			if FireHack then
-				-- Stop Moving
-				if ((_range.style == "ranged" and NeP.Lib.Distance("player", 'target') < _range.Range - 5)
-				or (_range.style == "melee" and NeP.Lib.Distance("player", 'target') < _range.Range))
-				and unitSpeed ~= 0 then 
-					MoveTo(ObjectPosition('player'))
-				-- Start Moving
-				elseif NeP.Lib.Distance("player", 'target') > _range.Range then
-					NeP.Alert('Moving to: '..GetUnitName('target', false)) 
-					MoveTo(ObjectPosition('target'))
+				if not GetKeyState('65') -- A
+				and not GetKeyState('83') -- S
+				and not GetKeyState('68') -- D
+				and not GetKeyState('87') then -- W
+					-- Stop Moving
+					if ((_range.style == "ranged" and NeP.Lib.Distance("player", 'target') < _range.Range - 5)
+					or (_range.style == "melee" and NeP.Lib.Distance("player", 'target') < _range.Range))
+					and unitSpeed ~= 0 then 
+						MoveTo(ObjectPosition('player'))
+					-- Start Moving
+					elseif NeP.Lib.Distance("player", 'target') > _range.Range then
+						NeP.Alert('Moving to: '..GetUnitName('target', false)) 
+						MoveTo(ObjectPosition('target'))
+					end
 				end
 			end
 		end
