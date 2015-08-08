@@ -5,6 +5,8 @@
 ## Author: MrTheSoulz
 
 system\Core.lua
+system\Libs\LibDraw\LibDraw.lua
+system\Libs\LibStub\LibStub.lua
 interface\minimap.lua
 interface\splash.lua
 interface\alert.lua
@@ -12,7 +14,6 @@ interface\status.lua
 interface\info.lua
 interface\config.lua
 interface\overlays.lua
-system\Libs\LibDraw.lua
 system\Tracker.lua
 system\Extras.lua
 system\Overlays.lua

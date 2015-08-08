@@ -1,3 +1,5 @@
+local LibDraw = LibStub("LibDraw-1.0")
+
 local _mediaDir = NeP.Addon.Interface.mediaDir
 local alpha = 100
 local zOffset = 3
@@ -47,7 +49,7 @@ local herb_small = {
 	width = 18, height = 18, scale = 1
 }
 
-C_Timer.NewTicker(0.01, (function()
+LibDraw.Sync(function()
 	if NeP.Core.CurrentCR then
 		if FireHack then
 			
@@ -138,52 +140,53 @@ C_Timer.NewTicker(0.01, (function()
 				
 				for i=1,#NeP.ObjectManager.objectsCache do
 					local object = NeP.ObjectManager.objectsCache[i]
-					local distance = object.distance
-					local ox, oy, oz = ObjectPosition(object.key)
-					local name = object.name
-					local id = object.is
-					
-					-- Lumbermill
-					if id == 'LM' then
-						if distance < 50 then
-							LibDraw.Texture(lumbermill_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(lumbermill_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(lumbermill, ox, oy, oz + zOffset, alpha)
+					if ObjectExists(object.key) then
+						local distance = object.distance
+						local ox, oy, oz = ObjectPosition(object.key)
+						local name = object.name
+						local id = object.is
+						
+						-- Lumbermill
+						if id == 'LM' then
+							if distance < 50 then
+								LibDraw.Texture(lumbermill_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(lumbermill_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(lumbermill, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(name .. "\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(name .. "\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-					end
-
-					-- Ores
-					if id == 'Ore' then
-						if distance < 50 then
-							LibDraw.Texture(ore_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(ore_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(ore, ox, oy, oz + zOffset, alpha)
+						-- Ores
+						if id == 'Ore' then
+							if distance < 50 then
+								LibDraw.Texture(ore_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(ore_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(ore, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(name .. "\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(name .. "\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-					end
-
-					-- Herbs
-					if id == 'Herb' then
-						if distance < 50 then
-							LibDraw.Texture(herb_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(herb_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(herb, ox, oy, oz + zOffset, alpha)
+						-- Herbs
+						if id == 'Herb' then
+							if distance < 50 then
+								LibDraw.Texture(herb_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(herb_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(herb, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(name .. "\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(name .. "\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 					end
-					
 				end
 			end
 		end
 	end
-end), nil)
+end)
+
+LibDraw.Enable(0.01)
