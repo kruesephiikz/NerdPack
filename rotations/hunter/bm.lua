@@ -124,7 +124,7 @@ local inCombat = {
 	{{ -- Steady Focus // TALENT
 		{ "77767", "player.buff(177668).duration < 3", "target" }, -- Cobra Shot
 	}, { "talent(4,1)", "lastcast(77767)"} },
-	{ "157708", (function() return NeP.Lib.AutoDots(157708, 35) end) },-- Kill Shot
+	{ "157708", (function() return NeP.Lib.AutoDots('157708', 35) end) },-- Kill Shot
 	{ "117050" }, -- Glaive Toss // TALENT
 	{ "Barrage" }, -- Barrage // TALENT
 	{ "Powershot", "player.timetomax > 2.5", "target" }, -- Powershot // TALENT

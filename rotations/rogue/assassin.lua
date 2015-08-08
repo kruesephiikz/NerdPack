@@ -23,7 +23,7 @@ local inCombat = {
 	{{-- Auto Dotting
 		{"Rupture", {
 			"player.combopoints >= 5",
-			(function() return NeP.Lib.AutoDots('Rupture', 7, 100) end)
+			(function() return NeP.Lib.AutoDots('Rupture', 100, 7, 5) end)
 		}, "target" },
 	}, "toggle.dotEverything" },
 	{"Rupture", {

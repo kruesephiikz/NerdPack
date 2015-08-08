@@ -33,7 +33,7 @@ local AoE = {
 	{ "Blade Flurry", "player.area(10).enemies > 1" },
 	{"Crimson Tempest", {
 		"player.combopoints >= 5",
-		(function() return NeP.Lib.AutoDots('Crimson Tempest', 7, 100) end),
+		(function() return NeP.Lib.AutoDots('Crimson Tempest', 100, 7, 5) end),
 		"player.area(10).enemies > 6"
 	}},
 }
@@ -42,7 +42,7 @@ local ST = {
 	{{-- Auto Dotting
 		{"Rupture", {
 			"player.combopoints >= 5",
-			(function() return NeP.Lib.AutoDots('Rupture', 7, 100) end)
+			(function() return NeP.Lib.AutoDots('Rupture', 100, 7, 5) end)
 		}, "target" },
 	}, "toggle.dotEverything" },
 	{ "Ambush" },

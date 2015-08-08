@@ -384,8 +384,8 @@ local solo = {
 			}, "player" },
 	
 	{{-- Auto Dotting
-		{ "32379", (function() return NeP.Lib.AutoDots(32379, 0, 20) end) }, -- SW:D
-		{ "589", (function() return NeP.Lib.AutoDots(589, 2, 100) end) }, -- SW:P 
+		{ "32379", (function() return NeP.Lib.AutoDots('32379', 20) end) }, -- SW:D
+		{ "589", (function() return NeP.Lib.AutoDots('589', 100) end) }, -- SW:P 
 	}, "toggle.dotEverything" },
 	
 	-- DPS
