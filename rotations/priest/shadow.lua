@@ -11,7 +11,7 @@ local General = {
 	-- Buffs
 	{ "215262", "!player.buffs.stamina" }, -- Power Word: Fortitude
 	{ "15473", "player.stance = 0" }, -- Shadowform
-	{ "1706", "player.falling" } -- Levitate
+	--{ "1706", "player.falling" } -- Levitate
 }
 
 local Cooldowns = {
