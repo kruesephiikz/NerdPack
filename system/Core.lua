@@ -46,6 +46,19 @@ ProbablyEngine.condition.register('elite', function(target)
   return UnitClassification(target) == 'elite'
 end)
 
+ProbablyEngine.condition.register("petinmelee", function(target)
+   return (IsSpellInRange(GetSpellInfo(2649), target) == 1)
+end)
+
+ProbablyEngine.condition.register("power.regen", function(target)
+  return select(2, GetPowerRegen(target))
+end)
+
+ProbablyEngine.condition.register("casttime", function(target, spell)
+    local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
+    return cast_time
+end)
+
 --[[-----------------------------------------------
 									** Commands **
 							DESC: Slash commands in-game.
