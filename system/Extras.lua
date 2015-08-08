@@ -10,15 +10,38 @@ DESC: Moves to a unit.
 
 Build By: MTS
 ---------------------------------------------------]]
+local _moving = 0
 function NeP.Extras.MoveTo()
+	local _classRange = {
+		["HUNTER"] = {Range = 30},
+		["WARLOCK"] = {Range = 30},
+		["PRIEST"] = {Range = 30},
+		["PALADIN"] = {Range = 5},
+		["MAGE"] = {Range = 30},
+		["ROGUE"] = {Range = 5},
+		["DRUID"] = {Range = 5},
+		["SHAMAN"] = {Range = 30},
+		["WARRIOR"] = {Range = 5},
+		["DEATHKNIGHT"] = {Range = 5},
+		["MONK"] = {Range = 5},
+	}
+	local _class, _className = UnitClass('player')
+	local _range = _classRange[_className].Range
   	if NeP.Core.PeFetch('npconf', 'AutoMove') then
-  		if UnitExists('target') and UnitIsVisible('target') and not UnitChannelInfo("player") then
+  		if UnitExists('target') 
+		and UnitIsVisible('target') 
+		and not UnitChannelInfo("player") then
 			local name = GetUnitName('target', false)
 			if FireHack then
-				local aX, aY, aZ = ObjectPosition('target')
-				if NeP.Lib.Distance("player", 'target') >= 6 then
+				if NeP.Lib.Distance("player", 'target') <= _range - 5 
+				and _moving == 1 then 
+					_moving = 0
+					MoveTo(ObjectPosition('player'))
+				elseif NeP.Lib.Distance("player", 'target') >= _range
+				and _moving == 0 then
 					NeP.Alert('Moving to: '..name) 
-					MoveTo(aX, aY, aZ)
+					_moving = 1
+					MoveTo(ObjectPosition('target'))
 				end
 			end
 		end
@@ -33,8 +56,10 @@ Build By: MTS
 ---------------------------------------------------]]
 function NeP.Extras.FaceTo()
 	if NeP.Core.PeFetch('npconf', 'AutoFace') then
-	local unitSpeed, _ = GetUnitSpeed('player')
-			if UnitExists('target') and UnitIsVisible('target') and unitSpeed == 0 and not UnitChannelInfo("player") then
+		local unitSpeed, _ = GetUnitSpeed('player')
+		if UnitExists('target') and UnitIsVisible('target') 
+		and unitSpeed == 0 
+		and not UnitChannelInfo("player") then
 			local name = GetUnitName('target', false)
 			if not NeP.Lib.Infront('target') then
 				if FireHack then
@@ -94,7 +119,9 @@ function NeP.Extras.autoTarget(unit, name)
 		91540,      -- Illusionary Outcast (HFC)
 	}
 	if NeP.Core.PeFetch('npconf', 'AutoTarget') then
-		if UnitExists("target") and not UnitIsFriend("player", "target") and not UnitIsDeadOrGhost("target") then
+		if UnitExists("target") 
+		and not UnitIsFriend("player", "target") 
+		and not UnitIsDeadOrGhost("target") then
 			-- Do nothing
 		else
 			for i=1,#NeP.ObjectManager.unitCache do
@@ -187,32 +214,47 @@ end
 function NeP.Extras.AutoBait()
 	if NeP.Core.PeFetch('npconf', 'bait') ~= "none" then
 		-- Jawless Skulker Bait
-		if NeP.Core.PeFetch('npconf', 'bait') == "jsb" and not UnitBuff("player", GetSpellInfo(158031)) and GetItemCount(110274, false, false) > 0 then
+		if NeP.Core.PeFetch('npconf', 'bait') == "jsb" 
+		and not UnitBuff("player", GetSpellInfo(158031)) 
+		and GetItemCount(110274, false, false) > 0 then
 			UseItem(110274)
 		-- Fat Sleeper Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "fsb" and not UnitBuff("player", GetSpellInfo(158034)) and GetItemCount(110289, false, false) > 0 then
+		elseif NeP.Core.PeFetch('npconf', 'bait') == "fsb" 
+		and not UnitBuff("player", GetSpellInfo(158034)) 
+		and GetItemCount(110289, false, false) > 0 then
 			UseItem(110289)
 		-- Blind Lake Sturgeon Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "blsb" and not UnitBuff("player", GetSpellInfo(158035)) and GetItemCount(110290, false, false) > 0 then
+		elseif NeP.Core.PeFetch('npconf', 'bait') == "blsb" 
+		and not UnitBuff("player", GetSpellInfo(158035)) 
+		and GetItemCount(110290, false, false) > 0 then
 			UseItem(110290)
 		-- Fire Ammonite Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "fab" and not UnitBuff("player", GetSpellInfo(158036)) and GetItemCount(110291, false, false) > 0 then
+		elseif NeP.Core.PeFetch('npconf', 'bait') == "fab" 
+		and not UnitBuff("player", GetSpellInfo(158036)) 
+		and GetItemCount(110291, false, false) > 0 then
 			UseItem(110291)
 		-- Sea Scorpion Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "ssb" and not UnitBuff("player", GetSpellInfo(158037)) and GetItemCount(110292, false, false) > 0 then
+		elseif NeP.Core.PeFetch('npconf', 'bait') == "ssb" 
+		and not UnitBuff("player", GetSpellInfo(158037)) 
+		and GetItemCount(110292, false, false) > 0 then
 			UseItem(110292)
 		-- Abyssal Gulper Eel Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "ageb" and not UnitBuff("player", GetSpellInfo(158038)) and GetItemCount(110293, false, false) > 0 then
+		elseif NeP.Core.PeFetch('npconf', 'bait') == "ageb" 
+		and not UnitBuff("player", GetSpellInfo(158038)) 
+		and GetItemCount(110293, false, false) > 0 then
 			UseItem(110293)
 		-- Blackwater Whiptail Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "bwb" and not UnitBuff("player", GetSpellInfo(158039)) and GetItemCount(110294, false, false) > 0 then
+		elseif NeP.Core.PeFetch('npconf', 'bait') == "bwb" 
+		and not UnitBuff("player", GetSpellInfo(158039)) 
+		and GetItemCount(110294, false, false) > 0 then
 			UseItem(110294)
 		end
 	end
 end
  
 local function CarpDestruction()
-	if NeP.Core.PeFetch('npconf', 'LunarfallCarp') and GetItemCount(116158, false, false) > 0 then
+	if NeP.Core.PeFetch('npconf', 'LunarfallCarp') 
+	and GetItemCount(116158, false, false) > 0 then
 		for bag = 0, NUM_BAG_SLOTS do
 			for slot = 1, GetContainerNumSlots(bag) do
 				currentItemID = GetContainerItemID(bag, slot)
@@ -241,7 +283,8 @@ function NeP.Extras.dummyTest(key)
 	NeP.Extras.dummyTimeRemaning = TimeRemaning
 	
 	-- If Disabled PE while runing a test, abort.
-	if NeP.Extras.dummyStartedTime ~= 0 and not ProbablyEngine.config.read('button_states', 'MasterToggle', false) then
+	if NeP.Extras.dummyStartedTime ~= 0 
+	and not ProbablyEngine.config.read('button_states', 'MasterToggle', false) then
 		NeP.Extras.dummyStartedTime = 0
 		message('|r[|cff9482C9MTS|r] You have Disabled PE while running a dummy test. \n[|cffC41F3BStoped dummy test timer|r].')
 		StopAttack()

@@ -84,7 +84,7 @@ ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow
 		{ General },
 		{ Survival },
 		{{-- Interrupts
-			{ "!15487" }, -- Counter Shot
+			{ "!15487" }, -- Silece
 		}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
 		{ Cooldowns, "modifier.cooldowns" },
 		{ Dotting },

@@ -110,7 +110,7 @@ NeP.Addon.Interface.General = {
 						type = "checkbox", 
 						text = "Auto Facing", 
 						key = "AutoFace", 
-						default = false, 
+						default = true, 
 						desc ="Face your current target.\nChecks for LoS and range."
 					},
 					{ 
