@@ -10,19 +10,27 @@ NeP.ObjectManager = {
 local _addonColor = NeP.Addon.Interface.GuiTextColor
 local _tittleGUI = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Name
 local _GUIColor = NeP.Addon.Interface.GuiColor
+local OChObjectsTotal = NeP.ObjectManager.objectsCacheTotal
+local OChUnitsTotal = NeP.ObjectManager.unitCacheTotal
+local OChFriendlyTotal = NeP.ObjectManager.unitCacheFriendlyTotal
+local OChUnits = NeP.ObjectManager.unitCache
+local OChFriendly = NeP.ObjectManager.unitFriendlyCache
+local OChObjects = NeP.ObjectManager.objectsCache
 
 --[[
 											LOCAL TABLES
 								This is were you insert units/object ID's 
 									either to search or blacklist.
+-------------------------------------------------------------------------------------------------------
 ]]
 
 
---[[-----------------------------------------------
-	ID's to display LM IDs
+--[[
+	ID's to display LM,
 	Used for overlays.
 ---------------------------------------------------]]
 local lumbermillIDs = {
+	--[[ //// WOD //// ]]
 	234127,
 	234193,
 	234023,
@@ -57,23 +65,29 @@ local lumbermillIDs = {
 	234124
 }
 
---[[-----------------------------------------------
-	ID's to display Ores IDs
+--[[
+	ID's to display Ores,
 	Used for overlays.
 ---------------------------------------------------]]
 local oresIDs = {
-	228510,
-	228493,
-	228564,
-	228563,
-	232544,
-	232545,
-	232542,
-	232543,
-	232541,
+	--[[ //// WOD //// ]]
+	228510, --[[ Rich True Iron Deposit ]]
+	228493, --[[ True Iron Deposit ]]
+	228564, --[[ Rich Blackrock Deposit ]]
+	228563, --[[ Blackrock Deposit ]]
+	232544, --[[ True Iron Deposit ]]
+	232545, --[[ Rich True Iron Deposit ]]
+	232542, --[[ Blackrock Deposit ]]
+	232543, --[[ Rich Blackrock Deposit ]]
+	232541, --[[ Mine Cart ]]
 }
 
+--[[
+	ID's to display Fish Poles,
+	Used for overlays.
+---------------------------------------------------]]
 local fishIDs = {
+	--[[ //// WOD //// ]]
 	229072,
 	229073,
 	229069,
@@ -87,11 +101,12 @@ local fishIDs = {
 	229071,
 }
 
---[[-----------------------------------------------
-	ID's to display Herbs IDs
+--[[
+	ID's to display Herbs,
 	Used for overlays.
 ---------------------------------------------------]]
 local herbsIDs = {
+	--[[ //// WOD //// ]]
 	237400,
 	228576,
 	235391,
@@ -114,9 +129,9 @@ local herbsIDs = {
 	228572
 }
 
---[[-----------------------------------------------
-DESC: Checks if unit has a Blacklisted Debuff.
-This will remove the unit from the OM cache.
+--[[
+	DESC: Checks if unit has a Blacklisted Debuff.
+	This will remove the unit from the OM cache.
 ---------------------------------------------------]]
 local function BlacklistedDebuffs(unit)
 	local NeP_ImmuneAuras = {
@@ -171,9 +186,9 @@ local function BlacklistedDebuffs(unit)
 	end
 end
 
---[[-----------------------------------------------
-DESC: Checks if object is a Blacklisted.
-This will remove the Object from the OM cache.
+--[[
+	DESC: Checks if object is a Blacklisted.
+	This will remove the Object from the OM cache.
 ---------------------------------------------------]]
 local function BlacklistedObject(unit)
 	local BlacklistedObjects = {
@@ -194,9 +209,9 @@ local function BlacklistedObject(unit)
 	end
 end
 
---[[-----------------------------------------------
-DESC: Checks if unit is a Dummy.
-This will force the unit from the OM cache.
+--[[
+	DESC: Checks if unit is a Dummy.
+	This will force the unit from the OM cache.
 ---------------------------------------------------]]
 local function UnitIsDummy(unit)
 	local dummyObjects = {
@@ -236,10 +251,9 @@ end
 											ObjectManagers
 									This contains the specific OM force
 											each unlocker.
+-------------------------------------------------------------------------------------------------------
 ]]
-
-
---[[-----------------------------------------------
+--[[
 	FireHack OM
 ---------------------------------------------------]]
 local firehackOM = function()
@@ -268,9 +282,9 @@ local firehackOM = function()
 							if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
 								for k,v in pairs(lumbermillIDs) do
 									if ObjectID == v then
-										NeP.ObjectManager.objectsCacheTotal = NeP.ObjectManager.objectsCacheTotal + 1
-										table.insert(NeP.ObjectManager.objectsCache, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='LM'})
-										table.sort(NeP.ObjectManager.objectsCache, function(a,b) return a.distance < b.distance end)
+										OChObjectsTotal = OChObjectsTotal + 1
+										table.insert(OChObjects, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='LM'})
+										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
 									end
 								end
 							end	
@@ -278,9 +292,9 @@ local firehackOM = function()
 							if NeP.Core.PeFetch("NePconf_Overlays", "objectsOres") then
 								for k,v in pairs(oresIDs) do
 									if ObjectID == v then
-										NeP.ObjectManager.objectsCacheTotal = NeP.ObjectManager.objectsCacheTotal + 1
-										table.insert(NeP.ObjectManager.objectsCache, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='Ore'})
-										table.sort(NeP.ObjectManager.objectsCache, function(a,b) return a.distance < b.distance end)
+										OChObjectsTotal = OChObjectsTotal + 1
+										table.insert(OChObjects, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='Ore'})
+										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
 									end
 								end
 							end
@@ -288,9 +302,9 @@ local firehackOM = function()
 							if NeP.Core.PeFetch("NePconf_Overlays", "objectsHerbs") then
 								for k,v in pairs(herbsIDs) do
 									if ObjectID == v then
-										NeP.ObjectManager.objectsCacheTotal = NeP.ObjectManager.objectsCacheTotal + 1
-										table.insert(NeP.ObjectManager.objectsCache, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='Herb'})
-										table.sort(NeP.ObjectManager.objectsCache, function(a,b) return a.distance < b.distance end)
+										OChObjectsTotal = OChObjectsTotal + 1
+										table.insert(OChObjects, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='Herb'})
+										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
 									end
 								end
 							end
@@ -298,9 +312,9 @@ local firehackOM = function()
 							if NeP.Core.PeFetch("NePconf_Overlays", "objectsFishs") then
 								for k,v in pairs(fishIDs) do
 									if ObjectID == v then
-										NeP.ObjectManager.objectsCacheTotal = NeP.ObjectManager.objectsCacheTotal + 1
-										table.insert(NeP.ObjectManager.objectsCache, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='Fish'})
-										table.sort(NeP.ObjectManager.objectsCache, function(a,b) return a.distance < b.distance end)
+										OChObjectsTotal = OChObjectsTotal + 1
+										table.insert(OChObjects, {key=object, distance=objectDistance, id=ObjectID, name=ObjectName, is='Fish'})
+										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
 									end
 								end
 							end
@@ -318,24 +332,24 @@ local firehackOM = function()
 								if UnitIsFriend("player", object) then
 									-- Enabled on GUI
 									if NeP.Core.PeFetch("ObjectCache", "FU") then
-										NeP.ObjectManager.unitCacheFriendlyTotal = NeP.ObjectManager.unitCacheFriendlyTotal + 1
-										table.insert(NeP.ObjectManager.unitFriendlyCache, {key=object, distance=objectDistance, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=ObjectName})
-										table.sort(NeP.ObjectManager.unitFriendlyCache, function(a,b) return a.distance < b.distance end)
+										OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+										table.insert(OChFriendly, {key=object, distance=objectDistance, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=ObjectName})
+										table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)
 									end	
 								-- INSERT DUMMYS!
 								elseif UnitIsDummy(object) then
 									if NeP.Core.PeFetch("ObjectCache", "dummys") then
-										NeP.ObjectManager.unitCacheTotal = NeP.ObjectManager.unitCacheTotal + 1
-										table.insert(NeP.ObjectManager.unitCache, {key=object, distance=objectDistance, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=ObjectName})
-										table.sort(NeP.ObjectManager.unitCache, function(a,b) return a.distance < b.distance end)
+										OChUnitsTotal = OChUnitsTotal + 1
+										table.insert(OChUnits, {key=object, distance=objectDistance, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=ObjectName})
+										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 									end	
 								-- Enemie Units
 								else
 									-- Enabled on GUI and unit affecting combat
 									if NeP.Core.PeFetch("ObjectCache", "EU") then
-										NeP.ObjectManager.unitCacheTotal = NeP.ObjectManager.unitCacheTotal + 1
-										table.insert(NeP.ObjectManager.unitCache, {key=object, distance=objectDistance, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=ObjectName, class=_class})
-										table.sort(NeP.ObjectManager.unitCache, function(a,b) return a.distance < b.distance end)
+										OChUnitsTotal = OChUnitsTotal + 1
+										table.insert(OChUnits, {key=object, distance=objectDistance, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=ObjectName, class=_class})
+										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 									end
 								end			
 							end
@@ -347,7 +361,7 @@ local firehackOM = function()
 	end
 end
 
---[[-----------------------------------------------
+--[[
 	Generic OM
 ---------------------------------------------------]]
 local genericOM = function()
@@ -362,9 +376,9 @@ local genericOM = function()
 					if UnitAffectingCombat(target) then
 					local objectDistance = NeP.Lib.Distance('player', target)
 						if objectDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) and ProbablyEngine.condition["alive"](target) then
-							NeP.ObjectManager.unitCacheTotal = NeP.ObjectManager.unitCacheTotal + 1
-							table.insert(NeP.ObjectManager.unitCache, {key=target, distance=objectDistance, health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), maxHealth=UnitHealthMax(target), actualHealth=UnitHealth(target), name=UnitName(target)})
-							table.sort(NeP.ObjectManager.unitCache, function(a,b) return a.distance < b.distance end)
+							OChUnitsTotal = OChUnitsTotal + 1
+							table.insert(OChUnits, {key=target, distance=objectDistance, health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), maxHealth=UnitHealthMax(target), actualHealth=UnitHealth(target), name=UnitName(target)})
+							table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 						end
 					end
 				end
@@ -376,24 +390,24 @@ local genericOM = function()
 			if NeP.Core.PeFetch("ObjectCache", "FU") then
 				local objectDistance = NeP.Lib.Distance('player', friendly)
 				if objectDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) and ProbablyEngine.condition["alive"](friendly) then
-					NeP.ObjectManager.unitCacheFriendlyTotal = NeP.ObjectManager.unitCacheFriendlyTotal + 1
-					table.insert(NeP.ObjectManager.unitFriendlyCache, {key=friendly, distance=objectDistance, health=math.floor((UnitHealth(friendly) / UnitHealthMax(friendly)) * 100), maxHealth=UnitHealthMax(friendly), actualHealth=UnitHealth(friendly), name=UnitName(friendly)})
-					table.sort(NeP.ObjectManager.unitFriendlyCache, function(a,b) return a.distance < b.distance end)
+					OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+					table.insert(OChFriendly, {key=friendly, distance=objectDistance, health=math.floor((UnitHealth(friendly) / UnitHealthMax(friendly)) * 100), maxHealth=UnitHealthMax(friendly), actualHealth=UnitHealth(friendly), name=UnitName(friendly)})
+					table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)
 				end
 			end
 		end
 	-- Solo Cache self and target
 	else
 		-- Self
-		NeP.ObjectManager.unitCacheFriendlyTotal = NeP.ObjectManager.unitCacheFriendlyTotal + 1
-		table.insert(NeP.ObjectManager.unitFriendlyCache, {key='Player', distance=0, health=math.floor((UnitHealth('player') / UnitHealthMax('player')) * 100), maxHealth=UnitHealthMax('player'), actualHealth=UnitHealth('player'), name=UnitName('player')})
+		OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+		table.insert(OChFriendly, {key='Player', distance=0, health=math.floor((UnitHealth('player') / UnitHealthMax('player')) * 100), maxHealth=UnitHealthMax('player'), actualHealth=UnitHealth('player'), name=UnitName('player')})
 		-- Target
 		if UnitExists('target') and not UnitIsFriend("player", 'target') then
 			if UnitAffectingCombat('target') then
 				local objectDistance = NeP.Lib.Distance('player', 'target')
 				if objectDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) and ProbablyEngine.condition["alive"]('target') then
-					NeP.ObjectManager.unitCacheTotal = NeP.ObjectManager.unitCacheTotal + 1
-					table.insert(NeP.ObjectManager.unitCache, {key='target', distance=objectDistance, health=math.floor((UnitHealth('target') / UnitHealthMax('target')) * 100), maxHealth=UnitHealthMax('target'), actualHealth=UnitHealth('target'), name=UnitName('target')})
+					OChUnitsTotal = OChUnitsTotal + 1
+					table.insert(OChUnits, {key='target', distance=objectDistance, health=math.floor((UnitHealth('target') / UnitHealthMax('target')) * 100), maxHealth=UnitHealthMax('target'), actualHealth=UnitHealth('target'), name=UnitName('target')})
 				end
 			end
 		end
@@ -402,8 +416,8 @@ local genericOM = function()
 			if UnitAffectingCombat('mouseover') then
 				local objectDistance = NeP.Lib.Distance('player', 'mouseover')
 				if objectDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) and ProbablyEngine.condition["alive"]('mouseover') then
-					NeP.ObjectManager.unitCacheTotal = NeP.ObjectManager.unitCacheTotal + 1
-					table.insert(NeP.ObjectManager.unitCache, {key='mouseover', distance=objectDistance, health=math.floor((UnitHealth('mouseover') / UnitHealthMax('mouseover')) * 100), maxHealth=UnitHealthMax('mouseover'), actualHealth=UnitHealth('mouseover'), name=UnitName('mouseover')})
+					OChUnitsTotal = OChUnitsTotal + 1
+					table.insert(OChUnits, {key='mouseover', distance=objectDistance, health=math.floor((UnitHealth('mouseover') / UnitHealthMax('mouseover')) * 100), maxHealth=UnitHealthMax('mouseover'), actualHealth=UnitHealth('mouseover'), name=UnitName('mouseover')})
 				end
 			end
 		end		
@@ -413,10 +427,11 @@ end
 --[[
 											ObjectManager GUI
 									This contains the code for the GUI.
+-------------------------------------------------------------------------------------------------------
 ]]
 
 
---[[-----------------------------------------------
+--[[
 	VARs
 ---------------------------------------------------]]
 local emptyMsg = "" -- [[ Message to display when empty... ]]
@@ -427,7 +442,7 @@ local NeP_OpenCacheWindow = false
 local NeP_ShowingCacheWindow = false
 local NeP_cacheWindowUpdating = false
 
---[[-----------------------------------------------
+--[[
 	Settings GUI
 ---------------------------------------------------]]
 local NeP_ObjectCache = {
@@ -456,7 +471,7 @@ local NeP_ObjectCache = {
     }
 }
 
---[[-----------------------------------------------
+--[[
 	Enemies GUI
 ---------------------------------------------------]]
 local NeP_EnemieObjectCache = {
@@ -483,7 +498,7 @@ local NeP_EnemieObjectCache = {
     }
 }
 
---[[-----------------------------------------------
+--[[
 	Friendly GUI
 ---------------------------------------------------]]
 local NeP_FriendlyObjectCache = {
@@ -510,7 +525,7 @@ local NeP_FriendlyObjectCache = {
     }
 }
 
---[[-----------------------------------------------
+--[[
 	Update GUIs function
 	Needs to improve! (Cleaner)
 ---------------------------------------------------]]
@@ -518,117 +533,75 @@ local OMGUI_Update = function()
 	-- Update GUI objects lists
 	if NeP_cacheWindowUpdating then
 		-- Totals:
-		NeP_cacheWindow.elements.current_Cache1Total:SetText(_addonColor.."Total Enemies:|r "..NeP.ObjectManager.unitCacheTotal)
-		NeP_cacheWindow.elements.current_Cache2Total:SetText(_addonColor.."Total Friendly:|r "..NeP.ObjectManager.unitCacheFriendlyTotal)
-		NeP_cacheWindow.elements.current_Cache3Total:SetText(_addonColor.."Total GameObjects:|r "..NeP.ObjectManager.objectsCacheTotal)
-		
+		NeP_cacheWindow.elements.current_Cache1Total:SetText(_addonColor.."Total Enemies:|r "..OChUnitsTotal)
+		NeP_cacheWindow.elements.current_Cache2Total:SetText(_addonColor.."Total Friendly:|r "..OChUnitsFriendlyTotal)
+		NeP_cacheWindow.elements.current_Cache3Total:SetText(_addonColor.."Total GameObjects:|r "..OChObjectsTotal)
 		-- Enemies:
-		if NeP.ObjectManager.unitCache[1] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_1:SetText(_addonColor.."1 |r "..NeP.ObjectManager.unitCache[1].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[1].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[1].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[1].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[1].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[1].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_1:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[2] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_2:SetText(_addonColor.."2 |r "..NeP.ObjectManager.unitCache[2].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[2].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[2].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[2].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[2].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[2].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_2:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[3] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_3:SetText(_addonColor.."3 |r "..NeP.ObjectManager.unitCache[3].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[3].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[3].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[3].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[3].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[3].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_3:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[4] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_4:SetText(_addonColor.."4 |r "..NeP.ObjectManager.unitCache[4].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[4].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[4].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[4].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[4].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[4].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_4:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[5] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_5:SetText(_addonColor.."5 |r "..NeP.ObjectManager.unitCache[5].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[5].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[5].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[5].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[5].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[5].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_5:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[6] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_6:SetText(_addonColor.."6 |r "..NeP.ObjectManager.unitCache[6].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[6].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[6].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[6].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[6].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[6].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_6:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[7] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_7:SetText(_addonColor.."7 |r "..NeP.ObjectManager.unitCache[7].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[7].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[7].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[7].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[7].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[7].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_7:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[8] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_8:SetText(_addonColor.."8 |r "..NeP.ObjectManager.unitCache[8].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[8].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[8].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[8].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[8].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[8].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_8:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[9] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_9:SetText(_addonColor.."9 |r "..NeP.ObjectManager.unitCache[9].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[9].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[9].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[9].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[9].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[9].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_9:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitCache[10] then
-			NeP_cacheWindowEmemies.elements.current_Cache1_10:SetText(_addonColor.."10 |r "..NeP.ObjectManager.unitCache[10].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitCache[10].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitCache[10].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitCache[10].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitCache[10].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitCache[10].actualHealth)
-		else
-			NeP_cacheWindowEmemies.elements.current_Cache1_10:SetText(emptyMsg)
-		end
-		
-		-- Friendly
-		if NeP.ObjectManager.unitFriendlyCache[1] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_1:SetText(_addonColor.."1: |r "..NeP.ObjectManager.unitFriendlyCache[1].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[1].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[1].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[1].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[1].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[1].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_1:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[2] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_2:SetText(_addonColor.."2: |r "..NeP.ObjectManager.unitFriendlyCache[2].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[2].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[2].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[2].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[2].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[2].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_2:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[3] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_3:SetText(_addonColor.."3: |r "..NeP.ObjectManager.unitFriendlyCache[3].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[3].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[3].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[3].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[3].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[3].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_3:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[4] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_4:SetText(_addonColor.."4: |r "..NeP.ObjectManager.unitFriendlyCache[4].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[4].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[4].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[4].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[4].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[4].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_4:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[5] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_5:SetText(_addonColor.."5: |r "..NeP.ObjectManager.unitFriendlyCache[5].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[5].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[5].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[5].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[5].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[5].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_5:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[6] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_6:SetText(_addonColor.."6: |r "..NeP.ObjectManager.unitFriendlyCache[6].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[6].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[6].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[6].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[6].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[6].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_6:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[7] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_7:SetText(_addonColor.."7: |r "..NeP.ObjectManager.unitFriendlyCache[7].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[7].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[7].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[7].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[7].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[7].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_7:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[8] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_8:SetText(_addonColor.."8: |r "..NeP.ObjectManager.unitFriendlyCache[8].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[8].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[8].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[8].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[8].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[8].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_8:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[9] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_9:SetText(_addonColor.."9: |r "..NeP.ObjectManager.unitFriendlyCache[9].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[9].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[9].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[9].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[9].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[9].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_9:SetText(emptyMsg)
-		end
-		if NeP.ObjectManager.unitFriendlyCache[10] then
-			NeP_cacheWindowFriendly.elements.current_Cache2_10:SetText(_addonColor.."10: |r "..NeP.ObjectManager.unitFriendlyCache[10].name.."\n |--> |cff0070DEGUID:|r "..NeP.ObjectManager.unitFriendlyCache[10].key.."\n |--> |cff0070DEDistance:|r "..NeP.ObjectManager.unitFriendlyCache[10].distance.."\n |--> |cff0070DEHealth:|r "..NeP.ObjectManager.unitFriendlyCache[10].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..NeP.ObjectManager.unitFriendlyCache[10].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..NeP.ObjectManager.unitFriendlyCache[10].actualHealth)
-		else
-			NeP_cacheWindowFriendly.elements.current_Cache2_10:SetText(emptyMsg)
-		end
+		if OChUnits[1] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_1:SetText(_addonColor.."1 |r "..OChUnits[1].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[1].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[1].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[1].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[1].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[1].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_1:SetText(emptyMsg) end
+		if OChUnits[2] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_2:SetText(_addonColor.."2 |r "..OChUnits[2].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[2].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[2].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[2].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[2].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[2].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_2:SetText(emptyMsg) end
+		if OChUnits[3] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_3:SetText(_addonColor.."3 |r "..OChUnits[3].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[3].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[3].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[3].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[3].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[3].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_3:SetText(emptyMsg) end
+		if OChUnits[4] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_4:SetText(_addonColor.."4 |r "..OChUnits[4].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[4].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[4].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[4].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[4].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[4].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_4:SetText(emptyMsg) end
+		if OChUnits[5] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_5:SetText(_addonColor.."5 |r "..OChUnits[5].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[5].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[5].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[5].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[5].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[5].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_5:SetText(emptyMsg) end
+		if OChUnits[6] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_6:SetText(_addonColor.."6 |r "..OChUnits[6].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[6].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[6].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[6].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[6].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[6].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_6:SetText(emptyMsg) end
+		if OChUnits[7] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_7:SetText(_addonColor.."7 |r "..OChUnits[7].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[7].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[7].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[7].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[7].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[7].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_7:SetText(emptyMsg) end
+		if OChUnits[8] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_8:SetText(_addonColor.."8 |r "..OChUnits[8].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[8].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[8].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[8].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[8].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[8].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_8:SetText(emptyMsg) end
+		if OChUnits[9] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_9:SetText(_addonColor.."9 |r "..OChUnits[9].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[9].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[9].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[9].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[9].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[9].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_9:SetText(emptyMsg) end
+		if OChUnits[10] then
+			NeP_cacheWindowEmemies.elements.current_Cache1_10:SetText(_addonColor.."10 |r "..OChUnits[10].name.."\n |--> |cff0070DEGUID:|r "..OChUnits[10].key.."\n |--> |cff0070DEDistance:|r "..OChUnits[10].distance.."\n |--> |cff0070DEHealth:|r "..OChUnits[10].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChUnits[10].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChUnits[10].actualHealth)
+		else NeP_cacheWindowEmemies.elements.current_Cache1_10:SetText(emptyMsg) end
+		-- Friendly:
+		if OChFriendly[1] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_1:SetText(_addonColor.."1: |r "..OChFriendly[1].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[1].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[1].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[1].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[1].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[1].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_1:SetText(emptyMsg) end
+		if OChFriendly[2] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_2:SetText(_addonColor.."2: |r "..OChFriendly[2].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[2].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[2].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[2].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[2].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[2].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_2:SetText(emptyMsg) end
+		if OChFriendly[3] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_3:SetText(_addonColor.."3: |r "..OChFriendly[3].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[3].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[3].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[3].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[3].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[3].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_3:SetText(emptyMsg) end
+		if OChFriendly[4] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_4:SetText(_addonColor.."4: |r "..OChFriendly[4].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[4].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[4].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[4].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[4].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[4].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_4:SetText(emptyMsg) end
+		if OChFriendly[5] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_5:SetText(_addonColor.."5: |r "..OChFriendly[5].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[5].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[5].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[5].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[5].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[5].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_5:SetText(emptyMsg) end
+		if OChFriendly[6] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_6:SetText(_addonColor.."6: |r "..OChFriendly[6].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[6].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[6].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[6].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[6].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[6].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_6:SetText(emptyMsg) end
+		if OChFriendly[7] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_7:SetText(_addonColor.."7: |r "..OChFriendly[7].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[7].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[7].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[7].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[7].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[7].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_7:SetText(emptyMsg) end
+		if OChFriendly[8] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_8:SetText(_addonColor.."8: |r "..OChFriendly[8].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[8].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[8].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[8].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[8].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[8].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_8:SetText(emptyMsg) end
+		if OChFriendly[9] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_9:SetText(_addonColor.."9: |r "..OChFriendly[9].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[9].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[9].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[9].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[9].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[9].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_9:SetText(emptyMsg) end
+		if OChFriendly[10] then
+			NeP_cacheWindowFriendly.elements.current_Cache2_10:SetText(_addonColor.."10: |r "..OChFriendly[10].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[10].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[10].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[10].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[10].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[10].actualHealth)
+		else NeP_cacheWindowFriendly.elements.current_Cache2_10:SetText(emptyMsg) end
 	end
 end
 
---[[-----------------------------------------------
+--[[
 	GUIs Manager
 ---------------------------------------------------]]
 function NeP.Addon.Interface.CacheGUI()
@@ -636,7 +609,6 @@ function NeP.Addon.Interface.CacheGUI()
         NeP_cacheWindow = ProbablyEngine.interface.buildGUI(NeP_ObjectCache)
 		NeP_cacheWindowEmemies = ProbablyEngine.interface.buildGUI(NeP_EnemieObjectCache)
 		NeP_cacheWindowFriendly = ProbablyEngine.interface.buildGUI(NeP_FriendlyObjectCache)
-        
 		-- [[ If you close any of the 3 windows open, they all close.]]
 		NeP_cacheWindow.parent:SetEventListener('OnClose', function()
 			NeP_cacheWindowEmemies.parent:Hide()
@@ -656,18 +628,15 @@ function NeP.Addon.Interface.CacheGUI()
             NeP_OpenCacheWindow = false
             NeP_ShowingCacheWindow = false
         end)
-		
 		NeP_cacheWindowUpdating = true
 		NeP_ShowingCacheWindow = true
 		NeP_OpenCacheWindow = true
-
 	elseif NeP_OpenCacheWindow and NeP_ShowingCacheWindow then
         NeP_cacheWindowUpdating = false
 		NeP_ShowingCacheWindow = false
         NeP_cacheWindow.parent:Hide()
 		NeP_cacheWindowEmemies.parent:Hide()
 		NeP_cacheWindowFriendly.parent:Hide()
-
     elseif NeP_OpenCacheWindow and not NeP_ShowingCacheWindow then
         NeP_cacheWindowUpdating = true
 		NeP_ShowingCacheWindow = true
@@ -680,21 +649,18 @@ end
 
 --[[
 									TICKER
+-------------------------------------------------------------------------------------------------------
 ]]
 C_Timer.NewTicker(1, (function()
 	
 	OMGUI_Update()
-	
 	-- Wipe Cache
-	wipe(NeP.ObjectManager.unitCache)
-	wipe(NeP.ObjectManager.unitFriendlyCache)
-	wipe(NeP.ObjectManager.objectsCache)
-	
-	-- Wipe Counters
-	NeP.ObjectManager.unitCacheTotal = 0
-	NeP.ObjectManager.unitCacheFriendlyTotal = 0
-	NeP.ObjectManager.objectsCacheTotal = 0
-	
+	wipe(OChUnits)
+	wipe(OChFriendly)
+	wipe(OChObjects)
+	OChUnitsTotal = 0
+	OChUnitsFriendlyTotal = 0
+	OChObjectsTotal = 0
 	-- Object Manager Core
 	if NeP.Core.CurrentCR then
 		if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
@@ -703,8 +669,7 @@ C_Timer.NewTicker(1, (function()
 				-- If we're using FireHack...  
 				if FireHack and NeP.Core.PeFetch("ObjectCache", "AC") then
 					firehackOM()
-				-- Generic Cache
-				else
+				else -- Generic Cache
 					genericOM()
 				end
 			end
