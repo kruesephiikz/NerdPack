@@ -73,23 +73,14 @@ local ST = {
 	{ "15407" },  -- Mind Flay
 } 
 
-local outCombat = {
-	-- Buffs
-	{ "215262", "!player.buffs.stamina" }, -- Power Word: Fortitude
-	{ "15473", "player.stance = 0" }, -- Shadowform
-}
-
 ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow'), 
-		{ -- In-Combat
-			{ General },
-			{ Survival },
-			{ Cooldowns, "modifier.cooldowns" },
-			{ Dotting },
-			{{ -- Sanity Checks
-				{ AoE, "modifier.multitarget" },
-				{ ST, "!modifier.multitarget" }
-			}, { "target.range <= 40", "target.infront" } }
-		},{ -- Out-Combat
-			{ General },
-			{ outCombat },
-		}, lib)
+	{ -- In-Combat
+		{ General },
+		{ Survival },
+		{ Cooldowns, "modifier.cooldowns" },
+		{ Dotting },
+		{{ -- Sanity Checks
+			{ AoE, "modifier.multitarget" },
+			{ ST, "!modifier.multitarget" }
+		}, { "target.range <= 40", "target.infront" } }
+	}, General, lib)
