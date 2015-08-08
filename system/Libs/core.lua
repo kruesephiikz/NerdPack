@@ -127,7 +127,7 @@ end
 
 --[[
 Usage:
-NeP.Lib.AutoDots(spell, remaning, health, Classification)
+NeP.Lib.AutoDots(_spell, _health, _distance, _duration, _classification)
 
 Classifications:
 	elite - Elite
@@ -136,19 +136,23 @@ Classifications:
 	rare - Rare
 	rareelite - Rare-Elite
 	worldboss - World Boss
+	all - All Units
 ]]
-function NeP.Lib.AutoDots(spell, remaning, health, Classification)
-	if Classification == nil then Classification = 'normal' end
+function NeP.Lib.AutoDots(_spell, _health, _distance, _duration, _classification)
+	if _classification == nil then _classification = 'all' end
+	if _distance == nil then _distance = 40 end
+	if _health == nil then _health = 100 end
+	if _duration == nil then _duration = 0 end
 	for i=1,#NeP.ObjectManager.unitCache do
-		local object = NeP.ObjectManager.unitCache[i]
-		if UnitClassification(object) == Classification then
-			if object.health <= health then
-				local _,_,_,_,_,_,debuff = UnitDebuff(object.key, GetSpellInfo(spell), nil, "PLAYER")
-				if not debuff or debuff - GetTime() < remaning then
-					if UnitCanAttack("player", object.key)
-					and IsSpellInRange(GetSpellInfo(spell), object.key) then
-						if NeP.Lib.Infront(object.key) then
-							ProbablyEngine.dsl.parsedTarget = object.key
+		local _object = NeP.ObjectManager.unitCache[i]
+		if UnitClassification(_object) == _classification or _classification == 'all' then
+			if _object.health <= _health then
+				local _,_,_,_,_,_,debuff = UnitDebuff(_object.key, GetSpellInfo(_spell), nil, "PLAYER")
+				if not debuff or debuff - GetTime() < _duration then
+					if UnitCanAttack("player", _object.key)
+					and _object.distance <= _distance then
+						if NeP.Lib.Infront(_object.key) then
+							ProbablyEngine.dsl.parsedTarget = _object.key
 							return true
 						end					 
 					end
@@ -156,4 +160,5 @@ function NeP.Lib.AutoDots(spell, remaning, health, Classification)
 			end
 		end
 	end
+	return false
 end
