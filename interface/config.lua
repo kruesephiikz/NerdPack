@@ -14,7 +14,7 @@ NeP.Addon.Interface.General = {
 			-- [[HEADER]]		
 			{ 
 				type = "texture",
-				texture = "Interface\\AddOns\\Probably_MrTheSoulz\\media\\splash.blp",
+				texture = NeP.Addon.Info.Splash,
 				width = 200, 
 				height = 100, 
 				offset = 90, 

@@ -240,7 +240,7 @@ local outCombat = {
 	{ "77472", "lowest.health <= 70", "lowest" }, -- Healing Wave
 }
 
-ProbablyEngine.rotation.register_custom(264, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Restoration'), 
 	{ -- In-Combat
 		{{ -- Solo
 			{SelfHealing},

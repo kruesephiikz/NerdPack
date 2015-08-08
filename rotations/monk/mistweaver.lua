@@ -319,7 +319,7 @@ local outCombat = {
  
 
 
-ProbablyEngine.rotation.register_custom(270, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(270, NeP.Core.GetCrInfo('Monk - Mistweaver'), 
 	{-- Change CR dyn
 		{ inCombatSerpente, "player.stance = 1" },
 		{ inCombatCrane, "player.stance = 2" },

@@ -178,5 +178,5 @@ local outCombat = {
 
 }
 
-ProbablyEngine.rotation.register_custom(104, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(104, NeP.Core.GetCrInfo('Druid - Guardian'), 
 	inCombat, outCombat, exeOnLoad)

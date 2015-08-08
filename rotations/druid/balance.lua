@@ -55,7 +55,7 @@ local BoomkinForm = {
   
 }
 
-ProbablyEngine.rotation.register_custom(102, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(102, NeP.Core.GetCrInfo('Druid - Balance'), 
 	{ ------------------------------------------------------------------------------------------------------------------ In Combat
 		{ "1126", {  -- Mark of the Wild
 			"!player.buff(20217).any", -- kings

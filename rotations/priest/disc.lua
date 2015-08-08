@@ -349,7 +349,7 @@ local All = {
 
 }
 	
-ProbablyEngine.rotation.register_custom(256, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discipline'), 
 	{ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ In-Combat
 		 	------------------------------------------------------------------------------------------------------------------------------------- All in combat
 		 		{ All },																									-- Shared across all

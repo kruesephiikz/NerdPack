@@ -1,13 +1,4 @@
---[[ ///---INFO---////
-// Monk WindWalker //
-!Originaly made by Tao!
-Thank You For Using My ProFiles
-I Hope Your Enjoy Them
-MTS
-]]
-
 local n,r = GetSpellInfo(137639)
-
 
 local exeOnLoad = function()
 	NeP.Splash()
@@ -140,5 +131,5 @@ local outCombat = {
   
 }
 
-ProbablyEngine.rotation.register_custom(269, NeP.Core.CrInfo(),
+ProbablyEngine.rotation.register_custom(269, NeP.Core.GetCrInfo('Monk - Windwalker'),
 	inCombat, outCombat, exeOnLoad)

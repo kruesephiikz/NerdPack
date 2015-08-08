@@ -1,9 +1,3 @@
--- ///////////////////-----------------------------------------INFO-----------------------------------//////////////////////////////
---														 //Paladin Holy//
---												  Thank Your For Your My ProFiles
---													  I Hope Your Enjoy Them
---															    MTS
-
 local lib = function()
 	NeP.Splash()
 end
@@ -421,5 +415,5 @@ local outCombat = {
 
 }
 
-ProbablyEngine.rotation.register_custom(65,NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(65, NeP.Core.GetCrInfo('Paladin - Holy'), 
 	inCombat, outCombat, lib)

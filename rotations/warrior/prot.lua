@@ -1,12 +1,4 @@
---[[ ///---INFO---////
-// Warrior Fury //
-Thank You For Using My ProFiles
-I Hope Your Enjoy Them
-MTS
-]]
-
 local Battle_Print = false
-
 
 local exeOnLoad = function()
 	NeP.Splash()
@@ -102,7 +94,7 @@ local Cooldowns = {
 
 }
 
-ProbablyEngine.rotation.register_custom(73, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(73, NeP.Core.GetCrInfo('Warrior - Protection'), 
 	{-- In-Combat CR
 		{ "Battle Shout", {
 			"!player.buffs.attackpower",

@@ -133,7 +133,7 @@ local CatForm = {
 }
 
 
-ProbablyEngine.rotation.register_custom(103, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(103, NeP.Core.GetCrInfo('Druid - Feral'), 
 	{ ------------------------------------------------------------------------------------------------------------------ In Combat
 		{ "1126", {  -- Mark of the Wild
 			"!player.buff(20217).any", -- kings

@@ -246,5 +246,5 @@ local oocRotation = {
 	}},
 }
 
-ProbablyEngine.rotation.register_custom(262, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(262, NeP.Core.GetCrInfo('Shamman - Elemental'), 
 	combat_rotation, oocRotation, exeOnLoad)

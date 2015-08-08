@@ -57,5 +57,5 @@ local outCombat = {
 
 }
 
-ProbablyEngine.rotation.register_custom(62, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(62, NeP.Core.GetCrInfo('Mage - Arcane'), 
 	inCombat, outCombat, lib)

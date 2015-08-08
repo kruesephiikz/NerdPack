@@ -1,10 +1,3 @@
---[[ ///---INFO---////
-Fury Warrior DPS is based on maintaining a high uptime on Enrage to generally buff 
-  your damage while also using as many Execute as possible. 
-  ///---INFO---////  ]]
-
-
-
 local exeOnLoad = function()
 	NeP.Splash()
 end
@@ -131,7 +124,7 @@ local Normal = {
 
 }
 
-ProbablyEngine.rotation.register_custom(72, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(72, NeP.Core.GetCrInfo('Warrior - Fury'), 
 	{-- Incombat
 		{ "57755", "player.range > 10", "target" }, 	-- Heroic Throw // Ranged
 		{ "2457", "player.seal != 1" }, 				-- Battle Stance

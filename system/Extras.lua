@@ -17,13 +17,13 @@ function NeP.Extras.MoveTo()
 			if FireHack then
 				local aX, aY, aZ = ObjectPosition('target')
 				if NeP.Lib.Distance("player", 'target') >= 6 + (UnitCombatReach('player') + UnitCombatReach('target')) then
-					npAlert:message('Moving to: '..name) 
+					NeP.Alert('Moving to: '..name) 
 					MoveTo(aX, aY, aZ)
 				end
 			elseif WOWSX_ISLOADED then
 				local aX, aY, aZ = ObjectPosition('target')
 				if NeP.Lib.Distance("player", 'target') >= 6 then
-					npAlert:message('Moving to: '..name) 
+					NeP.Alert('Moving to: '..name) 
 					MoveTo(aX, aY, aZ)
 				end
 			end
@@ -44,14 +44,14 @@ function NeP.Extras.FaceTo()
 			local name = GetUnitName('target', false)
 			if not NeP.Lib.Infront('target') then
 				if FireHack then
-					npAlert:message('Facing: '..name) 
+					NeP.Alert('Facing: '..name) 
 					FaceUnit('target')
 				elseif oexecute then
-					npAlert:message('Facing: '..name) 
+					NeP.Alert('Facing: '..name) 
 					FaceToUnit('target')
 				elseif WOWSX_ISLOADED then
 					local radian = ObjectFacing("target")
-					npAlert:message('Facing: '..name) 
+					NeP.Alert('Facing: '..name) 
 					Face(radian+PI)
 				end
 			end
@@ -72,7 +72,7 @@ function NeP.Extras.autoTarget(unit, name)
 		else
 			for i=1,#NeP.ObjectManager.unitCache do
 				if NeP.ObjectManager.unitCache[i].name ~= UnitName("player") then
-					npAlert:message('Targeting: '..NeP.ObjectManager.unitCache[i].name) 
+					NeP.Alert('Targeting: '..NeP.ObjectManager.unitCache[i].name) 
 					Macro("/target "..NeP.ObjectManager.unitCache[i].key)
 				end
 			end

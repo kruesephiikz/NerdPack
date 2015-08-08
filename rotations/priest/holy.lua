@@ -1,10 +1,3 @@
---[[ ///---INFO---////
-//Priest Disc//
-Thank You For Using My ProFiles
-I Hope Your Enjoy Them
-MTS
-]]--
-
 local exeOnLoad = function()
 	NeP.Splash()
 	ProbablyEngine.toggle.create(
@@ -514,7 +507,7 @@ local outCombat = {
 }
 
 	
-ProbablyEngine.rotation.register_custom(257, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(257, NeP.Core.GetCrInfo('Priest - Holy'), 
 	{-- Dyn Change CR
 		{ inCombat, "modifier.party" },
 		{ solo, "!modifier.party" },

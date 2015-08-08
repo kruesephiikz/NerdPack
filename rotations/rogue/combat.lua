@@ -1,5 +1,3 @@
-
-
 local exeOnLoad = function()
 	NeP.Splash()
 	ProbablyEngine.toggle.create(
@@ -78,7 +76,7 @@ local outCombat = {
 		}},
 }
 
-ProbablyEngine.rotation.register_custom(260, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(260, NeP.Core.GetCrInfo('Rogue - Combat'), 
 	{-- In-Combat
 		{{ -- Dont Break Sealth && Melee Range
 			{{-- Interrupts

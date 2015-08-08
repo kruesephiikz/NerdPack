@@ -82,7 +82,7 @@ local outCombat = {
 	{ "15473", "player.stance = 0" }, -- Shadowform
 }
 
-ProbablyEngine.rotation.register_custom(258, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow'), 
 		{ -- In-Combat
 			{ General },
 			{ Survival },

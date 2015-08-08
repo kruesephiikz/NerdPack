@@ -184,5 +184,5 @@ local outCombat = {
   
 }
 
-ProbablyEngine.rotation.register_custom(251, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(251, NeP.Core.GetCrInfo('Deathknight - Frost'), 
 	inCombat, outCombat, exeOnLoad)

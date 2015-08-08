@@ -218,7 +218,7 @@ local outCombat = {
 	}},
 }
 
-ProbablyEngine.rotation.register_custom(70,  NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retribution'), 
 	{-- In-Combat
 		{{-- Interrupts
 			{ "Rebuke" },

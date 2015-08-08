@@ -5,7 +5,7 @@ end
 local inCombat = {
 	
 	-- SPECIAL
-		{ "!53351", (function() return NeP.Lib.AutoDots(53351, 0, 20) end) },--Kill Shot
+		{ "!53351", (function() return NeP.Lib.AutoDots(53351, 0, 20) end) },-- Kill Shot
 	
 	{{-- Interrumpt
 		{ "147362" }, -- Counter Shot
@@ -130,5 +130,5 @@ local outCombat = {
 }
 
 
-ProbablyEngine.rotation.register_custom(254, NeP.Core.CrInfo(), 
+ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksmanship'), 
 	inCombat, outCombat, lib)

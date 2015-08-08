@@ -1,4 +1,13 @@
 NeP = {
+	Core = {
+		peRecomemded = "6.1r16",
+		CurrentCR = false,
+		hidding = false,
+		printColor = "|cffFFFFFF",
+		PeFetch = ProbablyEngine.interface.fetchKey,
+		PeConfig = ProbablyEngine.config,
+		PeBuildGUI = ProbablyEngine.interface.buildGUI
+	},
 	Addon = {
 		Info = {
 			Name = 'NerdPack',
@@ -16,16 +25,7 @@ NeP = {
 			addonColor = "|cff0070DE",
 			mediaDir = "Interface\\AddOns\\NerdPack\\media\\"
 		}
-	},
-	Core = {
-		peRecomemded = "6.1r16",
-		CurrentCR = false,
-		hidding = false,
-		printColor = "|cffFFFFFF",
-		PeFetch = ProbablyEngine.interface.fetchKey,
-		PeConfig = ProbablyEngine.config,
-		PeBuildGUI = ProbablyEngine.interface.buildGUI
-	},
+	}
 }
 
 local _parse = ProbablyEngine.dsl.parse
@@ -112,17 +112,10 @@ function NeP.Core.classColor(unit)
 	return _color.Hex
 end
 
-function NeP.Core.CrInfo()
+function NeP.Core.GetCrInfo(txt)
 	local _nick = NeP.Addon.Interface.addonColor..NeP.Addon.Info.Nick
-	return NeP.Addon.Info.Icon..'|r['.._nick.."|r]"..NeP.Core.GetUnitInfo('player')
-end
-
-function NeP.Core.GetUnitInfo(unit)
-	local _class, className = UnitClass(unit)
-	local _spec = GetSpecialization()
-	local _specName = select(2, GetSpecializationInfo(_spec))
-	local _specIcon = select(4, GetSpecializationInfo(_spec))
-	return "|r[|cff"..NeP.Core.classColor(unit).._class.." - ".."|T".._specIcon..":13:13|t ".._specName.."|r]"
+	local _classColor = NeP.Core.classColor('Player')
+	return NeP.Addon.Info.Icon.. '|r[' .. _nick .. "|r]|r[|cff" .. _classColor .. txt .. "|r]"
 end
 
 function NeP.Core.HideAll()
