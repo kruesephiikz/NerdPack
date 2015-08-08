@@ -13,31 +13,32 @@ Build By: MTS
 local _moving = 0
 function NeP.Extras.MoveTo()
 	local _classRange = {
-		["HUNTER"] = {Range = 30},
-		["WARLOCK"] = {Range = 30},
-		["PRIEST"] = {Range = 30},
-		["PALADIN"] = {Range = 5},
-		["MAGE"] = {Range = 30},
-		["ROGUE"] = {Range = 5},
-		["DRUID"] = {Range = 5},
-		["SHAMAN"] = {Range = 30},
-		["WARRIOR"] = {Range = 5},
-		["DEATHKNIGHT"] = {Range = 5},
-		["MONK"] = {Range = 5},
+		["HUNTER"] = {style = "ranged", Range = 30},
+		["WARLOCK"] = {style = "ranged",  Range = 30},
+		["PRIEST"] = {style = "ranged",  Range = 30},
+		["PALADIN"] = {style = "melee", Range = 5},
+		["MAGE"] = {style = "ranged",  Range = 30},
+		["ROGUE"] = {style = "melee", Range = 5},
+		["DRUID"] = {style = "melee", Range = 5},
+		["SHAMAN"] = {style = "ranged",  Range = 30},
+		["WARRIOR"] = {style = "melee", Range = 5},
+		["DEATHKNIGHT"] = {style = "melee", Range = 5},
+		["MONK"] = {style = "melee", Range = 5},
 	}
 	local _class, _className = UnitClass('player')
-	local _range = _classRange[_className].Range
+	local _range = _classRange[_className]
   	if NeP.Core.PeFetch('npconf', 'AutoMove') then
   		if UnitExists('target') 
 		and UnitIsVisible('target') 
 		and not UnitChannelInfo("player") then
 			local name = GetUnitName('target', false)
 			if FireHack then
-				if NeP.Lib.Distance("player", 'target') <= _range - 5 
+				if ((_range.style == "ranged" and NeP.Lib.Distance("player", 'target') <= _range.Range - 5)
+				or (_range.style == "melee" and NeP.Lib.Distance("player", 'target') <= _range.Range))
 				and _moving == 1 then 
 					_moving = 0
 					MoveTo(ObjectPosition('player'))
-				elseif NeP.Lib.Distance("player", 'target') >= _range
+				elseif NeP.Lib.Distance("player", 'target') > _range.Range
 				and _moving == 0 then
 					NeP.Alert('Moving to: '..name) 
 					_moving = 1
