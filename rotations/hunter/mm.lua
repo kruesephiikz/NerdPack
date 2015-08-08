@@ -123,9 +123,9 @@ ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksm
 	{ -- In-Combat
 		{_ALL},
 		{{-- Interrupts
-			{ "147362" }, -- Counter Shot
-			{ "19577" }, -- Intimidation
-			{ "19386" }, -- Wyrven Sting
+			{ "!147362" }, -- Counter Shot
+			{ "!19577" }, -- Intimidation
+			{ "!19386" }, -- Wyrven Sting
 		}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
 		{{ -- General Conditions
 			{Survival, "player.health < 100"},
