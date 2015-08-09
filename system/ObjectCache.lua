@@ -258,33 +258,32 @@ end
 ---------------------------------------------------]]
 local firehackOM = function()
 	local totalObjects = ObjectCount()
-	
 	for i=1, totalObjects do
 		local Obj = ObjectWithIndex(i)
-	
 			if ObjectExists(Obj) then
 				if ObjectIsType(Obj, ObjectTypes.GameObject) 
 				or ObjectIsType(Obj, ObjectTypes.Unit) then
-					if not BlacklistedObject(Obj) then
-									
+					if not BlacklistedObject(Obj) then		
 					local _OName = UnitName(Obj)
 					local _OD = NeP.Lib.Distance('player', Obj)
-				
 					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-								
 						-- Objects OM
 						if ObjectIsType(Obj, ObjectTypes.GameObject) then
-
 							local guid = UnitGUID(Obj)
 							local _, _, _, _, _, _id, _ = strsplit("-", guid)
 							local ObID = tonumber(_id)
-		
 							-- Lumbermill
 							if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
 								for k,v in pairs(lumbermillIDs) do
 									if ObID == v then
 										OChObjectsTotal = OChObjectsTotal + 1
-										table.insert(OChObjects, {key=Obj, distance=_OD, id=ObID, name=_OName, is='LM'})
+										OChObjects[#OChObjects+1] = {
+											key=Obj, 
+											distance=_OD, 
+											id=ObID, 
+											name=_OName, 
+											is='LM'
+										}
 										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
 									end
 								end
@@ -294,7 +293,13 @@ local firehackOM = function()
 								for k,v in pairs(oresIDs) do
 									if ObID == v then
 										OChObjectsTotal = OChObjectsTotal + 1
-										table.insert(OChObjects, {key=Obj, distance=_OD, id=ObID, name=_OName, is='Ore'})
+										OChObjects[#OChObjects+1] = {
+											key=Obj, 
+											distance=_OD, 
+											id=ObID, 
+											name=_OName, 
+											is='Ore'
+										}
 										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
 									end
 								end
@@ -304,7 +309,13 @@ local firehackOM = function()
 								for k,v in pairs(herbsIDs) do
 									if ObID == v then
 										OChObjectsTotal = OChObjectsTotal + 1
-										table.insert(OChObjects, {key=Obj, distance=_OD, id=ObID, name=_OName, is='Herb'})
+										OChObjects[#OChObjects+1] = {
+											key=Obj, 
+											distance=_OD, 
+											id=ObID, 
+											name=_OName, 
+											is='Herb'
+										}
 										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
 									end
 								end
@@ -314,7 +325,13 @@ local firehackOM = function()
 								for k,v in pairs(fishIDs) do
 									if ObID == v then
 										OChObjectsTotal = OChObjectsTotal + 1
-										table.insert(OChObjects, {key=Obj, distance=_OD, id=ObID, name=_OName, is='Fish'})
+										OChObjects[#OChObjects+1] = {
+											key=Obj, 
+											distance=_OD, 
+											id=ObID, 
+											name=_OName, 
+											is='Fish'
+										}
 										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
 									end
 								end
@@ -335,14 +352,28 @@ local firehackOM = function()
 									-- Enabled on GUI
 									if NeP.Core.PeFetch("ObjectCache", "FU") then
 										OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
-										table.insert(OChFriendly, {key=Obj, distance=_OD, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=_OName})
+										OChFriendly[#OChFriendly+1] = {
+											key=Obj, 
+											distance=_OD, 
+											health=health, 
+											maxHealth=maxHealth, 
+											actualHealth=actualHealth, 
+											name=_OName
+										}
 										table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)
 									end	
 								-- INSERT DUMMYS!
 								elseif UnitIsDummy(Obj) then
 									if NeP.Core.PeFetch("ObjectCache", "dummys") then
 										OChUnitsTotal = OChUnitsTotal + 1
-										table.insert(OChUnits, {key=Obj, distance=_OD, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=_OName})
+										OChUnits[#OChUnits+1] = {
+											key=Obj, 
+											distance=_OD, 
+											health=health, 
+											maxHealth=maxHealth, 
+											actualHealth=actualHealth, 
+											name=_OName
+										}
 										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 									end	
 								-- Enemie Units
@@ -350,7 +381,13 @@ local firehackOM = function()
 									-- Enabled on GUI and unit affecting combat
 									if NeP.Core.PeFetch("ObjectCache", "EU") then
 										OChUnitsTotal = OChUnitsTotal + 1
-										table.insert(OChUnits, {key=Obj, distance=_OD, health=health, maxHealth=maxHealth, actualHealth=actualHealth, name=_OName, class=_class})
+										OChUnits[#OChUnits+1] = {
+											key=Obj, distance=_OD, 
+											health=health, maxHealth=maxHealth, 
+											actualHealth=actualHealth, 
+											name=_OName, 
+											class=_class
+										}
 										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 									end
 								end			
@@ -381,7 +418,14 @@ local genericOM = function()
 						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
 						and ProbablyEngine.condition["alive"](target) then
 							OChUnitsTotal = OChUnitsTotal + 1
-							table.insert(OChUnits, {key=target, distance=_OD, health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), maxHealth=UnitHealthMax(target), actualHealth=UnitHealth(target), name=UnitName(target)})
+							OChUnits[#OChUnits+1] = {
+								key=target, 
+								distance=_OD, 
+								health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), 
+								maxHealth=UnitHealthMax(target), 
+								actualHealth=UnitHealth(target), 
+								name=UnitName(target)
+							}
 							table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 						end
 					end
@@ -396,7 +440,14 @@ local genericOM = function()
 				if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
 				and ProbablyEngine.condition["alive"](friendly) then
 					OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
-					table.insert(OChFriendly, {key=friendly, distance=_OD, health=math.floor((UnitHealth(friendly) / UnitHealthMax(friendly)) * 100), maxHealth=UnitHealthMax(friendly), actualHealth=UnitHealth(friendly), name=UnitName(friendly)})
+					OChFriendly[#OChFriendly+1] = {
+						key=friendly, 
+						distance=_OD, 
+						health=math.floor((UnitHealth(friendly) / UnitHealthMax(friendly)) * 100), 
+						maxHealth=UnitHealthMax(friendly), 
+						actualHealth=UnitHealth(friendly), 
+						name=UnitName(friendly)
+					}
 					table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)
 				end
 			end
@@ -405,7 +456,14 @@ local genericOM = function()
 	else
 		-- Self
 		OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
-		table.insert(OChFriendly, {key='Player', distance=0, health=math.floor((UnitHealth('player') / UnitHealthMax('player')) * 100), maxHealth=UnitHealthMax('player'), actualHealth=UnitHealth('player'), name=UnitName('player')})
+		OChFriendly[#OChFriendly+1] = {
+			key='Player', 
+			distance=0, 
+			health=math.floor((UnitHealth('player') / UnitHealthMax('player')) * 100), 
+			maxHealth=UnitHealthMax('player'), 
+			actualHealth=UnitHealth('player'), 
+			name=UnitName('player')
+		}
 		-- Target
 		if UnitExists('target') and not UnitIsFriend("player", 'target') then
 			if UnitAffectingCombat('target') then
@@ -413,7 +471,14 @@ local genericOM = function()
 				if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
 				and ProbablyEngine.condition["alive"]('target') then
 					OChUnitsTotal = OChUnitsTotal + 1
-					table.insert(OChUnits, {key='target', distance=_OD, health=math.floor((UnitHealth('target') / UnitHealthMax('target')) * 100), maxHealth=UnitHealthMax('target'), actualHealth=UnitHealth('target'), name=UnitName('target')})
+					OChFriendly[#OChFriendly+1] = {
+						key='target', 
+						distance=_OD, 
+						health=math.floor((UnitHealth('target') / UnitHealthMax('target')) * 100), 
+						maxHealth=UnitHealthMax('target'), 
+						actualHealth=UnitHealth('target'), 
+						name=UnitName('target')
+					}
 				end
 			end
 		end
@@ -424,7 +489,14 @@ local genericOM = function()
 				if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
 				and ProbablyEngine.condition["alive"]('mouseover') then
 					OChUnitsTotal = OChUnitsTotal + 1
-					table.insert(OChUnits, {key='mouseover', distance=_OD, health=math.floor((UnitHealth('mouseover') / UnitHealthMax('mouseover')) * 100), maxHealth=UnitHealthMax('mouseover'), actualHealth=UnitHealth('mouseover'), name=UnitName('mouseover')})
+					OChUnits[#OChUnits+1] = {
+						key='mouseover', 
+						distance=_OD, 
+						health=math.floor((UnitHealth('mouseover') / UnitHealthMax('mouseover')) * 100), 
+						maxHealth=UnitHealthMax('mouseover'), 
+						actualHealth=UnitHealth('mouseover'), 
+						name=UnitName('mouseover')
+					}
 				end
 			end
 		end		
