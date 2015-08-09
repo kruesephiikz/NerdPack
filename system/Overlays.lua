@@ -312,6 +312,21 @@ LibDraw.Sync(function()
 						LibDraw.SetColorRaw(1, 1, 1, alpha)
 						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 					end
+				elseif UnitIsPlayer(object.key) then
+					if NeP.Core.PeFetch("NePconf_Overlays", "objectsPlayers") then
+						local factionGroup, factionName = UnitFactionGroup(object.key)
+						if factionGroup == 'Horde' then
+							if distance < 50 then
+								LibDraw.Texture(horde_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(horde_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(horde, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+						end
+					end
 				end
 			end
 		end
@@ -328,17 +343,7 @@ LibDraw.Sync(function()
 					if NeP.Core.PeFetch("NePconf_Overlays", "objectsPlayers") then
 						if name ~= UnitName('player') then
 							local factionGroup, factionName = UnitFactionGroup(object.key)
-							if factionGroup == 'Horde' then
-								if distance < 50 then
-									LibDraw.Texture(horde_big, ox, oy, oz + zOffset, alpha)
-								elseif distance > 200 then
-									LibDraw.Texture(horde_small, ox, oy, oz + zOffset, alpha)
-								else
-									LibDraw.Texture(horde, ox, oy, oz + zOffset, alpha)
-								end
-								LibDraw.SetColorRaw(1, 1, 1, alpha)
-								LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-							elseif factionGroup == 'Alliance' then
+							if factionGroup == 'Alliance' then
 								if distance < 50 then
 									LibDraw.Texture(ally_big, ox, oy, oz + zOffset, alpha)
 								elseif distance > 200 then
