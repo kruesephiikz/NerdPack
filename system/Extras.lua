@@ -182,7 +182,6 @@ function NeP.Extras.autoMilling()
 					Cast(_millSpell) 
 					UseItem(Milling_Herbs[i])
 					NeP.Core.Print('Milling '..Milling_Herbs[i])
-					break
 				else	
 					NeP.AutoMilling = false
 					NeP.Core.Print('Stoped milling, you dont have enough mats.')
