@@ -102,6 +102,32 @@ local unit_small = {
 	width = 18, height = 18, scale = 1
 }
 
+local horde = {
+	texture = _mediaDir.."horde.blp",
+	width = 64, height = 64
+}
+local horde_big = {
+	texture = _mediaDir.."horde.blp",
+	width = 58, height = 58, scale = 1
+}
+local horde_small = {
+	texture = _mediaDir.."horde.blp",
+	width = 18, height = 18, scale = 1
+}
+
+local ally = {
+	texture = _mediaDir.."alliance.blp",
+	width = 64, height = 64
+}
+local ally_big = {
+	texture = _mediaDir.."alliance.blp",
+	width = 58, height = 58, scale = 1
+}
+local ally_small = {
+	texture = _mediaDir.."alliance.blp",
+	width = 18, height = 18, scale = 1
+}
+
 LibDraw.Sync(function()
 	if NeP.Core.CurrentCR and FireHack then
 		-- Reset
@@ -301,15 +327,28 @@ LibDraw.Sync(function()
 				if UnitIsPlayer(object.key) then
 					if NeP.Core.PeFetch("NePconf_Overlays", "objectsPlayers") then
 						if name ~= UnitName('player') then
-							if distance < 50 then
-								LibDraw.Texture(unit_big, ox, oy, oz + zOffset, alpha)
-							elseif distance > 200 then
-								LibDraw.Texture(unit_small, ox, oy, oz + zOffset, alpha)
-							else
-								LibDraw.Texture(unit, ox, oy, oz + zOffset, alpha)
+							local factionGroup, factionName = UnitFactionGroup(object.key)
+							if factionGroup == 'Horde' then
+								if distance < 50 then
+									LibDraw.Texture(horde_big, ox, oy, oz + zOffset, alpha)
+								elseif distance > 200 then
+									LibDraw.Texture(horde_small, ox, oy, oz + zOffset, alpha)
+								else
+									LibDraw.Texture(horde, ox, oy, oz + zOffset, alpha)
+								end
+								LibDraw.SetColorRaw(1, 1, 1, alpha)
+								LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+							elseif factionGroup == 'Alliance' then
+								if distance < 50 then
+									LibDraw.Texture(ally_big, ox, oy, oz + zOffset, alpha)
+								elseif distance > 200 then
+									LibDraw.Texture(ally_small, ox, oy, oz + zOffset, alpha)
+								else
+									LibDraw.Texture(ally, ox, oy, oz + zOffset, alpha)
+								end
+								LibDraw.SetColorRaw(1, 1, 1, alpha)
+								LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 							end
-							LibDraw.SetColorRaw(1, 1, 1, alpha)
-							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 						end
 					end
 				end
