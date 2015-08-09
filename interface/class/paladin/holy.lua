@@ -1,5 +1,3 @@
-
-
 NeP.Addon.Interface.PalaHoly = {
   key = "npconfPalaHoly",
   profiles = true,
@@ -186,7 +184,7 @@ NeP.Addon.Interface.PalaHoly = {
 	     	type = "spinner", 
 	     	text = "Flash of Light", 
 	     	key = "FlashofLightTank", 
-	     	default = 20 
+	     	default = 40 
 	    },
 	    { 
 	    	type = "spinner", 
@@ -252,7 +250,7 @@ NeP.Addon.Interface.PalaHoly = {
       		type = "spinner", 
       		text = "Flash of Light", 
       		key = "FlashofLight", 
-      		default = 20 
+      		default = 35 
       	},
       	{ 
       		type = "spinner", 
