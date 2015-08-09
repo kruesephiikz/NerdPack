@@ -27,9 +27,10 @@ ProbablyEngine.listener.register("PLAYER_ENTERING_WORLD", function(...)
 end)
 
 ProbablyEngine.listener.register("ACTIVE_TALENT_GROUP_CHANGED", function(...)
-    -- Reload when player changes spec to avoid key nils.
     	if NeP_inWorld then
-			ReloadUI()
+			-- Open & Close class config to avoid nil keys
+			NeP.Addon.Interface.ClassGUI()
+			NeP.Addon.Interface.ClassGUI()
         end
 end)
 
