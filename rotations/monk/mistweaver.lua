@@ -82,7 +82,7 @@ local exeOnLoad = function()
 		'Interface\\Icons\\Inv_boots_plate_dungeonplate_c_05.png', 
 		'Enable Casting Transcendence Outside of Combat', 
 		'Enable/Disable Casting Transcendence Outside of Combat \nIf you forget to cast it and need help -- not a bad idea!.')
-	ProbablyEngine.listener.register("COMBAT_LOG_EVENT_UNFILTERED", function()
+	ProbablyEngine.listener.register("COMBAT_LOG_EVENT_UNFILTERED", function(...)
 		local timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID = ...
 		if event == "SPELL_CAST_SUCCESS" then
 			if sourceGUID == UnitGUID("player") then
