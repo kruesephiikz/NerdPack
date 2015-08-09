@@ -13,55 +13,68 @@ local exeOnLoad = function()
 end
 
 local Cooldowns = {
-	{ "Vanish" },
-	{ "Shadow Reflection" },
-	{ "Preparation", "player.spell(Vanish).cooldown >= 10" },
-	{ "Vendetta", "!player.moving" },
+	{ "1856", "player.energy >= 60" }, -- Vanish
+	{ "Shadow Reflection" }, -- Shadow Reflection // TALENT (FIXME: ID)
+	{ "14185", "player.spell(1856).cooldown >= 10" }, -- Preparation
+	{ "79140", "!player.moving" }, -- Vendetta
+}
+
+local Survival = {
+	{ "73651", { -- Recuperate
+		"player.combopoints <= 3",
+		"player.health < 35",
+		"player.buff(73651).duration <= 5"
+	}},
+	{ "5277", "player.health < 30" }, -- Evasion
+	{ "57934", "player.aggro > 60", "tank"}, -- Tricks of the Trade
+	{ "57934", "player.aggro > 60", "focus"}, -- Tricks of the Trade
 }
 
 local inCombat = {
+	{"137619", { -- Marked for Death
+		"player.combopoints = 0",
+		"toggle.MfD"
+	}},
 	{{-- Auto Dotting
-		{"Rupture", {
+		{"1943", { -- Rupture
 			"player.combopoints >= 5",
-			(function() return NeP.Lib.AutoDots('Rupture', 100, 7, 5) end)
+			(function() return NeP.Lib.AutoDots('1943', 100, 7, 5) end)
 		}, "target" },
 	}, "toggle.dotEverything" },
-	{"Rupture", {
-		"player.combopoints >= 5",
-		"target.debuff(Rupture).duration <= 7"
-	}, "target" },
-	{"Envenom", "player.combopoints >= 5", "target" },
-	{"Dispatch", "target.health <= 35", "target" },
-	{"Dispatch", "player.buff(Blindside)", "target" },
-	
-	-- SAoE
-	{"Fan of Knives", "player.area(10).enemies > 3"},
-	
-	-- Force AoE
-	{"Fan of Knives", "modifier.multitarget"},
-	
-	{{-- ST
-		{"Mutilate", "target.health >= 35", "target" },
-	}, {"!modifier.multitarget", "!player.area(10).enemies > 3"} },
+	{{ -- Toggle off
+		{"1943", { -- Rupture
+			"player.combopoints >= 5",
+			"target.debuff(1943).duration <= 7"
+		}, "target" },
+	}, "!toggle.dotEverything" },
+	{ "32645", "player.combopoints >= 5", "target" }, -- Envenom
+	{ "111240", "target.health <= 35", "target" }, -- Dispatch
+	{ "111240", "player.buff(121153)", "target" }, -- Dispatch w/ Proc Blindside
+	-- AoE
+		-- SAoE
+		{ "51723", "player.area(10).enemies > 3"}, -- Fan of Knives
+		-- Force AoE
+		{ "51723", "modifier.multitarget"}, -- Fan of Knives
+	{ "1329", "target.health >= 35", "target" }, -- Mutilate
 }
 
 local outCombat = {
 	-- Auto Attack after vanish
-	{"Ambush", {
+	{"8676", { -- Ambush
 		"target.alive",
-		"lastcast(Vanish)"
+		"lastcast(1856)"
 	}, "target" },
 
 	-- Poison
 		-- Letal
-		{"Deadly Poison", {
-			"!lastcast(Deadly Poison)",
-			"!player.buff(Deadly Poison)"
+		{"2823", { -- Deadly Poison
+			"!lastcast(2823)",
+			"!player.buff(2823)"
 		}},
 		-- Non-Letal
-		{"Crippling Poison", {
-			"!lastcast(Crippling Poison)",
-			"!player.buff(Crippling Poison)"
+		{"3408", { -- Crippling Poison
+			"!lastcast(3408)",
+			"!player.buff(3408)"
 		}},
 }
 
@@ -69,20 +82,10 @@ ProbablyEngine.rotation.register_custom(259, NeP.Core.GetCrInfo('Rogue - Assassi
 	{-- In-Combat
 		{{ -- Dont Break Sealth && Melee Range
 			{{-- Interrupts
-				{ "Kick" },
+				{ "1766" }, -- Kick
 			}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
-			{"Recuperate",{
-				"player.combopoints <= 3",
-				"player.health < 35",
-				"player.buff(Recuperate).duration <= 5"
-			}},
-			{"Marked for Death", {
-				"player.combopoints = 0",
-				"toggle.MfD"
-			}},
-			{"Tricks of the Trade", "player.aggro > 60", "tank"},
-			{"Evasion", "player.health < 30"},
+			{Survival},
 			{Cooldowns, "modifier.cooldowns" },
 			{inCombat},
-		}, {"!player.buff(Vanish)", "target.range < 7"} },
+		}, { "!player.buff(1856)", "target.range < 7" } },
 	}, outCombat, exeOnLoad)
