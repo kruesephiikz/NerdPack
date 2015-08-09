@@ -318,8 +318,6 @@ LibDraw.Sync(function()
 	end
 end)
 
-LibDraw.Enable(0.01)
-
 
 local NeP_OverlaysGUI
 local NeP_OverlaysGUI_Open = false

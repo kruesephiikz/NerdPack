@@ -17,12 +17,12 @@ end
 
 if LibStub then
 	-- LibStub version control
-	LibDraw = LibStub:NewLibrary("LibDraw-1.0", 1)
+	LibDraw = LibStub:NewLibrary("LibDraw-1.0", 2)
 	if not LibDraw then return end
 else
 	-- Pretty much LibStub
 	LibDraw = {
-		version = 1.1
+		version = 1.2
 	}
 	if _G['LibDraw'] and _G['LibDraw'].version and _G['LibDraw'].version > LibDraw.version then
 		return
