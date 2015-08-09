@@ -8,8 +8,8 @@ local exeOnLoad = function()
 	ProbablyEngine.toggle.create(
 		'dotEverything', 
 		'Interface\\Icons\\Ability_creature_cursed_05.png', 
-		'Dot All The Things! (SOLO)', 
-		'Click here to dot all the things while in single target.')
+		'Dot All The Things!', 
+		'Click here to dot all the things.')
 end
 
 local Cooldowns = {
