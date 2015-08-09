@@ -1,3 +1,30 @@
+local _DarkSimUnit = function(unit)
+	local _darkSimSpells = {
+		-- Siege of Orgrimmar
+		"Froststorm Bolt",
+		"Arcane Shock",
+		"Rage of the Empress",
+		"Chain Lightning",
+		-- PvP
+		"Hex",
+		"Mind Control",
+		"Cyclone",
+		"Polymorph",
+		"Pyroblast",
+		"Tranquility",
+		"Divine Hymn",
+		"Hymn of Hope",
+		"Ring of Frost",
+		"Entangling Roots"
+	}
+	for index,spellName in pairs(_darkSimSpells) do
+		if ProbablyEngine.condition["casting"](unit, spellName) then
+			return true 
+		end
+	end
+	return false
+end
+
 local exeOnLoad = function()
 	NeP.Splash()
 	ProbablyEngine.toggle.create(
@@ -91,8 +118,8 @@ local inCombat = {
 	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
 
 	-- Spell Steal
-	{ "77606", (function() return NeP.Lib.DK.DarkSimUnit('target') end), "target" }, -- Dark Simulacrum
-	{ "77606", (function() return NeP.Lib.DK.DarkSimUnit('focus') end), "focus" },  -- Dark Simulacrum
+	{ "77606", (function() return _DarkSimUnit('target') end), "target" }, -- Dark Simulacrum
+	{ "77606", (function() return _DarkSimUnit('focus') end), "focus" },  -- Dark Simulacrum
 
 	-- Plague Leech
 	{ "123693", {

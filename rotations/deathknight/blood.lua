@@ -1,3 +1,94 @@
+NeP.Addon.Interface.DkBlood = {
+	key = "npconfDkBlood",
+	profiles = true,
+	title = NeP.Addon.Info.Icon.."MrTheSoulz Config",
+	subtitle = "Deathknight Blood Settings",
+	color = NeP.Core.classColor('player'),
+	width = 250,
+	height = 500,
+	config = {
+		
+		-- General
+		{ type = 'rule' },
+		{ 
+			type = 'header', 
+			text = "General settings:", 
+			align = "center"
+		},
+
+			{ 
+				type = "checkbox", 
+				text = "Run Faster", 
+				key = "RunFaster", 
+				default = false, 
+				desc = "This checkbox enables or disables the use of Unholy presence while out of combat to move faster."
+			},
+
+		-- Focus
+		{ type = 'rule' },
+		{ type = 'header', text = 'Player settings:', align = "center"},
+
+			{ 
+				type = "spinner", 
+				text = "Icebound Fortitude", 
+				key = "IceboundFortitude", 
+				default = 40
+			},
+			{ 
+				type = "spinner", 
+				text = "Vampiric Blood", 
+				key = "VampiricBlood", 
+				default = 40
+			},
+			{ 
+				type = "spinner", 
+				text = "Death Pact", 
+				key = "DeathPact", 
+				default = 50
+			},
+			{ 
+				type = "spinner", 
+				text = "Rune Tap", 
+				key = "RuneTap", 
+				default = 60
+			},
+			{ 
+				type = "spinner", 
+				text = "Death Siphon", 
+				key = "DeathSiphon", 
+				default = 60
+			},
+
+	}
+}
+
+local _DarkSimUnit = function(unit)
+	local _darkSimSpells = {
+		-- Siege of Orgrimmar
+		"Froststorm Bolt",
+		"Arcane Shock",
+		"Rage of the Empress",
+		"Chain Lightning",
+		-- PvP
+		"Hex",
+		"Mind Control",
+		"Cyclone",
+		"Polymorph",
+		"Pyroblast",
+		"Tranquility",
+		"Divine Hymn",
+		"Hymn of Hope",
+		"Ring of Frost",
+		"Entangling Roots"
+	}
+	for index,spellName in pairs(_darkSimSpells) do
+		if ProbablyEngine.condition["casting"](unit, spellName) then
+			return true 
+		end
+	end
+	return false
+end
+
 local exeOnLoad = function()
 	NeP.Splash()
 
@@ -71,8 +162,8 @@ local inCombat = {
 	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
 
 	-- Spell Steal
-		{ "77606", (function() return NeP.Lib.DK.DarkSimUnit('target') end), "target" }, -- Dark Simulacrum
-		{ "77606", (function() return NeP.Lib.DK.DarkSimUnit('focus') end), "focus" },  -- Dark Simulacrum
+		{ "77606", (function() return _DarkSimUnit('target') end), "target" }, -- Dark Simulacrum
+		{ "77606", (function() return _DarkSimUnit('focus') end), "focus" },  -- Dark Simulacrum
 
 	-- Plague Leech
 		{ "123693", {

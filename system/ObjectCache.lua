@@ -605,6 +605,52 @@ local NeP_FriendlyObjectCache = {
 }
 
 --[[
+	GUIs Manager
+---------------------------------------------------]]
+function NeP.Addon.Interface.CacheGUI()
+    if not NeP_OpenCacheWindow then
+        NeP_cacheWindow = ProbablyEngine.interface.buildGUI(NeP_ObjectCache)
+		NeP_cacheWindowEmemies = ProbablyEngine.interface.buildGUI(NeP_EnemieObjectCache)
+		NeP_cacheWindowFriendly = ProbablyEngine.interface.buildGUI(NeP_FriendlyObjectCache)
+		-- [[ If you close any of the 3 windows open, they all close.]]
+		NeP_cacheWindow.parent:SetEventListener('OnClose', function()
+			NeP_cacheWindowEmemies.parent:Hide()
+			NeP_cacheWindowFriendly.parent:Hide()
+            NeP_OpenCacheWindow = false
+            NeP_ShowingCacheWindow = false
+        end)
+		NeP_cacheWindowEmemies.parent:SetEventListener('OnClose', function()
+			NeP_cacheWindow.parent:Hide()
+			NeP_cacheWindowFriendly.parent:Hide()
+            NeP_OpenCacheWindow = false
+            NeP_ShowingCacheWindow = false
+        end)
+		NeP_cacheWindowFriendly.parent:SetEventListener('OnClose', function()
+			NeP_cacheWindowEmemies.parent:Hide()
+			NeP_cacheWindow.parent:Hide()
+            NeP_OpenCacheWindow = false
+            NeP_ShowingCacheWindow = false
+        end)
+		NeP_cacheWindowUpdating = true
+		NeP_ShowingCacheWindow = true
+		NeP_OpenCacheWindow = true
+	elseif NeP_OpenCacheWindow and NeP_ShowingCacheWindow then
+        NeP_cacheWindowUpdating = false
+		NeP_ShowingCacheWindow = false
+        NeP_cacheWindow.parent:Hide()
+		NeP_cacheWindowEmemies.parent:Hide()
+		NeP_cacheWindowFriendly.parent:Hide()
+    elseif NeP_OpenCacheWindow and not NeP_ShowingCacheWindow then
+        NeP_cacheWindowUpdating = true
+		NeP_ShowingCacheWindow = true
+        NeP_cacheWindow.parent:Show()
+		NeP_cacheWindowEmemies.parent:Show()
+		NeP_cacheWindowFriendly.parent:Show()
+        
+    end
+end
+
+--[[
 	Update GUIs function
 	Needs to improve! (Cleaner)
 ---------------------------------------------------]]
@@ -679,52 +725,6 @@ local OMGUI_Update = function()
 			GUIFriendly.current_Cache2_10:SetText(_addonColor.."10: |r "..OChFriendly[10].name.."\n |--> |cff0070DEGUID:|r "..OChFriendly[10].key.."\n |--> |cff0070DEDistance:|r "..OChFriendly[10].distance.."\n |--> |cff0070DEHealth:|r "..OChFriendly[10].health.."%".."\n |--> |cff0070DEMaxHealth:|r "..OChFriendly[10].maxHealth.."\n |--> |cff0070DEactualHealth:|r "..OChFriendly[10].actualHealth)
 		else GUIFriendly.current_Cache2_10:SetText(emptyMsg) end
 	end
-end
-
---[[
-	GUIs Manager
----------------------------------------------------]]
-function NeP.Addon.Interface.CacheGUI()
-    if not NeP_OpenCacheWindow then
-        NeP_cacheWindow = ProbablyEngine.interface.buildGUI(NeP_ObjectCache)
-		NeP_cacheWindowEmemies = ProbablyEngine.interface.buildGUI(NeP_EnemieObjectCache)
-		NeP_cacheWindowFriendly = ProbablyEngine.interface.buildGUI(NeP_FriendlyObjectCache)
-		-- [[ If you close any of the 3 windows open, they all close.]]
-		NeP_cacheWindow.parent:SetEventListener('OnClose', function()
-			NeP_cacheWindowEmemies.parent:Hide()
-			NeP_cacheWindowFriendly.parent:Hide()
-            NeP_OpenCacheWindow = false
-            NeP_ShowingCacheWindow = false
-        end)
-		NeP_cacheWindowEmemies.parent:SetEventListener('OnClose', function()
-			NeP_cacheWindow.parent:Hide()
-			NeP_cacheWindowFriendly.parent:Hide()
-            NeP_OpenCacheWindow = false
-            NeP_ShowingCacheWindow = false
-        end)
-		NeP_cacheWindowFriendly.parent:SetEventListener('OnClose', function()
-			NeP_cacheWindowEmemies.parent:Hide()
-			NeP_cacheWindow.parent:Hide()
-            NeP_OpenCacheWindow = false
-            NeP_ShowingCacheWindow = false
-        end)
-		NeP_cacheWindowUpdating = true
-		NeP_ShowingCacheWindow = true
-		NeP_OpenCacheWindow = true
-	elseif NeP_OpenCacheWindow and NeP_ShowingCacheWindow then
-        NeP_cacheWindowUpdating = false
-		NeP_ShowingCacheWindow = false
-        NeP_cacheWindow.parent:Hide()
-		NeP_cacheWindowEmemies.parent:Hide()
-		NeP_cacheWindowFriendly.parent:Hide()
-    elseif NeP_OpenCacheWindow and not NeP_ShowingCacheWindow then
-        NeP_cacheWindowUpdating = true
-		NeP_ShowingCacheWindow = true
-        NeP_cacheWindow.parent:Show()
-		NeP_cacheWindowEmemies.parent:Show()
-		NeP_cacheWindowFriendly.parent:Show()
-        
-    end
 end
 
 --[[

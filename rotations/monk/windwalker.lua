@@ -1,4 +1,61 @@
+NeP.Addon.Interface.MonkWw = {
+	key = "npconfigMonkWw",
+	profiles = true,
+	title = NeP.Addon.Info.Icon.."MrTheSoulz Config",
+	subtitle = "Monk WindWalker Settings",
+	color = NeP.Core.classColor('player'),
+	width = 250,
+	height = 500,
+	config = {
+		
+		-- General
+		{ type = 'rule' },
+		{ 
+			type = 'header',
+			text = "General settings:", 
+			align = "center" 
+		},
+			{ 
+				type = "checkbox", 
+				text = "SEF", 
+				key = "SEF", 
+				default = true,
+			},
+
+			-- NOTHING IN HERE YET...
+
+		{ type = "spacer" },
+		{ type = 'rule' },
+		{ 
+			type = "header", 
+			text = "Survival Settings", 
+			align = "center" 
+		},
+			
+			-- Survival Settings:
+			
+			
+	}
+}
+
 local n,r = GetSpellInfo(137639)
+
+local _SEF = function()
+	for i=1,#NeP.ObjectManager.unitCache do
+		local object = NeP.ObjectManager.unitCache[i]
+		if UnitGUID('target') ~= UnitGUID(object.key) 
+		and IsSpellInRange(GetSpellInfo(137639), object.key) then
+		local _,_,_,_,_,_,debuff = UnitDebuff(object.key, GetSpellInfo(137639), nil, "PLAYER")
+			if not debuff and NeP.Core.dynamicEval("!player.buff(137639).count = 2") then
+				if NeP.Lib.Infront(object.key) then
+					ProbablyEngine.dsl.parsedTarget = object.key
+					return true 
+				end
+			end
+		end
+	end
+	return false
+end
 
 local exeOnLoad = function()
 	NeP.Splash()
@@ -17,7 +74,7 @@ local inCombat = {
 		{ "122470", "modifier.alt" }, -- Touch of Karma
 
 	{{-- SEF
-		{ "137639", (function() return NeP.Lib.Monk.SEF() end) },
+		{ "137639", (function() return _SEF() end) },
 		{ "/cancelaura "..n, "target.debuff(137639)", "target"}, -- Storm, Earth, and Fire
 	}, (function() return NeP.Core.PeFetch('npconfigMonkWw', 'SEF') end) },
 
