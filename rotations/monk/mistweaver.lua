@@ -58,6 +58,18 @@ local function Trans()
 	return false
 end
 
+local NeP_SoothingMist_Target = nil
+
+local NeP_soothingMist = function (ht)
+	if NeP_SoothingMist_Target ~= nil then
+		local health = math.floor((UnitHealth(NeP_SoothingMist_Target) / UnitHealthMax(NeP_SoothingMist_Target)) * 100)
+		if health >= ht then
+			return true
+		end
+	end
+	return false
+end
+
 local exeOnLoad = function()
 	NeP.Splash()
 	ProbablyEngine.toggle.create(
@@ -70,6 +82,17 @@ local exeOnLoad = function()
 		'Interface\\Icons\\Inv_boots_plate_dungeonplate_c_05.png', 
 		'Enable Casting Transcendence Outside of Combat', 
 		'Enable/Disable Casting Transcendence Outside of Combat \nIf you forget to cast it and need help -- not a bad idea!.')
+	ProbablyEngine.listener.register("COMBAT_LOG_EVENT_UNFILTERED", function()
+		local timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID = ...
+		if event == "SPELL_CAST_SUCCESS" then
+			if sourceGUID == UnitGUID("player") then
+				-- Monk MW // Soothing Mist
+				if spellID == 115175 then
+					NeP_SoothingMist_Target = targetName
+				end
+			end
+		end
+	end)
 end
 							-- [[ !!!Stance of the Wise Serpent!!!]]
 --[[!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!]]
