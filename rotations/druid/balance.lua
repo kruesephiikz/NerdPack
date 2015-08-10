@@ -112,41 +112,6 @@ local _All = {
 		"modifier.lshift", 
 		"!mouseover.alive" 
 	}, "mouseover" },
-	
-	-- Form Handling Logic
-	{ "/run CancelShapeshiftForm()", (function() 
-	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "MANUAL" then
-	  		return false
-	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "0" then
-	  		return true
-	  	else
-	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("npconfDruidBalance", "Form", "4"))
-	  	end
-	end) },
-	{ "768", { -- catform
-	  	"player.form != 2", -- Stop if cat
-	  	"!modifier.lalt", -- Stop if pressing left alt
-	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "2" end),
-	}},
-	{ "783", { -- Travel
-	  	"player.form != 3", -- Stop if cat
-	  	"!modifier.lalt", -- Stop if pressing left alt
-	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "3" end),
-	}},
-	{ "5487", { -- catform
-	  	"player.form != 1", -- Stop if cat
-	  	"!modifier.lalt", -- Stop if pressing left alt
-	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "1" end),
-	}},
-	{ "24858", { -- boomkin
-	  	"player.form != 4", -- Stop if boomkin
-	  	"!modifier.lalt", -- Stop if pressing left alt
-	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "4" end),
-	}},
 }
 
 local BoomkinForm = {
@@ -183,17 +148,72 @@ local BoomkinForm = {
 		{ "164812", "player.buff(Lunar Peak)", "target" }, --MoonFire on proc
 	
 	-- Rotation
-		{ "78674", { "player.spell(78674).charges >= 2", "!lastcast(78674)" } }, --StarSurge with more then 2 charges
-		{ "78674", { "player.buff(112071)", "!lastcast(78674)" } }, --StarSurge with Celestial Alignment buff
-		{ "164812", "target.debuff(Moonfire).duration <= 2" }, --MoonFire
-		{ "164815", "target.debuff(Sunfire).duration <= 2" }, --SunFire
-		{ "2912", "player.buff(Lunar Empowerment).count >= 1" }, --Starfire with Lunar Empowerment
-		{ "5176", "player.buff(Solar Empowerment).count >= 1" }, --Wrath with Solar Empowerment
-		{ "2912", { ( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) <= 20 end ), "player.lunar" } }, --StarFire
-		{ "5176", { ( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) >= -20 end ), "player.solar" } },  --Wrath
-		{ "2912", { ( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) <= 0 end ), "player.solar" } }, --StarFire
-		{ "5176", { ( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) >= 0 end ), "player.lunar" } },  --Wrath
-		--{ "2912" }, --StarFire Filler
+	{ "78674", { --StarSurge with more then 2 charges
+		"player.spell(78674).charges >= 2", 
+		"!lastcast(78674)" 
+	}},
+	{ "78674", { --StarSurge with Celestial Alignment buff
+		"player.buff(112071)", 
+		"!lastcast(78674)" 
+	}},
+	{ "164812", "target.debuff(Moonfire).duration <= 2" }, --MoonFire
+	{ "164815", "target.debuff(Sunfire).duration <= 2" }, --SunFire
+	{ "2912", "player.buff(Lunar Empowerment).count >= 1" }, --Starfire with Lunar Empowerment
+	{ "5176", "player.buff(Solar Empowerment).count >= 1" }, --Wrath with Solar Empowerment
+	{ "2912", { -- StarFire
+		( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) <= 20 end ), 
+		"player.lunar" 
+	}},
+	{ "5176", { -- Wrath
+		( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) >= -20 end ), 
+		"player.solar" 
+	}}, 
+	{ "2912", { -- StarFire
+		( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) <= 0 end ), 
+		"player.solar" 
+	}},
+	{ "5176", { --Wrath
+		( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) >= 0 end ), 
+		"player.lunar" 
+	}},
+	--{ "2912" }, --StarFire Filler
+}
+
+local inCombat = {
+	-- Form Handling Logic
+	{ "/run CancelShapeshiftForm()", (function() 
+	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "MANUAL" then
+	  		return false
+	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "0" then
+	  		return true
+	  	else
+	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("npconfDruidBalance", "Form", "4"))
+	  	end
+	end) },
+	{ "768", { -- catform
+	  	"player.form != 2", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "2" end),
+	}},
+	{ "783", { -- Travel
+	  	"player.form != 3", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "3" end),
+	}},
+	{ "5487", { -- catform
+	  	"player.form != 1", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "1" end),
+	}},
+	{ "24858", { -- boomkin
+	  	"player.form != 4", -- Stop if boomkin
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "4" end),
+	}},
 }
 
 local outCombat = {
@@ -236,6 +256,7 @@ local outCombat = {
 ProbablyEngine.rotation.register_custom(102, NeP.Core.GetCrInfo("Druid - Balance"), 
 	{ -- In Combat
 		{_All},
+		{inCombat},
 	  	{{ -- Boomkin Form
 	  		{ BoomkinForm },
 		}, "player.form = 4" },
