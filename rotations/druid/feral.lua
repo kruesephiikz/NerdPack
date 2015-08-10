@@ -224,52 +224,102 @@ local CatForm = {
   
 }
 
+local _All = {
+	-- Buff
+	{ "1126", {  -- Mark of the Wild
+		"!player.buff(20217).any", -- kings
+		"!player.buff(115921).any", -- Legacy of the Emperor
+		"!player.buff(1126).any",   -- Mark of the Wild
+		"!player.buff(90363).any",  -- embrace of the Shale Spider
+		"!player.buff(69378).any",  -- Blessing of Forgotten Kings
+		"!player.buff(5215)",-- Not in Stealth
+		"player.form = 0", -- Player not in form
+		(function() return NeP.Core.PeFetch('npconfDruidFeral','Buffs') end),
+	}},
+	
+	{ "Ursol's Vortex", {
+		"modifier.shift", 
+		"target.exists"
+	}, "mouseover.ground" }, -- Ursol's Vortex
+	{ "Disorienting Roar", "modifier.shift" },
+	{ "Mighty Bash", {
+		"modifier.control", 
+		"target.exists"
+	}, "target" },
+	{ "Typhoon", {
+		"modifier.alt", 
+		"target.exists"
+	}, "target" },
+	{ "Mass Entanglement", "modifier.shift" },
+}
+
+local inCombat = {
+	-- Form Hadling Logic
+	{ "/run CancelShapeshiftForm();", (function() 
+	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('npconfDruidFeral', 'Form') == 'MANUAL' then
+	  		return false
+	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('npconfDruidFeral', 'Form') == '0' then
+	  		return true
+	  	else
+	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('npconfDruidFeral', 'Form'))
+	  	end
+	end) },
+	{ "768", { -- catform
+	  	"player.form != 2", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '2' end),
+	}},
+	{ "783", { -- Travel
+	  	"player.form != 3", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '3' end),
+	}},
+	{ "5487", { -- catform
+	  	"player.form != 1", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '1' end),
+	}},
+}
+
+local outCombat = {
+	-- Form Handling Logic
+	{ "/run CancelShapeshiftForm();", (function() 
+		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC') == 'MANUAL' then
+	  		return false
+	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC') == '0' then
+	  		return true
+	  	else
+	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC'))
+	  	end
+	end) },
+	{ "768", { -- catform
+	  	"player.form != 2", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+		(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '2' end),
+	}},
+	{ "783", { -- Travel
+	  	"player.form != 3", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '3' end),
+	}},
+	{ "5487", { -- catform
+	  	"player.form != 1", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '1' end),
+	}},
+}
 
 ProbablyEngine.rotation.register_custom(103, NeP.Core.GetCrInfo('Druid - Feral'), 
-	{ ------------------------------------------------------------------------------------------------------------------ In Combat
-		{ "1126", {  -- Mark of the Wild
-			"!player.buff(20217).any", -- kings
-			"!player.buff(115921).any", -- Legacy of the Emperor
-			"!player.buff(1126).any",   -- Mark of the Wild
-			"!player.buff(90363).any",  -- embrace of the Shale Spider
-			"!player.buff(69378).any",  -- Blessing of Forgotten Kings
-			"!player.buff(5215)",-- Not in Stealth
-			"player.form = 0", -- Player not in form
-			(function() return NeP.Core.PeFetch('npconfDruidFeral','Buffs') end),
-		}},
-		{ "Ursol's Vortex", {"modifier.shift", "target.exists"}, "mouseover.ground" }, -- Ursol's Vortex
-	  	{ "Disorienting Roar", "modifier.shift" },
-	  	{ "Mighty Bash", {"modifier.control", "target.exists"}, "target" },
-	  	{ "Typhoon", {"modifier.alt", "target.exists"}, "target" },
-	  	{ "Mass Entanglement", "modifier.shift" },
-	  	{ "/run CancelShapeshiftForm();", (function() 
-	  		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('npconfDruidFeral', 'Form') == 'MANUAL' then
-	  			return false
-	  		elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('npconfDruidFeral', 'Form') == '0' then
-	  			return true
-	  		else
-	  			return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('npconfDruidFeral', 'Form'))
-	  		end
-	  	end) },
-		{ "768", { -- catform
-	  		"player.form != 2", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '2' end),
-	  	}},
-	  	{ "783", { -- Travel
-	  		"player.form != 3", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '3' end),
-	  	}},
-	  	{ "5487", { -- catform
-	  		"player.form != 1", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '1' end),
-	  	}},
-	  	{{ --------------------------------------------------------------------------------- Cat Form
+	{ -- In Combat
+		{_All},
+		{inCombat},
+	  	{{ -- Cat Form
 	  		{{
 		  		{ "106839" },	-- Skull Bash
 				{ "5211" }, 	-- Mighty Bash
@@ -277,50 +327,10 @@ ProbablyEngine.rotation.register_custom(103, NeP.Core.GetCrInfo('Druid - Feral')
 			{ CatForm },
 		}, "player.form = 2" },
 	}, 
-	{ ------------------------------------------------------------------------------------------------------------------ Out Combat
-		{ "1126", {  -- Mark of the Wild
-			"!player.buff(20217).any", -- kings
-			"!player.buff(115921).any", -- Legacy of the Emperor
-			"!player.buff(1126).any",   -- Mark of the Wild
-			"!player.buff(90363).any",  -- embrace of the Shale Spider
-			"!player.buff(69378).any",  -- Blessing of Forgotten Kings
-			"!player.buff(5215)",-- Not in Stealth
-			"player.form = 0", -- Player not in form
-			(function() return NeP.Core.PeFetch('npconfDruidFeral','Buffs') end),
-		}},
-		{ "Ursol's Vortex", {"modifier.shift", "target.exists"}, "mouseover.ground" }, -- Ursol's Vortex
-	  	{ "Disorienting Roar", "modifier.shift" },
-	  	{ "Mighty Bash", {"modifier.control", "target.exists"}, "target" },
-	  	{ "Typhoon", {"modifier.alt", "target.exists"}, "target" },
-	  	{ "Mass Entanglement", "modifier.shift" },
-	  	{ "/run CancelShapeshiftForm();", (function() 
-	  		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC') == 'MANUAL' then
-	  			return false
-	  		elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC') == '0' then
-	  			return true
-	  		else
-	  			return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC'))
-	  		end
-	  	end) },
-		{ "768", { -- catform
-	  		"player.form != 2", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '2' end),
-	  	}},
-	  	{ "783", { -- Travel
-	  		"player.form != 3", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '3' end),
-	  	}},
-	  	{ "5487", { -- catform
-	  		"player.form != 1", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '1' end),
-	  	}},
-	  	{{ --------------------------------------------------------------------------------- Cat Form
+	{ -- Out Combat
+		{_All},
+		{outCombat},
+	  	{{ -- Cat Form
 	  		{ "5215", { -- Stealth
 		  		"player.form = 2", -- If cat
 		  		"!player.buff(5215)", -- Not in Stealth
