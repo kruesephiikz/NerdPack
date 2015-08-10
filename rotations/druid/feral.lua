@@ -138,90 +138,89 @@ local CatForm = {
 	  	}, "target" },
 
   	-- Survival
-	  	{ "Renewal", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'Renewal')) end) }, -- Renewal
-	  	{ "Cenarion Ward", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'CenarionWard')) end) }, -- Cenarion Ward
-	  	{ "61336",(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'SurvivalInstincts')) end) }, -- Survival Instincts
+	{ "Renewal", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'Renewal')) end) }, -- Renewal
+	{ "Cenarion Ward", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'CenarionWard')) end) }, -- Cenarion Ward
+	{ "61336",(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'SurvivalInstincts')) end) }, -- Survival Instincts
 	  	
 	-- Predatory Swiftness (Passive Proc)
-	  	{ "5185", {  -- Healing Touch Player
-	  		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'HealingTouch')) end),
-	  		"player.buff(Predatory Swiftness)",
-	  		"!talent(7,2)"
-	  	}, "player" },
-	  	{ "5185", {  -- Healing Touch Lowest
-	  		"lowest.health < 70",
-	  		"!talent(7,2)",
-	  		"player.buff(Predatory Swiftness)" 
-	  	}, "lowest" },
-	  	{ "5185", {  -- Healing Touch Lowest (BooldTalons TALENT)
-	  		"talent(7,2)",
-	  		"player.combopoints = 5",
-	  		"player.buff(Predatory Swiftness)"
-	  	}, "lowest" },
-	  	{ "5185", { -- Healing Touch EXPIRE
-	  		"player.buff(Predatory Swiftness)", 
-	  		"player.buff(Predatory Swiftness).duration <= 3"
-	  	}, "lowest" },
+	{ "5185", {  -- Healing Touch Player
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'HealingTouch')) end),
+		"player.buff(Predatory Swiftness)",
+		"!talent(7,2)"
+	}, "player" },
+	{ "5185", {  -- Healing Touch Lowest
+		"lowest.health < 70",
+		"!talent(7,2)",
+		"player.buff(Predatory Swiftness)" 
+	}, "lowest" },
+	{ "5185", {  -- Healing Touch Lowest (BooldTalons TALENT)
+		"talent(7,2)",
+		"player.combopoints = 5",
+		"player.buff(Predatory Swiftness)"
+	}, "lowest" },
+	{ "5185", { -- Healing Touch EXPIRE
+		"player.buff(Predatory Swiftness)", 
+		"player.buff(Predatory Swiftness).duration <= 3"
+	}, "lowest" },
 
-  	--Cooldowns
-	  	{ "106737", {  --Force of Nature
-	  		"player.spell(106737).charges > 2", 
-	  		"!lastcast(106737)", 
-	  		"player.spell(106737).exists" 
-	  	}},
-	  	{ "106951", "modifier.cooldowns" }, -- Beserk
-	  	{ "124974", "modifier.cooldowns" }, -- Nature's Vigil
-	  	{ "102543", "modifier.cooldowns" }, -- incarnation
+  	{{--Cooldowns
+		{ "106737", {  --Force of Nature
+			"player.spell(106737).charges > 2", 
+			"!lastcast(106737)", 
+			"player.spell(106737).exists" 
+		}},
+		{ "106951" }, -- Beserk
+		{ "124974" }, -- Nature's Vigil
+		{ "102543" }, -- incarnation
+	}, "modifier.cooldowns" },
   	
-	-- buffs
-		{ "5217", (function() return NeP.Core.dynamicEval("player.energy <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'TigersFury')) end) }, -- Tiger's Fury
+	-- Buffs
+	{ "5217", (function() return NeP.Core.dynamicEval("player.energy <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'TigersFury')) end) }, -- Tiger's Fury
 
-		-- Proc's
-	  		{ "106830", "player.buff(Omen of Clarity)", "target" }, -- Free Thrash
+	-- Proc's
+	{ "106830", "player.buff(Omen of Clarity)", "target" }, -- Free Thrash
 
-	  	-- Finish
-	  		{ "52610", { -- Savage Roar
-	  			"player.buff(52610).duration <= 4", -- Savage Roar
-	  			"player.buff(174544).duration <= 4", -- Savage Roar GLYPH
-	  			"player.combopoints <= 2" 
-	  		}, "target"},
-	  		{{ -- 5 CP
-			  	{ "1079", { -- Rip // bellow 25% if target does not have debuff
-					"target.health < 25", 
-					"!target.debuff(1079)" -- stop if target as rip debuff
-				}, "target"},
-				{ "1079", { -- Rip // more then 25% to refresh
-					"target.health > 25", 
-					"target.debuff(1079).duration <= 7"
-				}, "target"},
-				{ "22568", { -- Ferocious Bite to refresh Rip when target at <= 25% health.
-				    "target.health < 25", 
-				    "target.debuff(1079).duration < 5" -- RIP
-				}, "target"},
-				{ "22568", { -- Ferocious Bite // Max Combo and Rip or Savage Roar do not need refreshed
-				    "target.debuff(1079).duration > 7", -- RIP
-				    "player.buff(52610).duration > 4" -- Savage Roar
-				}, "target"},
-				{ "22568", { -- Ferocious Bite // Max Combo and Rip or Savage Roar GLYPH do not need refreshed
-				    "target.debuff(1079).duration > 7", -- RIP
-				    "player.buff(174544).duration > 4" -- Savage Roar GLYPH
-				}, "target"},
-			}, "player.combopoints = 5" },
+	-- Finish
+	{ "52610", { -- Savage Roar
+		"player.buff(52610).duration <= 4", -- Savage Roar
+		"player.buff(174544).duration <= 4", -- Savage Roar GLYPH
+		"player.combopoints <= 2" 
+	}, "target"},
+	{{ -- 5 CP
+		{ "1079", { -- Rip // bellow 25% if target does not have debuff
+			"target.health < 25", 
+			"!target.debuff(1079)" -- stop if target as rip debuff
+		}, "target"},
+		{ "1079", { -- Rip // more then 25% to refresh
+			"target.health > 25", 
+			"target.debuff(1079).duration <= 7"
+		}, "target"},
+		{ "22568", { -- Ferocious Bite to refresh Rip when target at <= 25% health.
+			"target.health < 25", 
+			"target.debuff(1079).duration < 5" -- RIP
+		}, "target"},
+		{ "22568", { -- Ferocious Bite // Max Combo and Rip or Savage Roar do not need refreshed
+			"target.debuff(1079).duration > 7", -- RIP
+			"player.buff(52610).duration > 4" -- Savage Roar
+		}, "target"},
+		{ "22568", { -- Ferocious Bite // Max Combo and Rip or Savage Roar GLYPH do not need refreshed
+			"target.debuff(1079).duration > 7", -- RIP
+			"player.buff(174544).duration > 4" -- Savage Roar GLYPH
+		}, "target"},
+	}, "player.combopoints = 5" },
 
-	  	-- AOE
-		  	{{-- Forced
-				{ "106830", "target.debuff(106830).duration < 5", "target" }, -- Tharsh
-				{ "106785" }, -- Swipe
-			}, (function() return NeP.Lib.SAoE(3, 40) end) },
+	{{-- AoE
+		{ "106830", "target.debuff(106830).duration < 5", "target" }, -- Tharsh
+		{ "106785" }, -- Swipe
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 
-	 	-- Single Rotation
-	  		{ "1822", "target.debuff(155722).duration <= 4", "target" }, -- rake
-	  		{ "155625", { -- MoonFire // Lunar Inspiration (TALENT)
-	  			"target.debuff(155625).duration <= 4",
-	  			"talent(7, 1)"
-	  		}, "target" },
-		    { "5221" }, -- Shred
-  
+	-- Single Rotation
+	{ "1822", "target.debuff(155722).duration <= 4", "target" }, -- rake
+	{ "155625", { -- MoonFire // Lunar Inspiration (TALENT)
+		"target.debuff(155625).duration <= 4",
+		"talent(7, 1)"
+	}, "target" },
+	{ "5221" }, -- Shred
 }
 
 local _All = {

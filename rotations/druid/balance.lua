@@ -121,18 +121,19 @@ local BoomkinForm = {
 	}, "target.interruptsAt("..(NeP.Core.PeFetch("npconf", "ItA", 40))..")" },
 	
 	-- Items
-		{ "#5512", "player.health < 50" }, --Healthstone
+	{ "#5512", "player.health < 50" }, --Healthstone
 	
-	-- Cooldowns
-		{ "112071", "modifier.cooldowns" }, --Celestial Alignment
-		{ "#trinket1", "modifier.cooldowns" }, --trinket 1
-		{ "#trinket2", "modifier.cooldowns" }, --trinket 2
+	{{-- Cooldowns
+		{ "112071" }, --Celestial Alignment
+		{ "#trinket1" }, --trinket 1
+		{ "#trinket2" }, --trinket 2
 		{ "#57723", "player.hashero" }, --  Int Pot on lust
+	}, "modifier.cooldowns" },
  
 	--Defensive
-		{ "Barkskin", "player.health <= 50", "player" },
-		{ "#5512", "player.health < 40" }, --Healthstone when less than 40% health
-		{ "108238", "player.health < 60", "player" }, --Instant renewal when less than 40% health
+	{ "Barkskin", "player.health <= 50", "player" },
+	{ "#5512", "player.health < 40" }, --Healthstone when less than 40% health
+	{ "108238", "player.health < 60", "player" }, --Instant renewal when less than 40% health
 	
 	{{ -- Auto Dotting	
 		{ "164812", (function() return NeP.Lib.AutoDots("164812", 100, 2) end) }, -- moonfire
@@ -140,12 +141,12 @@ local BoomkinForm = {
 	}, "toggle.dotEverything" },
 
 	-- AoE
-		{ "48505", { (function() return NeP.Lib.SAoE(8, 40) end), "!player.buff(184989)" }}, -- Starfall
+	{ "48505", { (function() return NeP.Lib.SAoE(8, 40) end), "!player.buff(184989)" }}, -- Starfall
 	
 	-- Proc's
-		{ "78674", "player.buff(Shooting Stars)", "target" }, --Starsurge with Shooting Stars Proc
-		{ "164815", "player.buff(Solar Peak)", "target" }, --SunFire on proc
-		{ "164812", "player.buff(Lunar Peak)", "target" }, --MoonFire on proc
+	{ "78674", "player.buff(Shooting Stars)", "target" }, --Starsurge with Shooting Stars Proc
+	{ "164815", "player.buff(Solar Peak)", "target" }, --SunFire on proc
+	{ "164812", "player.buff(Lunar Peak)", "target" }, --MoonFire on proc
 	
 	-- Rotation
 	{ "78674", { --StarSurge with more then 2 charges
