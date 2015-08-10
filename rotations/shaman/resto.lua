@@ -176,6 +176,16 @@ NeP.Addon.Interface.ShamanResto = {
 
 local exeOnLoad = function()
 	NeP.Splash()
+	ProbablyEngine.toggle.create(
+  		'NeP_Totems', 
+  		'Interface\\Icons\\Spell_shaman_dropall_01.png‎', 
+  		'Use Totems', 
+  		'Enable to use totems.\nSpecial Totems require Cooldowns Toggle enabled also.')
+	ProbablyEngine.toggle.create(
+  		'NeP_Wolf', 
+  		'Interface\\Icons\\Spell_nature_spiritwolf.png', 
+  		'Use Ghost Wolf', 
+  		'Enable to use Ghost Worf while moving\nRequires player to move for 3 seconds or more.')
   	ProbablyEngine.toggle.create(
   		'dps', 
   		'Interface\\Icons\\Spell_shaman_stormearthfire.png‎', 
@@ -286,19 +296,21 @@ local General = {
 		"!player.buff(52127)", 
 		"!player.buff(974)"
 	}},
-	{"/cancelaura Ghost Wolf",{
-		"!player.moving", 
-		"player.buff(2645)"
-	}},
-	{"/cancelaura Ghost Wolf",{
-		"player.buff(79206)", 
-		"player.buff(2645)"
-	}},
-	{"2645", { -- Ghost Wolf
-		"player.movingfor >= 1", 
-		"!player.buff(79206)",
-		"!player.buff(2645)"
-	}},	
+	{{ -- Ghost Wolf
+		{"/cancelaura Ghost Wolf",{
+			"!player.moving", 
+			"player.buff(2645)"
+		}},
+		{"/cancelaura Ghost Wolf",{
+			"player.buff(79206)", 
+			"player.buff(2645)"
+		}},
+		{"2645", { -- Ghost Wolf
+			"player.movingfor >= 1", 
+			"!player.buff(79206)",
+			"!player.buff(2645)"
+		}},
+	}, "toggle.NeP_Wolf" },
 
 	-- Survival
 	{ "108271", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'AstralShift')) end), nil }, -- Astral Shift
@@ -432,7 +444,7 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 					{ "57994" }, -- Wind Shear
 				}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
 				{Cooldowns, "modifier.cooldowns"},
-				{Totems},
+				{Totems, "toggle.NeP_Totems"},
 				{Tank, "tank.range <= 40"},
 				{Focus, "focus.range <= 40"},
 				{AoE},
@@ -445,4 +457,7 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 				}},
 			}, "!player.moving" },
 		}, "modifier.party" },
-	}, outCombat, exeOnLoad)
+	},{ -- Out-Combat
+		{General},
+		{outCombat}
+	}, exeOnLoad)
