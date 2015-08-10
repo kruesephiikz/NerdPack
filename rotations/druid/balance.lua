@@ -132,15 +132,16 @@ local BoomkinForm = {
 	
 	-- Rotation
 		{ "78674", "player.spell(78674).charges >= 2" }, --StarSurge with more then 2 charges
-		{ "78674", "player.buff(112071}" }, --StarSurge with Celestial Alignment buff
+		{ "78674", "player.buff(112071)" }, --StarSurge with Celestial Alignment buff
 		{ "164812", "target.debuff(Moonfire).duration <= 2"}, --MoonFire
 		{ "164815", "target.debuff(Sunfire).duration <= 2"}, --SunFire
 		{ "2912", "player.buff(Lunar Empowerment).count >= 1" }, --Starfire with Lunar Empowerment
 		{ "5176", "player.buff(Solar Empowerment).count >= 1" }, --Wrath with Solar Empowerment
-		{ "2912", "player.lunar"}, --StarFire
-		{ "5176", "player.solar"},  --Wrath
+		{ "2912", { ( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) <= 20 end ), "player.lunar" } }, --StarFire
+		{ "5176", { ( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) >= -20 end ), "player.solar" } },  --Wrath
+		{ "2912", { ( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) <= 0 end ), "player.solar" } }, --StarFire
+		{ "5176", { ( function() return UnitPower( "player", SPELL_POWER_ECLIPSE ) >= 0 end ), "player.lunar" } },  --Wrath
 		--{ "2912" }, --StarFire Filler
-  
 }
 
 ProbablyEngine.rotation.register_custom(102, NeP.Core.GetCrInfo('Druid - Balance'), 
