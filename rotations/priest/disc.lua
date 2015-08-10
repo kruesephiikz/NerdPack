@@ -655,7 +655,7 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 					--"target.range <= 30",
 					--"target.infront"
 			 	}}, ----------------------------------------------------------------------------------------------------------
-		 		{ AoE, "modifier.multitarget" },																			-- AoE Heals
+		 		{ AoE, (function() return NeP.Lib.SAoE(3, 40) end) },																			-- AoE Heals
 				{ Normal}																									-- Normal Heals
 		}, "modifier.party" },
 		{{ ------------------------------------------------------------------------------------------------------------------------------------- Solo CR

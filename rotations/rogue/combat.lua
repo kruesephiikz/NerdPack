@@ -28,7 +28,7 @@ local AoE = {
 		{"Crimson Tempest", {
 			"player.combopoints >= 5",
 		}, "target"},
-	}, "modifier.multitarget" },
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 	
 	{ "Blade Flurry", "player.area(10).enemies > 1" },
 	{"Crimson Tempest", {
@@ -94,7 +94,7 @@ ProbablyEngine.rotation.register_custom(260, NeP.Core.GetCrInfo('Rogue - Combat'
 			{"Tricks of the Trade", "player.aggro > 60", "tank"},
 			{"Evasion", "player.health < 30"},
 			{Cooldowns, "modifier.cooldowns" },
-			{AoE, "modifier.multitarget" },
+			{AoE, (function() return NeP.Lib.SAoE(3, 40) end) },
 			{ST},
 		}, {"!player.buff(Vanish)", "target.range < 7"} },
 	}, outCombat, exeOnLoad)

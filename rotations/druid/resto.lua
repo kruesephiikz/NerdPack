@@ -131,7 +131,7 @@ local inCombat = {
 			"@coreHealing.needsHealing(85, 3)", 
 			"!lastcast(48438)"
 		}, "lowest" }, 
-	}, "modifier.multitarget" },
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 
 	{{-- Soul of the Forest
 		{ "Regrowth", {

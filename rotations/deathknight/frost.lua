@@ -140,7 +140,7 @@ local inCombat = {
 	{ "114866", "target.health < 35", "target"  },
 	
 	-- AoE
-	{ "49184", "modifier.multitarget", "target" }, -- Howling Blast
+	{ "49184", (function() return NeP.Lib.SAoE(3, 40) end), "target" }, -- Howling Blast
 
 	{{ -- 1-hand
 		{ "49143", "player.buff(Killing Machine)", "target"  },-- Frost Strike

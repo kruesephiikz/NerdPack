@@ -218,7 +218,7 @@ local InCombat = {
 				"player.seal != 1",
 				(function() return NeP.Core.PeFetch("npconfPalaProt", "sealAoE") == 'Truth' end),
 			}},
-		}, "modifier.multitarget" },
+		}, (function() return NeP.Lib.SAoE(3, 40) end) },
 		{{ -- Single Target
 			{ "20165", { -- Seal of Insigh
 				"player.seal != 3",
@@ -260,7 +260,7 @@ local InCombat = {
 			"!player.moving" 		-- Not Moving
 		}},
 		{ "119072", "target.range <= 10" }, 
-	}, "modifier.multitarget" },
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 
 	-- Normal
 	{ "53600", { 				------------------------------ Shield of Righteous

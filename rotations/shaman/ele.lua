@@ -291,7 +291,7 @@ local combat_rotation = {
 		}},
 		
 		{ "Chain Lightning", { 
-			"modifier.multitarget", 
+			(function() return NeP.Lib.SAoE(3, 40) end), 
 			"player.buff(Ancestral Swiftness)" 
 		}},
 		{ "Chain Lightning", { 
@@ -311,7 +311,7 @@ local combat_rotation = {
 			"player.buff(Lightning Shield).count >= 18" 
 		}},
 		{ "Chain Lightning" }
-	}, "modifier.multitarget" },
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 
 	{{	-- Smart AoE
 		{ "Lava Beam", "player.buff(Ascendance)" },

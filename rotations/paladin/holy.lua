@@ -356,7 +356,7 @@ local _AoE = {
 			"!player.moving", 
 			"modifier.raid", 
 		}, "lowest" },  
-	}, "modifier.multitarget" },
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 }
 
 local _InfusionOfLight = {
@@ -365,7 +365,7 @@ local _InfusionOfLight = {
 			"@coreHealing.needsHealing(80, 3)", 
 			"!player.moving"
 		}, "lowest" }, 
-	}, "modifier.multitarget" }, 
+	}, (function() return NeP.Lib.SAoE(3, 40) end) }, 
 	{ "82326", { -- Holy Light
 		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfPalaHoly', 'HolyLightIL')) end),
 		"!player.moving" 
@@ -615,7 +615,7 @@ local outCombat = {
 			"!player.moving", 
 			"modifier.raid", 
 		}, "lowest" },
-	}, "modifier.multitarget" },
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 	-- Holy Light
 	{ "82326", { 
 		(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('npconfPalaHoly', 'HolyLightOCC')) end),

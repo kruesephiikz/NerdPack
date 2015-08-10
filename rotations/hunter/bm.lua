@@ -130,7 +130,7 @@ local inCombat = {
 	{ "Powershot", "player.timetomax > 2.5", "target" }, -- Powershot // TALENT
 	{{ -- AoE
 		{ "2643", "player.focus > 60", "target" }, -- Multi-Shot
-	}, "modifier.multitarget" },	
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },	
 	{ "3044", "player.focus > 60", "target" },-- Arcane Shot
 	{ "Focusing Shot" }, -- Focusing Shot // TALENT
 	{ "77767" }, -- Cobra Shot

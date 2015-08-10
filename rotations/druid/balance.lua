@@ -122,7 +122,7 @@ local BoomkinForm = {
 	}, "toggle.dotEverything" },
 
 	-- AoE
-		{ "48505", "modifier.multitarget", "target" }, -- Starfall
+		{ "48505", (function() return NeP.Lib.SAoE(3, 40) end), "target" }, -- Starfall
 		{ "48505", "player.area(8).enemies >= 4", "target" }, -- Starfall  // FH SMART AoE
 	
 	-- Proc's

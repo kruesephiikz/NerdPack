@@ -131,7 +131,7 @@ ProbablyEngine.rotation.register_custom(261, NeP.Core.GetCrInfo('Rogue - Subtlet
 			{"Tricks of the Trade", "player.aggro > 60", "tank"},
 			{"Evasion", "player.health < 30"},
 			{Cooldowns, "modifier.cooldowns" },
-			{AoE, "modifier.multitarget" },
+			{AoE, (function() return NeP.Lib.SAoE(3, 40) end) },
 			{ST, "!modifier.multitarget" },
 		}, {"!player.buff(Vanish)", "target.range < 7"} },
 	}, outCombat, exeOnLoad)

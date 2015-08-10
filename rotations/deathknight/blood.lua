@@ -190,7 +190,7 @@ local inCombat = {
 		{ "50842",	"target.range <= 10" },-- Blood Boil
 		{ "43265", "target.range < 7", "target.ground" }, -- Death and Decay
 		{ "152280", "target.range < 7", "target.ground" }, -- Defile
-	}, "modifier.multitarget", },
+	}, (function() return NeP.Lib.SAoE(3, 40) end), },
 
 	-- Rotation
 		{ "50842", { -- Blood Boil

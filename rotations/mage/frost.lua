@@ -45,13 +45,13 @@ local inCombat = {
 
 	
 	-- AoE // FallBack
-		{ "84714", "modifier.multitarget" },--Frozen Orb
+		{ "84714", (function() return NeP.Lib.SAoE(3, 40) end) },--Frozen Orb
 		{ "Ice Nova", { 
-			"modifier.multitarget", 
+			(function() return NeP.Lib.SAoE(3, 40) end), 
 			"talent(5, 3)" 
 		}},
-		{ "120", "modifier.multitarget" },--Cone of Cold
-		{ "10", "modifier.multitarget", "target.ground" },--Blizzard
+		{ "120", (function() return NeP.Lib.SAoE(3, 40) end) },--Cone of Cold
+		{ "10", (function() return NeP.Lib.SAoE(3, 40) end), "target.ground" },--Blizzard
 
 	-- Main Rotation
 		{ "84714", "!toggle.cleave" }, -- Frozen Orb

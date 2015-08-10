@@ -280,7 +280,7 @@ local Seals = {
 				"player.seal != 1",
 				(function() return NeP.Core.PeFetch("npconfPalaProt", "sealAoE") == 'Truth' end),
 			}},
-		}, "modifier.multitarget" },
+		}, (function() return NeP.Lib.SAoE(3, 40) end) },
 		{{ -- Single Target
 			{ "20165", { -- Seal of Insigh
 				"player.seal != 3",
@@ -386,7 +386,7 @@ local outCombat = {
 		"player.seal != 1" 
 	}},
 	{ "Seal of Righteousness", { 
-		"modifier.multitarget", 
+		(function() return NeP.Lib.SAoE(3, 40) end), 
 		"player.seal != 2" 
 	}},
 }
@@ -405,6 +405,6 @@ ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retrib
 		{ Seals },
 		{ inCombat },
 		-- FIXME: Needs smart AOE
-		{ AoE, "modifier.multitarget" },
+		{ AoE, (function() return NeP.Lib.SAoE(3, 40) end) },
 		{ ST },
 	}, outCombat_Testing, exeOnLoad)

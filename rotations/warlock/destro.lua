@@ -21,7 +21,7 @@ local inCombat = {
   		{ "Fel Flame", {"!player.spell(Kil'jaeden's Cunning).exists", "player.moving"} }, 	
 		
 	-- AoE
-		{"Fire and Brimstone", "modifier.multitarget", "target"},
+		{"Fire and Brimstone", (function() return NeP.Lib.SAoE(3, 40) end), "target"},
 
   	-- Rotation
 	  	{"Shadowburn", "target.health <=20", "target"},

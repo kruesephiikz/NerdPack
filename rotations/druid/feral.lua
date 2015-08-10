@@ -212,7 +212,7 @@ local CatForm = {
 		  	{{-- Forced
 				{ "106830", "target.debuff(106830).duration < 5", "target" }, -- Tharsh
 				{ "106785" }, -- Swipe
-			}, "modifier.multitarget" },
+			}, (function() return NeP.Lib.SAoE(3, 40) end) },
 
 	 	-- Single Rotation
 	  		{ "1822", "target.debuff(155722).duration <= 4", "target" }, -- rake

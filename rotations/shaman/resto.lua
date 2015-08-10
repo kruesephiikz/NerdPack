@@ -401,7 +401,7 @@ local DPS= {
 	{ "8050", "!target.debuff(8050)" },
 	{ "51505" },
 	{ "421", { 
-		"modifier.multitarget", 
+		(function() return NeP.Lib.SAoE(3, 40) end), 
 		"target.area(10).enemies > 2"
 	}},
 	{ "403" }, -- Lightning Bolt	

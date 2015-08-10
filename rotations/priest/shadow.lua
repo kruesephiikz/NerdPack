@@ -186,7 +186,7 @@ ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow
 		{ Cooldowns, "modifier.cooldowns" },
 		{ Dotting },
 		{{ -- Sanity Checks
-			{ AoE, "modifier.multitarget" },
+			{ AoE, (function() return NeP.Lib.SAoE(3, 40) end) },
 			{ ST, "!modifier.multitarget" }
 		}, { "target.range <= 40", "!player.moving" } }
 	}, General, lib)

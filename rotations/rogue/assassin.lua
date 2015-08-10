@@ -54,7 +54,7 @@ local inCombat = {
 		-- SAoE
 		{ "51723", "player.area(10).enemies > 3"}, -- Fan of Knives
 		-- Force AoE
-		{ "51723", "modifier.multitarget"}, -- Fan of Knives
+		{ "51723", (function() return NeP.Lib.SAoE(3, 40) end)}, -- Fan of Knives
 	{ "1329", "target.health >= 35", "target" }, -- Mutilate
 }
 

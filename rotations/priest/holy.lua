@@ -434,7 +434,7 @@ local inCombat = {
 			}},
 		{ "596", (function() return _PoH() end) },-- Prayer of Healing
    		{ "155245", (function() return _ClarityOfPurpose() end), "lowest" },-- Clarity Of Purpose
-	}, "modifier.multitarget" },
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 
 	{{-- Heal Fast Bitch!!
 		-- Desperate Prayer
@@ -688,7 +688,7 @@ local solo = {
 		{ "48045", "target.area(10).enemies >= 3", "target" }, -- mind sear
 		
 		-- AoE
-		{ "48045", "modifier.multitarget", "target" }, -- mind sear
+		{ "48045", (function() return NeP.Lib.SAoE(3, 40) end), "target" }, -- mind sear
 			
 		-- Single
 		{ "129250" }, -- PW:S
@@ -741,7 +741,7 @@ local outCombat = {
 			}},
 		{ "596", (function() return _PoH() end) },-- Prayer of Healing
    		{ "155245", (function() return _ClarityOfPurpose() end), "lowest" },-- Clarity Of Purpose
-	}, "modifier.multitarget" },
+	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 		
 	-- shields 
 		{ "17", { --Power Word: Shield

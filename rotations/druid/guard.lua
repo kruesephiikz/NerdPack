@@ -213,7 +213,7 @@ local inCombat = {
 		}},
 		{ "33917" }, -- Mangle
 		-- AoE
-			{ "77758", "modifier.multitarget" }, -- Thrash	
+			{ "77758", (function() return NeP.Lib.SAoE(3, 40) end) }, -- Thrash	
 		{ "77758", "target.debuff(77758).duration <= 4" }, -- Thrash
 		{ "33745" }, -- Lacerate
   

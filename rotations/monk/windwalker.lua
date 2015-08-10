@@ -149,7 +149,7 @@ local inCombat = {
 		{ "107428", "target.debuff(130320).duration < 3" }, -- Rising Sun Kick
 		{ "113656", "!player.moving" },-- Fists of Fury	
 		-- AoE
-			{ "101546", "modifier.multitarget" }, -- Spinning Crane Kick
+			{ "101546", (function() return NeP.Lib.SAoE(3, 40) end) }, -- Spinning Crane Kick
 		{ "100784", "player.chi >= 3" }, -- Blackout Kick
 		{ "100787", "!player.buff(125359)"}, -- Tiger Palm if not w/t Tiger Power
 		{ "115698", "player.chi <= 3" }, -- Jab
