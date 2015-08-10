@@ -146,11 +146,6 @@ local exeOnLoad = function()
 		'Enable Mouseovers', 
 		'Enable flameshock on mousover targets.')
 	ProbablyEngine.toggle.create(
-		'smartae', 
-		'Interface\\Icons\\spell_holy_sealofrighteousness', 
-		'Enable Smart AE', 
-		'Enable automatic detection of AE and cleave rotations.')
-	ProbablyEngine.toggle.create(
 		'burn', 
 		'Interface\\Icons\\spell_holy_sealofblood', 
 		'Single Target Burn', 
@@ -291,13 +286,10 @@ local combat_rotation = {
 		}},
 		
 		{ "Chain Lightning", { 
-			(function() return NeP.Lib.SAoE(3, 40) end), 
+			(function() return NeP.Lib.SAoE(4, 8) end), 
 			"player.buff(Ancestral Swiftness)" 
 		}},
-		{ "Chain Lightning", { 
-			"target.area(6).enemies >= 4", 
-			"player.buff(Ancestral Swiftness)" 
-		}},
+		
 		{ "Lava Burst", "player.buff(Ancestral Swiftness)" },
 		{ "Elemental Blast", "player.buff(Ancestral Swiftness)" }
 	}, { "player.moving", "!player.buff(Spiritwalker's Grace)" } },
@@ -311,18 +303,7 @@ local combat_rotation = {
 			"player.buff(Lightning Shield).count >= 18" 
 		}},
 		{ "Chain Lightning" }
-	}, (function() return NeP.Lib.SAoE(3, 40) end) },
-
-	{{	-- Smart AoE
-		{ "Lava Beam", "player.buff(Ascendance)" },
-		{ "Chain Lightning", "!player.buff(Improved Chain Lightning)" },
-		{ "Earthquake", "player.buff(Improved Chain Lightning)", "target.ground" },
-		{ "Earth Shock", { 
-			"player.buff(Lightning Shield)", 
-			"player.buff(Lightning Shield).count >= 18" 
-		}},
-		{ "Chain Lightning" }
-	}, { "toggle.smartae", "target.area(8).enemies >= 5" } },
+	}, (function() return NeP.Lib.SAoE(8, 5) end) },
 
 	{{	-- Cleave
 		{ "Chain Lightning", { 
@@ -331,14 +312,6 @@ local combat_rotation = {
 		}},
 		{ "Earthquake", "player.buff(Improved Chain Lightning)", "target.ground" },
 	}, { "toggle.cleavemode" } },
-
-	{{	-- SmartAE Cleave 2
-		{ "Chain Lightning", { 
-			"!player.buff(Improved Chain Lightning)", 
-			"player.spell(Earthquake).cooldown < 1" 
-		}},
-		{ "Earthquake", "player.buff(Improved Chain Lightning)", "target.ground" },
-	}, { "target.area(8).enemies >= 2", "toggle.smartae" } },
 
 }, "!toggle.burn" }, --Force single target rotation
 
@@ -359,7 +332,7 @@ local combat_rotation = {
 		"target.ttd >= 10"
 	}},
 	{ "Chain Lightning", { 
-		"target.area(8).enemies >= 4", 
+		(function() return NeP.Lib.SAoE(4, 8) end), 
 		"toggle.smartae", 
 		"!toggle.burn" 
 	}},

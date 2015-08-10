@@ -684,11 +684,9 @@ local solo = {
 	}, "toggle.dotEverything" },
 	
 	-- DPS
-		-- AoE FH
-		{ "48045", "target.area(10).enemies >= 3", "target" }, -- mind sear
 		
 		-- AoE
-		{ "48045", (function() return NeP.Lib.SAoE(3, 40) end), "target" }, -- mind sear
+		{ "48045", (function() return NeP.Lib.SAoE(3, 10) end), "target" }, -- mind sear
 			
 		-- Single
 		{ "129250" }, -- PW:S

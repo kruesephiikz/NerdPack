@@ -32,10 +32,8 @@ local inCombat = {
   }, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
 
   -- AoE
-    { "1449", (function() return NeP.Lib.SAoE(3, 40) end)},--Arcane Explosion
-    { "120", (function() return NeP.Lib.SAoE(3, 40) end)},--Cone of Cold
-    { "1449", "target.area(10).enemies >= 5" },--Arcane Explosion
-    { "120", "target.area(10).enemies >= 5" },--Cone of Cold
+    { "1449", (function() return NeP.Lib.SAoE(5, 10) end)},--Arcane Explosion
+    { "120", (function() return NeP.Lib.SAoE(5, 10) end)},--Cone of Cold
 
   -- Moving
     { "108839", "player.moving" },--Ice Floes
