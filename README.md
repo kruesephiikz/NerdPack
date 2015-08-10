@@ -12,8 +12,7 @@ NeP goal is to be light but with advanced features.
 <p><b>Before asking for help follow the Instructions:</b> Make sure you'r fully updated (PE, Lua unlocker & NeP) and have used your choosen lua unlocker, if nothing works try and disabling all other addons. </p>
 
 <p><b>Donate Link</b>: http://goo.gl/yrctPO <br/>
-Why donate? <br/>
-This is a hobby, as such i will only work on the stuff im personaly interested unless money speaks. <br/>
+Why donate? This is a hobby, as such i will only work on the stuff im personaly interested unless money speaks. <br/>
 If not enough donations are made to the project, i will stop proving support.
 </p>
 
