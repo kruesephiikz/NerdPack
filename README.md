@@ -4,7 +4,7 @@
 
 
 <h2 align="center">About The Project:</h2>
-<p align="center">
+<p>
 <b>NerdPack Profiles For ProbablyEngine.</b><br/>
 NeP is a natural evolution of MTSP, ive created this project using PE's engine & custom libs. <br/>
 NeP goal is to be light but with advanced features.
