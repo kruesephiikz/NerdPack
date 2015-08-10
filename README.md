@@ -7,9 +7,9 @@
 <p align="center">
 <b>NerdPack Profiles For ProbablyEngine.</b><br/>
 NeP is a natural evolution of MTSP, ive created this project using PE's engine & custom libs. <br/>
-NeP goal is to be light but with advanced features. <br/>
+NeP goal is to be light but with advanced features.<\p>
 
-Before asking for help follow the Instructions: Make sure you'r fully updated (PE, Lua unlocker & NeP) and have used your choosen lua unlocker, if nothing works try and disabling all other addons. </p>
+<p>Before asking for help follow the Instructions: Make sure you'r fully updated (PE, Lua unlocker & NeP) and have used your choosen lua unlocker, if nothing works try and disabling all other addons. </p>
 
 <p>
 Donate Link: http://goo.gl/yrctPO <br/>
