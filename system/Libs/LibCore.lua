@@ -49,7 +49,6 @@ function NeP.Lib.SAoE(units, distance)
 			for i=1,#NeP.ObjectManager.unitCache do
 				local object = NeP.ObjectManager.unitCache[i]
 				if object.distance <= distance then
-					print('1')
 					UnitsTotal = UnitsTotal + 1
 				end
 			end
