@@ -88,13 +88,66 @@ NeP.Addon.Interface.DruidBalance = {
 
 local exeOnLoad = function()
 	NeP.Splash()
-
   	ProbablyEngine.toggle.create(
 		"dotEverything", 
 		"Interface\\Icons\\Ability_creature_cursed_05.png", 
 		"Dot All The Things!", 
 		"Click here to dot all the things!\nSome Spells require Multitarget enabled also.\nOnly Works if using FireHack.")
 end
+
+local _All = {
+	-- Buff
+	{ "1126", {  -- Mark of the Wild
+		"!player.buff(20217).any", -- kings
+		"!player.buff(115921).any", -- Legacy of the Emperor
+		"!player.buff(1126).any",   -- Mark of the Wild
+		"!player.buff(90363).any",  -- embrace of the Shale Spider
+		"!player.buff(69378).any",  -- Blessing of Forgotten Kings
+		"!player.buff(5215)",-- Not in Stealth
+		"player.form = 0", -- Player not in form
+		(function() return NeP.Core.PeFetch("npconfDruidBalance", "Buffs", true) end),
+	}},
+	--Shared Stuff
+	{ "20484", { -- Rebirth
+		"modifier.lshift", 
+		"!mouseover.alive" 
+	}, "mouseover" },
+	
+	-- Form Handling Logic
+	{ "/run CancelShapeshiftForm()", (function() 
+	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "MANUAL" then
+	  		return false
+	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "0" then
+	  		return true
+	  	else
+	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("npconfDruidBalance", "Form", "4"))
+	  	end
+	end) },
+	{ "768", { -- catform
+	  	"player.form != 2", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "2" end),
+	}},
+	{ "783", { -- Travel
+	  	"player.form != 3", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "3" end),
+	}},
+	{ "5487", { -- catform
+	  	"player.form != 1", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "1" end),
+	}},
+	{ "24858", { -- boomkin
+	  	"player.form != 4", -- Stop if boomkin
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "4" end),
+	}},
+}
 
 local BoomkinForm = {
 			
@@ -143,105 +196,51 @@ local BoomkinForm = {
 		--{ "2912" }, --StarFire Filler
 }
 
+local outCombat = {
+	-- Form Handling Logic
+	{ "/run CancelShapeshiftForm()", (function() 
+		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "MANUAL" then
+			return false
+		elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "0" then
+			return true
+		else
+			return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4"))
+		end
+	end) },
+	{ "768", { -- catform
+	  	"player.form != 2", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "2" end),
+	}},
+	{ "783", { -- Travel
+	  	"player.form != 3", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "3" end),
+	}},
+	{ "5487", { -- catform
+		"player.form != 1", -- Stop if cat
+	  	"!modifier.lalt", -- Stop if pressing left alt
+	  	"!player.buff(5215)", -- Not in Stealth
+	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "1" end),
+	}},
+	{ "24858", { -- boomkin
+		"player.form != 4", -- Stop if boomkin
+		"!modifier.lalt", -- Stop if pressing left alt
+		"!player.buff(5215)", -- Not in Stealth
+	(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "4" end),
+	}},
+}
+
 ProbablyEngine.rotation.register_custom(102, NeP.Core.GetCrInfo("Druid - Balance"), 
-	{ ------------------------------------------------------------------------------------------------------------------ In Combat
-		{ "1126", {  -- Mark of the Wild
-			"!player.buff(20217).any", -- kings
-			"!player.buff(115921).any", -- Legacy of the Emperor
-			"!player.buff(1126).any",   -- Mark of the Wild
-			"!player.buff(90363).any",  -- embrace of the Shale Spider
-			"!player.buff(69378).any",  -- Blessing of Forgotten Kings
-			"!player.buff(5215)",-- Not in Stealth
-			"player.form = 0", -- Player not in form
-			(function() return NeP.Core.PeFetch("npconfDruidBalance", "Buffs", true) end),
-		}},
-		{ "20484", { -- Rebirth
-			"modifier.lshift", 
-			"!mouseover.alive" 
-		}, "mouseover" },
-	  	{ "/run CancelShapeshiftForm()", (function() 
-	  		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "MANUAL" then
-	  			return false
-	  		elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "0" then
-	  			return true
-	  		else
-	  			return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("npconfDruidBalance", "Form", "4"))
-	  		end
-	  	end) },
-		{ "768", { -- catform
-	  		"player.form != 2", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "2" end),
-	  	}},
-	  	{ "783", { -- Travel
-	  		"player.form != 3", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "3" end),
-	  	}},
-	  	{ "5487", { -- catform
-	  		"player.form != 1", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "1" end),
-	  	}},
-	  	{ "24858", { -- boomkin
-	  		"player.form != 4", -- Stop if boomkin
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "4" end),
-	  	}},
-	  	{{ --------------------------------------------------------------------------------- Boomkin Form
+	{ -- In Combat
+		{_All},
+	  	{{ -- Boomkin Form
 	  		{ BoomkinForm },
 		}, "player.form = 4" },
 	}, 
-	{ ------------------------------------------------------------------------------------------------------------------ Out Combat
-		{ "1126", {  -- Mark of the Wild
-			"!player.buff(20217).any", -- kings
-			"!player.buff(115921).any", -- Legacy of the Emperor
-			"!player.buff(1126).any",   -- Mark of the Wild
-			"!player.buff(90363).any",  -- embrace of the Shale Spider
-			"!player.buff(69378).any",  -- Blessing of Forgotten Kings
-			"!player.buff(5215)",-- Not in Stealth
-			"player.form = 0", -- Player not in form
-			(function() return NeP.Core.PeFetch("npconfDruidBalance", "Buffs", true) end),
-		}},
-		{ "20484", { -- Rebirth
-			"modifier.lshift", 
-			"!mouseover.alive" 
-		}, "mouseover" },
-	  	{ "/run CancelShapeshiftForm()", (function() 
-	  		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "MANUAL" then
-	  			return false
-	  		elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "0" then
-	  			return true
-	  		else
-	  			return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4"))
-	  		end
-	  	end) },
-		{ "768", { -- catform
-	  		"player.form != 2", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "2" end),
-	  	}},
-	  	{ "783", { -- Travel
-	  		"player.form != 3", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "3" end),
-	  	}},
-	  	{ "5487", { -- catform
-	  		"player.form != 1", -- Stop if cat
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "1" end),
-	  	}},
-		{ "24858", { -- boomkin
-	  		"player.form != 4", -- Stop if boomkin
-	  		"!modifier.lalt", -- Stop if pressing left alt
-	  		"!player.buff(5215)", -- Not in Stealth
-	  		(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "4" end),
-	  	}},
+	{ -- Out Combat
+	  	{_All},
+		{outCombat}
 	}, exeOnLoad)
