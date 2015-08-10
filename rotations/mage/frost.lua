@@ -5,11 +5,6 @@ local lib = function()
   		'Interface\\Icons\\spell_frost_frostbolt', 
   		'Disable Cleaves', 
   		'Disable casting of Cone of Cold and Ice Nova for Procs.')
-  	ProbablyEngine.toggle.create(
-		'NeP_SAoE', 
-		'Interface\\AddOns\\Probably_MrTheSoulz\\media\\toggle.blp', 
-		'Smart AoE', 
-		'Smart AoE\nTo Force AoE enable multitarget toggle.')
 end
 
 
@@ -47,16 +42,6 @@ local inCombat = {
 			"target.debuff(Frost Bomb).duration <= 3", 
 			"talent(5, 1)" 
 		}},
-
-	{{-- can use FH
-
-		-- AoE smart
-			{ "84714", "target.area(10).enemies >= 5" },--Frozen Orb
-			{ "Ice Nova", {"target.area(10).enemies >= 5", "talent(5, 3)" } },
-			{ "120", "target.area(10).enemies >= 5" },--Cone of Cold
-			{ "10", "target.area(10).enemies >= 5", "target.ground" },--Blizzard
-
-	}, "toggle.NeP_SAoE" },
 
 	
 	-- AoE // FallBack

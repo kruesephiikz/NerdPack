@@ -1,10 +1,5 @@
 local exeOnLoad = function()
 	NeP.Splash()
-	ProbablyEngine.toggle.create(
-		'NeP_SAoE', 
-		'Interface\\AddOns\\Probably_MrTheSoulz\\media\\toggle.blp', 
-		'Smart AoE', 
-		'Smart AoE\nTo Force AoE enable multitarget toggle.')
 end
 
 local inCombat = {
@@ -24,12 +19,6 @@ local inCombat = {
 	-- Moving
 		{ "Incinerate", {"player.spell(Kil'jaeden's Cunning).exists", "player.moving"} },
   		{ "Fel Flame", {"!player.spell(Kil'jaeden's Cunning).exists", "player.moving"} }, 	
-
-	{{-- can use FH
-
-   	 	{"Fire and Brimstone","player.area(10).enemies >= 3", "target"}, -- smarth
-
-  	}, "toggle.NeP_SAoE" },
 		
 	-- AoE
 		{"Fire and Brimstone", "modifier.multitarget", "target"},

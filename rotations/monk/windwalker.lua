@@ -59,11 +59,6 @@ end
 
 local exeOnLoad = function()
 	NeP.Splash()
-	ProbablyEngine.toggle.create(
-		'NeP_SAoE', 
-		'Interface\\AddOns\\Probably_MrTheSoulz\\media\\toggle.blp', 
-		'Smart AoE', 
-		'Smart AoE\nTo Force AoE enable multitarget toggle.')
 end
 
 local inCombat = {
@@ -155,10 +150,6 @@ local inCombat = {
 		{ "113656", "!player.moving" },-- Fists of Fury	
 		-- AoE
 			{ "101546", "modifier.multitarget" }, -- Spinning Crane Kick
-			{ "101546", { -- Spinning Crane Kick // Smart
-				"player.area(8).enemies >= 3", 
-				"toggle.NeP_SAoE"
-			}}, 
 		{ "100784", "player.chi >= 3" }, -- Blackout Kick
 		{ "100787", "!player.buff(125359)"}, -- Tiger Palm if not w/t Tiger Power
 		{ "115698", "player.chi <= 3" }, -- Jab

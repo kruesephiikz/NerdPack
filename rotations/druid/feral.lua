@@ -104,11 +104,6 @@ NeP.Addon.Interface.DruidFeral = {
 
 local exeOnLoad = function()
 	NeP.Splash()
-	ProbablyEngine.toggle.create(
-		'NeP_SAoE', 
-		'Interface\\AddOns\\Probably_MrTheSoulz\\media\\toggle.blp', 
-		'Smart AoE', 
-		'Smart AoE\nTo Force AoE enable multitarget toggle.')
 end
 
 local CatForm = {
@@ -218,13 +213,6 @@ local CatForm = {
 				{ "106830", "target.debuff(106830).duration < 5", "target" }, -- Tharsh
 				{ "106785" }, -- Swipe
 			}, "modifier.multitarget" },
-			{{ -- Smart
-				{ "106830", { -- Tharsh
-					"player.area(8).enemies >= 3", 
-					"target.debuff(106830).duration < 5"
-				}, "target" },
-				{ "106785", "player.area(8).enemies >= 3" },-- Swipe
-			}, "toggle.NeP_SAoE" },
 
 	 	-- Single Rotation
 	  		{ "1822", "target.debuff(155722).duration <= 4", "target" }, -- rake

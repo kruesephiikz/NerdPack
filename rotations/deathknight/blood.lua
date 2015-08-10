@@ -97,11 +97,6 @@ local exeOnLoad = function()
 		"Interface\\Icons\\INV_Sword_07", 
 		"Stop using Dancing Rune Weapon",
 		"Toggle Off if you dont want to use DRW on CD")
-	ProbablyEngine.toggle.create(
-		'NeP_SAoE', 
-		'Interface\\AddOns\\Probably_MrTheSoulz\\media\\toggle.blp', 
-		'Smart AoE', 
-		'Smart AoE\nTo Force AoE enable multitarget toggle.')
 
 end
 
@@ -190,18 +185,6 @@ local inCombat = {
 			"target.debuff(55095).duration < 3", 
 			"target.debuff(55078).duration <3" 
 		} --[[NO TARGET]] },
-
-	{{-- AoE smart
-		{ "50842","player.area(10).enemies > 4"}, -- Blood Boil
-		{ "43265", {
-			"target.range < 7",
-			"player.area(10).enemies > 4"
-		}, "target.ground" }, -- Death and Decay
-		{ "152280", {
-			"target.range < 7",
-			"player.area(10).enemies > 4"
-		}, "target.ground" }, -- Defile
-	}, "toggle.NeP_SAoE" },
 
 	{{-- AoE
 		{ "50842",	"target.range <= 10" },-- Blood Boil

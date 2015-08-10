@@ -106,11 +106,6 @@ NeP.Addon.Interface.DruidGuard = {
 
 local exeOnLoad = function()
 	NeP.Splash()
-	ProbablyEngine.toggle.create(
-		'NeP_SAoE', 
-		'Interface\\AddOns\\Probably_MrTheSoulz\\media\\toggle.blp', 
-		'Smart AoE', 
-		'Smart AoE\nTo Force AoE enable multitarget toggle.')
 end
 
 local inCombat = {
@@ -217,18 +212,8 @@ local inCombat = {
 			"player.buff(158792).duration <= 3"
 		}},
 		{ "33917" }, -- Mangle
-		
 		-- AoE
-			{ "77758", "modifier.multitarget" }, -- Thrash
-
-		{{-- can use FH
-
-			-- AoE smart
-				{ "77758", "player.area(8).enemies >= 3", "target" }, -- Thrash  // FH SMARTH AoE
-
-		}, "toggle.NeP_SAoE" },
-
-			
+			{ "77758", "modifier.multitarget" }, -- Thrash	
 		{ "77758", "target.debuff(77758).duration <= 4" }, -- Thrash
 		{ "33745" }, -- Lacerate
   

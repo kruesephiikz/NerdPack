@@ -36,18 +36,35 @@ across all unlockers.
 
 Build By: MTS
 ---------------------------------------------------]]
+local _SAoE_Time = nil
+local UnitsTotal = 0
+
 function NeP.Lib.SAoE(units, distance)
-	local UnitsTotal = 0
-	if NeP.ObjectManager.unitCacheTotal >= units 
-	and NeP.Core.PeConfig.read('button_states', 'multitarget', false) then
-		for i=1,#NeP.ObjectManager.unitCache do
-			local object = NeP.ObjectManager.unitCache[i]
-			if object.distance <= distance then
-				UnitsTotal = UnitsTotal + 1
+	-- Cache returns beacuse PE cycles too fast
+	if _SAoE_Time == nil or _SAoE_Time + 0.5 <= GetTime() then
+		-- Wipe Cache
+		_SAoE_Time = nil
+		UnitsTotal = 0
+		-- Force AoE
+		if NeP.Core.PeConfig.read('button_states', 'multitarget', false) then
+			_SAoE_Time = GetTime()
+			UnitsTotal = UnitsTotal + 99
+			return UnitsTotal >= units
+		-- SAoE
+		elseif (NeP.ObjectManager.unitCacheTotal >= units 
+		and NeP.Core.PeConfig.read('button_states', 'NeP_SAoE', false)) then
+			for i=1,#NeP.ObjectManager.unitCache do
+				local object = NeP.ObjectManager.unitCache[i]
+				if object.distance <= distance then
+					UnitsTotal = UnitsTotal + 1
+					if UnitsTotal >= units then
+						_SAoE_Time = GetTime()
+						return UnitsTotal >= units
+					end
+				end
 			end
-		end
-	end
-	return UnitsTotal
+		else return false end
+	else return UnitsTotal >= units end
 end
 
 --[[-----------------------------------------------

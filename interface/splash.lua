@@ -30,6 +30,12 @@ local _StartEvents = function()
 	else
 		NeP.Core.Print("Load successful.")
 	end
+	
+	ProbablyEngine.toggle.create(
+		'NeP_SAoE', 
+		'Interface\\Icons\\Inv_battery_01', 
+		'Smart AoE', 
+		'Enable to use Smart AoE.\nTo force AoE use the multitarget toggle.')
 end
 
 function NeP.Splash()
