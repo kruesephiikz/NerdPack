@@ -115,7 +115,7 @@ local inCombat = {
 		{ "2643", "player.focus > 60", "target" }, -- Multi-Shot
 	}, (function() return NeP.Lib.SAoE(3, 40) end) },
 	{ "19434", "player.focus > 60", "target" }, -- Aimed Shot
-	{ "163485" }, -- Focusing Shot // TALENT
+	{ "163485", "!player.moving", "target" }, -- Focusing Shot // TALENT
 	{ "Steady Shot" }
 }
 
