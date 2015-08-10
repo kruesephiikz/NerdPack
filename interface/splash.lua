@@ -33,7 +33,7 @@ local _StartEvents = function()
 	
 	ProbablyEngine.toggle.create(
 		'NeP_SAoE', 
-		'Interface\\Icons\\Inv_battery_01', 
+		'Interface\\Icons\\Spell_magic_polymorphrabbit', 
 		'Smart AoE', 
 		'Enable to use Smart AoE.\nTo force AoE use the multitarget toggle.')
 end
