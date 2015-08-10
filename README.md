@@ -61,3 +61,4 @@ If not enough donations are made to the project, i will stop proving support.
 * Auto Milling.
 * Advanced ObjectManager.
 * In-Game Overlays.
+* Smart AoE even when using a generic unlocker.
