@@ -249,7 +249,7 @@ local combat_rotation = {
 			(function() return NeP.Core.PeFetch('npconfShamanEle', 'frostshock') end) 
 		}},  
 		{ "Thunderstorm", (function() return NeP.Core.PeFetch('npconfShamanEle', 'thunderstorm') end) }
-	}, "player.area(8).enemies >= 1" },
+	}, (function() return NeP.Lib.SAoE(2, 8) end) },
 	
 	-- Control Toggles
 	{ "Flame Shock", { 

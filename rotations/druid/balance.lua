@@ -122,8 +122,7 @@ local BoomkinForm = {
 	}, "toggle.dotEverything" },
 
 	-- AoE
-		{ "48505", { (function() return NeP.Lib.SAoE(3, 40) end), "!player.buff(184989)" }}, -- Starfall
-		{ "48505", { "player.area(8).enemies >= 4", "!player.buff(184989)" }}, -- Starfall  // FH SMART AoE
+		{ "48505", { (function() return NeP.Lib.SAoE(8, 40) end), "!player.buff(184989)" }}, -- Starfall
 	
 	-- Proc's
 		{ "78674", "player.buff(Shooting Stars)", "target" }, --Starsurge with Shooting Stars Proc

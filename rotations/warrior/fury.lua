@@ -230,8 +230,7 @@ ProbablyEngine.rotation.register_custom(72, NeP.Core.GetCrInfo('Warrior - Fury')
 		{ "100130", "player.buff(46916)", "target" },	-- Wild Strike to consume Bloodsurge procs.
 		{ "85288" }, 									-- Raging Blow when available.
 		{ Execute, "target.health <= 20" },				-- Execute
-		{ AoE, (function() return NeP.Lib.SAoE(3, 40) end) },				-- AoE Forced
-		{ AoE, "player.area(8).enemies >= 3" },			-- AoE
+		{ AoE, (function() return NeP.Lib.SAoE(3, 40) end) },-- AoE Forced
 		{ Normal, "target.health >= 20" }				-- Normal CR
 	}, 
 	{ -- Out Combat

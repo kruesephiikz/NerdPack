@@ -15,56 +15,14 @@ local Cooldowns = {
 }
 
 local AoE = {
-	{{ -- SAoE
-		
-		{{ -- <=3 targets
-			-- Slice and Dice // Refresh
-			{"Slice and Dice", {
-				"player.buff(Slice and Dice).duration <= 3",
-				"player.combopoints >= 3"
-			}},
-			-- Rupture to apply dot
-			{"Rupture", {
-				"player.combopoints >= 5",
-				"target.debuff(Rupture).duration <= 7"
-			}},
-			-- Eviscerate // Dump CP
-			{"Eviscerate", "player.combopoints >= 5"},
-			-- Hemorrhage to apply dot
-			{"Hemorrhage", "target.debuff(Hemorrhage).duration <= 7" },
-			{"Ambush"},
-			{"Fan of Knives"},
-		}, "player.area(10).enemies <= 3" },
-		
-		{{ -- > 3 targets
-			-- Slice and Dice // Refresh
-			{"Slice and Dice", {
-				"player.buff(Slice and Dice).duration <= 3",
-				"player.combopoints >= 3"
-			}},
-			-- Crimson Tempest // DUMP CP
-			{"Crimson Tempest", "player.combopoints >= 5"},
-			-- Hemorrhage to apply dot
-			{"Hemorrhage", "target.debuff(Hemorrhage).duration <= 7"},
-			{"Ambush"},
-			{"Fan of Knives"},
-		}, "player.area(10).enemies > 3" },
-				
-	}, "player.firehack" },
-			
-	{{ -- Fallback AoE
-		-- Slice and Dice // Refresh
-		{"Slice and Dice", {
-			"player.buff(Slice and Dice).duration <= 3",
-			"player.combopoints >= 3"
-		}},
-		-- Crimson Tempest // DUMP CP
-		{"Crimson Tempest", "player.combopoints >= 5"},
-		-- Hemorrhage to apply dot
-		{"Hemorrhage", "target.debuff(Hemorrhage).duration <= 7"},
-		{"Ambush"},
-		{"Fan of Knives"},
-	}, "!player.firehack" },
+	{"Slice and Dice", { -- Slice and Dice // Refresh
+		"player.buff(Slice and Dice).duration <= 3",
+		"player.combopoints >= 3"
+	}},
+	{"Crimson Tempest", "player.combopoints >= 5"}, -- Crimson Tempest // DUMP CP
+	{"Hemorrhage", "target.debuff(Hemorrhage).duration <= 7"}, -- Hemorrhage to apply dot
+	{"Ambush"},
+	{"Fan of Knives"},
 }
 
 local ST = {
@@ -131,7 +89,7 @@ ProbablyEngine.rotation.register_custom(261, NeP.Core.GetCrInfo('Rogue - Subtlet
 			{"Tricks of the Trade", "player.aggro > 60", "tank"},
 			{"Evasion", "player.health < 30"},
 			{Cooldowns, "modifier.cooldowns" },
-			{AoE, (function() return NeP.Lib.SAoE(3, 40) end) },
+			{AoE, (function() return NeP.Lib.SAoE(3, 10) end) },
 			{ST, "!modifier.multitarget" },
 		}, {"!player.buff(Vanish)", "target.range < 7"} },
 	}, outCombat, exeOnLoad)
