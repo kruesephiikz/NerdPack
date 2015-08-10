@@ -45,11 +45,11 @@ function NeP.Lib.SAoE(units, distance)
 		UnitsTotal = 0
 		if NeP.Core.PeConfig.read('button_states', 'multitarget', false) then
 			UnitsTotal = UnitsTotal + 99
-		elseif (NeP.ObjectManager.unitCacheTotal >= units 
-		and NeP.Core.PeConfig.read('button_states', 'NeP_SAoE', false)) then
+		elseif NeP.Core.PeConfig.read('button_states', 'NeP_SAoE', false) then
 			for i=1,#NeP.ObjectManager.unitCache do
 				local object = NeP.ObjectManager.unitCache[i]
 				if object.distance <= distance then
+					print('1')
 					UnitsTotal = UnitsTotal + 1
 				end
 			end
