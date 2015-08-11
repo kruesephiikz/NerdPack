@@ -1,5 +1,5 @@
 NeP.Addon.Interface.PriestDisc = {
-	key = "npconfPriestDisc",
+	key = "NePconfPriestDisc",
 	profiles = true,
 	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
 	subtitle = "Priest Discipline Settings",
@@ -15,6 +15,58 @@ NeP.Addon.Interface.PriestDisc = {
 			text = "General settings:", 
 			align = "center" 
 		},
+			{ 
+				type = "checkbox", 
+				text = "Power Word Barrier", 
+				key = "PowerWordBarrier", 
+				default = true, 
+				desc = "This checkbox enables or disables the use of automatic Power Word Barrier on tank."
+			},
+			{ 
+				type = "checkbox", 
+				text = "Feathers", 
+				key = "Feathers", 
+				default = true, 
+				desc = "This checkbox enables or disables the use of automatic feathers to move faster."
+			},
+			{ 
+				type = "dropdown",
+				text = "Pain Suppression", 
+				key = "PainSuppression", 
+				list = {
+			    	{
+			          text = "Lowest",
+			          key = "Lowest"
+			        },
+			        {
+			          text = "Tank",
+			          key = "Tank"
+			    	},
+			    	{
+			    	  text = "Focus",
+			          key = "Focus"
+			    	}
+		    	}, 
+		    	default = "Lowest", 
+		    	desc = "Select Who to use Pain Suppression on." 
+		    },
+			{ 
+				type = "dropdown",
+				text = "Pain Suppression", 
+				key = "PainSuppressionTG", 
+				list = {
+			    	{
+			          text = "Allways",
+			          key = "Allways"
+			        },
+			        {
+			          text = "Boss",
+			          key = "Boss"
+			    	}
+		    	}, 
+		    	default = "Allways", 
+		    	desc = "Select When to use Pain Suppression." 
+		    },
 		
 	}
 }
@@ -125,12 +177,9 @@ local _Raid = {
 }
 
 local _Attonement = {
-	{ "14914", "player.mana > 20",, "target" }, -- Holy Fire
-	{{-- not moving
-		{ "47540" } ,-- Penance
-		{ "585" }, --Smite
-	}, "!player.moving" },
-
+	{ "14914", "player.mana > 20", "target" }, -- Holy Fire
+	{ "47540" } ,-- Penance
+	{ "585" }, --Smite
 }
 
 local _Fast = {
@@ -210,7 +259,38 @@ local _Cooldowns = {
 		"@coreHealing.needsHealing(60, 5)",
 		"modifier.raid"
 	}}, 
-	{ "33206", "lowest.health <= 30", "lowest" }, -- Pain Suppression
+}
+
+local _PainSuppression = {	
+		{{-- ALL
+		{ "33206", { 
+			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Focus' end),
+			(function() return mts.Core.dynamicEval("focus.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+		}, "focus" },
+		{ "33206", {
+			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Tank' end),
+			(function() return mts.Core.dynamicEval("tank.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+		}, "tank" },
+		{ "33206", {
+			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Lowest' end),
+			(function() return mts.Core.dynamicEval("lowest.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+		}, "lowest" },
+	}, (function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppressionTG") == 'Allways' end) },
+
+	{{-- Boss
+		{ "33206", { 
+			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Focus' end),
+			(function() return mts.Core.dynamicEval("focus.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+		}, "focus" },
+		{ "33206", {
+			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Tank' end),
+			(function() return mts.Core.dynamicEval("tank.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+		}, "tank" },
+		{ "33206", {
+			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Lowest' end),
+			(function() return mts.Core.dynamicEval("lowest.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+		}, "lowest" },
+	}, {"target.boss", (function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppressionTG") == 'Boss' end)} }
 }
 
 local _Solo = {
@@ -278,6 +358,7 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 		 		{ _SpiritShell, "player.buff(109964)" }, -- SpiritShell // Talent
 				{_Fast, {"!player.casting.percent >= 40", "lowest.health <= 30"} },
 				{_Cooldowns, "modifier.cooldowns"},
+				{_PainSuppression},
 				{_Attonement, {
 					"!lowest.health < 70", 
 					"!player.buff(81661).count = 5", 
