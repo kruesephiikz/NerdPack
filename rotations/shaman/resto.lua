@@ -435,8 +435,10 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 			{General},
 			{{ -- Stop if moving
 				{{ -- Dispel
-					{ "77130", (function() return NeP.Lib.Dispell(function() return dispelType == 'Magic' or dispelType == 'Curse' end) end) }, -- Dispel Everything
-				}, (function() return NeP.Core.PeFetch('npconf','Dispell') end) }, 
+					{ "77130", (function() return NeP.Lib.Dispell(
+						function() return dispelType == 'Magic' or dispelType == 'Curse' end
+					) end) },
+				}}, 
 				{{-- Interrupt
 					{ "57994" }, -- Wind Shear
 				}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },

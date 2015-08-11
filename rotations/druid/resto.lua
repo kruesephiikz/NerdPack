@@ -84,7 +84,7 @@ local inCombat = {
 		{ "88423", (function() return NeP.Lib.Dispell(
 			function() return dispelType == 'Magic' or dispelType == 'curse' end
 		) end) },
-	}, (function() return NeP.Core.PeFetch('npconfDruidResto','Dispels') end) },
+	}},
 
 	{{-- Cooldowns
 		{ "29166", "player.mana < 80", "player" }, -- Inervate

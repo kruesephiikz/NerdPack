@@ -73,11 +73,6 @@ end
 local exeOnLoad = function()
 	NeP.Splash()
 	ProbablyEngine.toggle.create(
-		'dispel', 
-		'Interface\\Icons\\Ability_paladin_sacredcleansing.png', 
-		'Dispel Everything', 
-		'Dispels everything it finds \nThis does not effect SoO dispels.')
-	ProbablyEngine.toggle.create(
 		'trans', 
 		'Interface\\Icons\\Inv_boots_plate_dungeonplate_c_05.png', 
 		'Enable Casting Transcendence Outside of Combat', 
@@ -151,8 +146,10 @@ local inCombatSerpente = {
 	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
 	
 	{{ -- Dispell all?
-		{ "115450", (function() return NeP.Lib.Dispell(function() return dispelType == 'Magic' or dispelType == 'Posion' or dispelType == 'Disease' end) end) },-- Dispel Everything
-	}, "toggle.dispel" },
+		{ "115450", (function() return NeP.Lib.Dispell(
+			function() return dispelType == 'Magic' or dispelType == 'Posion' or dispelType == 'Disease' end
+		) end) },
+	}},
 
 	-- Cooldowns
   		{ "116849", "lowest.health <= 25" },-- Life Coccon

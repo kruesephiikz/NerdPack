@@ -105,27 +105,20 @@ function NeP.Lib.Dispell(dispelTypes)
 		'Mark of Arrogance',
 		'Displaced Energy'
 	}
-	if NeP.Core.PeFetch('npconf', 'Dispells') then
+	if NeP.Core.PeFetch('npconf', 'Dispell') then
 		for i=1,#NeP.ObjectManager.unitFriendlyCache do
-			local object = NeP.ObjectManager.unitCache[i].key
+			local object = NeP.ObjectManager.unitFriendlyCache[i]
 			if object.distance <= 40 then
 				for j = 1, 40 do
-					local debuffName, _,_,_, dispelType, duration, expires,_,_,_,_,_,_,_,_,_ = UnitDebuff(object, j)
+					local debuffName, _,_,_, dispelType, duration, expires,_,_,_,_,_,_,_,_,_ = UnitDebuff(object.key, j)
 					if dispelType and dispelTypes then
 						local ignore = false
 						for k = 1, #blacklistedDebuffs do
-							if debuffName == blacklistedDebuffs[k] then
-								ignore = true
-								break
+							if debuffName ~= blacklistedDebuffs[k] then
+								ProbablyEngine.dsl.parsedTarget = object.key
+								return true
 							end
 						end
-						if not ignore then
-							ProbablyEngine.dsl.parsedTarget = object
-							return true
-						end
-					end
-					if not debuffName then
-						break
 					end
 				end
 			end

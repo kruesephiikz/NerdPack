@@ -363,8 +363,10 @@ local inCombat = {
  
   	-- Dispel's
 	 	{{ -- Dispell all?
-			{ "527", (function() return NeP.Lib.Dispell(function() return dispelType == 'Magic' or dispelType == 'Disease' end) end) },-- Dispel Everything
-		}, (function() return NeP.Core.PeFetch('npconfPriestHoly','Dispels') end) },
+			{ "527", (function() return NeP.Lib.Dispell(
+				function() return dispelType == 'Magic' or dispelType == 'Disease' end
+			) end) },
+		}},
 
   	-- CD's
 		{ "10060", "modifier.cooldowns" }, --Power Infusion
@@ -622,8 +624,10 @@ local solo = {
  
   	-- Dispel's
 	 	{{ -- Dispell all?
-			{ "527", (function() return NeP.Lib.Dispell(function() return dispelType == 'Magic' or dispelType == 'Disease' end) end) },-- Dispel Everything
-		}, (function() return NeP.Core.PeFetch('npconfPriestHoly','Dispels') end) },
+			{ "527", (function() return NeP.Lib.Dispell(
+				function() return dispelType == 'Magic' or dispelType == 'Disease' end
+			) end) },
+		}},
 
   	-- CD's
 		{ "10060", "modifier.cooldowns" }, --Power Infusion
