@@ -125,13 +125,10 @@ local _Raid = {
 }
 
 local _Attonement = {
-	{ "14914", { --Holy Fire
-		"player.mana > 20",
-		"target.spell(14914).range",
-	}, "target" },
+	{ "14914", "player.mana > 20",, "target" }, -- Holy Fire
 	{{-- not moving
-		{ "47540", "target.spell(47540).range", "target" } ,-- Penance
-		{ "585", "target.spell(585).range", "target" }, --Smite
+		{ "47540" } ,-- Penance
+		{ "585" }, --Smite
 	}, "!player.moving" },
 
 }
@@ -224,6 +221,7 @@ local _Solo = {
 
   	-- CD's
 	{ "10060", "modifier.cooldowns" }, --Power Infusion 
+	{ "585" }, --Smite
 }
 
 local _Moving = {
@@ -281,7 +279,7 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 				{_Fast, {"!player.casting.percent >= 40", "lowest.health <= 30"} },
 				{_Cooldowns, "modifier.cooldowns"},
 				{_Attonement, {
-					"!lowest.health < 90", 
+					"!lowest.health < 70", 
 					"!player.buff(81661).count = 5", 
 					"!player.mana <= 20", 
 					"target.range < 30"
