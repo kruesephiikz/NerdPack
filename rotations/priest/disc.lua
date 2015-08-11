@@ -63,6 +63,16 @@ local _Tank = {
 	{ "2060", "tank.health < 100", "tank" }, -- Heal
 }
 
+local _Focus = {
+	{ "47540", "focus.health <= 85", "focus" }, -- Penance
+	{ "17", {  --Power Word: Shield
+		"focus.health < 100",
+		"!focus.debuff(6788).any", 
+		"!focus.buff(17).any",
+	}, "focus" },
+	{ "2060", "focus.health < 100", "focus" }, -- Heal
+}
+
 local _Player = {
 	{ "19236", "player.health <= 20", "player" }, --Desperate Prayer
 	{ "#5512", "player.health <= 35" }, -- Health Stone
@@ -115,7 +125,7 @@ local _Fast = {
 	{ "!2061", "lowest.health <= 30", "lowest" }, --Flash Heal
 }
 
-local AoE = {
+local _AoE = {
 	{ "121135", "@coreHealing.needsHealing(95, 3)", "lowest"}, -- Cascade
  	{ "596", (function() return _PoH() end) },-- Prayer of Healing
    	{ "132157", (function() return _holyNova() end), nil }, -- Holy Nova
@@ -204,6 +214,7 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 			}},
 			{ "81700", "player.buff(81661).count = 5" }, -- Archangel
 			{ _All },
+			{ "129250", "target.range < 30", "target" },
 			{ _Moving, "player.moving"},
 			{{ -- Conditions
 				{ SavingGrace, { -- Saving Grace // Talent
@@ -215,17 +226,23 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 		 		{ SpiritShell, "player.buff(109964)" }, -- SpiritShell // Talent
 				{_Fast, {"!player.casting.percent >= 50", "lowest.health <= 30"} },
 				{_Cooldowns, "modifier.cooldowns"},
-				{_Attonement, {"!lowest.health < 90", "!player.buff(81661).count = 5", "!player.mana <= 20"} },
+				{_Attonement, {
+					"!lowest.health < 90", 
+					"!player.buff(81661).count = 5", 
+					"!player.mana <= 20", 
+					"target.range < 30"
+				}},
 				{_AoE, "modifier.multitarget"},
-				{_Tank},
-				{_Player},
-				{_Raid}
+				{_Tank, "tank.health < 100"},
+				{_Focus, "focus.health < 100"},
+				{_Player, "player.health < 100"},
+				{_Raid, "lowest.health < 100"}
 			}, "!player.moving" },
 		}, "modifier.party" },
 		{{ -- Solo
 			{_All},
 			{_Player},
-			{_Solo}
+			{_Solo, "target.range < 30"}
 		}, "!modifier.party" },
 	},  
 	{ -- Out-Combat
