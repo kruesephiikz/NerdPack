@@ -399,7 +399,43 @@ end
 --[[
 	Generic OM
 ---------------------------------------------------]]
+local function GenericFilter(unit)
+	if UnitExists(unit) then
+		if UnitCanAttack('player', unit) then
+			print(unit)
+			for i=1,#NeP.ObjectManager.unitCache do
+				local object = NeP.ObjectManager.unitCache[i]
+				print('2')
+				if object.health == math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
+				and object.name == UnitName(unit) then
+					print('2')
+					return false
+				end
+			end
+		elseif UnitIsFriend("player", unit) then
+			for i=1,#NeP.ObjectManager.unitFriendlyCache do
+				local object = NeP.ObjectManager.unitFriendlyCache[i]
+				if object.health == math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
+				and object.name == UnitName(unit) then
+					return false
+				end
+			end
+		end
+		return true
+	end
+end
+
 local genericOM = function()
+	-- Self
+		OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+		OChFriendly[#OChFriendly+1] = {
+			key='Player', 
+			distance=0, 
+			health=math.floor((UnitHealth('player') / UnitHealthMax('player')) * 100), 
+			maxHealth=UnitHealthMax('player'), 
+			actualHealth=UnitHealth('player'), 
+			name=UnitName('player')
+		}
 	-- If in Group scan frames...
 	if IsInGroup() or IsInRaid() then
 		local prefix = (IsInRaid() and 'raid') or 'party'
@@ -407,20 +443,22 @@ local genericOM = function()
 			-- Enemie
 			local target = prefix..i.."target"
 			if NeP.Core.PeFetch("ObjectCache", "EU") then
-				if UnitExists(target) and UnitCanAttack('player', target) then
-					local _OD = NeP.Lib.Distance('player', target)
-					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-					and ProbablyEngine.condition["alive"](target) then
-						OChUnitsTotal = OChUnitsTotal + 1
-						OChUnits[#OChUnits+1] = {
-							key=target, 
-							distance=_OD, 
-							health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), 
-							maxHealth=UnitHealthMax(target), 
-							actualHealth=UnitHealth(target), 
-							name=UnitName(target)
-						}
-						table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
+				if UnitCanAttack('player', target) then
+					if GenericFilter(target) then
+						local _OD = NeP.Lib.Distance('player', target)
+						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100)
+						and ProbablyEngine.condition["alive"](target) then
+							OChUnitsTotal = OChUnitsTotal + 1
+							OChUnits[#OChUnits+1] = {
+								key=target, 
+								distance=_OD, 
+								health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), 
+								maxHealth=UnitHealthMax(target), 
+								actualHealth=UnitHealth(target), 
+								name=UnitName(target)
+							}
+							table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
+						end
 					end
 				end
 			end
@@ -429,7 +467,7 @@ local genericOM = function()
 			if NeP.Core.PeFetch("ObjectCache", "FU") then
 				if UnitExists(friendly) and UnitIsFriend("player", friendly) then
 					local _OD = NeP.Lib.Distance('player', friendly)
-					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100)
 					and ProbablyEngine.condition["alive"](friendly) then
 						OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
 						OChFriendly[#OChFriendly+1] = {
@@ -444,54 +482,87 @@ local genericOM = function()
 					end
 				end
 			end
-		end	
+		end
+		-- Mouseover
+		if UnitExists('mouseover') then
+			local object = 'mouseover'
+			if GenericFilter(object) then
+				-- Friendly
+				if UnitIsFriend("player", object) then
+					if NeP.Core.PeFetch("ObjectCache", "FU") then
+						local _OD = NeP.Lib.Distance('player', object)
+						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+						and ProbablyEngine.condition["alive"](object) then
+							OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+							OChFriendly[#OChFriendly+1] = {
+								key=object, 
+								distance=_OD, 
+								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+								maxHealth=UnitHealthMax(object), 
+								actualHealth=UnitHealth(object), 
+								name=UnitName(object)
+							}
+						end
+					end
+				-- Enemie
+				elseif UnitCanAttack('player', object) then
+					if NeP.Core.PeFetch("ObjectCache", "EU") then
+						local _OD = NeP.Lib.Distance('player', object)
+						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+						and ProbablyEngine.condition["alive"](object) then
+							OChUnitsTotal = OChUnitsTotal + 1
+							OChUnits[#OChUnits+1] = {
+								key=object, 
+								distance=_OD, 
+								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+								maxHealth=UnitHealthMax(object), 
+								actualHealth=UnitHealth(object), 
+								name=UnitName(object)
+							}
+						end
+					end
+				end
+			end
+		end
 	-- Solo Cache self and target
 	else
-		-- Self
-		OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
-		OChFriendly[#OChFriendly+1] = {
-			key='Player', 
-			distance=0, 
-			health=math.floor((UnitHealth('player') / UnitHealthMax('player')) * 100), 
-			maxHealth=UnitHealthMax('player'), 
-			actualHealth=UnitHealth('player'), 
-			name=UnitName('player')
-		}
 		-- Target
 		if UnitExists('target') then
 			local object = 'target'
-			-- Friendly
-			if UnitIsFriend("player", object) then
-				if NeP.Core.PeFetch("ObjectCache", "FU") then
-					local _OD = NeP.Lib.Distance('player', object)
-					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-					and ProbablyEngine.condition["alive"](object) then
-						OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
-						OChFriendly[#OChFriendly+1] = {
-							key=object, 
-							distance=_OD, 
-							health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-							maxHealth=UnitHealthMax(object), 
-							actualHealth=UnitHealth(object), 
-							name=UnitName(object)
-						}
+			if GenericFilter(object) then
+				-- Friendly
+				if UnitIsFriend("player", object) then
+					if NeP.Core.PeFetch("ObjectCache", "FU") then
+						local _OD = NeP.Lib.Distance('player', object)
+						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+						and ProbablyEngine.condition["alive"](object) then
+							OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+							OChFriendly[#OChFriendly+1] = {
+								key=object, 
+								distance=_OD, 
+								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+								maxHealth=UnitHealthMax(object), 
+								actualHealth=UnitHealth(object), 
+								name=UnitName(object)
+							}
+						end
 					end
-				end
-			-- Enemie
-			elseif UnitCanAttack('player', object) then
-				if NeP.Core.PeFetch("ObjectCache", "EU") then
-					local _OD = NeP.Lib.Distance('player', object)
-					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-					and ProbablyEngine.condition["alive"](object) then
-						OChUnitsTotal = OChUnitsTotal + 1
-						OChUnits[#OChUnits+1] = {
-							key=object, 
-							distance=_OD, 
-							health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-							maxHealth=UnitHealthMax(object), 
-							actualHealth=UnitHealth(object), 
-							name=UnitName(object)
-						}
+				-- Enemie
+				elseif UnitCanAttack('player', object) then
+					if NeP.Core.PeFetch("ObjectCache", "EU") then
+						local _OD = NeP.Lib.Distance('player', object)
+						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+						and ProbablyEngine.condition["alive"](object) then
+							OChUnitsTotal = OChUnitsTotal + 1
+							OChUnits[#OChUnits+1] = {
+								key=object, 
+								distance=_OD, 
+								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+								maxHealth=UnitHealthMax(object), 
+								actualHealth=UnitHealth(object), 
+								name=UnitName(object)
+							}
+						end
 					end
 				end
 			end
@@ -499,42 +570,44 @@ local genericOM = function()
 		-- Mouseover
 		if UnitExists('mouseover') then
 			local object = 'mouseover'
-			-- Friendly
-			if UnitIsFriend("player", object) then
-				if NeP.Core.PeFetch("ObjectCache", "FU") then
-					local _OD = NeP.Lib.Distance('player', object)
-					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-					and ProbablyEngine.condition["alive"](object) then
-						OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
-						OChFriendly[#OChFriendly+1] = {
-							key=object, 
-							distance=_OD, 
-							health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-							maxHealth=UnitHealthMax(object), 
-							actualHealth=UnitHealth(object), 
-							name=UnitName(object)
-						}
+			if GenericFilter(object) then
+				-- Friendly
+				if UnitIsFriend("player", object) then
+					if NeP.Core.PeFetch("ObjectCache", "FU") then
+						local _OD = NeP.Lib.Distance('player', object)
+						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+						and ProbablyEngine.condition["alive"](object) then
+							OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+							OChFriendly[#OChFriendly+1] = {
+								key=object, 
+								distance=_OD, 
+								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+								maxHealth=UnitHealthMax(object), 
+								actualHealth=UnitHealth(object), 
+								name=UnitName(object)
+							}
+						end
 					end
-				end
-			-- Enemie
-			elseif UnitCanAttack('player', object) then
-				if NeP.Core.PeFetch("ObjectCache", "EU") then
-					local _OD = NeP.Lib.Distance('player', object)
-					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-					and ProbablyEngine.condition["alive"](object) then
-						OChUnitsTotal = OChUnitsTotal + 1
-						OChUnits[#OChUnits+1] = {
-							key=object, 
-							distance=_OD, 
-							health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-							maxHealth=UnitHealthMax(object), 
-							actualHealth=UnitHealth(object), 
-							name=UnitName(object)
-						}
+				-- Enemie
+				elseif UnitCanAttack('player', object) then
+					if NeP.Core.PeFetch("ObjectCache", "EU") then
+						local _OD = NeP.Lib.Distance('player', object)
+						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+						and ProbablyEngine.condition["alive"](object) then
+							OChUnitsTotal = OChUnitsTotal + 1
+							OChUnits[#OChUnits+1] = {
+								key=object, 
+								distance=_OD, 
+								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+								maxHealth=UnitHealthMax(object), 
+								actualHealth=UnitHealth(object), 
+								name=UnitName(object)
+							}
+						end
 					end
 				end
 			end
-		end		
+		end
 	end
 end
 
