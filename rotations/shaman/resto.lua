@@ -444,7 +444,7 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 				{Totems, "toggle.NeP_Totems"},
 				{Tank, "tank.range <= 40"},
 				{Focus, "focus.range <= 40"},
-				{AoE},
+				{AoE, "modifier.multitarget"},
 				{SelfHealing},
 				{RaidHealing},
 				{DPS, {

@@ -81,7 +81,9 @@ local inCombat = {
 		}, nil },
 
 	{{-- Dispel
-		{ "88423", (function() return NeP.Lib.Dispell(function() return dispelType == 'Magic' or dispelType == 'curse' end) end) }, -- Dispel Everything
+		{ "88423", (function() return NeP.Lib.Dispell(
+			function() return dispelType == 'Magic' or dispelType == 'curse' end
+		) end) },
 	}, (function() return NeP.Core.PeFetch('npconfDruidResto','Dispels') end) },
 
 	{{-- Cooldowns
@@ -131,7 +133,7 @@ local inCombat = {
 			"@coreHealing.needsHealing(85, 3)", 
 			"!lastcast(48438)"
 		}, "lowest" }, 
-	}, (function() return NeP.Lib.SAoE(3, 40) end) },
+	}, "modifier.multitarget" },
 
 	{{-- Soul of the Forest
 		{ "Regrowth", {
@@ -216,12 +218,16 @@ local inCombat = {
 
 	-- Life Bloom
 		{ "33763", { -- Life Bloom
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'LifeBloomTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'LifeBloomTank')
+			) end),
 			"!focus.buff(33763)", 
 			"focus.spell(33763).range" 
 		}, "focus" }, 
 		{ "33763", { -- Life Bloom
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'LifeBloomTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'LifeBloomTank'
+			)) end),
 			"!tank.buff(33763)", 
 			"tank.spell(33763).range" 
 		}, "tank" }, 
@@ -238,23 +244,31 @@ local inCombat = {
 	
 	-- Swiftmend
 		{ "18562", {  -- Swiftmend
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'SwiftmendTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'SwiftmendTank')
+			) end),
 			"focus.buff(774)" 
 		}, "focus" },
 		{ "18562", { -- Swiftmend
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'SwiftmendTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'SwiftmendTank')
+			) end),
 			"tank.buff(774)" 
 		}, "tank" },
 		{ "18562", { "lowest.health < 30", "lowest.buff(774)" }, "focus" }, -- Swiftmend
 
 	-- Rejuvenation
 		{ "774", {
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'RejuvenationTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'RejuvenationTank')
+			) end),
 			"!focus.buff", 
 			"focus.spell(774).range" 
 			}, "focus" },
 		{ "774", {
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'RejuvenationTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'RejuvenationTank')
+			) end),
 			"!tank.buff", 
 			"tank.spell(774).range" 
 			}, "tank" },
@@ -265,12 +279,16 @@ local inCombat = {
 
 	{{-- Germination // Talent
 		{ "774", {
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'RejuvenationTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'RejuvenationTank')
+			) end),
 			"!focus.buff(155777)", 
 			"focus.spell(774).range" 
 		}, "focus" },
 		{ "774", {
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'RejuvenationTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'RejuvenationTank')
+			) end),
 			"!tank.buff(155777)", 
 			"tank.spell(774).range" 
 		}, "tank" },
@@ -296,11 +314,15 @@ local inCombat = {
 
 	-- Healing Touch
 	 	{ "5185", {  -- Healing Touch
-	 		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'HealingTouchTank')) end), 
+	 		(function() return NeP.Core.dynamicEval(
+				"focus.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'HealingTouchTank')
+			) end), 
 		 	"!player.moving" 
 		}, "focus" },
 		{ "5185", { -- Healing Touch
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'HealingTouchTank')) end),
+			(function() return NeP.Core.dynamicEval(
+				"tank.health <= " .. NeP.Core.PeFetch('npconfDruidResto', 'HealingTouchTank')
+			) end),
 			"!player.moving" 
 		}, "tank" },
 		{ "5185", { "lowest.health < 96", "!player.moving" }, "lowest" }, -- Healing Touch

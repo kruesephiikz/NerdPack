@@ -434,7 +434,7 @@ local inCombat = {
 			}},
 		{ "596", (function() return _PoH() end) },-- Prayer of Healing
    		{ "155245", (function() return _ClarityOfPurpose() end), "lowest" },-- Clarity Of Purpose
-	}, (function() return NeP.Lib.SAoE(3, 40) end) },
+	}, "modifier.multitarget" },
 
 	{{-- Heal Fast Bitch!!
 		-- Desperate Prayer
@@ -739,7 +739,7 @@ local outCombat = {
 			}},
 		{ "596", (function() return _PoH() end) },-- Prayer of Healing
    		{ "155245", (function() return _ClarityOfPurpose() end), "lowest" },-- Clarity Of Purpose
-	}, (function() return NeP.Lib.SAoE(3, 40) end) },
+	}, "modifier.multitarget" },
 		
 	-- shields 
 		{ "17", { --Power Word: Shield

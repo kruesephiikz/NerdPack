@@ -615,56 +615,55 @@ local All = {
 }
 	
 ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discipline'), 
-	{ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ In-Combat
-		 	------------------------------------------------------------------------------------------------------------------------------------- All in combat
-		 		{ All },																									-- Shared across all
-		 	------------------------------------------------------------------------------------------------------------------ Mana
-			 	{ "123040", { ----------------------------------------------------------- Mindbender
-					"player.mana < 85",				-- Need mana
-					"target.range <= 40"			-- Spell in range
-				}, "target" },--------------------------------------------------
-				{ "34433", { ----------------------------------------------------------- Shadowfiend
-					"player.mana < 85",				-- Need mana
-					"target.range <= 40"			-- Spell in range
-				}, "target" },--------------------------------------------------
-				{ "129250", { ----------------------------------------------------------- PW:Solance
-					"target.spell(129250).range",	-- Spell in range
-					"talent(3,3)",					-- Got talent
-					"target.infront"
-				}, "target" },------------------------------------------------------------------------------------------
-		{{ ------------------------------------------------------------------------------------------------------------------------------------- Party/Raid CR
-				{ "32375", "modifier.control", "player.ground" }, 															-- Mass Dispel
-				{ "62618", "modifier.shift", "tank.ground" },																-- Power word Barrier // w/t CD's and on tank // PArty
-				{ Cooldowns, "modifier.cooldowns" },																		-- Cooldowns
-				{ SavingGrace, {---------------------------------------------------------------------------------------------- Saving Grace // Talent
+	{ -- In-Combat
+		 { All },
+		 	-- Mana
+			 { "123040", { -- Mindbender
+				"player.mana < 85",-- Need mana
+				"target.range <= 40"-- Spell in range
+			}, "target" },
+			{ "34433", { -- Shadowfiend
+				"player.mana < 85",-- Need mana
+				"target.range <= 40"-- Spell in range
+			}, "target" },
+			{ "129250", { -- PW:Solance
+				"target.spell(129250).range",-- Spell in range
+				"talent(3,3)",-- Got talent
+				"target.infront"
+			}, "target" },
+		{{ -- Party/Raid CR
+				{ "32375", "modifier.control", "player.ground" }, -- Mass Dispel
+				{ "62618", "modifier.shift", "tank.ground" }, -- Power word Barrier // w/t CD's and on tank // PArty
+				{ Cooldowns, "modifier.cooldowns" },  -- Cooldowns
+				{ SavingGrace, { -- Saving Grace // Talent
 					"talent(7,3)",
 					(function() return NeP.Core.dynamicEval("!player.debuff(155274) >= " .. NeP.Core.PeFetch('npconfPriestDisc', 'SavingGraceStacks')) end),
 				}}, 
-				{ Clarity_of_Will, "talent(7,1)" },																			-- Clarity of Will // Talent
-				{ FlashHeal, {------------------------------------------------------------------------------------------------ Flash Heal // dont interrumpt if castbar more then 50%
+				{ Clarity_of_Will, "talent(7,1)" },-- Clarity of Will // Talent
+				{ FlashHeal, {-- Flash Heal // dont interrumpt if castbar more then 50%
 					"!player.casting.percent >= 50",
 					"!talent(7,3)"
 				}},	
-		 		{ BorrowedTime, "player.buff(59889).duration <= 2" },														-- BorrowedTime // Passive Buff
-		 		{ SpiritShell, "player.buff(109964)" },																		-- SpiritShell // Talent
-			 	{ Attonement, {----------------------------------------------------------------------------------------------- Attonement
+		 		{ BorrowedTime, "player.buff(59889).duration <= 2" },-- BorrowedTime // Passive Buff
+		 		{ SpiritShell, "player.buff(109964)" },-- SpiritShell // Talent
+			 	{ Attonement, {-- Attonement
 			 		(function() return NeP.Core.dynamicEval("lowest.health >= " .. NeP.Core.PeFetch('npconfPriestDisc', 'Attonement')) end),
 					(function() return NeP.Lib.Infront('target') end),
 					--"!player.buff(81661).count = 5",
 					"!player.mana < 20",
 					--"target.range <= 30",
 					--"target.infront"
-			 	}}, ----------------------------------------------------------------------------------------------------------
-		 		{ AoE, (function() return NeP.Lib.SAoE(3, 40) end) },																			-- AoE Heals
-				{ Normal}																									-- Normal Heals
+			 	}},
+		 		{ AoE, "modifier.multitarget" },-- AoE Heals
+				{ Normal}-- Normal Heals
 		}, "modifier.party" },
-		{{ ------------------------------------------------------------------------------------------------------------------------------------- Solo CR
+		{{ -- Solo CR
 			{ FlashHeal, "!player.casting.percent >= 50" },
 			{ Solo },
 			{ Attonement },
 		}, "!modifier.party" },
 	},  
-	{ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ Out-Combat
+	{ -- Out-Combat
 		{ All },
 		{ FlashHeal, "!player.casting.percent >= 50" },
 		{outCombat}

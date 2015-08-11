@@ -333,30 +333,28 @@ local _All = {
 }
 
 local _AoE = {
-	{{-- AoE
-		-- Light of Dawn
-		{ "85222", { -- Party
-			"@coreHealing.needsHealing(90, 3)", 
-			"player.holypower >= 3",
-			"modifier.party" 
-		}},
-		{ "85222", { -- Raid
-			"@coreHealing.needsHealing(90, 5)", 
-			"player.holypower >= 3", 
-			"modifier.raid", 
-		}},
-		-- Holy Radiance 
-		{ "82327", { -- Holy Radiance - Party
-			"@coreHealing.needsHealing(80, 3)", 
-			"!player.moving", 
-			"modifier.party" 
-		}, "lowest" }, 
-		{ "82327", { -- Holy Radiance - Raid
-			"@coreHealing.needsHealing(90, 5)", 
-			"!player.moving", 
-			"modifier.raid", 
-		}, "lowest" },  
-	}, (function() return NeP.Lib.SAoE(3, 40) end) },
+	-- Light of Dawn
+	{ "85222", { -- Party
+		"@coreHealing.needsHealing(90, 3)", 
+		"player.holypower >= 3",
+		"modifier.party" 
+	}},
+	{ "85222", { -- Raid
+		"@coreHealing.needsHealing(90, 5)", 
+		"player.holypower >= 3", 
+		"modifier.raid", 
+	}},
+	-- Holy Radiance 
+	{ "82327", { -- Holy Radiance - Party
+		"@coreHealing.needsHealing(80, 3)", 
+		"!player.moving", 
+		"modifier.party" 
+	}, "lowest" }, 
+	{ "82327", { -- Holy Radiance - Raid
+		"@coreHealing.needsHealing(90, 5)", 
+		"!player.moving", 
+		"modifier.raid", 
+	}, "lowest" },  
 }
 
 local _InfusionOfLight = {
@@ -365,7 +363,7 @@ local _InfusionOfLight = {
 			"@coreHealing.needsHealing(80, 3)", 
 			"!player.moving"
 		}, "lowest" }, 
-	}, (function() return NeP.Lib.SAoE(3, 40) end) }, 
+	}, "modifier.multitarget" }, 
 	{ "82326", { -- Holy Light
 		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfPalaHoly', 'HolyLightIL')) end),
 		"!player.moving" 
@@ -615,7 +613,7 @@ local outCombat = {
 			"!player.moving", 
 			"modifier.raid", 
 		}, "lowest" },
-	}, (function() return NeP.Lib.SAoE(3, 40) end) },
+	}, "modifier.multitarget" },
 	-- Holy Light
 	{ "82326", { 
 		(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('npconfPalaHoly', 'HolyLightOCC')) end),
@@ -638,7 +636,7 @@ ProbablyEngine.rotation.register_custom(65, NeP.Core.GetCrInfo('Paladin - Holy')
 		{_DivinePurpose, "player.buff(86172)"},
 		{_SelflessHealer, "talent(3, 1)"},
 		{_Cooldowns, "modifier.cooldowns"},
-		{_AoE},
+		{_AoE, "modifier.multitarget"},
 		{_Tank},
 		{_Focus},
 		{_Player},
