@@ -1,7 +1,7 @@
 NeP.Addon.Interface.WarrFury = {
 	key = "npconfigWarrFury",
 	profiles = true,
-	title = NeP.Addon.Info.Icon.."MrTheSoulz Config",
+	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
 	subtitle = "Warrior Fury Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,
