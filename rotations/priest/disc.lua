@@ -9,10 +9,9 @@ NeP.Addon.Interface.PriestDisc = {
 	config = {
 		
 		-- General
-		{ type = 'rule' },
 		{ 
 			type = 'header', 
-			text = "General settings:", 
+			text = "General Settings:", 
 			align = "center" 
 		},
 			{ 
@@ -91,6 +90,120 @@ NeP.Addon.Interface.PriestDisc = {
 				key = "FastHeals", 
 				default = 35,
 			},
+		-- Tank/Focus
+		{ type = 'Spacer' },
+		{ type = 'rule' },
+		{ 
+			type = 'header', 
+			text = "Tank/Focus Settings:", 
+			align = "center" 
+		},
+			{ 
+				type = "spinner", 
+				text = "Clarity Of Will", 
+				key = "ClarityofWillTank", 
+				default = 100,
+			},
+			{ 
+				type = "spinner", 
+				text = "Power Word: Shield", 
+				key = "PowerShieldTank", 
+				default = 100,
+			},
+			{ 
+				type = "spinner", 
+				text = "Penance", 
+				key = "PenanceTank", 
+				default = 70,
+			},
+			{ 
+				type = "spinner", 
+				text = "Flash Heal", 
+				key = "FlashHealTank", 
+				default = 40,
+			},
+			{ 
+				type = "spinner", 
+				text = "Heal", 
+				key = "HealTank", 
+				default = 100,
+			},
+		-- Player
+		{ type = 'Spacer' },
+		{ type = 'rule' },
+		{ 
+			type = 'header', 
+			text = "Player Settings:", 
+			align = "center" 
+		},
+			{ 
+				type = "spinner", 
+				text = "Clarity Of Will", 
+				key = "ClarityofWillPlayer", 
+				default = 100,
+			},
+			{ 
+				type = "spinner", 
+				text = "Power Word: Shield", 
+				key = "PowerShieldPlayer", 
+				default = 100,
+			},
+			{ 
+				type = "spinner", 
+				text = "Penance", 
+				key = "PenancePlayer", 
+				default = 60,
+			},
+			{ 
+				type = "spinner", 
+				text = "Flash Heal", 
+				key = "FlashHealPlayer", 
+				default = 40,
+			},
+			{ 
+				type = "spinner", 
+				text = "Heal", 
+				key = "HealPlayer", 
+				default = 100,
+			},
+		-- Raid
+		{ type = 'Spacer' },
+		{ type = 'rule' },
+		{ 
+			type = 'header', 
+			text = "Raid Settings:", 
+			align = "center" 
+		},
+			{ 
+				type = "spinner", 
+				text = "Clarity Of Will", 
+				key = "ClarityofWillRaid", 
+				default = 60,
+			},
+			{ 
+				type = "spinner", 
+				text = "Power Word: Shield", 
+				key = "PowerShieldRaid", 
+				default = 60,
+			},
+			{ 
+				type = "spinner", 
+				text = "Penance", 
+				key = "PenanceRaid", 
+				default = 60,
+			},
+			{ 
+				type = "spinner", 
+				text = "Flash Heal", 
+				key = "FlashHealRaid", 
+				default = 40,
+			},
+			{ 
+				type = "spinner", 
+				text = "Heal", 
+				key = "HealRaid", 
+				default = 100,
+			},
 	}
 }
 
@@ -150,23 +263,25 @@ local exeOnLoad = function()
 end
 
 local _Tank = {
-	{ "47540", "tank.health <= 85", "tank" }, -- Penance
+	{ "47540", (function() return NeP.Core.dynamicEval("tank.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PenanceTank')) end), "tank" }, -- Penance
 	{ "17", {  --Power Word: Shield
-		"tank.health < 100",
-		"!tank.debuff(6788).any", 
-		"!tank.buff(17).any",
-	}, "tank" },
-	{ "2060", "tank.health < 100", "tank" }, -- Heal
-}
-
-local _Focus = {
-	{ "47540", "focus.health <= 85", "focus" }, -- Penance
-	{ "17", {  --Power Word: Shield
-		"focus.health < 100",
+		(function() return NeP.Core.dynamicEval("tank.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PowerShieldTank')) end),
 		"!focus.debuff(6788).any", 
 		"!focus.buff(17).any",
 	}, "focus" },
-	{ "2060", "focus.health < 100", "focus" }, -- Heal
+	{ "2061", (function() return NeP.Core.dynamicEval("tank.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'FlashHealTank')) end), "tank" }, --Flash Heal
+	{ "2060", (function() return NeP.Core.dynamicEval("tank.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'HealTank')) end), "tank" }, -- Heal
+}
+
+local _Focus = {
+	{ "47540", (function() return NeP.Core.dynamicEval("focus.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PenanceTank')) end), "focus" }, -- Penance
+	{ "17", {  --Power Word: Shield
+		(function() return NeP.Core.dynamicEval("focus.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PowerShieldTank')) end),
+		"!focus.debuff(6788).any", 
+		"!focus.buff(17).any",
+	}, "focus" },
+	{ "2061", (function() return NeP.Core.dynamicEval("focus.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'FlashHealTank')) end), "focus" }, --Flash Heal
+	{ "2060", (function() return NeP.Core.dynamicEval("focus.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'HealTank')) end), "focus" }, -- Heal
 }
 
 local _Player = {
@@ -175,26 +290,26 @@ local _Player = {
 	{ "586", "target.threat >= 80" }, -- Fade
 	
 	-- Heals
-	{ "47540", "player.health <= 85", "player" }, -- Penance
+	{ "47540", (function() return NeP.Core.dynamicEval("player.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PenancePlayer')) end), "player" }, -- Penance
 	{ "17", {  --Power Word: Shield
-		"player.health < 100",
+		(function() return NeP.Core.dynamicEval("player.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PowerShieldPlayer')) end),
 		"!player.debuff(6788).any", 
 		"!player.buff(17).any",
 	}, "player" },
-	{ "2061", "player.health <= 50", "player" }, --Flash Heal
-	{ "2060", "player.health < 100", "player" }, -- Heal
+	{ "2061", (function() return NeP.Core.dynamicEval("player.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'FlashHealPlayer')) end), "player" }, --Flash Heal
+	{ "2060", (function() return NeP.Core.dynamicEval("player.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'HealPlayer')) end), "player" }, -- Heal
 }
 
 local _Raid = {
-	{ "47540", "lowest.health <= 85", "lowest" }, -- Penance
+	{ "47540", (function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PenanceRaid')) end), "lowest" }, -- Penance
 	{ "17", {  --Power Word: Shield
-		"lowest.health <= 60",
+		(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PowerShieldRaid')) end),
 		"!lowest.debuff(6788).any", 
 		"!lowest.buff(17).any",
 	}, "lowest" },
-	{ "2061", "lowest.health <= 50", "lowest" }, --Flash Heal
+	{ "2061", (function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'FlashHealRaid')) end), "lowest" }, --Flash Heal
 	{ "2060", {-- Heal
-		"lowest.health < 100",
+		(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'HealRaid')) end),
 		"!player.moving"
 	}, "lowest" }, 
 }
@@ -247,22 +362,22 @@ local _SpiritShell = {
 local _ClarityOfWill = {
 	-- tank
 	{ "152118", { -- Clarity of Will
-		"tank.health < 100",
+		(function() return NeP.Core.dynamicEval("tank.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
 		"!tank.buff(152118).any"	
 	}, "tank" },
 	-- focus
 	{ "152118", { -- Clarity of Will
-		"focus.health < 100",
+		(function() return NeP.Core.dynamicEval("focus.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
 		"!focus.buff(152118).any"	
 	}, "focus" },
 	-- player
 	{ "152118", { -- Clarity of Will
-		"player.health < 100",
+		(function() return NeP.Core.dynamicEval("player.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'ClarityofWillPlayer')) end),
 		"!player.buff(152118).any"	
 	}, "player" },
 	-- raid
 	{ "152118", { -- Clarity of Will
-		"lowest.health < 60",
+		(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfPriestDisc', 'ClarityofWillRaid')) end),
 		"!lowest.buff(152118).any"		
 	}, "lowest" },
 }
