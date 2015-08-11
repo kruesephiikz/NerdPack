@@ -80,6 +80,13 @@ NeP.Addon.Interface.PriestDisc = {
 				default = 70,
 				desc = "If a lowest unit goes bellow HP% then use direct heals."
 			},
+			{ 
+				type = "spinner", 
+				text = "Saving Grace", 
+				key = "SavingGrace", 
+				default = 70,
+				desc = "If a lowest unit goes bellow HP% then use direct heals."
+			},
 	}
 }
 
@@ -214,17 +221,18 @@ local _All = {
 	-- Buffs
 	{ "21562", "!player.buffs.stamina" }, -- Fortitude
 	
-	-- LoOk aT It GOoZ!!!
-	{ "121536", { 
-		"player.movingfor > 2", 
-		"!player.buff(121557)", 
-		"player.spell(121536).charges >= 1" 
-	}, "player.ground" },
-	{ "17", {
-		"talent(2, 1)", 
-		"player.movingfor > 2", 
-		"!player.buff(17)",
-	}, "player" },
+	{{-- LoOk aT It GOoZ!!!
+		{ "121536", { 
+			"player.movingfor > 2", 
+			"!player.buff(121557)", 
+			"player.spell(121536).charges >= 1" 
+		}, "player.ground" },
+		{ "17", {
+			"talent(2, 1)", 
+			"player.movingfor > 2", 
+			"!player.buff(17)",
+		}, "player" },
+	}, (function() return NeP.Core.PeFetch("NePconfPriestDisc", "Feathers") end), },
 }
 
 local _SpiritShell = {
@@ -257,8 +265,10 @@ local _ClarityOfWill = {
 }
 
 local _SavingGrace = {
-	{ "!152116", "tank.health < 30", "tank" }, -- Saving Grace
-	{ "!152116", "lowest.health < 30", "lowest" }, -- Saving Grace
+	{ "!152116", (function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'SavingGrace')) end), "tank" }, -- Saving Grace
+	{ "!152116", (function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'SavingGrace')) end), "lowest" }, -- Saving Grace
+	{ "!152116", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'SavingGrace')) end), "lowest" }, -- Saving Grace
+	{ "!152116", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'SavingGrace')) end), "lowest" }, -- Saving Grace
 }
 
 local _Cooldowns = {
