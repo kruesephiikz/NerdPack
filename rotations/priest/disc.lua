@@ -138,15 +138,60 @@ local _All = {
 	}, "player" },
 }
 
-local _Solo = {
+local SpiritShell = {
+   	{ "596", (function() return _PoH() end) }, -- Prayer of Healing
+	{ "!2061", "lowest.health <= 40", "lowest" }, -- Flash Heal
+	{ "2060", "lowest.health >= 40", "lowest" }, -- Heal
+}
 
+local Clarity_of_Will = {
+	-- tank
+	{ "152118", { -- Clarity of Will
+		"tank.health < 100",
+		"!tank.buff(152118).any"	
+	}, "tank" },
+	-- raid
+	{ "152118", { -- Clarity of Will
+		"lowest.health < 100",
+		"!lowest.buff(152118).any"		
+	}, "lowest" },
+}
+
+local SavingGrace = {
+	{ "!152116", "tank.health < 30", "tank" }, -- Saving Grace
+	{ "!152116", "lowest.health < 30", "lowest" }, -- Saving Grace
+}
+
+local _Cooldowns = {
+	{ "10060", "player.mana < 80" },-- Power Infusion
+	{ "109964", {-- Spirit Shell // Party
+		"@coreHealing.needsHealing(60, 3)",
+		"modifier.party"
+	}},
+	{ "109964", {-- Spirit Shell // Raid
+		"@coreHealing.needsHealing(60, 5)",
+		"modifier.raid"
+	}}, 
+	{ "33206", "lowest.health <= 30", "lowest" }, -- Pain Suppression
+}
+
+local _Solo = {
 	{{-- Auto Dotting
 		{ "32379", (function() return NeP.Lib.AutoDots('32379', 20) end) }, -- SW:D
 		{ "589", (function() return NeP.Lib.AutoDots('589', 100) end) }, -- SW:P 
 	}, "toggle.dotEverything" },
 
   	-- CD's
-		{ "10060", "modifier.cooldowns" }, --Power Infusion 
+	{ "10060", "modifier.cooldowns" }, --Power Infusion 
+}
+
+local _Moving = {
+	{ "17", {  -- Power Word: Shield
+		"lowest.health <= 30",
+		"!lowest.debuff(6788).any", 
+		"!lowest.buff(17).any",
+	}, "lowest" },
+	{ "47540", "lowest.health <= 30", "lowest" }, -- Penance
 }
 
 ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discipline'), 
@@ -158,9 +203,18 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 				) end) },
 			}},
 			{ "81700", "player.buff(81661).count = 5" }, -- Archangel
-			{_All},
-			{_Fast, {"!player.casting.percent >= 50", "lowest.health <= 30"} },
+			{ _All },
+			{ _Moving, "player.moving"},
 			{{ -- Conditions
+				{ SavingGrace, { -- Saving Grace // Talent
+					"talent(7,3)",
+					"!player.debuff(155274) >= 3",
+				}}, 
+				{ Clarity_of_Will, "talent(7,1)" }, -- Clarity of Will // Talent
+		 		{ BorrowedTime, "player.buff(59889).duration <= 2" }, -- BorrowedTime // Passive Buff
+		 		{ SpiritShell, "player.buff(109964)" }, -- SpiritShell // Talent
+				{_Fast, {"!player.casting.percent >= 50", "lowest.health <= 30"} },
+				{_Cooldowns, "modifier.cooldowns"},
 				{_Attonement, {"!lowest.health < 90", "!player.buff(81661).count = 5", "!player.mana <= 20"} },
 				{_AoE, "modifier.multitarget"},
 				{_Tank},
