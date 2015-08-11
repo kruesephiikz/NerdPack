@@ -413,21 +413,19 @@ local genericOM = function()
 			if NeP.Core.PeFetch("ObjectCache", "EU") then
 				if UnitExists(target) 
 				and not UnitIsFriend("player", target) then
-					if UnitAffectingCombat(target) then
 					local _OD = NeP.Lib.Distance('player', target)
-						if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-						and ProbablyEngine.condition["alive"](target) then
-							OChUnitsTotal = OChUnitsTotal + 1
-							OChUnits[#OChUnits+1] = {
-								key=target, 
-								distance=_OD, 
-								health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), 
-								maxHealth=UnitHealthMax(target), 
-								actualHealth=UnitHealth(target), 
-								name=UnitName(target)
-							}
-							table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
-						end
+					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+					and ProbablyEngine.condition["alive"](target) then
+						OChUnitsTotal = OChUnitsTotal + 1
+						OChUnits[#OChUnits+1] = {
+							key=target, 
+							distance=_OD, 
+							health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), 
+							maxHealth=UnitHealthMax(target), 
+							actualHealth=UnitHealth(target), 
+							name=UnitName(target)
+						}
+						table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 					end
 				end
 			end
