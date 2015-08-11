@@ -467,7 +467,7 @@ local genericOM = function()
 			-- Friendly
 			local friendly = prefix..i
 			if NeP.Core.PeFetch("ObjectCache", "FU") then
-				if UnitExists(friendly) and UnitIsFriend("player", friendly) then
+				if GenericFilter(target) then
 					local _OD = NeP.Lib.Distance('player', friendly)
 					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100)
 					and ProbablyEngine.condition["alive"](friendly) then
