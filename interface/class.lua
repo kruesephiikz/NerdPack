@@ -4,9 +4,9 @@ local _OpenClassWindow = false
 local _ShowingClassWindow = false
 
 function NeP.Addon.Interface.ClassGUI()
-	local _Spec = (GetSpecialization() or nil)
+	local _Spec = GetSpecialization()
 	
-	if not _Spec == nil then
+	if _Spec ~= nil then
 		local _SpecID =  (GetSpecializationInfo(_Spec) or nil)
 		-- Check wich spec the player is to return the correct window.	
 		if _SpecID == 250 and not _OpenClassWindow then -- DK Blood

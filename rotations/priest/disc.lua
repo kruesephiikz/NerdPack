@@ -1,3 +1,24 @@
+NeP.Addon.Interface.PriestDisc = {
+	key = "npconfPriestDisc",
+	profiles = true,
+	title = NeP.Addon.Info.Icon.."MrTheSoulz Config",
+	subtitle = "Priest Discipline Settings",
+	color = NeP.Core.classColor('player'),
+	width = 250,
+	height = 500,
+	config = {
+		
+		-- General
+		{ type = 'rule' },
+		{ 
+			type = 'header', 
+			text = "General settings:", 
+			align = "center" 
+		},
+		
+	}
+}
+
 local _holyNova = function()
 	local minHeal = GetSpellBonusDamage(2) * 1.125
 	local total = 0
