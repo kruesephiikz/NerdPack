@@ -260,11 +260,10 @@ local firehackOM = function()
 	local totalObjects = ObjectCount()
 	for i=1, totalObjects do
 		local Obj = ObjectWithIndex(i)
-			if ObjectExists(Obj) then
-				if ObjectIsType(Obj, ObjectTypes.GameObject) 
-				or ObjectIsType(Obj, ObjectTypes.Unit) then
-					if not BlacklistedObject(Obj) then		
-					local _OName = UnitName(Obj)
+		if ObjectExists(Obj) then
+			if ObjectIsType(Obj, ObjectTypes.GameObject) 
+			or ObjectIsType(Obj, ObjectTypes.Unit) then
+				if not BlacklistedObject(Obj) then		
 					local _OD = NeP.Lib.Distance('player', Obj)
 					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
 						-- Objects OM
@@ -281,7 +280,7 @@ local firehackOM = function()
 											key=Obj, 
 											distance=_OD, 
 											id=ObID, 
-											name=_OName, 
+											name = UnitName(Obj), 
 											is='LM'
 										}
 										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
@@ -297,7 +296,7 @@ local firehackOM = function()
 											key=Obj, 
 											distance=_OD, 
 											id=ObID, 
-											name=_OName, 
+											name = UnitName(Obj), 
 											is='Ore'
 										}
 										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
@@ -313,7 +312,7 @@ local firehackOM = function()
 											key=Obj, 
 											distance=_OD, 
 											id=ObID, 
-											name=_OName, 
+											name = UnitName(Obj), 
 											is='Herb'
 										}
 										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
@@ -329,7 +328,7 @@ local firehackOM = function()
 											key=Obj, 
 											distance=_OD, 
 											id=ObID, 
-											name=_OName, 
+											name = UnitName(Obj), 
 											is='Fish'
 										}
 										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
@@ -341,11 +340,6 @@ local firehackOM = function()
 						elseif ObjectIsType(Obj, ObjectTypes.Unit) 
 						and ProbablyEngine.condition["alive"](Obj) then
 							if not BlacklistedDebuffs(Obj) then
-								
-								local health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100)
-								local maxHealth = UnitHealthMax(Obj)
-								local actualHealth = UnitHealth(Obj)
-								local _class = UnitClassification(Obj)
 												
 								-- Friendly Cache
 								if UnitIsFriend("player", Obj) then
@@ -355,10 +349,10 @@ local firehackOM = function()
 										OChFriendly[#OChFriendly+1] = {
 											key=Obj, 
 											distance=_OD, 
-											health=health, 
-											maxHealth=maxHealth, 
-											actualHealth=actualHealth, 
-											name=_OName
+											health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
+											maxHealth = UnitHealthMax(Obj),
+											actualHealth = UnitHealth(Obj),
+											name = UnitName(Obj),
 										}
 										table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)
 									end	
@@ -369,24 +363,26 @@ local firehackOM = function()
 										OChUnits[#OChUnits+1] = {
 											key=Obj, 
 											distance=_OD, 
-											health=health, 
-											maxHealth=maxHealth, 
-											actualHealth=actualHealth, 
-											name=_OName
+											health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
+											maxHealth = UnitHealthMax(Obj),
+											actualHealth = UnitHealth(Obj),
+											name = UnitName(Obj),
 										}
 										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 									end	
 								-- Enemie Units
-								else
+								elseif UnitCanAttack('player', Obj) then
 									-- Enabled on GUI and unit affecting combat
 									if NeP.Core.PeFetch("ObjectCache", "EU") then
 										OChUnitsTotal = OChUnitsTotal + 1
 										OChUnits[#OChUnits+1] = {
-											key=Obj, distance=_OD, 
-											health=health, maxHealth=maxHealth, 
-											actualHealth=actualHealth, 
-											name=_OName, 
-											class=_class
+											key=Obj, 
+											distance=_OD, 
+											health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
+											maxHealth = UnitHealthMax(Obj),
+											actualHealth = UnitHealth(Obj),
+											name = UnitName(Obj), 
+											class = UnitClassification(Obj)
 										}
 										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 									end
@@ -407,12 +403,11 @@ local genericOM = function()
 	-- If in Group scan frames...
 	if IsInGroup() or IsInRaid() then
 		local prefix = (IsInRaid() and 'raid') or 'party'
-		-- Enemies
 		for i = 1, GetNumGroupMembers() do
+			-- Enemie
 			local target = prefix..i.."target"
 			if NeP.Core.PeFetch("ObjectCache", "EU") then
-				if UnitExists(target) 
-				and not UnitIsFriend("player", target) then
+				if UnitExists(target) and UnitCanAttack('player', target) then
 					local _OD = NeP.Lib.Distance('player', target)
 					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
 					and ProbablyEngine.condition["alive"](target) then
@@ -429,6 +424,7 @@ local genericOM = function()
 					end
 				end
 			end
+			-- Friendly
 			local friendly = prefix..i
 			if NeP.Core.PeFetch("ObjectCache", "FU") then
 				if UnitExists(friendly) and UnitIsFriend("player", friendly) then
@@ -462,38 +458,80 @@ local genericOM = function()
 			name=UnitName('player')
 		}
 		-- Target
-		if UnitExists('target') and not UnitIsFriend("player", 'target') then
-			if UnitAffectingCombat('target') then
-				local _OD = NeP.Lib.Distance('player', 'target')
-				if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-				and ProbablyEngine.condition["alive"]('target') then
-					OChUnitsTotal = OChUnitsTotal + 1
-					OChFriendly[#OChFriendly+1] = {
-						key='target', 
-						distance=_OD, 
-						health=math.floor((UnitHealth('target') / UnitHealthMax('target')) * 100), 
-						maxHealth=UnitHealthMax('target'), 
-						actualHealth=UnitHealth('target'), 
-						name=UnitName('target')
-					}
+		if UnitExists('target') then
+			local object = 'target'
+			-- Friendly
+			if UnitIsFriend("player", object) then
+				if NeP.Core.PeFetch("ObjectCache", "FU") then
+					local _OD = NeP.Lib.Distance('player', object)
+					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+					and ProbablyEngine.condition["alive"](object) then
+						OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+						OChFriendly[#OChFriendly+1] = {
+							key=object, 
+							distance=_OD, 
+							health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+							maxHealth=UnitHealthMax(object), 
+							actualHealth=UnitHealth(object), 
+							name=UnitName(object)
+						}
+					end
+				end
+			-- Enemie
+			elseif UnitCanAttack('player', object) then
+				if NeP.Core.PeFetch("ObjectCache", "EU") then
+					local _OD = NeP.Lib.Distance('player', object)
+					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+					and ProbablyEngine.condition["alive"](object) then
+						OChUnitsTotal = OChUnitsTotal + 1
+						OChUnits[#OChUnits+1] = {
+							key=object, 
+							distance=_OD, 
+							health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+							maxHealth=UnitHealthMax(object), 
+							actualHealth=UnitHealth(object), 
+							name=UnitName(object)
+						}
+					end
 				end
 			end
 		end
 		-- Mouseover
-		if UnitExists('mouseover') and not UnitIsFriend("player", 'mouseover') then
-			if UnitAffectingCombat('mouseover') then
-				local _OD = NeP.Lib.Distance('player', 'mouseover')
-				if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-				and ProbablyEngine.condition["alive"]('mouseover') then
-					OChUnitsTotal = OChUnitsTotal + 1
-					OChUnits[#OChUnits+1] = {
-						key='mouseover', 
-						distance=_OD, 
-						health=math.floor((UnitHealth('mouseover') / UnitHealthMax('mouseover')) * 100), 
-						maxHealth=UnitHealthMax('mouseover'), 
-						actualHealth=UnitHealth('mouseover'), 
-						name=UnitName('mouseover')
-					}
+		if UnitExists('mouseover') then
+			local object = 'mouseover'
+			-- Friendly
+			if UnitIsFriend("player", object) then
+				if NeP.Core.PeFetch("ObjectCache", "FU") then
+					local _OD = NeP.Lib.Distance('player', object)
+					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+					and ProbablyEngine.condition["alive"](object) then
+						OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+						OChFriendly[#OChFriendly+1] = {
+							key=object, 
+							distance=_OD, 
+							health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+							maxHealth=UnitHealthMax(object), 
+							actualHealth=UnitHealth(object), 
+							name=UnitName(object)
+						}
+					end
+				end
+			-- Enemie
+			elseif UnitCanAttack('player', object) then
+				if NeP.Core.PeFetch("ObjectCache", "EU") then
+					local _OD = NeP.Lib.Distance('player', object)
+					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+					and ProbablyEngine.condition["alive"](object) then
+						OChUnitsTotal = OChUnitsTotal + 1
+						OChUnits[#OChUnits+1] = {
+							key=object, 
+							distance=_OD, 
+							health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+							maxHealth=UnitHealthMax(object), 
+							actualHealth=UnitHealth(object), 
+							name=UnitName(object)
+						}
+					end
 				end
 			end
 		end		
@@ -728,7 +766,7 @@ end
 									TICKER
 -------------------------------------------------------------------------------------------------------
 ]]
-C_Timer.NewTicker(1, (function()
+C_Timer.NewTicker(0.5, (function()
 	
 	OMGUI_Update()
 	-- Wipe Cache
