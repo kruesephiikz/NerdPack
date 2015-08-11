@@ -67,7 +67,19 @@ NeP.Addon.Interface.PriestDisc = {
 		    	default = "Allways", 
 		    	desc = "Select When to use Pain Suppression." 
 		    },
-		
+			{ 
+				type = "spinner", 
+				text = "Pain Suppression", 
+				key = "PainSuppressionHP", 
+				default = 25
+			},
+			{ 
+				type = "spinner", 
+				text = "Attonement", 
+				key = "Attonement", 
+				default = 70,
+				desc = "If a lowest unit goes bellow HP% then use direct heals."
+			},
 	}
 }
 
@@ -258,7 +270,17 @@ local _Cooldowns = {
 	{ "109964", {-- Spirit Shell // Raid
 		"@coreHealing.needsHealing(60, 5)",
 		"modifier.raid"
-	}}, 
+	}},
+	{{ -- Power word Barrier
+		{ "62618", {  -- Power word Barrier // w/t CD's and on tank // PArty
+			"@coreHealing.needsHealing(50, 3)", 
+			"modifier.party", 
+		}, "tank.ground" },
+		{ "62618", {  -- Power word Barrier // w/t CD's and on tank // raid
+			"@coreHealing.needsHealing(50, 5)", 
+			"modifier.raid", 
+		}, "tank.ground" },
+	}, (function() return mts.Core.PeFetch("mtsconfPriestDisc", "PowerWordBarrier") end) },
 }
 
 local _PainSuppression = {	
