@@ -263,7 +263,7 @@ local firehackOM = function()
 		if ObjectExists(Obj) then
 			if ObjectIsType(Obj, ObjectTypes.GameObject) 
 			or ObjectIsType(Obj, ObjectTypes.Unit) then
-				if not BlacklistedObject(Obj) then		
+				if not BlacklistedObject(Obj) then
 					local _OD = NeP.Lib.Distance('player', Obj)
 					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
 						-- Objects OM
@@ -401,27 +401,29 @@ end
 ---------------------------------------------------]]
 local function GenericFilter(unit)
 	if UnitExists(unit) then
-		if UnitCanAttack('player', unit) then
-			print(unit)
-			for i=1,#NeP.ObjectManager.unitCache do
-				local object = NeP.ObjectManager.unitCache[i]
-				print('2')
-				if object.health == math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
-				and object.name == UnitName(unit) then
-					print('2')
-					return false
+		local _,_,_,_,_,unitID = strsplit("-", UnitGUID(unit))
+			if not BlacklistedObject(unit) then
+				if not BlacklistedDebuffs(unit) then
+				if UnitCanAttack('player', unit) then
+					for i=1,#NeP.ObjectManager.unitCache do
+						local object = NeP.ObjectManager.unitCache[i]
+						if object.health == math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
+						and object.name == UnitName(unit) then
+							return false
+						end
+					end
+				elseif UnitIsFriend("player", unit) then
+					for i=1,#NeP.ObjectManager.unitFriendlyCache do
+						local object = NeP.ObjectManager.unitFriendlyCache[i]
+						if object.health == math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
+						and object.name == UnitName(unit) then
+							return false
+						end
+					end
 				end
-			end
-		elseif UnitIsFriend("player", unit) then
-			for i=1,#NeP.ObjectManager.unitFriendlyCache do
-				local object = NeP.ObjectManager.unitFriendlyCache[i]
-				if object.health == math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
-				and object.name == UnitName(unit) then
-					return false
-				end
+				return true
 			end
 		end
-		return true
 	end
 end
 
