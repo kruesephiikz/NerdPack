@@ -24,10 +24,10 @@ NeP.Addon.Interface.PriestDisc = {
 			},
 			{ 
 				type = "checkbox", 
-				text = "Feathers", 
+				text = "Move Faster", 
 				key = "Feathers", 
 				default = true, 
-				desc = "This checkbox enables or disables the use of automatic feathers to move faster."
+				desc = "This checkbox enables or disables the automatic use of feathers & others to move faster."
 			},
 			{ 
 				type = "dropdown",
@@ -78,14 +78,18 @@ NeP.Addon.Interface.PriestDisc = {
 				text = "Attonement", 
 				key = "Attonement", 
 				default = 70,
-				desc = "If a lowest unit goes bellow HP% then use direct heals."
 			},
 			{ 
 				type = "spinner", 
 				text = "Saving Grace", 
 				key = "SavingGrace", 
 				default = 35,
-				desc = "If a lowest unit goes bellow HP% then use direct heals."
+			},
+			{ 
+				type = "spinner", 
+				text = "Emergency Heals", 
+				key = "FastHeals", 
+				default = 35,
 			},
 	}
 }
@@ -202,13 +206,12 @@ local _Attonement = {
 }
 
 local _Fast = {
-	{ "!47540", "lowest.health <= 30", "lowest" }, -- Penance
+	{ "!47540", nil, "lowest" }, -- Penance
 	{ "!17", {  -- Power Word: Shield
-		"lowest.health <= 30",
 		"!lowest.debuff(6788).any", 
 		"!lowest.buff(17).any",
 	}, "lowest" },
-	{ "!2061", "lowest.health <= 30", "lowest" }, --Flash Heal
+	{ "!2061", nil, "lowest" }, --Flash Heal
 }
 
 local _AoE = {
@@ -388,7 +391,10 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 				{ _ClarityOfWill, "talent(7,1)" }, -- Clarity of Will // Talent
 		 		{ _BorrowedTime, "player.buff(59889).duration <= 2" }, -- BorrowedTime // Passive Buff
 		 		{ _SpiritShell, "player.buff(109964)" }, -- SpiritShell // Talent
-				{_Fast, {"!player.casting.percent >= 40", "lowest.health <= 30"} },
+				{_Fast, {
+					(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'FastHeals')) end),
+					"!player.casting.percent >= 40", 
+				}},
 				{_Cooldowns, "modifier.cooldowns"},
 				{_PainSuppression},
 				{_Attonement, {
