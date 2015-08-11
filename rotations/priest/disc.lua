@@ -169,26 +169,36 @@ local _All = {
 	}, "player" },
 }
 
-local SpiritShell = {
+local _SpiritShell = {
    	{ "596", (function() return _PoH() end) }, -- Prayer of Healing
 	{ "!2061", "lowest.health <= 40", "lowest" }, -- Flash Heal
 	{ "2060", "lowest.health >= 40", "lowest" }, -- Heal
 }
 
-local Clarity_of_Will = {
+local _ClarityOfWill = {
 	-- tank
 	{ "152118", { -- Clarity of Will
 		"tank.health < 100",
 		"!tank.buff(152118).any"	
 	}, "tank" },
+	-- focus
+	{ "152118", { -- Clarity of Will
+		"focus.health < 100",
+		"!focus.buff(152118).any"	
+	}, "focus" },
+	-- player
+	{ "152118", { -- Clarity of Will
+		"player.health < 100",
+		"!player.buff(152118).any"	
+	}, "player" },
 	-- raid
 	{ "152118", { -- Clarity of Will
-		"lowest.health < 100",
+		"lowest.health < 60",
 		"!lowest.buff(152118).any"		
 	}, "lowest" },
 }
 
-local SavingGrace = {
+local _SavingGrace = {
 	{ "!152116", "tank.health < 30", "tank" }, -- Saving Grace
 	{ "!152116", "lowest.health < 30", "lowest" }, -- Saving Grace
 }
@@ -225,11 +235,34 @@ local _Moving = {
 	{ "47540", "lowest.health <= 30", "lowest" }, -- Penance
 }
 
+local _BorrowedTime = {
+	{ "17", {
+		"!tank.debuff(6788).any",
+		"!tank.buff(10).any",
+		"tank.range <= 40",
+	}, "tank" },
+	{ "17", { 
+		"!focus.debuff(6788).any",
+		"!focus.buff(10).any",
+		"focus.range <= 40",
+	}, "focus" }, 
+	{ "17", {
+		"!player.debuff(6788).any",
+		"!player.buff(10).any",
+	}, "player" },
+	{ "17", {
+		"lowest.health < 100",
+		"!lowest.debuff(6788).any",
+		"!lowest.buff(10).any",
+	}, "lowest" }, 
+
+}
+
 ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discipline'), 
 	{ -- In-Combat
 		{{ -- Party/Raid
 			{{-- Dispell ALl // Dont interrumpt if castbar more then 50%
-				{ "!527", (function() return NeP.Lib.Dispell(
+				{ "527", (function() return NeP.Lib.Dispell(
 					function() return dispelType == 'Magic' or dispelType == 'Disease' end
 				) end) },
 			}},
@@ -238,14 +271,14 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 			{ "129250", "target.range < 30", "target" },
 			{ _Moving, "player.moving"},
 			{{ -- Conditions
-				{ SavingGrace, { -- Saving Grace // Talent
+				{ _SavingGrace, { -- Saving Grace // Talent
 					"talent(7,3)",
 					"!player.debuff(155274) >= 3",
 				}}, 
-				{ Clarity_of_Will, "talent(7,1)" }, -- Clarity of Will // Talent
-		 		{ BorrowedTime, "player.buff(59889).duration <= 2" }, -- BorrowedTime // Passive Buff
-		 		{ SpiritShell, "player.buff(109964)" }, -- SpiritShell // Talent
-				{_Fast, {"!player.casting.percent >= 50", "lowest.health <= 30"} },
+				{ _ClarityOfWill, "talent(7,1)" }, -- Clarity of Will // Talent
+		 		{ _BorrowedTime, "player.buff(59889).duration <= 2" }, -- BorrowedTime // Passive Buff
+		 		{ _SpiritShell, "player.buff(109964)" }, -- SpiritShell // Talent
+				{_Fast, {"!player.casting.percent >= 40", "lowest.health <= 30"} },
 				{_Cooldowns, "modifier.cooldowns"},
 				{_Attonement, {
 					"!lowest.health < 90", 
