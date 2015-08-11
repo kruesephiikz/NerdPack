@@ -84,7 +84,7 @@ NeP.Addon.Interface.PriestDisc = {
 				type = "spinner", 
 				text = "Saving Grace", 
 				key = "SavingGrace", 
-				default = 70,
+				default = 35,
 				desc = "If a lowest unit goes bellow HP% then use direct heals."
 			},
 	}
