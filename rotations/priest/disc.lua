@@ -280,39 +280,39 @@ local _Cooldowns = {
 			"@coreHealing.needsHealing(50, 5)", 
 			"modifier.raid", 
 		}, "tank.ground" },
-	}, (function() return mts.Core.PeFetch("mtsconfPriestDisc", "PowerWordBarrier") end) },
+	}, (function() return NeP.Core.PeFetch("NePconfPriestDisc", "PowerWordBarrier") end) },
 }
 
 local _PainSuppression = {	
 		{{-- ALL
 		{ "33206", { 
-			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Focus' end),
-			(function() return mts.Core.dynamicEval("focus.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+			(function() return NeP.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Focus' end),
+			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
 		}, "focus" },
 		{ "33206", {
-			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Tank' end),
-			(function() return mts.Core.dynamicEval("tank.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+			(function() return NeP.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Tank' end),
+			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
 		}, "tank" },
 		{ "33206", {
-			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Lowest' end),
-			(function() return mts.Core.dynamicEval("lowest.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+			(function() return NeP.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Lowest' end),
+			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
 		}, "lowest" },
-	}, (function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppressionTG") == 'Allways' end) },
+	}, (function() return NeP.Core.PeFetch("NePconfPriestDisc", "PainSuppressionTG") == 'Allways' end) },
 
 	{{-- Boss
 		{ "33206", { 
-			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Focus' end),
-			(function() return mts.Core.dynamicEval("focus.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+			(function() return NeP.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Focus' end),
+			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
 		}, "focus" },
 		{ "33206", {
-			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Tank' end),
-			(function() return mts.Core.dynamicEval("tank.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+			(function() return NeP.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Tank' end),
+			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
 		}, "tank" },
 		{ "33206", {
-			(function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Lowest' end),
-			(function() return mts.Core.dynamicEval("lowest.health <= " .. mts.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+			(function() return NeP.Core.PeFetch("NePconfPriestDisc", "PainSuppression") == 'Lowest' end),
+			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
 		}, "lowest" },
-	}, {"target.boss", (function() return mts.Core.PeFetch("NePconfPriestDisc", "PainSuppressionTG") == 'Boss' end)} }
+	}, {"target.boss", (function() return NeP.Core.PeFetch("NePconfPriestDisc", "PainSuppressionTG") == 'Boss' end)} }
 }
 
 local _Solo = {
@@ -382,7 +382,7 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 				{_Cooldowns, "modifier.cooldowns"},
 				{_PainSuppression},
 				{_Attonement, {
-					"!lowest.health < 70", 
+					(function() return NeP.Core.dynamicEval("lowest.health >= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'Attonement')) end), 
 					"!player.buff(81661).count = 5", 
 					"!player.mana <= 20", 
 					"target.range < 30"
