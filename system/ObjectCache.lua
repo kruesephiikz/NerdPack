@@ -431,27 +431,26 @@ local genericOM = function()
 					end
 				end
 			end
-		end	
-		-- Friendly
-		for i = -1, GetNumGroupMembers() - 1 do
-			local friendly = (i == 0 and 'player') or prefix .. i
+			local friendly = prefix..i
 			if NeP.Core.PeFetch("ObjectCache", "FU") then
-				local _OD = NeP.Lib.Distance('player', friendly)
-				if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
-				and ProbablyEngine.condition["alive"](friendly) then
-					OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
-					OChFriendly[#OChFriendly+1] = {
-						key=friendly, 
-						distance=_OD, 
-						health=math.floor((UnitHealth(friendly) / UnitHealthMax(friendly)) * 100), 
-						maxHealth=UnitHealthMax(friendly), 
-						actualHealth=UnitHealth(friendly), 
-						name=UnitName(friendly)
-					}
-					table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)
+				if UnitExists(friendly) and UnitIsFriend("player", friendly) then
+					local _OD = NeP.Lib.Distance('player', friendly)
+					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) 
+					and ProbablyEngine.condition["alive"](friendly) then
+						OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+						OChFriendly[#OChFriendly+1] = {
+							key=friendly, 
+							distance=_OD, 
+							health=math.floor((UnitHealth(friendly) / UnitHealthMax(friendly)) * 100), 
+							maxHealth=UnitHealthMax(friendly), 
+							actualHealth=UnitHealth(friendly), 
+							name=UnitName(friendly)
+						}
+						table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)
+					end
 				end
 			end
-		end
+		end	
 	-- Solo Cache self and target
 	else
 		-- Self
