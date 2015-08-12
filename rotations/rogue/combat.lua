@@ -74,7 +74,7 @@ ProbablyEngine.rotation.register_custom(260, NeP.Core.GetCrInfo('Rogue - Combat'
 		{{ -- Dont Break Sealth && Melee Range
 			{{-- Interrupts
 				{ "Kick" },
-			}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+			}, "target.NePinterrupt" },
 			{"Recuperate",{
 				"player.combopoints <= 3",
 				"player.health < 35",

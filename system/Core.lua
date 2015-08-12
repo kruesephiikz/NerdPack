@@ -59,6 +59,16 @@ ProbablyEngine.condition.register("casttime", function(target, spell)
     return cast_time
 end)
 
+ProbablyEngine.condition.register('NePinterrupt', function (target)
+	if ProbablyEngine.condition['modifier.toggle']('interrupt') then
+		if UnitName('player') == UnitName(target) then return false end
+		local stopAt = NeP.Core.PeFetch('npconf', 'ItA') or 95
+		local secondsLeft, castLength = ProbablyEngine.condition['casting.delta'](target)
+		return secondsLeft and 100 - (secondsLeft / castLength * 100) > stopAt
+	end
+	return false
+end)
+
 --[[-----------------------------------------------
 									** Commands **
 							DESC: Slash commands in-game.

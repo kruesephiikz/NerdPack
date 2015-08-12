@@ -16,7 +16,7 @@ local inCombat = {
 
 	{{-- Interrupt
 		{ "2139" },--Counterspell
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 
  	--Survival Abilities
  		{ "1953", "player.state.root" }, -- Blink

@@ -92,7 +92,7 @@ local inCombat = {
 		{ "119381", "target.range <= 5" }, -- Leg Sweep when SHS is on CD
 		{ "119392", "target.range <= 30" }, -- Charging Ox Wave when SHS is on CD
 		{ "107079", "!target.debuff(116705)" }, -- Quaking Palm when SHS is on CD
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 
 	-- Cooldowns
 		{ "115288", { -- Energizing Brew

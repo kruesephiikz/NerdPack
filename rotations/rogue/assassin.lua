@@ -80,7 +80,7 @@ ProbablyEngine.rotation.register_custom(259, NeP.Core.GetCrInfo('Rogue - Assassi
 		{{ -- Dont Break Sealth && Melee Range
 			{{-- Interrupts
 				{ "1766" }, -- Kick
-			}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+			}, "target.NePinterrupt" },
 			{Survival},
 			{Cooldowns, "modifier.cooldowns" },
 			{inCombat},

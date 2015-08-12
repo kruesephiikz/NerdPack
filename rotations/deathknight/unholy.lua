@@ -350,7 +350,7 @@ local inCombat = {
 		{ "47476", "!lastcast(47528)", "target" }, -- Strangulate
 		{ "108194", "!lastcast(47528)", "target" }, -- Asphyxiate
 		{ "47482" }, -- Leap
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 
 	-- Spell Steal
 	{ "77606", (function() return _DarkSimUnit('target') end), "target" }, -- Dark Simulacrum

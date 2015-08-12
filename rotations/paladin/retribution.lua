@@ -395,7 +395,7 @@ ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retrib
 	{-- In-Combat
 		{{-- Interrupts
 			{ "Rebuke" },
-		}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+		}, "target.NePinterrupt" },
 		{ "Cleanse", {
 			"player.dispellable(Cleanse)", 
 			(function() return NeP.Core.PeFetch('npconfPalaRet', 'cleanse') end) 

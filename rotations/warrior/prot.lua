@@ -197,7 +197,7 @@ ProbablyEngine.rotation.register_custom(73, NeP.Core.GetCrInfo('Warrior - Protec
 			{ "6552" }, -- Pummel
 	  		{ "Disrupting Shout", "target.range <= 8", "target" },
 	  		{ "114028" }, -- Mass Spell Reflection
-	  	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	  	}, "target.NePinterrupt" },
   		{ "Will of the Forsaken", "player.state.fear" },
   		{ "Will of the Forsaken", "player.state.charm" },
   		{ "Will of the Forsaken", "player.state.sleep" },

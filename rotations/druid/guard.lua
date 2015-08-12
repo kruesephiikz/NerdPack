@@ -160,7 +160,7 @@ local inCombat = {
 	{{-- Interrupts
 		{ "106839" }, -- Skull Bash
 		{ "5211" }, -- Mighty Bash
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 	
 	-- Items
 		{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'Healthstone')) end) }, -- Healthstone

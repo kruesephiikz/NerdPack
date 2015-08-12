@@ -322,7 +322,7 @@ ProbablyEngine.rotation.register_custom(103, NeP.Core.GetCrInfo('Druid - Feral')
 	  		{{
 		  		{ "106839" },	-- Skull Bash
 				{ "5211" }, 	-- Mighty Bash
-			}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+			}, "target.NePinterrupt" },
 			{ CatForm },
 		}, "player.form = 2" },
 	}, 

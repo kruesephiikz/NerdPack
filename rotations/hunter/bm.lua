@@ -143,7 +143,7 @@ ProbablyEngine.rotation.register_custom(253, NeP.Core.GetCrInfo('Hunter - Beast 
 			{ "!147362" }, -- Counter Shot
 			{ "!19577" }, -- Intimidation
 			{ "!19386" }, -- Wyrven Sting
-		}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+		}, "target.NePinterrupt" },
 		{{ -- General Conditions
 			{Survival, "player.health < 100"},
 			{Cooldowns, "modifier.cooldowns"},

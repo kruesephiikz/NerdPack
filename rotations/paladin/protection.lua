@@ -167,7 +167,7 @@ local InCombat = {
 
 	{{-- Interrumpts
 		{ "96231" }, 				-- Rebuke
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 
 	{{ -- Empowered Seals
 		{ "31801", { -- Seal of Truth

@@ -154,7 +154,7 @@ local inCombat = {
 		{ "47528" }, -- Mind freeze
 		{ "47476" }, -- Strangulate
 		{ "108194" }, -- Asphyxiate
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 
 	-- Spell Steal
 		{ "77606", (function() return _DarkSimUnit('target') end), "target" }, -- Dark Simulacrum

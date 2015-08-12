@@ -441,7 +441,7 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 				}}, 
 				{{-- Interrupt
 					{ "57994" }, -- Wind Shear
-				}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+				}, "target.NePinterrupt" },
 				{Cooldowns, "modifier.cooldowns"},
 				{Totems, "toggle.NeP_Totems"},
 				{Tank, "tank.range <= 40"},

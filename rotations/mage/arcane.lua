@@ -29,7 +29,7 @@ local inCombat = {
   {{-- Interrupts
     { "102051" }, -- Frostjaw
     { "2139" }, -- Counterspell
-  }, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+  }, "target.NePinterrupt" },
 
   -- AoE
     { "1449", (function() return NeP.Lib.SAoE(5, 10) end)},--Arcane Explosion

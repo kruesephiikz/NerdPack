@@ -221,7 +221,7 @@ ProbablyEngine.rotation.register_custom(72, NeP.Core.GetCrInfo('Warrior - Fury')
 		{{-- Interrupt
 			{ "6552", (function() return NeP.Core.dynamicEval("target.interruptsAt(" .. NeP.Core.PeFetch('npconf', 'ItA') or 40)..")" end) }, 			-- Pummel
 			{ "23920", (function() return NeP.Core.dynamicEval("target.interruptsAt(" .. NeP.Core.PeFetch('npconf', 'ItA') or 40)..")" end) }, 		-- Spell Reflection
-		}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+		}, "target.NePinterrupt" },
 		{ All },										-- Shared across all
 		{ Survival },									-- Survival
 		{ Cooldowns, "modifier.cooldowns" },			-- Cooldowns

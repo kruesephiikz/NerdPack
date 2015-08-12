@@ -510,7 +510,7 @@ local _Cooldowns = {
 local inCombat = {
 	{{-- Interrupts
 		{ "96231", "target.range <= 6", "target" },-- Rebuke
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 	{ "35395", { -- Crusader Strike
 		"target.range < 5",
 		"target.infront",

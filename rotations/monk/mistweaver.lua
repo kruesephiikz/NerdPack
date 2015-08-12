@@ -143,7 +143,7 @@ local inCombatSerpente = {
 	     	"!lastcast(116705)",
 	    }},
 	  	{ "116705" }, -- Spear Hand Strike
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 	
 	{{ -- Dispell all?
 		{ "115450", (function() return NeP.Lib.Dispell(
@@ -311,7 +311,7 @@ local inCombatCrane = {
 	     	"!lastcast(116705)",
 	    }},
 	  	{ "116705" }, -- Spear Hand Strike
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 		
 	-- FREEDOOM!
 		{ "137562", "player.state.disorient" }, -- Nimble Brew = 137562

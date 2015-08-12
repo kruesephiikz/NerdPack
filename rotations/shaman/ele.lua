@@ -294,7 +294,7 @@ local _Survival = {
 local inCombat = {
 	{{-- Interrupt
 		{ "Wind Shear" },
-	}, "target.interruptsAt("..(NeP.Core.PeFetch('npconf', 'ItA')  or 40)..")" },
+	}, "target.NePinterrupt" },
 
 	-- Main Rotation
 	{ "Flame Shock", "!target.debuff(Flame Shock)" },
