@@ -313,7 +313,7 @@ LibDraw.Sync(function()
 						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 					end
 				elseif UnitIsPlayer(object.key) then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsPlayers") then
+					if NeP.Core.PeFetch("NePconf_Overlays", "objectsEnemiePlayers") then
 						local factionGroup, factionName = UnitFactionGroup(object.key)
 						if factionGroup == 'Alliance' then
 							if distance < 50 then
@@ -350,7 +350,7 @@ LibDraw.Sync(function()
 				local _class = object.class
 				-- Players
 				if UnitIsPlayer(object.key) then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsPlayers") then
+					if NeP.Core.PeFetch("NePconf_Overlays", "objectsFriendlyPlayers") then
 						if name ~= UnitName('player') then
 							local factionGroup, factionName = UnitFactionGroup(object.key)
 							if factionGroup == 'Alliance' then
@@ -401,26 +401,28 @@ NeP.Addon.Interface.Overlays = {
 		{ type = 'spacer' },
 		{ type = 'rule' },
 		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Player Overlays:", size = 25, align = "Center" },
-		{ type = 'spacer' },
 			{ type = "checkbox", text = "Display Player Melee Range", key = "PlayerMRange", default = false },
 			{ type = "checkbox", text = "Display Player Caster Range", key = "PlayerCRange", default = false },
 			{ type = "checkbox", text = "Display Target Line", key = "TargetLine", default = false },
 			{ type = "checkbox", text = "Display Infront Cone", key = "PlayerInfrontCone", default = false },
-		{ type = 'rule' },
 		{ type = 'spacer' },
+		{ type = 'rule' },
 		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Target Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Player Melee Range", key = "TargetMRange", default = false },
 			{ type = "checkbox", text = "Display Player Caster Range", key = "TargetCRange", default = false },
 			{ type = "checkbox", text = "Display Infront Cone", key = "TargetCone", default = false },
-		{ type = 'rule' },
 		{ type = 'spacer' },
+		{ type = 'rule' },
 		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Objects Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Herb Objects", key = "objectsHerbs", default = false },
 			{ type = "checkbox", text = "Display Ore Objects", key = "objectsOres", default = false },
 			{ type = "checkbox", text = "Display Lumbermill Objects", key = "objectsLM", default = false },
 			{ type = "checkbox", text = "Display Fish Objects", key = "objectsFish", default = false },
+		{ type = 'spacer' },
+		{ type = 'rule' },
 		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Units Overlays:", size = 25, align = "Center" },
-			{ type = "checkbox", text = "Display Player Units", key = "objectsPlayers", default = false },
+			{ type = "checkbox", text = "Display Friendly Player Units", key = "objectsFriendlyPlayers", default = false },
+			{ type = "checkbox", text = "Display Enemie Player Units", key = "objectsEnemiePlayers", default = false },
 			{ type = "checkbox", text = "Display Rare Units", key = "objectsRares", default = false },
 			{ type = "checkbox", text = "Display WorldBoss Units", key = "objectsWorldBoss", default = false },
 			{ type = "checkbox", text = "Display Elite Units", key = "objectsElite", default = false },
