@@ -207,15 +207,60 @@ NeP.Addon.Interface.PriestDisc = {
 	}
 }
 
+local _MassDispell = function()
+	local start, duration, enabled = GetSpellCooldown('32375')
+    if duration == 0 then
+		local total = 0        
+		for i=1,#NeP.ObjectManager.unitFriendlyCache do
+			local object = NeP.ObjectManager.unitFriendlyCache[i]
+			if object.distance <= 40 then
+				for j = 1, 40 do
+					local debuffName, _,_,_, dispelType, duration, expires,_,_,_,_,_,_, _,_,_ = UnitDebuff(object.key, j)
+					if dispelType and dispelType == 'Magic' or dispelType == 'Disease' then
+						total = total + 1
+					end
+				end
+			end
+			if total >= 2 then
+				NeP.Core.Print("Mass Dispelled on: "..object.name.." total units:"..total)
+				CastGround('32375', object.key)
+				return true
+			end
+		end
+	end
+	return false
+end
+
+local _PWBarrier = function()
+	local start, duration, enabled = GetSpellCooldown('62618')
+    if duration == 0 then
+		local minHeal = GetSpellBonusDamage(2) * 1.125
+		local total = 0
+		for i=1,#NeP.ObjectManager.unitFriendlyCache do
+			local object = NeP.ObjectManager.unitFriendlyCache[i]
+			if object.distance <= 40 then
+				if max(0, object.maxHealth - object.actualHealth) > minHeal then
+					total = total + 1
+				end
+			end
+			if total >= 2 then
+				NeP.Core.Print("Power Word: Barrier on: "..object.name.." total units:"..total)
+				CastGround('62618', object.key)
+				return true
+			end
+		end
+	end
+	return false
+end
+
 local _holyNova = function()
 	local minHeal = GetSpellBonusDamage(2) * 1.125
 	local total = 0
 		for i=1,#NeP.ObjectManager.unitFriendlyCache do
-		local object = NeP.ObjectManager.unitFriendlyCache[i]
-		local healthMissing = max(0, object.maxHealth - object.actualHealth)
-			if healthMissing > minHeal and UnitIsFriend("player", object.key) then
-				if object.distance <= 12 then
-				total = total + 1
+			local object = NeP.ObjectManager.unitFriendlyCache[i]
+			if object.distance <= 12 then
+				if max(0, object.maxHealth - object.actualHealth) > minHeal then
+					total = total + 1
 				end
 			end
 		end
@@ -259,7 +304,12 @@ local exeOnLoad = function()
 		'dotEverything', 
 		'Interface\\Icons\\Ability_creature_cursed_05.png', 
 		'Dot All The Things! (SOLO)', 
-		'Click here to dot all the things while in Solo mode!\nSome Spells require Multitarget enabled also.\nOnly Works if using FireHack.')
+		'Click here to dot all the things while in Solo mode!\nSome Spells require Multitarget enabled also.')
+	ProbablyEngine.toggle.create(
+		'autoGround', 
+		'Interface\\Icons\\Ability_priest_bindingprayers.png', 
+		'Automated Ground Spells', 
+		'Enable the use of automated ground spells like MassDispell & Power Word: Barrier.\nOnly Works if using a Advanced Unlocker.')
 end
 
 local _Tank = {
@@ -321,6 +371,7 @@ local _Attonement = {
 }
 
 local _Fast = {
+	{ "Gift of the Naaru", nil, "lowest" },
 	{ "!47540", nil, "lowest" }, -- Penance
 	{ "!17", {  -- Power Word: Shield
 		"!lowest.debuff(6788).any", 
@@ -489,11 +540,15 @@ local _BorrowedTime = {
 ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discipline'), 
 	{ -- In-Combat
 		{{ -- Party/Raid
-			{{-- Dispell ALl // Dont interrumpt if castbar more then 50%
-				{ "527", (function() return NeP.Lib.Dispell(
-					function() return dispelType == 'Magic' or dispelType == 'Disease' end
-				) end) },
-			}},
+			{ "527", (function() return NeP.Lib.Dispell(function() return dispelType == 'Magic' or dispelType == 'Disease' end) end) },-- Dispell ALl
+			{{ -- Auto Ground ON
+				{ "32375", (function() return _MassDispell() end) }, -- MassDispell
+				{ "62618", _PWBarrier },
+			}, "toggle.autoGround" },
+			{{ -- Auto Ground Off
+				{ "32375", "modifier.lshift", "ground" }, -- MassDispell
+				{ "62618", "modifier.lcontrol", "ground" },
+			}, "!toggle.autoGround" },
 			{ "81700", "player.buff(81661).count = 5" }, -- Archangel
 			{ _All },
 			{ "129250", "target.range < 30", "target" },
@@ -519,8 +574,8 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 					"target.range < 30"
 				}},
 				{_AoE, "modifier.multitarget"},
-				{_Tank, "tank.health < 100"},
-				{_Focus, "focus.health < 100"},
+				{_Tank, {"tank.health < 100", "tank.range <= 40"}},
+				{_Focus, {"focus.health < 100", "focus.range <= 40"}},
 				{_Player, "player.health < 100"},
 				{_Raid, "lowest.health < 100"}
 			}, "!player.moving" },
