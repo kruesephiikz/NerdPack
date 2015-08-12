@@ -365,6 +365,8 @@ local _Raid = {
 }
 
 local _Attonement = {
+	{ "123040", "player.mana < 85", "target" }, -- Mindbender
+	{ "34433", "player.mana < 85", "target" }, -- Shadowfiend
 	{ "14914", "player.mana > 20", "target" }, -- Holy Fire
 	{ "47540" } ,-- Penance
 	{ "585" }, --Smite
