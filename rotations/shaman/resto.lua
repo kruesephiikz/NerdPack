@@ -311,16 +311,6 @@ local General = {
 			"!player.buff(2645)"
 		}},
 	}, "toggle.NeP_Wolf" },
-
-	-- Survival
-	{ "108271", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'AstralShift')) end), nil }, -- Astral Shift
-	{ "Stoneform", "player.health <= 65" }, -- Stoneform // Dwarf Racial
-	{ "59547", "player.health <= 70", "player" }, -- Gift of the Naaru // Draenei Racial
-
-	-- Items
-	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Healthstone')) end), nil }, -- Healthstone
-	{ "#trinket1", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Trinket1')) end), nil }, -- Trinket 1
-	{ "#trinket2", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Trinket2')) end), nil }, -- Trinket 2		
 }
 
 local AoE = {
@@ -388,7 +378,11 @@ local RaidHealing = {
 	{ "77472", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'HealingWaveRaid')) end), "lowest" }, -- Healing Wave
 }
 
-local SelfHealing = {
+local _Player = {
+	-- Survival
+	{ "108271", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'AstralShift')) end), nil }, -- Astral Shift
+	{ "Stoneform", "player.health <= 65" }, -- Stoneform // Dwarf Racial
+	{ "59547", "player.health <= 70", "player" }, -- Gift of the Naaru // Draenei Racial
 	{ "16188", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'AncestralSwiftnessPlayer')) end), "player" }, -- Ancestral Swiftness
 	{ "8004", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'HealingSurgePlayer')) end), "player" }, -- Healing Surge
 	{ "61295", { -- Riptide
@@ -398,6 +392,11 @@ local SelfHealing = {
 		"!lowest.health <= 50" -- Dont use it on sealf if someone needs it more!
 	}, "player" },
 	{ "77472", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'HealingWavePlayer')) end), "player" }, -- Healing Wave
+	
+	-- Items
+	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Healthstone')) end), nil }, -- Healthstone
+	{ "#trinket1", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Trinket1')) end), nil }, -- Trinket 1
+	{ "#trinket2", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Trinket2')) end), nil }, -- Trinket 2
 }
 
 local DPS= {
@@ -416,19 +415,10 @@ local DPS= {
 	{ "403" }, -- Lightning Bolt	
 }
 
-local outCombat = {
-	{ "61295", { -- Riptide
-		"!player.buff(53390)", -- Tidal Waves
-		"!lowest.buff(61295)", -- Riptide
-		"lowest.health < 100"
-	}, "lowest" },
-	{ "77472", "lowest.health <= 70", "lowest" }, -- Healing Wave
-}
-
 ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Restoration'), 
 	{ -- In-Combat
 		{{ -- Solo
-			{SelfHealing},
+			{_Player},
 			{DPS, "toggle.dps"}
 		}, "!modifier.party" },
 		{{ -- Party/Raid
@@ -447,16 +437,15 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 				{Tank, "tank.range <= 40"},
 				{Focus, "focus.range <= 40"},
 				{AoE, "modifier.multitarget"},
-				{SelfHealing},
+				{_Player},
 				{RaidHealing},
 				{DPS, {
 					"toggle.dps",
-					"target.infront",
 					"target.range < 40"
 				}},
 			}, "!player.moving" },
 		}, "modifier.party" },
 	},{ -- Out-Combat
 		{General},
-		{outCombat}
+		{_Player}
 	}, exeOnLoad)
