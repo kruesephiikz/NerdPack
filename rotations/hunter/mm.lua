@@ -66,10 +66,12 @@ local Pet = {
 }
 
 local Cooldowns = {
+	{ "82939", nil, "target.ground" }, -- Explosive Trap
 	{ "121818", "player.proc.any" }, -- Stampede
 	{ "121818", "player.hashero" }, -- Stampede
 	{ "121818", "player.buff(19615).count >= 4" }, --Stampede w/ Frenzy
 	{ "131894" }, -- A Murder of Crows
+	{ "3045" }, -- Rapid Fire
 	{ "Lifeblood" },
 	{ "Berserking" },
 	{ "Blood Fury" },
