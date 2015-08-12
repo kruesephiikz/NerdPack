@@ -422,6 +422,12 @@ local _Fast = {
 
 local _AoE = {
 	{ "121135", "@coreHealing.needsHealing(95, 3)", "lowest"}, -- Cascade
+	{ "33076", { --Prayer of Mending // FIXME needs TWeaking
+		"tank.health <= 80",
+		"@coreHealing.needsHealing(90, 3)",
+		"!player.moving", 
+		"tank.spell(33076).range" 
+	}, "tank" },
  	{ "596", (function() return _PoH() end) },-- Prayer of Healing
    	{ "132157", (function() return _holyNova() end), nil }, -- Holy Nova
 }
