@@ -401,9 +401,8 @@ end
 ---------------------------------------------------]]
 local function GenericFilter(unit)
 	if UnitExists(unit) then
-		local _,_,_,_,_,unitID = strsplit("-", UnitGUID(unit))
-			if not BlacklistedObject(unit) then
-				if not BlacklistedDebuffs(unit) then
+		if not BlacklistedObject(unit) then
+			if not BlacklistedDebuffs(unit) then
 				if UnitCanAttack('player', unit) then
 					for i=1,#NeP.ObjectManager.unitCache do
 						local object = NeP.ObjectManager.unitCache[i]
