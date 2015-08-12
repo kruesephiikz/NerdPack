@@ -15,11 +15,36 @@ NeP.Addon.Interface.PriestDisc = {
 			align = "center" 
 		},
 			{ 
-				type = "checkbox", 
-				text = "Power Word Barrier", 
-				key = "PowerWordBarrier", 
-				default = true, 
-				desc = "This checkbox enables or disables the use of automatic Power Word Barrier on tank."
+				type = "spinner", 
+				text = "Power Word: Barrier - Party", 
+				key = "PWBParty", 
+				default = 3,
+				min = 1,
+				max = 5
+			},
+			{ 
+				type = "spinner", 
+				text = "MassDispell - Party", 
+				key = "MDispellParty", 
+				default = 3,
+				min = 1,
+				max = 5
+			},
+			{ 
+				type = "spinner", 
+				text = "Power Word: Barrier - Raid", 
+				key = "PWBRaid", 
+				default = 5,
+				min = 1,
+				max = 20
+			},
+			{ 
+				type = "spinner", 
+				text = "MassDispell - Raid", 
+				key = "MDispellRaid", 
+				default = 5,
+				min = 1,
+				max = 20
 			},
 			{ 
 				type = "checkbox", 
@@ -210,6 +235,12 @@ NeP.Addon.Interface.PriestDisc = {
 local _MassDispell = function()
 	local start, duration, enabled = GetSpellCooldown('32375')
     if duration == 0 then
+		local _Count = 0
+		if IsInGroup() or IsInRaid() then
+			_Count = NeP.Core.PeFetch("NePconfPriestDisc", "MDispellRaid")
+		else 
+			_Count = NeP.Core.PeFetch("NePconfPriestDisc", "MDispellParty") 
+		end
 		local total = 0        
 		for i=1,#NeP.ObjectManager.unitFriendlyCache do
 			local object = NeP.ObjectManager.unitFriendlyCache[i]
@@ -221,7 +252,7 @@ local _MassDispell = function()
 					end
 				end
 			end
-			if total >= 2 then
+			if total >= _Count then
 				NeP.Core.Print("Mass Dispelled on: "..object.name.." total units:"..total)
 				CastGround('32375', object.key)
 				return true
@@ -234,6 +265,12 @@ end
 local _PWBarrier = function()
 	local start, duration, enabled = GetSpellCooldown('62618')
     if duration == 0 then
+		local _Count = 0
+		if IsInGroup() or IsInRaid() then
+			_Count = NeP.Core.PeFetch("NePconfPriestDisc", "PWBRaid")
+		else 
+			_Count = NeP.Core.PeFetch("NePconfPriestDisc", "PWBParty") 
+		end
 		local minHeal = GetSpellBonusDamage(2) * 1.125
 		local total = 0
 		for i=1,#NeP.ObjectManager.unitFriendlyCache do
@@ -243,7 +280,7 @@ local _PWBarrier = function()
 					total = total + 1
 				end
 			end
-			if total >= 2 then
+			if total >= _Count then
 				NeP.Core.Print("Power Word: Barrier on: "..object.name.." total units:"..total)
 				CastGround('62618', object.key)
 				return true
@@ -453,16 +490,6 @@ local _Cooldowns = {
 		"@coreHealing.needsHealing(60, 5)",
 		"modifier.raid"
 	}},
-	{{ -- Power word Barrier
-		{ "62618", {  -- Power word Barrier // w/t CD's and on tank // PArty
-			"@coreHealing.needsHealing(50, 3)", 
-			"modifier.party", 
-		}, "tank.ground" },
-		{ "62618", {  -- Power word Barrier // w/t CD's and on tank // raid
-			"@coreHealing.needsHealing(50, 5)", 
-			"modifier.raid", 
-		}, "tank.ground" },
-	}, (function() return NeP.Core.PeFetch("NePconfPriestDisc", "PowerWordBarrier") end) },
 }
 
 local _PainSuppression = {	
