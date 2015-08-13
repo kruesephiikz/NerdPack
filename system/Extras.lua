@@ -1,9 +1,12 @@
 local function _manualMoving()
-	if not GetKeyState('65') -- A
-	and not GetKeyState('83') -- S
-	and not GetKeyState('68') -- D
-	and not GetKeyState('87') then -- W
-		return true
+	if FireHack then
+		local a, _ = GetKeyState('65')
+		local s, _ = GetKeyState('83')
+		local d, _ = GetKeyState('68')
+		local w, _ = GetKeyState('87') 
+		if a or s or d or w then
+			return true
+		end
 	end
 	return false
 end
@@ -21,40 +24,40 @@ DESC: Moves to a unit.
 Build By: MTS
 ---------------------------------------------------]]
 function NeP.Extras.MoveTo()
-	local _classRange = {
-		["HUNTER"] = {style = "ranged", Range = 30},
-		["WARLOCK"] = {style = "ranged",  Range = 30},
-		["PRIEST"] = {style = "ranged",  Range = 30},
+	local _rangeTable = {
+		["HUNTER"] = {style = "ranged", Range = 40},
+		["WARLOCK"] = {style = "ranged",  Range = 40},
+		["PRIEST"] = {style = "ranged",  Range = 40},
 		["PALADIN"] = {style = "melee", Range = 5},
-		["MAGE"] = {style = "ranged",  Range = 30},
+		["MAGE"] = {style = "ranged",  Range = 40},
 		["ROGUE"] = {style = "melee", Range = 5},
 		["DRUID"] = {style = "melee", Range = 5},
-		["SHAMAN"] = {style = "ranged",  Range = 30},
+		["SHAMAN"] = {style = "ranged",  Range = 40},
 		["WARRIOR"] = {style = "melee", Range = 5},
 		["DEATHKNIGHT"] = {style = "melee", Range = 5},
 		["MONK"] = {style = "melee", Range = 5},
 	}
 	local _class, _className = UnitClass('player')
-	local _range = _classRange[_className]
+	local _classRange = _rangeTable[_className]
 	local unitSpeed, _ = GetUnitSpeed('player')
   	if NeP.Core.PeFetch('npconf', 'AutoMove') then
-  		if UnitExists('target') 
-		and UnitIsVisible('target') 
-		and not UnitChannelInfo("player") then
-			if FireHack then
-				if not GetKeyState('65') -- A
-				and not GetKeyState('83') -- S
-				and not GetKeyState('68') -- D
-				and not GetKeyState('87') then -- W
-					-- Stop Moving
-					if ((_range.style == "ranged" and NeP.Lib.Distance("player", 'target') < _range.Range - 5)
-					or (_range.style == "melee" and NeP.Lib.Distance("player", 'target') < _range.Range))
-					and unitSpeed ~= 0 then 
-						MoveTo(ObjectPosition('player'))
-					-- Start Moving
-					elseif NeP.Lib.Distance("player", 'target') > _range.Range then
-						NeP.Alert('Moving to: '..GetUnitName('target', false)) 
-						MoveTo(ObjectPosition('target'))
+  		if UnitExists('target') then
+			if UnitIsVisible('target') and not UnitChannelInfo("player") then
+				if NeP.Lib.LineOfSight('player', 'target') then
+					if not _manualMoving() then
+						if FireHack then
+							local _Range = _classRange.Range + UnitCombatReach('player') + UnitCombatReach('target')
+							-- Stop Moving
+							if ((_classRange.style == "ranged" and NeP.Lib.Distance("player", 'target') < _Range)
+							or (_classRange.style == "melee" and NeP.Lib.Distance("player", 'target') < _Range))
+							and unitSpeed ~= 0 then 
+								MoveTo(ObjectPosition('player'))
+							-- Start Moving
+							elseif NeP.Lib.Distance("player", 'target') > _Range then
+								NeP.Alert('Moving to: '..GetUnitName('target', false)) 
+								MoveTo(ObjectPosition('target'))
+							end
+						end
 					end
 				end
 			end
@@ -71,14 +74,15 @@ Build By: MTS
 function NeP.Extras.FaceTo()
 	if NeP.Core.PeFetch('npconf', 'AutoFace') then
 		local unitSpeed, _ = GetUnitSpeed('player')
-		if UnitExists('target') then
-			if UnitIsVisible('target') and not UnitChannelInfo("player") then
-				if not _manualMoving() and unitSpeed == 0 then
-					local name = GetUnitName('target', false)
-					if not NeP.Lib.Infront('target') then
-						if FireHack then
-							NeP.Alert('Facing: '..name) 
-							FaceUnit('target')
+		if not _manualMoving() and unitSpeed == 0 then
+			if UnitExists('target') then
+				if UnitIsVisible('target') and not UnitChannelInfo("player") then
+					if not NeP.Lib.Infront('player', 'target') then
+						if NeP.Lib.LineOfSight('player', 'target') then
+							if FireHack then
+								NeP.Alert('Facing: '..GetUnitName('target', false)) 
+								FaceUnit('target')
+							end
 						end
 					end
 				end
@@ -94,59 +98,19 @@ DESC: Checks if unit can/should be targeted.
 Build By: MTS & StinkyTwitch
 ---------------------------------------------------]]
 function NeP.Extras.autoTarget(unit, name)
-	--[[local _forceTarget = {
-		-- WOD DUNGEONS/RAIDS
-		75966,      -- Defiled Spirit (Shadowmoon Burial Grounds)
-		76220,      -- Blazing Trickster (Auchindoun Normal)
-		76222,      -- Rallying Banner (UBRS Black Iron Grunt)
-		76267,      -- Solar Zealot (Skyreach)
-		76518,      -- Ritual of Bones (Shadowmoon Burial Grounds)
-		77252,      -- Ore Crate (BRF Oregorger)
-		77665,      -- Iron Bomber (BRF Blackhand)
-		77891,      -- Grasping Earth (BRF Kromog)
-		77893,      -- Grasping Earth (BRF Kromog)
-		86752,      -- Stone Pillars (BRF Mythic Kromog)
-		78583,      -- Dominator Turret (BRF Iron Maidens)
-		78584,      -- Dominator Turret (BRF Iron Maidens)
-		79504,      -- Ore Crate (BRF Oregorger)
-		79511,      -- Blazing Trickster (Auchindoun Heroic)
-		81638,      -- Aqueous Globule (The Everbloom)
-		86644,      -- Ore Crate (BRF Oregorger)
-		94873,      -- Felfire Flamebelcher (HFC)
-		90432,      -- Felfire Flamebelcher (HFC)
-		95586,      -- Felfire Demolisher (HFC)
-		93851,      -- Felfire Crusher (HFC)
-		90410,      -- Felfire Crusher (HFC)
-		94840,      -- Felfire Artillery (HFC)
-		90485,      -- Felfire Artillery (HFC)
-		93435,      -- Felfire Transporter (HFC)
-		93717,      -- Volatile Firebomb (HFC)
-		188293,     -- Reinforced Firebomb (HFC)
-		94865,      -- Grasping Hand (HFC)
-		93838,      -- Grasping Hand (HFC)
-		93839,      -- Dragging Hand (HFC)
-		91368,      -- Crushing Hand (HFC)
-		94455,      -- Blademaster Jubei'thos (HFC)
-		90387,      -- Shadowy Construct (HFC)
-		90508,      -- Gorebound Construct (HFC)
-		90568,      -- Gorebound Essence (HFC)
-		94996,      -- Fragment of the Crone (HFC)
-		95656,      -- Carrion Swarm (HFC)
-		91540,      -- Illusionary Outcast (HFC)
-	}]]
 	if NeP.Core.PeFetch('npconf', 'AutoTarget') then
-		if UnitExists("target") 
-		and not UnitIsFriend("player", "target") 
-		and not UnitIsDeadOrGhost("target") then
+		if UnitExists("target") and not UnitIsFriend("player", "target") and not UnitIsDeadOrGhost("target") then
 			-- Do nothing
 		else
 			for i=1,#NeP.ObjectManager.unitCache do
 				local _object = NeP.ObjectManager.unitCache[i]
-				if UnitExists(_object.key) and UnitAffectingCombat(_object.key) then
-					if _object.distance <= 40 then
-						NeP.Alert('Targeting: '.._object.name) 
-						Macro("/target ".._object.key)
-						break
+				if UnitExists(_object.key) then
+					if (UnitAffectingCombat(_object.key) or _object.dummy) then
+						if _object.distance <= 40 then
+							NeP.Alert('Targeting: '.._object.name) 
+							Macro("/target ".._object.key)
+							break
+						end
 					end
 				end
 			end

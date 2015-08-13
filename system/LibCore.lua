@@ -118,29 +118,31 @@ function NeP.Lib.Distance(a, b)
 end
 
 function NeP.Lib.LineOfSight(a, b)
-	if UnitExists(a) and UnitExists(b) then
-		local ax, ay, az = ObjectPosition(a)
-		local bx, by, bz = ObjectPosition(b)
-		local losFlags =  bit.bor(0x10, 0x100)
-		local aCheck = select(6,strsplit("-",UnitGUID(a)))
-		local bCheck = select(6,strsplit("-",UnitGUID(b)))
-		local ignoreLOS = {
-			[76585] = true,     -- Ragewing the Untamed (UBRS)
-			[77063] = true,     -- Ragewing the Untamed (UBRS)
-			[77182] = true,     -- Oregorger (BRF)
-			[77891] = true,     -- Grasping Earth (BRF)
-			[77893] = true,     -- Grasping Earth (BRF)
-			[78981] = true,     -- Iron Gunnery Sergeant (BRF)
-			[81318] = true,     -- Iron Gunnery Sergeant (BRF)
-			[83745] = true,     -- Ragewing Whelp (UBRS)
-			[86252] = true,     -- Ragewing the Untamed (UBRS)
-		}
-		if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
-		if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
-		if ax == nil or ay == nil or az == nil or bx == nil or by == nil or bz == nil then return false end
-		if TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags) then return false end
-		return true
+	if FireHack then
+		if UnitExists(a) and UnitExists(b) then
+			local ax, ay, az = ObjectPosition(a)
+			local bx, by, bz = ObjectPosition(b)
+			local losFlags =  bit.bor(0x10, 0x100)
+			local aCheck = select(6,strsplit("-",UnitGUID(a)))
+			local bCheck = select(6,strsplit("-",UnitGUID(b)))
+			local ignoreLOS = {
+				[76585] = true,     -- Ragewing the Untamed (UBRS)
+				[77063] = true,     -- Ragewing the Untamed (UBRS)
+				[77182] = true,     -- Oregorger (BRF)
+				[77891] = true,     -- Grasping Earth (BRF)
+				[77893] = true,     -- Grasping Earth (BRF)
+				[78981] = true,     -- Iron Gunnery Sergeant (BRF)
+				[81318] = true,     -- Iron Gunnery Sergeant (BRF)
+				[83745] = true,     -- Ragewing Whelp (UBRS)
+				[86252] = true,     -- Ragewing the Untamed (UBRS)
+			}
+			if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
+			if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
+			if ax == nil or ay == nil or az == nil or bx == nil or by == nil or bz == nil then return false end
+			return not TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags)
+		end
 	end
+	return false
 end
 
 function NeP.Lib.Infront(a, b)

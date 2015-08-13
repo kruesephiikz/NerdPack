@@ -209,6 +209,53 @@ local function BlacklistedObject(unit)
 	end
 end
 
+local function UnitIsSpecial(unit)
+local _forceTarget = {
+			-- WOD DUNGEONS/RAIDS
+		75966,      -- Defiled Spirit (Shadowmoon Burial Grounds)
+		76220,      -- Blazing Trickster (Auchindoun Normal)
+		76222,      -- Rallying Banner (UBRS Black Iron Grunt)
+		76267,      -- Solar Zealot (Skyreach)
+		76518,      -- Ritual of Bones (Shadowmoon Burial Grounds)
+		77252,      -- Ore Crate (BRF Oregorger)
+		77665,      -- Iron Bomber (BRF Blackhand)
+		77891,      -- Grasping Earth (BRF Kromog)
+		77893,      -- Grasping Earth (BRF Kromog)
+		86752,      -- Stone Pillars (BRF Mythic Kromog)
+		78583,      -- Dominator Turret (BRF Iron Maidens)
+		78584,      -- Dominator Turret (BRF Iron Maidens)
+		79504,      -- Ore Crate (BRF Oregorger)
+		79511,      -- Blazing Trickster (Auchindoun Heroic)
+		81638,      -- Aqueous Globule (The Everbloom)
+		86644,      -- Ore Crate (BRF Oregorger)
+		94873,      -- Felfire Flamebelcher (HFC)
+		90432,      -- Felfire Flamebelcher (HFC)
+		95586,      -- Felfire Demolisher (HFC)
+		93851,      -- Felfire Crusher (HFC)
+		90410,      -- Felfire Crusher (HFC)
+		94840,      -- Felfire Artillery (HFC)
+		90485,      -- Felfire Artillery (HFC)
+		93435,      -- Felfire Transporter (HFC)
+		93717,      -- Volatile Firebomb (HFC)
+		188293,     -- Reinforced Firebomb (HFC)
+		94865,      -- Grasping Hand (HFC)
+		93838,      -- Grasping Hand (HFC)
+		93839,      -- Dragging Hand (HFC)
+		91368,      -- Crushing Hand (HFC)
+		94455,      -- Blademaster Jubei'thos (HFC)
+		90387,      -- Shadowy Construct (HFC)
+		90508,      -- Gorebound Construct (HFC)
+		90568,      -- Gorebound Essence (HFC)
+		94996,      -- Fragment of the Crone (HFC)
+		95656,      -- Carrion Swarm (HFC)
+		91540,      -- Illusionary Outcast (HFC)
+	}
+	local _,_,_,_,_,unitID = strsplit("-", UnitGUID(unit))
+	for k,v in pairs(_forceTarget) do
+		if tonumber(unitID) == v then return true end
+	end
+end
+
 --[[
 	DESC: Checks if unit is a Dummy.
 	This will force the unit from the OM cache.
@@ -367,6 +414,7 @@ local firehackOM = function()
 											maxHealth = UnitHealthMax(Obj),
 											actualHealth = UnitHealth(Obj),
 											name = UnitName(Obj),
+											dummy = true
 										}
 										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 									end	
@@ -602,7 +650,8 @@ local genericOM = function()
 								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
 								maxHealth=UnitHealthMax(object), 
 								actualHealth=UnitHealth(object), 
-								name=UnitName(object)
+								name=UnitName(object),
+								--special = UnitIsSpecial(object)
 							}
 						end
 					end
