@@ -138,17 +138,17 @@ local inCombat = {
 			"player.spell.exists(49039)" 
 		}},
 		
-	-- Cooldowns
-		{ "49028", { "modifier.cooldowns", "!toggle.DRW" }, "target" }, -- Dancing Rune Weapon
+	{{-- Cooldowns
+		{ "49028", "!toggle.DRW", "target" }, -- Dancing Rune Weapon
 		{ "47568", { -- Empower Rune Weapon
-			"modifier.cooldowns", 
 			"player.runes(death).count < 1", 
 			"player.runes(frost).count < 1", 
 			"player.runes(unholy).count < 1", 
 			"player.runicpower < 30" }}, 
-		{ "115989", { "modifier.cooldowns","target.debuff(55095)" }}, -- Unholy Blight
-		{ "115989", { "modifier.cooldowns","target.debuff(55078)" }}, -- Unholy Blight
+		{ "115989", "target.debuff(55095)" }, -- Unholy Blight
+		{ "115989", "target.debuff(55078)" }, -- Unholy Blight
 		{ "#gloves"},
+	}, "modifier.cooldowns" },
 
 	{{-- Interrupts
 		{ "47528" }, -- Mind freeze
