@@ -4,24 +4,22 @@
 ## Interface: 60200
 ## Author: MrTheSoulz
 
+external\LibDraw\LibDraw.lua
+external\LibStub.lua
+external\LibBossIDs.lua
 system\Core.lua
-system\PEOverloads.lua
-External\LibDraw\LibDraw.lua
-External\LibStub.lua
-External\LibStub.lua
-External\LibBossIDs.lua
-interface\minimap.lua
-interface\splash.lua
-interface\alert.lua
-interface\status.lua
-interface\info.lua
-interface\config.lua
-interface\class.lua
+system\PEStuff.lua
 system\ObjectCache.lua
 system\Tracker.lua
 system\Extras.lua
 system\Overlays.lua
 system\LibCore.lua
+interface\minimap.lua
+interface\splash.lua
+interface\alert.lua
+interface\info.lua
+interface\config.lua
+interface\class.lua
 rotations\paladin\retribution.lua
 rotations\paladin\protection.lua
 rotations\paladin\holy.lua

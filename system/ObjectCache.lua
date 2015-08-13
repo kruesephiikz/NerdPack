@@ -308,134 +308,124 @@ local firehackOM = function()
 	for i=1, totalObjects do
 		local Obj = ObjectWithIndex(i)
 		if ObjectExists(Obj) then
-			if ObjectIsType(Obj, ObjectTypes.GameObject) 
-			or ObjectIsType(Obj, ObjectTypes.Unit) then
-				if not BlacklistedObject(Obj) then
-					local _OD = NeP.Lib.Distance('player', Obj)
-					if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-						-- Objects OM
-						if ObjectIsType(Obj, ObjectTypes.GameObject) then
-							local guid = UnitGUID(Obj)
-							local _, _, _, _, _, _id, _ = strsplit("-", guid)
-							local ObID = tonumber(_id)
-							-- Lumbermill
-							if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
-								for k,v in pairs(lumbermillIDs) do
-									if ObID == v then
-										OChObjectsTotal = OChObjectsTotal + 1
-										OChObjects[#OChObjects+1] = {
-											key=Obj, 
-											distance=_OD, 
-											id=ObID, 
-											name = UnitName(Obj), 
-											is='LM'
-										}
-										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
-									end
+			-- Objects OM
+			if ObjectIsType(Obj, ObjectTypes.GameObject) then
+				local _OD = NeP.Lib.Distance('player', Obj)
+				if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
+					local guid = UnitGUID(Obj)
+					local _, _, _, _, _, _id, _ = strsplit("-", guid)
+					local ObID = tonumber(_id)
+					-- Lumbermill
+					if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
+						for k,v in pairs(lumbermillIDs) do
+							if ObID == v then
+								OChObjectsTotal = OChObjectsTotal + 1
+								OChObjects[#OChObjects+1] = {
+									key=Obj, 
+									distance=_OD, 
+									id=ObID, 
+									name = UnitName(Obj), 
+									is='LM'
+								}
+							end
+						end
+					end	
+					-- Ores
+					if NeP.Core.PeFetch("NePconf_Overlays", "objectsOres") then
+						for k,v in pairs(oresIDs) do
+							if ObID == v then
+								OChObjectsTotal = OChObjectsTotal + 1
+								OChObjects[#OChObjects+1] = {
+									key=Obj, 
+									distance=_OD, 
+									id=ObID, 
+									name = UnitName(Obj), 
+									is='Ore'
+								}
+							end
+						end
+					end
+					-- Herbs
+					if NeP.Core.PeFetch("NePconf_Overlays", "objectsHerbs") then
+						for k,v in pairs(herbsIDs) do
+							if ObID == v then
+								OChObjectsTotal = OChObjectsTotal + 1
+								OChObjects[#OChObjects+1] = {
+									key=Obj, 
+									distance=_OD, 
+									id=ObID, 
+									name = UnitName(Obj), 
+									is='Herb'
+								}
+							end
+						end
+					end
+					-- Fish
+					if NeP.Core.PeFetch("NePconf_Overlays", "objectsFishs") then
+						for k,v in pairs(fishIDs) do
+							if ObID == v then
+								OChObjectsTotal = OChObjectsTotal + 1
+								OChObjects[#OChObjects+1] = {
+									key=Obj, 
+									distance=_OD, 
+									id=ObID, 
+									name = UnitName(Obj), 
+									is='Fish'
+								}
+							end
+						end
+					end
+				end
+			-- Units OM
+			elseif ObjectIsType(Obj, ObjectTypes.Unit) then
+				local _OD = NeP.Lib.Distance('player', Obj)
+				if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then	
+					if not BlacklistedObject(Obj) and ProbablyEngine.condition["alive"](Obj) then
+						if not BlacklistedDebuffs(Obj) then
+							-- Friendly Cache
+							if UnitIsFriend("player", Obj) then
+								-- Enabled on GUI
+								if NeP.Core.PeFetch("ObjectCache", "FU") then
+									OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
+									OChFriendly[#OChFriendly+1] = {
+										key=Obj, 
+										distance=_OD, 
+										health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
+										maxHealth = UnitHealthMax(Obj),
+										actualHealth = UnitHealth(Obj),
+										name = UnitName(Obj),
+									}
+								end	
+							-- INSERT DUMMYS!
+							elseif UnitIsDummy(Obj) then
+								if NeP.Core.PeFetch("ObjectCache", "dummys") then
+									OChUnitsTotal = OChUnitsTotal + 1
+									OChUnits[#OChUnits+1] = {
+										key=Obj, 
+										distance=_OD, 
+										health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
+										maxHealth = UnitHealthMax(Obj),
+										actualHealth = UnitHealth(Obj),
+										name = UnitName(Obj),
+										dummy = true
+									}
+								end	
+							-- Enemie Units
+							elseif UnitCanAttack('player', Obj) then
+								-- Enabled on GUI and unit affecting combat
+								if NeP.Core.PeFetch("ObjectCache", "EU") then
+									OChUnitsTotal = OChUnitsTotal + 1
+									OChUnits[#OChUnits+1] = {
+										key=Obj, 
+										distance=_OD, 
+										health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
+										maxHealth = UnitHealthMax(Obj),
+										actualHealth = UnitHealth(Obj),
+										name = UnitName(Obj), 
+										class = UnitClassification(Obj)
+									}
 								end
 							end	
-							-- Ores
-							if NeP.Core.PeFetch("NePconf_Overlays", "objectsOres") then
-								for k,v in pairs(oresIDs) do
-									if ObID == v then
-										OChObjectsTotal = OChObjectsTotal + 1
-										OChObjects[#OChObjects+1] = {
-											key=Obj, 
-											distance=_OD, 
-											id=ObID, 
-											name = UnitName(Obj), 
-											is='Ore'
-										}
-										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
-									end
-								end
-							end
-							-- Herbs
-							if NeP.Core.PeFetch("NePconf_Overlays", "objectsHerbs") then
-								for k,v in pairs(herbsIDs) do
-									if ObID == v then
-										OChObjectsTotal = OChObjectsTotal + 1
-										OChObjects[#OChObjects+1] = {
-											key=Obj, 
-											distance=_OD, 
-											id=ObID, 
-											name = UnitName(Obj), 
-											is='Herb'
-										}
-										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
-									end
-								end
-							end
-							-- Fish
-							if NeP.Core.PeFetch("NePconf_Overlays", "objectsFishs") then
-								for k,v in pairs(fishIDs) do
-									if ObID == v then
-										OChObjectsTotal = OChObjectsTotal + 1
-										OChObjects[#OChObjects+1] = {
-											key=Obj, 
-											distance=_OD, 
-											id=ObID, 
-											name = UnitName(Obj), 
-											is='Fish'
-										}
-										table.sort(OChObjects, function(a,b) return a.distance < b.distance end)
-									end
-								end
-							end
-
-						-- Units OM
-						elseif ObjectIsType(Obj, ObjectTypes.Unit) 
-						and ProbablyEngine.condition["alive"](Obj) then
-							if not BlacklistedDebuffs(Obj) then
-												
-								-- Friendly Cache
-								if UnitIsFriend("player", Obj) then
-									-- Enabled on GUI
-									if NeP.Core.PeFetch("ObjectCache", "FU") then
-										OChUnitsFriendlyTotal = OChUnitsFriendlyTotal + 1
-										OChFriendly[#OChFriendly+1] = {
-											key=Obj, 
-											distance=_OD, 
-											health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-											maxHealth = UnitHealthMax(Obj),
-											actualHealth = UnitHealth(Obj),
-											name = UnitName(Obj),
-										}
-										table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)
-									end	
-								-- INSERT DUMMYS!
-								elseif UnitIsDummy(Obj) then
-									if NeP.Core.PeFetch("ObjectCache", "dummys") then
-										OChUnitsTotal = OChUnitsTotal + 1
-										OChUnits[#OChUnits+1] = {
-											key=Obj, 
-											distance=_OD, 
-											health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-											maxHealth = UnitHealthMax(Obj),
-											actualHealth = UnitHealth(Obj),
-											name = UnitName(Obj),
-											dummy = true
-										}
-										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
-									end	
-								-- Enemie Units
-								elseif UnitCanAttack('player', Obj) then
-									-- Enabled on GUI and unit affecting combat
-									if NeP.Core.PeFetch("ObjectCache", "EU") then
-										OChUnitsTotal = OChUnitsTotal + 1
-										OChUnits[#OChUnits+1] = {
-											key=Obj, 
-											distance=_OD, 
-											health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-											maxHealth = UnitHealthMax(Obj),
-											actualHealth = UnitHealth(Obj),
-											name = UnitName(Obj), 
-											class = UnitClassification(Obj)
-										}
-										table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
-									end
-								end			
-							end
 						end			
 					end
 				end
