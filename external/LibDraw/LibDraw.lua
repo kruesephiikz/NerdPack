@@ -32,7 +32,7 @@ else
 end
 
 LibDraw.line = LibDraw.line or { r = 0, g = 1, b = 0, a = 1, w = 1 }
-LibDraw.texture = "Interface\\AddOns\\NerdPack\\system\\Libs\\LibDraw\\Media\\LineTemplate"
+LibDraw.texture = "Interface\\AddOns\\NerdPack\\external\\LibDraw\\Media\\LineTemplate"
 LibDraw.level = "BACKGROUND"
 LibDraw.callbacks = { }
 

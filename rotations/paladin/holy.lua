@@ -513,7 +513,7 @@ local inCombat = {
 	}, "target.NePinterrupt" },
 	{ "35395", { -- Crusader Strike
 		"target.range < 5",
-		"target.infront",
+		"target.NePinfront",
 		(function() return NeP.Core.PeFetch('npconfPalaHoly', 'CrusaderStrike') end) 
 	}, "target" },
 }

@@ -139,6 +139,6 @@ ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksm
 				"!lastcast(Cobra Shot)", 
 				"player.buff(19615).count >= 1" 
 			}},
-			{inCombat, { "target.exists", "target.range <= 40" }},
+			{inCombat, { "target.NePinfront", "target.range <= 40" }},
 		}, "!player.channeling" }
 	}, _All, lib)

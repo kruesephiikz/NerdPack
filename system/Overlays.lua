@@ -151,7 +151,7 @@ LibDraw.Sync(function()
 			end
 			-- Player Infront Cone
 			if NeP.Core.PeFetch("NePconf_Overlays", "PlayerInfrontCone") then
-				if NeP.Lib.Infront('target') then
+				if NeP.Lib.Infront('player', 'target') then
 					LibDraw.SetColor(101, 255, 87, 70)
 				else
 					LibDraw.SetColor(255, 87, 87, 70)
