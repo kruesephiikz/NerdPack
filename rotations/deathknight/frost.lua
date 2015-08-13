@@ -143,27 +143,27 @@ local inCombat = {
 	{ "49184", (function() return NeP.Lib.SAoE(3, 40) end), "target" }, -- Howling Blast
 
 	{{ -- 1-hand
-		{ "49143", "player.buff(Killing Machine)", "target"  },-- Frost Strike
+		{ "49143", "player.buff(51128)", "target"  },-- Frost Strike / Killing Machine
 	    { "49143", "player.runicpower >= 80", "target" },-- Frost Strike
 	    { "49184", "player.runes(death).count > 1", "target"  },-- Howling Blast
 	    { "49184", "player.runes(frost).count > 1", "target" },-- Howling Blast
-	    { "49184", "player.buff(Freezing Fog)", "target"  }, -- Howling Blast
+	    { "49184", "player.buff(59052)", "target"  }, -- Howling Blast / Freezing Fog
 	    { "49143", "player.runicpower > 76", "target"  },-- Frost Strike
 	    { "49998", "player.buff(Dark Succor)", "target"  }, -- Death Strike
 	    { "49998", "player.health <= 65", "target"  }, -- Death Strike
 	    { "49020", { -- Obliterate
 			"player.runes(unholy).count > 0", 
-			"!player.buff(Killing Machine)" 
+			"!player.buff(51128)" -- Killing Machine
 		}, "target" }, 
 	    { "49184" },--Howling Blast
 	    { "49143", "player.runicpower >= 40", "target" },-- Frost Strike
 	 }, "player.onehand" },
 
 	{{ -- 2-Hand
-	    { "49184", "player.buff(Freezing Fog)" }, -- Howling Blast
+	    { "49184", "player.buff(59052)" }, -- Howling Blast / Freezing Fog
 	    -- If player less then 65% health
 			{ "49998", {
-				"player.buff(Killing Machine)", 
+				"player.buff(51128)", -- Killing Machine
 				"player.health < 65"
 			}, "target" }, -- Death Strike
 	        { "49998", {
@@ -171,16 +171,16 @@ local inCombat = {
 				"player.health < 65"
 			}, "target" }, -- Death Strike
 		-- If player more then 65% health
-		    { "49020", {
-				"player.buff(Killing Machine)", 
+		    { "49020", { -- Obliterate
+				"player.buff(51128)", -- Killing Machine
 				"player.health > 65"
-			}, "target" }, -- Obliterate
-			{ "49020", {
+			}, "target" },
+			{ "49020", { -- Obliterate
 				"player.runicpower <= 75", 
 				"player.health > 65"
 			}, "target" }, -- Obliterate
-	    { "49143", "!player.buff(Killing Machine)", "target" }, -- Frost Strike
-	    { "49143", "player.spell(Obliterate).cooldown >= 4", "target" }, -- Frost Strike
+	    { "49143", "!player.buff(51128)", "target" }, -- Frost Strike / Killing Machine
+	    { "49143", "player.spell(49020).cooldown >= 4", "target" }, -- Frost Strike
 	}, "player.twohand" },
 	
 	

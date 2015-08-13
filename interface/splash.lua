@@ -16,10 +16,6 @@ end
 local _StartEvents = function()
 	NeP.Core.CurrentCR = true
 
-	if NeP.Core.PeFetch('npconf', 'LiveGUI') then
-		NeP.ShowStatus()
-	end
-
 	if WoWver ~= NeP.Addon.Info.WoW_Version or ProbablyEngine.version ~= NeP.Core.peRecomemded then
 		if WoWver ~= NeP.Addon.Info.WoW_Version then
 			NeP.Core.Print("Your WoW Version is not supported by MTSP\n Using: "..WoWver.." while supported version is: "..NeP.Addon.Info.WoW_Version.."\nSomethings might not work until updated.")

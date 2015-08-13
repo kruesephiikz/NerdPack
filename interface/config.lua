@@ -57,13 +57,6 @@ NeP.Addon.Interface.General = {
 					},
 					{ 
 						type = "checkbox", 
-						text = "Status GUI", 
-						key = "LiveGUI", 
-						default = false, 
-						desc ="Enables or disables Displaying Status GUI at Start."
-					},
-					{ 
-						type = "checkbox", 
 						text = "Splash", 
 						key = "Splash", 
 						default = true, 

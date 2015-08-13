@@ -126,17 +126,17 @@ local inCombat = {
 			"player.state.fear", 
 			"player.runicpower >= 40", 
 			"player.spell.exists(49039)" 
-		} --[[NO TARGET]] },
+		}},
 		{ "49039", { -- Lichborne //sleep
 			"player.state.sleep", 
 			"player.runicpower >= 40", 
 			"player.spell.exists(49039)" 
-		} --[[NO TARGET]] },
+		}},
 		{ "49039", { -- Lichborne //charm
 			"player.state.charm", 
 			"player.runicpower >= 40", 
 			"player.spell.exists(49039)" 
-		} --[[NO TARGET]] },
+		}},
 		
 	-- Cooldowns
 		{ "49028", { "modifier.cooldowns", "!toggle.DRW" }, "target" }, -- Dancing Rune Weapon
@@ -168,7 +168,7 @@ local inCombat = {
 			"player.runes(frost).count = 0",-- With 0 Frost Runes
 			"player.runes(death).count = 0",-- With 0 Death Runes
 			"!lastcast(123693)"
-		} --[[NO TARGET]] }, 
+		}}, 
 
 	-- Diseases
 		{ "77575", "target.debuff(55095).duration < 2" }, -- Outbreak
@@ -179,12 +179,12 @@ local inCombat = {
 			"player.runes(blood).count > 1",
 			"target.debuff(55095).duration < 3", 
 			"target.debuff(55078).duration <3" 
-		} --[[NO TARGET]] },
+		}},
 		{ "48721", {  -- Blood Boil // death
 			"player.runes(death).count > 1",
 			"target.debuff(55095).duration < 3", 
 			"target.debuff(55078).duration <3" 
-		} --[[NO TARGET]] },
+		}},
 
 	{{-- AoE
 		{ "50842",	"target.range <= 10" },-- Blood Boil
@@ -203,25 +203,23 @@ local inCombat = {
 		{ "50842",	{ -- Blood Boil
 			"target.range <= 10", 
 			"!target.health <= 35" 
-		} --[[NO TARGET]] }, 
+		}}, 
 		{ "50842",	{ -- Blood Boil //35 % health if SR
 			"player.runes(blood).count = 1", 
 			"target.range <= 10", 
 			"target.health <= 35" 
-		} --[[NO TARGET]] }, 
+		}}, 
 		{ "47541", "player.runicpower >= 30", "target" }, -- Death Coil
 
-	-- Blood Tap
-	  {{
+	{{ -- Blood Tap
 	    { "45529", "player.runes(unholy).count = 0" }, --Blood Tap
 	    { "45529", "player.runes(frost).count = 0" }, -- Blood Tap
 	    { "45529", "player.runes(blood).count = 0" }, -- Blood Tap
-	  } , {
+	} , {
 	    "player.buff(Blood Charge).count >= 5",
 	    "player.runes(death).count = 0",
 	    "!lastcast(45529)"
-	  } --[[NO TARGET]] },
-
+	}},
 }
 
 local outCombat = {
