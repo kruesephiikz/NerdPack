@@ -1,3 +1,5 @@
+local n = GetSpellInfo('5118')
+
 local lib = function()
 	NeP.Splash()
 	ProbablyEngine.toggle.create(
@@ -17,12 +19,12 @@ local _ALL = {
 	-- Buffs
 	{"77769", "!player.buff(77769)"}, -- Trap Launcher
 		-- Aspect of the Cheetah
-		{ "/cancelaura Aspect of the Cheetah", { 
+		{  "/cancelaura "..n, { 
 			"player.buff(5118)",
 			"!player.glyph(692)", 
 			"!player.moving"
 		}},
-		{ "/cancelaura Aspect of the Cheetah", { 
+		{  "/cancelaura "..n, { 
 			"player.buff(5118)",
 			"!player.glyph(692)", 
 			"player.aggro >= 100"

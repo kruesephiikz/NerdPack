@@ -38,7 +38,7 @@ NeP.Addon.Interface.MonkWw = {
 	}
 }
 
-local n,r = GetSpellInfo(137639)
+local n,r = GetSpellInfo('137639')
 
 local _SEF = function()
 	for i=1,#NeP.ObjectManager.unitCache do
