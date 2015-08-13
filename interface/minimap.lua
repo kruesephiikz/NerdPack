@@ -65,10 +65,6 @@ NeP_MinimapButton_Dropdown = function(self)
 	info.func = function() NeP.Addon.Interface.InfoGUI() end
 	UIDropDownMenu_AddButton(info)
 	
-	info.text = "Status GUI"
-	info.func = function() NeP.ShowStatus() end
-	UIDropDownMenu_AddButton(info)
-	
 	info.text = "ObjectsManager"
 	info.func = function() NeP.Addon.Interface.CacheGUI() end
 	UIDropDownMenu_AddButton(info)

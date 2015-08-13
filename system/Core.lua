@@ -36,8 +36,6 @@ ProbablyEngine.command.register(NeP.Addon.Info.Nick, function(msg, box)
 	local command, text = msg:match("^(%S*)%s*(.-)$")
 	if command == 'config' or command == 'c' then
 		NeP.Addon.Interface.ConfigGUI()
-    elseif command == 'status' or command == 's' then
-		NeP.ShowStatus()
 	elseif command == 'class' or command == 'cl' then
 		NeP.Addon.Interface.ClassGUI()
 	elseif command == 'info' or command == 'i' then

@@ -8,7 +8,7 @@ NeP.ObjectManager = {
 }
 
 local _addonColor = NeP.Addon.Interface.GuiTextColor
-local _tittleGUI = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Name
+local _tittleGUI = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick
 local _GUIColor = NeP.Addon.Interface.GuiColor
 local OChObjectsTotal = NeP.ObjectManager.objectsCacheTotal
 local OChUnitsTotal = NeP.ObjectManager.unitCacheTotal
