@@ -72,13 +72,14 @@ function NeP.Extras.FaceTo()
 	if NeP.Core.PeFetch('npconf', 'AutoFace') then
 		local unitSpeed, _ = GetUnitSpeed('player')
 		if UnitExists('target') then
-		if UnitIsVisible('target') and not UnitChannelInfo("player") then
-			if not _manualMoving() and unitSpeed == 0 then
-				local name = GetUnitName('target', false)
-				if not NeP.Lib.Infront('target') then
-					if FireHack then
-						NeP.Alert('Facing: '..name) 
-						FaceUnit('target')
+			if UnitIsVisible('target') and not UnitChannelInfo("player") then
+				if not _manualMoving() and unitSpeed == 0 then
+					local name = GetUnitName('target', false)
+					if not NeP.Lib.Infront('target') then
+						if FireHack then
+							NeP.Alert('Facing: '..name) 
+							FaceUnit('target')
+						end
 					end
 				end
 			end
