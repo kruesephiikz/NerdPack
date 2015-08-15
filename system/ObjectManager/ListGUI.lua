@@ -2,6 +2,8 @@ local Texts = { }
 local TextsUsed = { }
 local _objectTable = NeP.ObjectManager.unitFriendlyCache
 local _Displaying = 'Friendly List'
+local _addonColor = '|cff'..NeP.Addon.Interface.GuiColor
+local _tittleGUI = NeP.Addon.Info.Icon.._addonColor..NeP.Addon.Info.Nick
 
 local OPTIONS_WIDTH = 510
 local OPTIONS_HEIGHT = 210
@@ -42,7 +44,7 @@ title.texture:SetTexture(0,0,0,1)
 title.text1 = title:CreateFontString(nil, "OVERLAY")
 title.text1:SetFont("Fonts\\FRIZQT__.TTF", 15)
 title.text1:SetPoint("LEFT")
-title.text1:SetText('NEP ObjectManager GUI')
+title.text1:SetText(_tittleGUI..'|r ObjectManager GUI')
 title.text2 = title:CreateFontString(nil, "OVERLAY")
 title.text2:SetFont("Fonts\\FRIZQT__.TTF", 15)
 title.text2:SetPoint("RIGHT", -10, 0)
@@ -59,7 +61,7 @@ closeButton:SetWidth(100)
 closeButton:SetHeight(25)
 closeButton:SetText("|cff000000Close")
 closeButton:SetNormalFontObject("GameFontNormal")
-closeButton:SetScript("OnClick", function(self) mainFrame:Hide() end)
+closeButton:SetScript("OnClick", function(self) mainFrame:Hide(); _CacheShow = false end)
 closeButton.closeButton1 = closeButton:CreateTexture()
 closeButton.closeButton1:SetTexture(255, 0 ,0 , 1)
 closeButton.closeButton1:SetTexCoord(0, 0.625, 0, 0.6875)
@@ -217,7 +219,6 @@ local function getText()
         contentFrame.text = contentFrame:CreateFontString(nil, "OVERLAY", contentFrame)
 		contentFrame.text:SetFont("Fonts\\FRIZQT__.TTF", 11)
         contentFrame.text:SetParent(contentFrame)
-		contentFrame.texture = contentFrame:CreateTexture() 
     end
     contentFrame.text:Show()
     table.insert(TextsUsed, contentFrame.text)
@@ -256,7 +257,7 @@ C_Timer.NewTicker(0.1, (function()
 								local _, _, _, _, _, _id, _ = strsplit("-", guid)
 								local objectID = (tonumber(_id) or 'UNKNOWN')
 								contentFrame.text:SetPoint("TOPLEFT", 0, 0+ (currentRow * -15) + -currentRow)
-								contentFrame.text:SetText('|cffFFCCCC'..name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' )')
+								contentFrame.text:SetText(_addonColor..name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' )')
 								currentRow = currentRow + 1
 								height = height + contentFrame.text:GetStringHeight() + 5
 							--end
@@ -277,8 +278,8 @@ C_Timer.NewTicker(0.1, (function()
 						local objectID = (tonumber(_id) or 'UNKNOWN')
 						local distance = (_object.distance or 'UNKNOWN')
 						contentFrame.text:SetPoint("TOPLEFT", 0, 0+ (currentRow * -15) + -currentRow)
-						contentFrame.text:SetText('|cffFFCCCC'..name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' Health: '..health..'% )')
-						--contentFrame.text:SetScript("OnMouseDown", function(self) TargetUnit(_object.key) end)
+						contentFrame.text:SetText(_addonColor..name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' Health: '..health..'% )')
+						--contentFrame.frame:SetScript("OnMouseDown", function(self) TargetUnit(_object.key) end)
 						height = height + contentFrame.text:GetStringHeight() + 5
 						currentRow = currentRow + 1
 					end
