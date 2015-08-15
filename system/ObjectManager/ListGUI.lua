@@ -5,6 +5,7 @@ local _Displaying = 'Friendly List'
 
 local OPTIONS_WIDTH = 510
 local OPTIONS_HEIGHT = 210
+local scrollMax = 0
 
 --NeP.Addon.Interface.OMGUI
 
@@ -51,7 +52,7 @@ closeButton:SetText("Close")
 closeButton:SetNormalFontObject("GameFontNormal")
 closeButton:SetScript("OnClick", function(self) mainFrame:Hide() end)
 closeButton.closeButton1 = closeButton:CreateTexture()
-closeButton.closeButton1:SetTexture(0,0,0,1)
+closeButton.closeButton1:SetTexture(255, 0 ,0 , 1)
 closeButton.closeButton1:SetTexCoord(0, 0.625, 0, 0.6875)
 closeButton.closeButton1:SetAllPoints() 
 closeButton.closeButton2 = closeButton:CreateTexture()
@@ -75,7 +76,7 @@ enemyButton:SetText("Enemy List")
 enemyButton:SetNormalFontObject("GameFontNormal")
 enemyButton:SetScript("OnClick", function(self) _objectTable = NeP.ObjectManager.unitCache; _Displaying = 'Enemy List' end)
 enemyButton.closeButton1 = enemyButton:CreateTexture()
-enemyButton.closeButton1:SetTexture(0,0,0,1)
+enemyButton.closeButton1:SetTexture(0, 0, 51, 1)
 enemyButton.closeButton1:SetTexCoord(0, 0.625, 0, 0.6875)
 enemyButton.closeButton1:SetAllPoints() 
 enemyButton.closeButton2 = enemyButton:CreateTexture()
@@ -92,14 +93,14 @@ enemyButton:SetPushedTexture(enemyButton.closeButton3)
 
 -- Friendly Button
 local friendlyButton = CreateFrame("Button", nil, mainFrame)
-friendlyButton:SetPoint("BOTTOMRIGHT", -110, 0)
+friendlyButton:SetPoint("BOTTOMRIGHT", -100, 0)
 friendlyButton:SetWidth(100)
 friendlyButton:SetHeight(25)
 friendlyButton:SetText("Friendly List")
 friendlyButton:SetNormalFontObject("GameFontNormal")
 friendlyButton:SetScript("OnClick", function(self) _objectTable = NeP.ObjectManager.unitFriendlyCache; _Displaying = 'Friendly List' end)
 friendlyButton.closeButton1 = friendlyButton:CreateTexture()
-friendlyButton.closeButton1:SetTexture(0,0,0,1)
+friendlyButton.closeButton1:SetTexture(0, 0, 51, 1)
 friendlyButton.closeButton1:SetTexCoord(0, 0.625, 0, 0.6875)
 friendlyButton.closeButton1:SetAllPoints() 
 friendlyButton.closeButton2 = friendlyButton:CreateTexture()
@@ -116,14 +117,14 @@ friendlyButton:SetPushedTexture(friendlyButton.closeButton3)
 
 -- Object Button
 local ObjectButton = CreateFrame("Button", nil, mainFrame)
-ObjectButton:SetPoint("BOTTOMRIGHT", -220, 0)
+ObjectButton:SetPoint("BOTTOMRIGHT", -200, 0)
 ObjectButton:SetWidth(100)
 ObjectButton:SetHeight(25)
 ObjectButton:SetText("Objects List")
 ObjectButton:SetNormalFontObject("GameFontNormal")
 ObjectButton:SetScript("OnClick", function(self) _objectTable = NeP.ObjectManager.objectsCache; _Displaying = 'Objects List' end)
 ObjectButton.closeButton1 = ObjectButton:CreateTexture()
-ObjectButton.closeButton1:SetTexture(0,0,0,1)
+ObjectButton.closeButton1:SetTexture(0, 0, 51, 1)
 ObjectButton.closeButton1:SetTexCoord(0, 0.625, 0, 0.6875)
 ObjectButton.closeButton1:SetAllPoints() 
 ObjectButton.closeButton2 = ObjectButton:CreateTexture()
@@ -169,7 +170,7 @@ end
 scrollbar:SetOrientation("VERTICAL");
 scrollbar:SetSize(16, OPTIONS_HEIGHT)
 scrollbar:SetPoint("TOPLEFT", mainFrame, "TOPRIGHT", 0, 0)
-scrollbar:SetMinMaxValues(0, 10)
+scrollbar:SetMinMaxValues(0, scrollMax)
 scrollbar:SetValue(0)
 scrollbar:SetScript("OnValueChanged", function(self)
       scrollframe:SetVerticalScroll(self:GetValue())
@@ -183,6 +184,7 @@ local function getText()
         contentFrame.text = contentFrame:CreateFontString(nil, "OVERLAY", contentFrame)
 		contentFrame.text:SetFont("Fonts\\FRIZQT__.TTF", 11)
         contentFrame.text:SetParent(contentFrame)
+		contentFrame.texture = contentFrame:CreateTexture() 
     end
     contentFrame.text:Show()
     table.insert(TextsUsed, contentFrame.text)
@@ -196,13 +198,11 @@ local function recycleTexts()
     end
 end
 
-local height = 0
-
 C_Timer.NewTicker(0.1, (function()
 		
 	recycleTexts()
 	
-	height = 0
+	local height = 0
 	local currentRow = 0
 	title.text2:SetText('|cffff0000Total: '..#_objectTable)
 	title.text3:SetText('|cffCCCCCC('.._Displaying..')')
@@ -214,18 +214,24 @@ C_Timer.NewTicker(0.1, (function()
 			local guid = UnitGUID(_object.key)
 			local _, _, _, _, _, _id, _ = strsplit("-", guid)
 			local Text = getText()
-			local name = _object.name
+			local name = (_object.name or 'UNKNOWN')
+			local health = (_object.health or 'UNKNOWN')
 			local objectID = (tonumber(_id) or 'UNKNOWN')
-			local distance = _object.distance
+			local distance = (_object.distance or 'UNKNOWN')
 			contentFrame.text:SetPoint("TOPLEFT", 0, 0+ (currentRow * -15) + -currentRow)
-			contentFrame.text:SetText('|cffff0000Name: |r'..name..'|cffCCCCCC( Distance: '..distance..' ID: '..objectID..' )')
+			contentFrame.text:SetText(name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' Health: '..health..'% )')
 			--contentFrame.text:SetScript("OnMouseDown", function(self) TargetUnit(_object.key) end)
 			currentRow = currentRow + 1
 			height = height + contentFrame.text:GetStringHeight() + 5
 		end
 	end
+	if height > OPTIONS_HEIGHT then
+		scrollMax = height - (OPTIONS_HEIGHT-70)
+	else
+		scrollMax = 0
+	end
 	contentFrame:SetSize(OPTIONS_WIDTH, height)
-	scrollbar:SetMinMaxValues(0, height)
+	scrollbar:SetMinMaxValues(0, scrollMax)
 
 end), nil)
 
@@ -236,8 +242,8 @@ contentFrame:SetScript("OnMouseWheel", function(self, delta)
       if IsShiftKeyDown() and (delta > 0) then
          scrollbar:SetValue(0)
       elseif IsShiftKeyDown() and (delta < 0) then
-         scrollbar:SetValue(height)
-      elseif (delta < 0) and (current < height) then
+         scrollbar:SetValue(scrollMax)
+      elseif (delta < 0) and (current < scrollMax) then
          scrollbar:SetValue(current + 20)
       elseif (delta > 0) and (current > 1) then
          scrollbar:SetValue(current - 20)
