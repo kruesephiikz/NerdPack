@@ -23,16 +23,7 @@ local NeP_ObjectCache = {
 			{ type = "checkbox", text = "Cache Enemies Units", key = "EU", default = true },
 			{ type = "checkbox", text = "Cache Dummys Units", key = "dummys", default = true },
 			{ type = "spinner", text = "Cache Distance:", key = "CD", width = 90, min = 10, max = 200, default = 100, step = 5},
-			{ type = "button", text = "Objects List", width = 190, height = 20, callback = function() 
-				if NeP.Addon.Interface.OMGUI.Open then
-					NeP.Addon.Interface.OMGUI:Hide()
-					NeP.Addon.Interface.OMGUI.Open = false
-				else
-					NeP.Addon.Interface.OMGUI:Show()
-					NeP.Addon.Interface.OMGUI.Open = true
-				end 
-			end
-			},
+			{ type = "button", text = "Objects List", width = 190, height = 20, callback = function() NeP.Addon.Interface.OMGUI() end },
     }
 }
 
