@@ -256,7 +256,7 @@ C_Timer.NewTicker(0.1, (function()
 								local _, _, _, _, _, _id, _ = strsplit("-", guid)
 								local objectID = (tonumber(_id) or 'UNKNOWN')
 								contentFrame.text:SetPoint("TOPLEFT", 0, 0+ (currentRow * -15) + -currentRow)
-								contentFrame.text:SetText(name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' )')
+								contentFrame.text:SetText('|cffFFCCCC'..name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' )')
 								currentRow = currentRow + 1
 								height = height + contentFrame.text:GetStringHeight() + 5
 							--end
@@ -277,7 +277,7 @@ C_Timer.NewTicker(0.1, (function()
 						local objectID = (tonumber(_id) or 'UNKNOWN')
 						local distance = (_object.distance or 'UNKNOWN')
 						contentFrame.text:SetPoint("TOPLEFT", 0, 0+ (currentRow * -15) + -currentRow)
-						contentFrame.text:SetText(name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' Health: '..health..'% )')
+						contentFrame.text:SetText('|cffFFCCCC'..name..' |cffCCCCCC( Distance: '..distance..' ID: '..objectID..' Health: '..health..'% )')
 						--contentFrame.text:SetScript("OnMouseDown", function(self) TargetUnit(_object.key) end)
 						height = height + contentFrame.text:GetStringHeight() + 5
 						currentRow = currentRow + 1
