@@ -223,57 +223,51 @@ end
 
 function NeP.Extras.AutoBait()
 	if NeP.Core.PeFetch('npconf', 'bait') ~= "none" then
-		-- Jawless Skulker Bait
-		if NeP.Core.PeFetch('npconf', 'bait') == "jsb" 
-		and not UnitBuff("player", GetSpellInfo(158031)) 
-		and GetItemCount(110274, false, false) > 0 then
-			UseItem(110274)
-		-- Fat Sleeper Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "fsb" 
-		and not UnitBuff("player", GetSpellInfo(158034)) 
-		and GetItemCount(110289, false, false) > 0 then
-			UseItem(110289)
-		-- Blind Lake Sturgeon Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "blsb" 
-		and not UnitBuff("player", GetSpellInfo(158035)) 
-		and GetItemCount(110290, false, false) > 0 then
-			UseItem(110290)
-		-- Fire Ammonite Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "fab" 
-		and not UnitBuff("player", GetSpellInfo(158036)) 
-		and GetItemCount(110291, false, false) > 0 then
-			UseItem(110291)
-		-- Sea Scorpion Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "ssb" 
-		and not UnitBuff("player", GetSpellInfo(158037)) 
-		and GetItemCount(110292, false, false) > 0 then
-			UseItem(110292)
-		-- Abyssal Gulper Eel Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "ageb" 
-		and not UnitBuff("player", GetSpellInfo(158038)) 
-		and GetItemCount(110293, false, false) > 0 then
-			UseItem(110293)
-		-- Blackwater Whiptail Bait
-		elseif NeP.Core.PeFetch('npconf', 'bait') == "bwb" 
-		and not UnitBuff("player", GetSpellInfo(158039)) 
-		and GetItemCount(110294, false, false) > 0 then
-			UseItem(110294)
+		local _baitsTable = {
+			{ ID= 110274, Debuff = 158031, Name = 'Jawless Skulker Bait', Key = 'jsb' },
+			{ ID= 110289, Debuff = 158034, Name = 'Fat Sleeper Bait', Key = 'fsb' },
+			{ ID= 110290, Debuff = 158035, Name = 'Blind Lake Sturgeon Bait', Key = 'blsb' },
+			{ ID= 110291, Debuff = 158036, Name = 'Fire Ammonite Bait', Key = 'fab' },
+			{ ID= 110292, Debuff = 158037, Name = 'Sea Scorpion Bait', Key = 'ssb' },
+			{ ID= 110293, Debuff = 158038, Name = 'Abyssal Gulper Eel Bait', Key = 'ageb' },
+			{ ID= 110294, Debuff = 158039, Name = 'Blackwater Whiptail Bait', Key = 'bwb' }
+		}
+		for i=1,#_baitsTable do
+			local _Bait = _baitsTable[i]
+			if NeP.Core.PeFetch('npconf', 'bait') == _Bait.Key then
+				if GetItemCount(_Bait.ID, false, false) > 0 and not UnitBuff("player", GetSpellInfo(_Bait.Debuff)) then
+					UseItem(_Bait.ID)
+				end
+			end
 		end
 	end
 end
  
 local function CarpDestruction()
 	if NeP.Core.PeFetch('npconf', 'LunarfallCarp') 
-	and GetItemCount(116158, false, false) > 0 then
+		deleteItem(116158, 0)
+	end
+end
+
+local function _BagSpace()
+	local freeslots = 0
+	for lbag = 0, NUM_BAG_SLOTS do
+		numFreeSlots, BagType = GetContainerNumFreeSlots(lbag)
+		freeslots = freeslots + numFreeSlots
+	end
+	return freeslots
+end
+
+local function deleteItem(ID, number)
+	if GetItemCount(ID, false, false) > number then
 		for bag = 0, NUM_BAG_SLOTS do
 			for slot = 1, GetContainerNumSlots(bag) do
 				currentItemID = GetContainerItemID(bag, slot)
-				if currentItemID == 116158 then
+				if currentItemID == ID then
 					PickupContainerItem(bag, slot)
-						if CursorHasItem() then
-							DeleteCursorItem();
-						end
-					return true
+					if CursorHasItem() then
+						DeleteCursorItem();
+					end
 				end
 			end
 		end
@@ -347,7 +341,7 @@ C_Timer.NewTicker(0.5, (function()
 			if not ProbablyEngine.module.player.combat then
 				if not UnitChannelInfo("player") then
 					CarpDestruction()
-					if NeP.Core.BagSpace() > 2 then
+					if _BagSpace() > 2 then
 						NeP.Extras.autoCraft(_acSpell, _acSpeNum, _acTable)
 						NeP.Extras.OpenSalvage()
 						NeP.Extras.AutoBait()
