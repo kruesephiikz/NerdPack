@@ -244,7 +244,7 @@ function NeP.Extras.AutoBait()
 end
  
 local function CarpDestruction()
-	if NeP.Core.PeFetch('npconf', 'LunarfallCarp') 
+	if NeP.Core.PeFetch('npconf', 'LunarfallCarp') then
 		_deleteItem(116158, 0)
 	end
 end
