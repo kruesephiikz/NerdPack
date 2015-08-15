@@ -245,7 +245,7 @@ end
  
 local function CarpDestruction()
 	if NeP.Core.PeFetch('npconf', 'LunarfallCarp') 
-		deleteItem(116158, 0)
+		_deleteItem(116158, 0)
 	end
 end
 
@@ -258,7 +258,7 @@ local function _BagSpace()
 	return freeslots
 end
 
-local function deleteItem(ID, number)
+local function _deleteItem(ID, number)
 	if GetItemCount(ID, false, false) > number then
 		for bag = 0, NUM_BAG_SLOTS do
 			for slot = 1, GetContainerNumSlots(bag) do
