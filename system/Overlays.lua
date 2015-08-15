@@ -130,228 +130,191 @@ local ally_small = {
 
 LibDraw.Sync(function()
 	if NeP.Core.CurrentCR and FireHack then
-		-- Reset
-		LibDraw.clearCanvas()
+		if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
+			-- Reset
+			LibDraw.clearCanvas()
 
-		local playerX, playerY, playerZ = ObjectPosition('player')
-		local cx, cy, cz = GetCameraPosition()
+			local playerX, playerY, playerZ = ObjectPosition('player')
+			local cx, cy, cz = GetCameraPosition()
 
-		if UnitExists('target') then
-			local targetX, targetY, targetZ = ObjectPosition("target")
-			local distance = NeP.Core.Distance('player', 'target')
-			local name = UnitName("target")
-			local playerRotation = ObjectFacing("player")
-			local targetRotation = ObjectFacing("target")
-			LibDraw.SetWidth(2)
-			-- Target Line
-			if NeP.Core.PeFetch("NePconf_Overlays", "TargetLine") then
-				LibDraw.SetColorRaw(1, 1, 1, alpha)
-				LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", targetX, targetY, targetZ + 6)
-				LibDraw.Line(playerX, playerY, playerZ, targetX, targetY, targetZ)
-			end
-			-- Player Infront Cone
-			if NeP.Core.PeFetch("NePconf_Overlays", "PlayerInfrontCone") then
-				if NeP.Core.Infront('player', 'target') then
-					LibDraw.SetColor(101, 255, 87, 70)
-				else
-					LibDraw.SetColor(255, 87, 87, 70)
+			if UnitExists('target') then
+				local targetX, targetY, targetZ = ObjectPosition("target")
+				local distance = NeP.Core.Distance('player', 'target')
+				local name = UnitName("target")
+				local playerRotation = ObjectFacing("player")
+				local targetRotation = ObjectFacing("target")
+				LibDraw.SetWidth(2)
+				-- Target Line
+				if NeP.Core.PeFetch("NePconf_Overlays", "TargetLine") then
+					LibDraw.SetColorRaw(1, 1, 1, alpha)
+					LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", targetX, targetY, targetZ + 6)
+					LibDraw.Line(playerX, playerY, playerZ, targetX, targetY, targetZ)
 				end
-				LibDraw.Arc(playerX, playerY, playerZ, 10, 180, playerRotation)
-			end
-			-- Player Melee Range
-			if NeP.Core.PeFetch("NePconf_Overlays", "PlayerMRange") then
-				if NeP.Core.Distance('player', 'target') <= 5 then
-					LibDraw.SetColor(101, 255, 87, 70)
-				else
-					LibDraw.SetColor(255, 87, 87, 70)
+				-- Player Infront Cone
+				if NeP.Core.PeFetch("NePconf_Overlays", "PlayerInfrontCone") then
+					if NeP.Core.Infront('player', 'target') then
+						LibDraw.SetColor(101, 255, 87, 70)
+					else
+						LibDraw.SetColor(255, 87, 87, 70)
+					end
+					LibDraw.Arc(playerX, playerY, playerZ, 10, 180, playerRotation)
 				end
-				LibDraw.Circle(playerX, playerY, playerZ, 5)
-			end
-			-- Player Caster Range
-			if NeP.Core.PeFetch("NePconf_Overlays", "PlayerCRange") then
-				if NeP.Core.Distance('player', 'target') <= 40 then
-					LibDraw.SetColor(101, 255, 87, 50)
-				else
-					LibDraw.SetColor(255, 87, 87, 50)
+				-- Player Melee Range
+				if NeP.Core.PeFetch("NePconf_Overlays", "PlayerMRange") then
+					if NeP.Core.Distance('player', 'target') <= 5 then
+						LibDraw.SetColor(101, 255, 87, 70)
+					else
+						LibDraw.SetColor(255, 87, 87, 70)
+					end
+					LibDraw.Circle(playerX, playerY, playerZ, 5)
 				end
-				LibDraw.Circle(playerX, playerY, playerZ, 45)
-			end
-			-- Target Infront Cone
-			if NeP.Core.PeFetch("NePconf_Overlays", "TargetCone") then
-				LibDraw.SetColorRaw(1, 1, 1, alpha)
-				LibDraw.Arc(targetX, targetY, targetZ, 10, 180, targetRotation)
-			end
-			-- Target Melee Range
-			if NeP.Core.PeFetch("NePconf_Overlays", "TargetMRange") then
-				if NeP.Core.Distance('player', 'target') <= 5 then
-					LibDraw.SetColor(101, 255, 87, 70)
-				else
-					LibDraw.SetColor(255, 87, 87, 70)
+				-- Player Caster Range
+				if NeP.Core.PeFetch("NePconf_Overlays", "PlayerCRange") then
+					if NeP.Core.Distance('player', 'target') <= 40 then
+						LibDraw.SetColor(101, 255, 87, 50)
+					else
+						LibDraw.SetColor(255, 87, 87, 50)
+					end
+					LibDraw.Circle(playerX, playerY, playerZ, 45)
 				end
-				LibDraw.Circle(targetX, targetY, targetZ, 5)
-			end
-			-- Target Caster Range
-			if NeP.Core.PeFetch("NePconf_Overlays", "TargetCRange") then
-				if NeP.Core.Distance('player', 'target') <= 40 then
-					LibDraw.SetColor(101, 255, 87, 50)
-				else
-					LibDraw.SetColor(255, 87, 87, 50)
+				-- Target Infront Cone
+				if NeP.Core.PeFetch("NePconf_Overlays", "TargetCone") then
+					LibDraw.SetColorRaw(1, 1, 1, alpha)
+					LibDraw.Arc(targetX, targetY, targetZ, 10, 180, targetRotation)
 				end
-				LibDraw.Circle(targetX, targetY, targetZ, 45)
-			end
-		end	
-		-- Objects (Ores/Herbs/LM)
-		for i=1,#NeP.ObjectManager.objectsCache do
-			local object = NeP.ObjectManager.objectsCache[i]
-			if ObjectExists(object.key) then
-				local distance = object.distance
-				local ox, oy, oz = ObjectPosition(object.key)
-				local name = object.name
-				local id = object.is
-
-				-- Lumbermill
-				if id == 'LM' then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
-						if distance < 50 then
-							LibDraw.Texture(lumbermill_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(lumbermill_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(lumbermill, ox, oy, oz + zOffset, alpha)
-						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+				-- Target Melee Range
+				if NeP.Core.PeFetch("NePconf_Overlays", "TargetMRange") then
+					if NeP.Core.Distance('player', 'target') <= 5 then
+						LibDraw.SetColor(101, 255, 87, 70)
+					else
+						LibDraw.SetColor(255, 87, 87, 70)
 					end
-				-- Ores
-				elseif id == 'Ore' then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsOres") then
-						if distance < 50 then
-							LibDraw.Texture(ore_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(ore_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(ore, ox, oy, oz + zOffset, alpha)
-						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-					end
-				-- Herbs
-				elseif id == 'Herb' then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsHerbs") then
-						if distance < 50 then
-							LibDraw.Texture(herb_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(herb_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(herb, ox, oy, oz + zOffset, alpha)
-						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-					end
-				-- Fish Poles
-				elseif id == 'Fish' then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsFishs") then
-						local ox, oy, oz = ObjectPosition(object)
-						if distance < 50 then
-							LibDraw.Texture(fish_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(fish_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(fish, ox, oy, oz + zOffset, alpha)
-						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-					end
+					LibDraw.Circle(targetX, targetY, targetZ, 5)
 				end
-			end
-		end
-		-- Enemie Units
-		for i=1,#NeP.ObjectManager.unitCache do
-			local object = NeP.ObjectManager.unitCache[i]
-			if ObjectExists(object.key) then
-				local distance = object.distance
-				local ox, oy, oz = ObjectPosition(object.key)
-				local name = object.name
-				local _class = object.class
-				-- Elites
-				if _class == 'elite' then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsElite") then
-						if distance < 50 then
-							LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
-						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+				-- Target Caster Range
+				if NeP.Core.PeFetch("NePconf_Overlays", "TargetCRange") then
+					if NeP.Core.Distance('player', 'target') <= 40 then
+						LibDraw.SetColor(101, 255, 87, 50)
+					else
+						LibDraw.SetColor(255, 87, 87, 50)
 					end
-				-- WorldBoss
-				elseif _class == 'worldboss' then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsWorldBoss") then
-						if distance < 50 then
-							LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
-						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-					end
-				-- Rares
-				elseif _class == 'rareelite' then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsRares") then
-						if distance < 50 then
-							LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
-						elseif distance > 200 then
-							LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
-						else
-							LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
-						end
-						LibDraw.SetColorRaw(1, 1, 1, alpha)
-						LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-					end
-				elseif UnitIsPlayer(object.key) then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsEnemiePlayers") then
-						local factionGroup, factionName = UnitFactionGroup(object.key)
-						if factionGroup == 'Alliance' then
-							if distance < 50 then
-								LibDraw.Texture(ally_big, ox, oy, oz + zOffset, alpha)
-							elseif distance > 200 then
-								LibDraw.Texture(ally_small, ox, oy, oz + zOffset, alpha)
-							else
-								LibDraw.Texture(ally, ox, oy, oz + zOffset, alpha)
-							end
-							LibDraw.SetColorRaw(1, 1, 1, alpha)
-							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-						elseif factionGroup == 'Horde' then
-							if distance < 50 then
-								LibDraw.Texture(horde_big, ox, oy, oz + zOffset, alpha)
-							elseif distance > 200 then
-								LibDraw.Texture(horde_small, ox, oy, oz + zOffset, alpha)
-							else
-								LibDraw.Texture(horde, ox, oy, oz + zOffset, alpha)
-							end
-							LibDraw.SetColorRaw(1, 1, 1, alpha)
-							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-						end
-					end
+					LibDraw.Circle(targetX, targetY, targetZ, 45)
 				end
-			end
-		end
-		-- Friendly Units
-		for i=1,#NeP.ObjectManager.unitFriendlyCache do
-			local object = NeP.ObjectManager.unitFriendlyCache[i]
+			end	
+			-- Objects (Ores/Herbs/LM)
+			for i=1,#NeP.ObjectManager.objectsCache do
+				local object = NeP.ObjectManager.objectsCache[i]
 				if ObjectExists(object.key) then
-				local distance = object.distance
-				local ox, oy, oz = ObjectPosition(object.key)
-				local name = object.name
-				local _class = object.class
-				-- Players
-				if UnitIsPlayer(object.key) then
-					if NeP.Core.PeFetch("NePconf_Overlays", "objectsFriendlyPlayers") then
-						if name ~= UnitName('player') then
+					local distance = object.distance
+					local ox, oy, oz = ObjectPosition(object.key)
+					local name = object.name
+					local id = object.is
+
+					-- Lumbermill
+					if id == 'LM' then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
+							if distance < 50 then
+								LibDraw.Texture(lumbermill_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(lumbermill_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(lumbermill, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+						end
+					-- Ores
+					elseif id == 'Ore' then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsOres") then
+							if distance < 50 then
+								LibDraw.Texture(ore_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(ore_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(ore, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+						end
+					-- Herbs
+					elseif id == 'Herb' then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsHerbs") then
+							if distance < 50 then
+								LibDraw.Texture(herb_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(herb_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(herb, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+						end
+					-- Fish Poles
+					elseif id == 'Fish' then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsFishs") then
+							local ox, oy, oz = ObjectPosition(object)
+							if distance < 50 then
+								LibDraw.Texture(fish_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(fish_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(fish, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+						end
+					end
+				end
+			end
+			-- Enemie Units
+			for i=1,#NeP.ObjectManager.unitCache do
+				local object = NeP.ObjectManager.unitCache[i]
+				if ObjectExists(object.key) then
+					local distance = object.distance
+					local ox, oy, oz = ObjectPosition(object.key)
+					local name = object.name
+					local _class = object.class
+					-- Elites
+					if _class == 'elite' then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsElite") then
+							if distance < 50 then
+								LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+						end
+					-- WorldBoss
+					elseif _class == 'worldboss' then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsWorldBoss") then
+							if distance < 50 then
+								LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+						end
+					-- Rares
+					elseif _class == 'rareelite' then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsRares") then
+							if distance < 50 then
+								LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
+							elseif distance > 200 then
+								LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
+							else
+								LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
+							end
+							LibDraw.SetColorRaw(1, 1, 1, alpha)
+							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+						end
+					elseif UnitIsPlayer(object.key) then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsEnemiePlayers") then
 							local factionGroup, factionName = UnitFactionGroup(object.key)
 							if factionGroup == 'Alliance' then
 								if distance < 50 then
@@ -373,6 +336,45 @@ LibDraw.Sync(function()
 								end
 								LibDraw.SetColorRaw(1, 1, 1, alpha)
 								LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+							end
+						end
+					end
+				end
+			end
+			-- Friendly Units
+			for i=1,#NeP.ObjectManager.unitFriendlyCache do
+				local object = NeP.ObjectManager.unitFriendlyCache[i]
+					if ObjectExists(object.key) then
+					local distance = object.distance
+					local ox, oy, oz = ObjectPosition(object.key)
+					local name = object.name
+					local _class = object.class
+					-- Players
+					if UnitIsPlayer(object.key) then
+						if NeP.Core.PeFetch("NePconf_Overlays", "objectsFriendlyPlayers") then
+							if name ~= UnitName('player') then
+								local factionGroup, factionName = UnitFactionGroup(object.key)
+								if factionGroup == 'Alliance' then
+									if distance < 50 then
+										LibDraw.Texture(ally_big, ox, oy, oz + zOffset, alpha)
+									elseif distance > 200 then
+										LibDraw.Texture(ally_small, ox, oy, oz + zOffset, alpha)
+									else
+										LibDraw.Texture(ally, ox, oy, oz + zOffset, alpha)
+									end
+									LibDraw.SetColorRaw(1, 1, 1, alpha)
+									LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+								elseif factionGroup == 'Horde' then
+									if distance < 50 then
+										LibDraw.Texture(horde_big, ox, oy, oz + zOffset, alpha)
+									elseif distance > 200 then
+										LibDraw.Texture(horde_small, ox, oy, oz + zOffset, alpha)
+									else
+										LibDraw.Texture(horde, ox, oy, oz + zOffset, alpha)
+									end
+									LibDraw.SetColorRaw(1, 1, 1, alpha)
+									LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
+								end
 							end
 						end
 					end
