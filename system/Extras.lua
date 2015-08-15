@@ -76,7 +76,7 @@ function NeP.Extras.FaceTo()
 		local unitSpeed, _ = GetUnitSpeed('player')
 		if not _manualMoving() and unitSpeed == 0 then
 			if UnitExists('target') then
-				if UnitIsVisible('target') and not UnitChannelInfo("player") then
+				if UnitIsVisible('target') and not UnitChannelInfo("player")then
 					if not NeP.Core.Infront('player', 'target') then
 						if NeP.Core.LineOfSight('player', 'target') then
 							if FireHack then
@@ -126,34 +126,76 @@ end
     Oh and possivly add more stuff...
 
     Build By: MTS
-    ---------------------------------------------------]] 
-NeP.AutoMilling = false -- [[ VAR for AutoMilling feature ]]
+    ---------------------------------------------------]]
+local _acSpell, _acSpeNum, _acTable = nil, nil, nil
+local acCraft_Run = false
+
 function NeP.Extras.autoMilling()
-	local Milling_Herbs = {
-		-- Draenor
-		109124, -- Frostweed
-		109125, -- Fireweed
-		109126, -- Gorgrond Flytrap
-		109127, -- Starflower
-		109128, -- Nagrand Arrowbloom
-		109129 -- Talador Orchid
-	}
-	local _millSpell = 51005
-	if NeP.AutoMilling then
-		if IsSpellKnown(_millSpell) then
-			for i=1,#Milling_Herbs do
-				if GetItemCount(Milling_Herbs[i], false, false) >= 5 then 
-					Cast(_millSpell) 
-					UseItem(Milling_Herbs[i])
-					NeP.Core.Print('Milling '..Milling_Herbs[i])
-				else	
-					NeP.AutoMilling = false
-					NeP.Core.Print('Stoped milling, you dont have enough mats.')
+	acCraft_Run = not acCraft_Run
+	if acCraft_Run then
+		local _Herbs = {
+			-- WoD
+			{ ID= 109124, Name = 'Frostweed' },
+			{ ID= 109125, Name = 'Fireweed' },
+			{ ID= 109126, Name = 'Gorgrond Flytrap' },
+			{ ID= 109127, Name = 'Starflower' },
+			{ ID= 109128, Name = 'Nagrand Arrowbloom' },
+			{ ID= 109129, Name = 'Talador Orchid' }
+		}
+		_acSpell, _acSpeNum, _acTable = 51005, 5, _Herbs
+	else
+		_acSpell, _acSpeNum, _acTable = nil, nil, nil
+	end
+end
+
+function NeP.Extras.autoProspect()
+	acCraft_Run = not acCraft_Run
+	if acCraft_Run then
+		local _Ores = {
+			-- MoP
+			{ ID= 72092, Name = 'Ghost Iron Ore' },
+		}
+		_acSpell, _acSpeNum, _acTable = 31252, 5, _Ores
+	else
+		_acSpell, _acSpeNum, _acTable = nil, nil, nil
+	end
+end
+
+function NeP.Extras.autoCraft(spell, number, _table)
+	if acCraft_Run then
+		local _craftID = nil
+		local _craftName = nil
+		local _craftRunning = false
+		if IsSpellKnown(spell) then
+			for i=1,#_table do
+				local _item = _table[i]
+				if _craftID == nil then
+					if GetItemCount(_item.ID, false, false) >= number then
+						_craftID = _item.ID
+						_craftName = _item.Name
+						_craftRunning = true
+						break
+					else
+						NeP.Core.Print('Stoped crafting, you dont have enough mats.')
+						acCraft_Run = false
+						break
+					end
 				end
 			end
 		else
-			NeP.AutoMilling = false
-			NeP.Core.Print('Failed, you are not a miller.')
+			NeP.Core.Print('Failed, you dont have the required spell.')
+			_craftID = nil
+			acCraft_Run = false
+		end
+		if _craftRunning then
+			if GetItemCount(_craftID, false, false) >= number then
+				Cast(spell) 
+				UseItem(_craftID)
+				NeP.Core.Print('Crafting: '.._craftName)
+			else	
+				NeP.Core.Print('Stoped crafting, you ran out of mats.')
+				acCraft_Run = false
+			end
 		end
 	end
 end
@@ -306,7 +348,7 @@ C_Timer.NewTicker(0.5, (function()
 				if not UnitChannelInfo("player") then
 					CarpDestruction()
 					if NeP.Core.BagSpace() > 2 then
-						NeP.Extras.autoMilling()
+						NeP.Extras.autoCraft(_acSpell, _acSpeNum, _acTable)
 						NeP.Extras.OpenSalvage()
 						NeP.Extras.AutoBait()
 					end
