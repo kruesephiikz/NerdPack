@@ -11,9 +11,7 @@ system\Core.lua
 system\PEStuff.lua
 system\ObjectManager\ObjectCache.lua
 system\ObjectManager\SettingsGUI.lua
-system\ObjectManager\EnemieGUI.lua
-system\ObjectManager\FriendlyGUI.lua
-system\ObjectManager\ObjectGUI.lua
+system\ObjectManager\ListGUI.lua
 system\Tracker.lua
 system\Extras.lua
 system\Overlays.lua

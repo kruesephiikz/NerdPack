@@ -56,6 +56,14 @@ ProbablyEngine.command.register(NeP.Addon.Info.Nick, function(msg, box)
 		NeP.Core.HideAll()
 	elseif command == 'overlay' or command == 'ov' or command == 'overlays' then
 		NeP.Addon.Interface.OverlaysGUI()
+	elseif command == 'test' then
+		if NeP.Addon.Interface.OMGUI.Open then
+			NeP.Addon.Interface.OMGUI:Hide()
+			NeP.Addon.Interface.OMGUI.Open = false
+		else
+			NeP.Addon.Interface.OMGUI:Show()
+			NeP.Addon.Interface.OMGUI.Open = true
+		end
 	else 
 		NeP.Core.Print('/config - (Opens General Settings GUI)')
 		NeP.Core.Print('/status - (Opens Status GUI)')

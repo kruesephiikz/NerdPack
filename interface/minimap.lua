@@ -149,7 +149,7 @@ local function onLeave(self)
 end
 
 function NeP.Addon.Interface.MinimapButton()
-	NeP_MinimapButton = CreateFrame('Button', 'MTS_Minimap', Minimap)
+	NeP_MinimapButton = CreateFrame('Button', 'NeP_Minimap', Minimap)
 	NeP_MinimapButton:SetFrameStrata('MEDIUM')
 	NeP_MinimapButton:SetSize(33, 33)
 	NeP_MinimapButton:RegisterForClicks('anyUp')
