@@ -138,7 +138,7 @@ LibDraw.Sync(function()
 
 		if UnitExists('target') then
 			local targetX, targetY, targetZ = ObjectPosition("target")
-			local distance = NeP.Lib.Distance('player', 'target')
+			local distance = NeP.Core.Distance('player', 'target')
 			local name = UnitName("target")
 			local playerRotation = ObjectFacing("player")
 			local targetRotation = ObjectFacing("target")
@@ -151,7 +151,7 @@ LibDraw.Sync(function()
 			end
 			-- Player Infront Cone
 			if NeP.Core.PeFetch("NePconf_Overlays", "PlayerInfrontCone") then
-				if NeP.Lib.Infront('player', 'target') then
+				if NeP.Core.Infront('player', 'target') then
 					LibDraw.SetColor(101, 255, 87, 70)
 				else
 					LibDraw.SetColor(255, 87, 87, 70)
@@ -160,7 +160,7 @@ LibDraw.Sync(function()
 			end
 			-- Player Melee Range
 			if NeP.Core.PeFetch("NePconf_Overlays", "PlayerMRange") then
-				if NeP.Lib.Distance('player', 'target') <= 5 then
+				if NeP.Core.Distance('player', 'target') <= 5 then
 					LibDraw.SetColor(101, 255, 87, 70)
 				else
 					LibDraw.SetColor(255, 87, 87, 70)
@@ -169,7 +169,7 @@ LibDraw.Sync(function()
 			end
 			-- Player Caster Range
 			if NeP.Core.PeFetch("NePconf_Overlays", "PlayerCRange") then
-				if NeP.Lib.Distance('player', 'target') <= 40 then
+				if NeP.Core.Distance('player', 'target') <= 40 then
 					LibDraw.SetColor(101, 255, 87, 50)
 				else
 					LibDraw.SetColor(255, 87, 87, 50)
@@ -183,7 +183,7 @@ LibDraw.Sync(function()
 			end
 			-- Target Melee Range
 			if NeP.Core.PeFetch("NePconf_Overlays", "TargetMRange") then
-				if NeP.Lib.Distance('player', 'target') <= 5 then
+				if NeP.Core.Distance('player', 'target') <= 5 then
 					LibDraw.SetColor(101, 255, 87, 70)
 				else
 					LibDraw.SetColor(255, 87, 87, 70)
@@ -192,7 +192,7 @@ LibDraw.Sync(function()
 			end
 			-- Target Caster Range
 			if NeP.Core.PeFetch("NePconf_Overlays", "TargetCRange") then
-				if NeP.Lib.Distance('player', 'target') <= 40 then
+				if NeP.Core.Distance('player', 'target') <= 40 then
 					LibDraw.SetColor(101, 255, 87, 50)
 				else
 					LibDraw.SetColor(255, 87, 87, 50)

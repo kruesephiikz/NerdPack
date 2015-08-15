@@ -42,73 +42,6 @@ function NeP.Lib.SAoE(units, distance)
 	return UnitsTotal >= units 
 end
 
---[[-----------------------------------------------
-** Distance **
-DESC: Sometimes PE's behaves badly,
-So here we go...
-
-Build By: MTS
----------------------------------------------------]]
-local function round(num, idp)
-  local mult = 10^(idp or 0)
-  return math.floor(num * mult + 0.5) / mult
-end
-
-function NeP.Lib.Distance(a, b)
-	-- FireHack
-	if FireHack then
-		local ax, ay, az = ObjectPosition(b)
-		local bx, by, bz = ObjectPosition(a)
-		return round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
-	else
-		return ProbablyEngine.condition["distance"](b)
-	end
-	return 0
-end
-
-function NeP.Lib.LineOfSight(a, b)
-	if FireHack then
-		if UnitExists(a) and UnitExists(b) then
-			local ax, ay, az = ObjectPosition(a)
-			local bx, by, bz = ObjectPosition(b)
-			local losFlags =  bit.bor(0x10, 0x100)
-			local aCheck = select(6,strsplit("-",UnitGUID(a)))
-			local bCheck = select(6,strsplit("-",UnitGUID(b)))
-			local ignoreLOS = {
-				[76585] = true,     -- Ragewing the Untamed (UBRS)
-				[77063] = true,     -- Ragewing the Untamed (UBRS)
-				[77182] = true,     -- Oregorger (BRF)
-				[77891] = true,     -- Grasping Earth (BRF)
-				[77893] = true,     -- Grasping Earth (BRF)
-				[78981] = true,     -- Iron Gunnery Sergeant (BRF)
-				[81318] = true,     -- Iron Gunnery Sergeant (BRF)
-				[83745] = true,     -- Ragewing Whelp (UBRS)
-				[86252] = true,     -- Ragewing the Untamed (UBRS)
-			}
-			if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
-			if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
-			if ax == nil or ay == nil or az == nil or bx == nil or by == nil or bz == nil then return false end
-			return not TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags)
-		end
-	end
-	return false
-end
-
-function NeP.Lib.Infront(a, b)
-	if (UnitExists(a) and UnitExists(b)) then
-		-- FireHack
-		if FireHack then
-			local aX, aY, aZ = ObjectPosition(b)
-			local bX, bY, bZ = ObjectPosition(a)
-			local playerFacing = GetPlayerFacing()
-			local facing = math.atan2(bY - aY, bX - aX) % 6.2831853071796
-			return math.abs(math.deg(math.abs(playerFacing - (facing)))-180) < 90
-		-- Fallback to PE's
-		else
-			return ProbablyEngine.condition["infront"](b)
-		end
-	end
-end
 
 function NeP.Lib.canTaunt()
 	if NeP.Core.PeFetch('npconf', 'Taunts') then
@@ -116,7 +49,7 @@ function NeP.Lib.canTaunt()
 			local object = NeP.ObjectManager.unitCache[i].key
 			if UnitIsTappedByPlayer(object) and object.distance <= 40 then
 				if UnitThreatSituation(object) and UnitThreatSituation(object) >= 2 then
-					if NeP.Lib.Infront('player', object) then
+					if NeP.Core.Infront('player', object) then
 						ProbablyEngine.dsl.parsedTarget = object
 						return true 
 					end
@@ -182,7 +115,7 @@ function NeP.Lib.AutoDots(_spell, _health, _duration, _distance, _classification
 				if not debuff or debuff - GetTime() < _duration then
 					if UnitCanAttack("player", _object.key)
 					and _object.distance <= _distance then
-						if NeP.Lib.Infront('player', _object.key) then
+						if NeP.Core.Infront('player', _object.key) then
 							ProbablyEngine.dsl.parsedTarget = _object.key
 							_lastDotted = _object.key
 							return true

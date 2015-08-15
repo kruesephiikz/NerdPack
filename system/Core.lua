@@ -136,3 +136,64 @@ function NeP.Core.Alert(txt)
 		npAlert:message("|r["..NeP.Addon.Interface.addonColor.."MTS|r]: "..NeP.Core.printColor..txt)
 	end
 end
+
+local function round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
+function NeP.Core.Distance(a, b)
+	-- FireHack
+	if FireHack then
+		local ax, ay, az = ObjectPosition(b)
+		local bx, by, bz = ObjectPosition(a)
+		return round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
+	else
+		return ProbablyEngine.condition["distance"](b)
+	end
+	return 0
+end
+
+function NeP.Core.LineOfSight(a, b)
+	if FireHack then
+		if UnitExists(a) and UnitExists(b) then
+			local ax, ay, az = ObjectPosition(a)
+			local bx, by, bz = ObjectPosition(b)
+			local losFlags =  bit.bor(0x10, 0x100)
+			local aCheck = select(6,strsplit("-",UnitGUID(a)))
+			local bCheck = select(6,strsplit("-",UnitGUID(b)))
+			local ignoreLOS = {
+				[76585] = true,     -- Ragewing the Untamed (UBRS)
+				[77063] = true,     -- Ragewing the Untamed (UBRS)
+				[77182] = true,     -- Oregorger (BRF)
+				[77891] = true,     -- Grasping Earth (BRF)
+				[77893] = true,     -- Grasping Earth (BRF)
+				[78981] = true,     -- Iron Gunnery Sergeant (BRF)
+				[81318] = true,     -- Iron Gunnery Sergeant (BRF)
+				[83745] = true,     -- Ragewing Whelp (UBRS)
+				[86252] = true,     -- Ragewing the Untamed (UBRS)
+			}
+			if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
+			if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
+			if ax == nil or ay == nil or az == nil or bx == nil or by == nil or bz == nil then return false end
+			return not TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags)
+		end
+	end
+	return false
+end
+
+function NeP.Core.Infront(a, b)
+	if (UnitExists(a) and UnitExists(b)) then
+		-- FireHack
+		if FireHack then
+			local aX, aY, aZ = ObjectPosition(b)
+			local bX, bY, bZ = ObjectPosition(a)
+			local playerFacing = GetPlayerFacing()
+			local facing = math.atan2(bY - aY, bX - aX) % 6.2831853071796
+			return math.abs(math.deg(math.abs(playerFacing - (facing)))-180) < 90
+		-- Fallback to PE's
+		else
+			return ProbablyEngine.condition["infront"](b)
+		end
+	end
+end

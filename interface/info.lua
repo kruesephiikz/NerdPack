@@ -18,7 +18,7 @@ NeP.Addon.Interface.info = {
 			y = 94, 
 			center = true 
 		},
-		{ 
+			{ 
 				type = "button", 
 				text = "Donate", 
 				width = 325, 

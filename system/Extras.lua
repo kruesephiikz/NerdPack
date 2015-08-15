@@ -43,17 +43,17 @@ function NeP.Extras.MoveTo()
   	if NeP.Core.PeFetch('npconf', 'AutoMove') then
   		if UnitExists('target') then
 			if UnitIsVisible('target') and not UnitChannelInfo("player") then
-				if NeP.Lib.LineOfSight('player', 'target') then
+				if NeP.Core.LineOfSight('player', 'target') then
 					if not _manualMoving() then
 						if FireHack then
 							local _Range = _classRange.Range + UnitCombatReach('player') + UnitCombatReach('target')
 							-- Stop Moving
-							if ((_classRange.style == "ranged" and NeP.Lib.Distance("player", 'target') < _Range)
-							or (_classRange.style == "melee" and NeP.Lib.Distance("player", 'target') < _Range))
+							if ((_classRange.style == "ranged" and NeP.Core.Distance("player", 'target') < _Range)
+							or (_classRange.style == "melee" and NeP.Core.Distance("player", 'target') < _Range))
 							and unitSpeed ~= 0 then 
 								MoveTo(ObjectPosition('player'))
 							-- Start Moving
-							elseif NeP.Lib.Distance("player", 'target') > _Range then
+							elseif NeP.Core.Distance("player", 'target') > _Range then
 								NeP.Alert('Moving to: '..GetUnitName('target', false)) 
 								MoveTo(ObjectPosition('target'))
 							end
@@ -77,8 +77,8 @@ function NeP.Extras.FaceTo()
 		if not _manualMoving() and unitSpeed == 0 then
 			if UnitExists('target') then
 				if UnitIsVisible('target') and not UnitChannelInfo("player") then
-					if not NeP.Lib.Infront('player', 'target') then
-						if NeP.Lib.LineOfSight('player', 'target') then
+					if not NeP.Core.Infront('player', 'target') then
+						if NeP.Core.LineOfSight('player', 'target') then
 							if FireHack then
 								NeP.Alert('Facing: '..GetUnitName('target', false)) 
 								FaceUnit('target')

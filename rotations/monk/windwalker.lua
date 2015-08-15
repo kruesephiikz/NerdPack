@@ -47,7 +47,7 @@ local _SEF = function()
 		and IsSpellInRange(GetSpellInfo(137639), object.key) then
 		local _,_,_,_,_,_,debuff = UnitDebuff(object.key, GetSpellInfo(137639), nil, "PLAYER")
 			if not debuff and NeP.Core.dynamicEval("!player.buff(137639).count = 2") then
-				if NeP.Lib.Infront('player', object.key) then
+				if NeP.Core.Infront('player', object.key) then
 					ProbablyEngine.dsl.parsedTarget = object.key
 					return true 
 				end

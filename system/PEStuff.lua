@@ -42,5 +42,5 @@ ProbablyEngine.condition.register("isBoss", function (target, spell)
 end)
 
 ProbablyEngine.condition.register("NePinfront", function(target, spell)
-	return NeP.Lib.Infront('player', target)
+	return NeP.Core.Infront('player', target)
 end)

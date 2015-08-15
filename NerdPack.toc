@@ -9,7 +9,11 @@ external\LibStub.lua
 external\LibBossIDs.lua
 system\Core.lua
 system\PEStuff.lua
-system\ObjectCache.lua
+system\ObjectManager\ObjectCache.lua
+system\ObjectManager\SettingsGUI.lua
+system\ObjectManager\EnemieGUI.lua
+system\ObjectManager\FriendlyGUI.lua
+system\ObjectManager\ObjectGUI.lua
 system\Tracker.lua
 system\Extras.lua
 system\Overlays.lua
