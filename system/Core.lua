@@ -114,15 +114,6 @@ function NeP.Core.HideAll()
 	end
 end
 
-function NeP.Core.BagSpace()
-	local freeslots = 0
-	for lbag = 0, NUM_BAG_SLOTS do
-		numFreeSlots, BagType = GetContainerNumFreeSlots(lbag)
-		freeslots = freeslots + numFreeSlots
-	end
-	return freeslots
-end
-
 function NeP.Core.Print(txt)
 	if not NeP.Core.hidding and NeP.Core.PeFetch('npconf', 'Prints') then
 		local _name = NeP.Addon.Interface.addonColor..NeP.Addon.Info.Name
