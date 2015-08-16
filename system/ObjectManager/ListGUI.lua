@@ -5,7 +5,7 @@ local _Displaying = 'Friendly List'
 local _addonColor = '|cff'..NeP.Addon.Interface.GuiColor
 local _tittleGUI = '|T'..NeP.Addon.Info.Logo..':20:20|t'.._addonColor..NeP.Addon.Info.Nick
 
-local OPTIONS_WIDTH = 510
+local OPTIONS_WIDTH = 524
 local OPTIONS_HEIGHT = 250
 local scrollMax = 0
 
@@ -58,7 +58,7 @@ title.text3:SetText('')
 local closeButton = CreateFrame("Button", nil, mainFrame)
 closeButton:SetPoint("BOTTOMLEFT", 0, 0)
 closeButton:SetWidth(100)
-closeButton:SetHeight(25)
+closeButton:SetHeight(30)
 closeButton:SetText("|cff000000Close")
 closeButton:SetNormalFontObject("GameFontNormal")
 closeButton:SetScript("OnClick", function(self) mainFrame:Hide(); _CacheShow = false end)
@@ -82,7 +82,7 @@ closeButton:SetPushedTexture(closeButton.closeButton3)
 local enemyButton = CreateFrame("Button", nil, mainFrame)
 enemyButton:SetPoint("BOTTOMRIGHT", 0, 0)
 enemyButton:SetWidth(100)
-enemyButton:SetHeight(25)
+enemyButton:SetHeight(30)
 enemyButton:SetText("|cffFFFFFFEnemy List")
 enemyButton:SetNormalFontObject("GameFontNormal")
 enemyButton:SetScript("OnClick", function(self) _objectTable = NeP.ObjectManager.unitCache; _Displaying = 'Enemy List' end)
@@ -106,7 +106,7 @@ enemyButton:SetPushedTexture(enemyButton.closeButton3)
 local friendlyButton = CreateFrame("Button", nil, mainFrame)
 friendlyButton:SetPoint("BOTTOMRIGHT", -100, 0)
 friendlyButton:SetWidth(100)
-friendlyButton:SetHeight(25)
+friendlyButton:SetHeight(30)
 friendlyButton:SetText("|cffFFFFFFFriendly List")
 friendlyButton:SetNormalFontObject("GameFontNormal")
 friendlyButton:SetScript("OnClick", function(self) _objectTable = NeP.ObjectManager.unitFriendlyCache; _Displaying = 'Friendly List' end)
@@ -130,7 +130,7 @@ friendlyButton:SetPushedTexture(friendlyButton.closeButton3)
 local ObjectButton = CreateFrame("Button", nil, mainFrame)
 ObjectButton:SetPoint("BOTTOMRIGHT", -200, 0)
 ObjectButton:SetWidth(100)
-ObjectButton:SetHeight(25)
+ObjectButton:SetHeight(30)
 ObjectButton:SetText("|cffFFFFFFObjects List")
 ObjectButton:SetNormalFontObject("GameFontNormal")
 ObjectButton:SetScript("OnClick", function(self) _objectTable = NeP.ObjectManager.objectsCache; _Displaying = 'Objects List' end)
@@ -154,7 +154,7 @@ ObjectButton:SetPushedTexture(ObjectButton.closeButton3)
 local AllButton = CreateFrame("Button", nil, mainFrame)
 AllButton:SetPoint("BOTTOMRIGHT", -300, 0)
 AllButton:SetWidth(50)
-AllButton:SetHeight(25)
+AllButton:SetHeight(30)
 AllButton:SetText("|cff000000All")
 AllButton:SetNormalFontObject("GameFontNormal")
 AllButton:SetScript("OnClick", function(self) _objectTable = NeP.ObjectManager.objectsCache; _Displaying = 'All' end)
@@ -201,42 +201,52 @@ SettingsButton:SetPushedTexture(SettingsButton.closeButton3)
 
 
 local scrollframe = CreateFrame("ScrollFrame", nil, mainFrame) 
-scrollframe:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT - 60)  
-scrollframe:SetPoint("TOP", 0, -30) 
+scrollframe:SetSize(OPTIONS_WIDTH-16, OPTIONS_HEIGHT - 60)  
+scrollframe:SetPoint("TOPLEFT", 0, -30) 
  
 --contentFrame 
 local contentFrame = CreateFrame("Frame") 
 contentFrame:SetPoint("TOPLEFT", 0, 0) 
 contentFrame:SetPoint("BOTTOMRIGHT", 0, 0) 
-contentFrame:SetSize(OPTIONS_WIDTH, 0)
+contentFrame:SetSize(OPTIONS_WIDTH-16, 0)
 local texture = contentFrame:CreateTexture() 
 texture:SetAllPoints() 
 texture:SetTexture(0,0,0,0.3)
 mainFrame.contentFrame = contentFrame 
- 
--- Create the slider that will be used to scroll through the results
-local scrollbar = CreateFrame("Slider", "FPreviewScrollBar", mainFrame)
+contentFrame:EnableMouseWheel(true)
+local scrollbar = CreateFrame("Slider", "FPreviewScrollBar", scrollframe)
 if not scrollbar.bg then
    scrollbar.bg = scrollbar:CreateTexture(nil, "BACKGROUND")
    scrollbar.bg:SetAllPoints(true)
-   scrollbar.bg:SetTexture(0, 0, 0, 0.5)
+   scrollbar.bg:SetTexture(255, 255, 255, 0.1)
 end
 if not scrollbar.thumb then
    scrollbar.thumb = scrollbar:CreateTexture(nil, "OVERLAY")
-   scrollbar.thumb:SetTexture(0, 0, 0, 0.5)
+   scrollbar.thumb:SetTexture(0, 0, 0, 1)
    scrollbar.thumb:SetSize(16, 16)
    scrollbar:SetThumbTexture(scrollbar.thumb)
 end
 --local scrollMax = 10
 scrollbar:SetOrientation("VERTICAL");
-scrollbar:SetSize(16, OPTIONS_HEIGHT)
-scrollbar:SetPoint("TOPLEFT", mainFrame, "TOPRIGHT", 0, 0)
+scrollbar:SetSize(16, OPTIONS_HEIGHT - 60)
+scrollbar:SetPoint("TOPLEFT", scrollframe, "TOPRIGHT", 0, 0)
 scrollbar:SetMinMaxValues(0, scrollMax)
 scrollbar:SetValue(0)
 scrollbar:SetScript("OnValueChanged", function(self)
       scrollframe:SetVerticalScroll(self:GetValue())
 end)
-
+contentFrame:SetScript("OnMouseWheel", function(self, delta)
+      local current = scrollbar:GetValue()
+      if IsShiftKeyDown() and (delta > 0) then
+         scrollbar:SetValue(0)
+      elseif IsShiftKeyDown() and (delta < 0) then
+         scrollbar:SetValue(scrollMax)
+      elseif (delta < 0) and (current < scrollMax) then
+         scrollbar:SetValue(current + 20)
+      elseif (delta > 0) and (current > 1) then
+         scrollbar:SetValue(current - 20)
+      end
+end)
 scrollframe:SetScrollChild(contentFrame)
 
 local function getText()
@@ -317,25 +327,10 @@ C_Timer.NewTicker(0.1, (function()
 			else
 				scrollMax = 0
 			end
-			contentFrame:SetSize(OPTIONS_WIDTH, height)
+			contentFrame:SetSize(OPTIONS_WIDTH-16, height)
 			scrollbar:SetMinMaxValues(0, scrollMax)
 		end
 	end
 end), nil)
-
-contentFrame:EnableMouseWheel(true)
-contentFrame:SetScript("OnMouseWheel", function(self, delta)
-      local current = scrollbar:GetValue()
-       
-      if IsShiftKeyDown() and (delta > 0) then
-         scrollbar:SetValue(0)
-      elseif IsShiftKeyDown() and (delta < 0) then
-         scrollbar:SetValue(scrollMax)
-      elseif (delta < 0) and (current < scrollMax) then
-         scrollbar:SetValue(current + 20)
-      elseif (delta > 0) and (current > 1) then
-         scrollbar:SetValue(current - 20)
-      end
-end)
 
 mainFrame:Hide()
