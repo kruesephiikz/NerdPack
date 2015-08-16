@@ -98,7 +98,7 @@ NeP_MinimapButton_Dropdown = function(self)
 	UIDropDownMenu_AddButton(info)
 	
 	info.text = "Fishing Bot"
-	info.func = function() NeP.Addon.Interface.OverlaysGUI() end
+	info.func = function() NeP.Addon.Interface.FishingGUI() end
 	UIDropDownMenu_AddButton(info)
 	
 	info.text = "Dummy Testing"
