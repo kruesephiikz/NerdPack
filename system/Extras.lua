@@ -135,12 +135,12 @@ function NeP.Extras.autoMilling()
 	if acCraft_Run then
 		local _Herbs = {
 			-- WoD
-			{ ID= 109124, Name = 'Frostweed' },
-			{ ID= 109125, Name = 'Fireweed' },
-			{ ID= 109126, Name = 'Gorgrond Flytrap' },
-			{ ID= 109127, Name = 'Starflower' },
-			{ ID= 109128, Name = 'Nagrand Arrowbloom' },
-			{ ID= 109129, Name = 'Talador Orchid' }
+			{ ID = 109124, Name = 'Frostweed' },
+			{ ID = 109125, Name = 'Fireweed' },
+			{ ID = 109126, Name = 'Gorgrond Flytrap' },
+			{ ID = 109127, Name = 'Starflower' },
+			{ ID = 109128, Name = 'Nagrand Arrowbloom' },
+			{ ID = 109129, Name = 'Talador Orchid' }
 		}
 		_acSpell, _acSpeNum, _acTable = 51005, 5, _Herbs
 	else
@@ -153,7 +153,7 @@ function NeP.Extras.autoProspect()
 	if acCraft_Run then
 		local _Ores = {
 			-- MoP
-			{ ID= 72092, Name = 'Ghost Iron Ore' },
+			{ ID = 72092, Name = 'Ghost Iron Ore' },
 		}
 		_acSpell, _acSpeNum, _acTable = 31252, 5, _Ores
 	else
@@ -207,45 +207,20 @@ end
     Build By: SVS
     ---------------------------------------------------]]
 function NeP.Extras.OpenSalvage()
-	if NeP.Core.PeFetch('npconf', 'OpenSalvage') then
-		-- Bag of Salvaged Goods
-		if GetItemCount(114116, false, false) > 0 then
-			UseItem(114116)
-		-- Crate of Salvage
-		elseif GetItemCount(114119, false, false) > 0 then
-			UseItem(114119)
-		-- Big Crate of Salvage
-		elseif GetItemCount(114120, false, false) > 0 then
-			UseItem(114120)
-		end
-	end
-end
-
-function NeP.Extras.AutoBait()
-	if NeP.Core.PeFetch('npconf', 'bait') ~= "none" then
-		local _baitsTable = {
-			{ ID= 110274, Debuff = 158031, Name = 'Jawless Skulker Bait', Key = 'jsb' },
-			{ ID= 110289, Debuff = 158034, Name = 'Fat Sleeper Bait', Key = 'fsb' },
-			{ ID= 110290, Debuff = 158035, Name = 'Blind Lake Sturgeon Bait', Key = 'blsb' },
-			{ ID= 110291, Debuff = 158036, Name = 'Fire Ammonite Bait', Key = 'fab' },
-			{ ID= 110292, Debuff = 158037, Name = 'Sea Scorpion Bait', Key = 'ssb' },
-			{ ID= 110293, Debuff = 158038, Name = 'Abyssal Gulper Eel Bait', Key = 'ageb' },
-			{ ID= 110294, Debuff = 158039, Name = 'Blackwater Whiptail Bait', Key = 'bwb' }
-		}
-		for i=1,#_baitsTable do
-			local _Bait = _baitsTable[i]
-			if NeP.Core.PeFetch('npconf', 'bait') == _Bait.Key then
-				if GetItemCount(_Bait.ID, false, false) > 0 and not UnitBuff("player", GetSpellInfo(_Bait.Debuff)) then
-					UseItem(_Bait.ID)
-				end
+	_salvageTable = {
+		{ ID = 114116, Name = 'Bag of Salvaged Goods' },
+		{ ID = 114119, Name = 'Crate of Salvage' },
+		{ ID = 114120, Name = 'Big Crate of Salvage' }
+	}
+	for i=1,#_salvageTable do
+		local _item = _salvageTable[i]
+		if NeP.Core.PeFetch('npconf', 'OpenSalvage') then
+			-- Bag of Salvaged Goods
+			if GetItemCount(_item.ID, false, false) > 0 then
+				NeP.Core.Print('Open Salvage: '.._item.Name)
+				UseItem(_item.ID)
 			end
 		end
-	end
-end
- 
-local function CarpDestruction()
-	if NeP.Core.PeFetch('npconf', 'LunarfallCarp') then
-		_deleteItem(116158, 0)
 	end
 end
 
@@ -258,7 +233,7 @@ local function _BagSpace()
 	return freeslots
 end
 
-local function _deleteItem(ID, number)
+function NeP.Extras.deleteItem(ID, number)
 	if GetItemCount(ID, false, false) > number then
 		for bag = 0, NUM_BAG_SLOTS do
 			for slot = 1, GetContainerNumSlots(bag) do
@@ -340,11 +315,9 @@ C_Timer.NewTicker(0.5, (function()
 			end
 			if not ProbablyEngine.module.player.combat then
 				if not UnitChannelInfo("player") then
-					CarpDestruction()
 					if _BagSpace() > 2 then
 						NeP.Extras.autoCraft(_acSpell, _acSpeNum, _acTable)
 						NeP.Extras.OpenSalvage()
-						NeP.Extras.AutoBait()
 					end
 				end
 			end

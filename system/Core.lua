@@ -41,13 +41,7 @@ ProbablyEngine.command.register(NeP.Addon.Info.Nick, function(msg, box)
 	elseif command == 'info' or command == 'i' then
 		NeP.Addon.Interface.InfoGUI()
 	elseif command == 'mill' or command == 'ml' then
-		if NeP.AutoMilling then
-			NeP.AutoMilling = false
-			NeP.Core.Print('Stoped Milling...')
-		else
-			NeP.AutoMilling = true
-			NeP.Core.Print('Started Milling...')
-		end
+		NeP.Extras.autoMilling()
 	elseif command == 'cache' or command == 'cch' or command == 'om' then
 		NeP.Addon.Interface.CacheGUI()
 	elseif command == 'hide' then

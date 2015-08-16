@@ -175,46 +175,6 @@ NeP.Addon.Interface.General = {
 						key = "LunarfallCarp",  
 						default = false,  
 						desc = "Enable automatic destruction of Lunarfall Carp." 
-					},			    
-					{ 
-						type = "dropdown",
-						text = "Bait:", 
-						key = "bait", 
-						list = {
-								{
-									text = "None",
-									key = "none"
-								},	
-								{
-									text = "Jawless Skulker",
-									key = "jsb"
-								},
-								{
-									text = "Fat Sleeper",
-									key = "fsb"
-								},
-								{
-									text = "Blind Lake Sturgeon",
-									key = "blsb"
-								},
-								{
-									text = "Fire Ammonite",
-									key = "fab"
-								},
-								{
-									text = "Sea Scorpion",
-									key = "ssb"
-								},
-								{
-									text = "Abyssal Gulper Eel",
-									key = "ageb"
-								},
-								{
-									text = "Blackwater Whiptail",
-									key = "bwb"
-								},
-							}, 
-						default = "none" 
 					},
 	}
 }

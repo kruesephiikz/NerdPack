@@ -16,6 +16,7 @@ system\Tracker.lua
 system\Extras.lua
 system\Overlays.lua
 system\LibCore.lua
+system\FishingBot.lua
 interface\minimap.lua
 interface\splash.lua
 interface\alert.lua

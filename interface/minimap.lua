@@ -97,21 +97,20 @@ NeP_MinimapButton_Dropdown = function(self)
 	info.func = function() NeP.Addon.Interface.OverlaysGUI() end
 	UIDropDownMenu_AddButton(info)
 	
+	info.text = "Fishing Bot"
+	info.func = function() NeP.Addon.Interface.OverlaysGUI() end
+	UIDropDownMenu_AddButton(info)
+	
 	info.text = "Dummy Testing"
 	info.func = function() NeP.Extras.dummyTest() end
 	UIDropDownMenu_AddButton(info)
 	
 	info.text = "Auto Milling"
-	info.func = function() -- If milling then stop
-					if NeP.AutoMilling then
-						NeP.AutoMilling = false
-						NeP.Core.Print('Stoped Milling...')
-					-- If not milling then start
-					else
-						NeP.AutoMilling = true
-						NeP.Core.Print('Started Milling...')
-					end 
-				end
+	info.func = function() NeP.Extras.autoMilling() end
+	UIDropDownMenu_AddButton(info)
+	
+	info.text = "Auto Prospecting"
+	info.func = function() NeP.Extras.autoProspect() end
 	UIDropDownMenu_AddButton(info)
 		
 		info.isTitle = 1
