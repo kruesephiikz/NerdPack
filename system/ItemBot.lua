@@ -21,8 +21,7 @@ NeP.Addon.Interface.Items = {
 		{ type = 'rule' },{ type = 'spacer' },
 		-- Mill
 		{ type = "button", text = "Start Milling", width = 230, height = 20, callback = function(self, button)
-			acCraft_Run = true
-			local _table = {
+			local _herbsTable = {
 				-- WoD
 				{ ID = 109124, Name = 'Frostweed', Number = 5 },
 				{ ID = 109125, Name = 'Fireweed', Number = 5 },
@@ -31,12 +30,12 @@ NeP.Addon.Interface.Items = {
 				{ ID = 109128, Name = 'Nagrand Arrowbloom', Number = 5 },
 				{ ID = 109129, Name = 'Talador Orchid', Number = 5 }
 			}
-			_acSpell, _acTable = 51005, _table
+			_acSpell, _acTable = 51005, _herbsTable
+			acCraft_Run = true
 		end},
 		-- Prospect
 		{ type = "button", text = "Start Prospecting", width = 230, height = 20, callback = function(self, button)
-			acCraft_Run = true
-				local _table = {
+				local _oresTable = {
 				{ ID = 72092, Name = 'Ghost Iron Ore', Number = 5 },
 				{ ID = 52183, Name = 'Pyrite', Number = 5 },
 				{ ID = 52183, Name = 'Pyrite', Number = 5 },
@@ -60,12 +59,13 @@ NeP.Addon.Interface.Items = {
 				{ ID = 2771, Name = 'Tin', Number = 5 },
 				{ ID = 2770, Name = 'Copper', Number = 5 }
 			}
-			_acSpell, _acTable = 31252, _table
+			_acSpell, _acTable = 31252, _oresTable
+			acCraft_Run = true
 		end},
+		--[[ It dosent work like this...
 		-- Smelting // REQUIRES TWEAKING ( SOME RECIPES REQUIRE 2 MATS )
 		{ type = "button", text = "Start Smelting", width = 230, height = 20, callback = function(self, button)
-			acCraft_Run = true
-			local _table = {
+			local _oresTable = {
 				{ ID = 72092, Name = 'Ghost Iron Ore', Number = 5 },
 				{ ID = 52183, Name = 'Pyrite', Number = 2 },
 				{ ID = 52183, Name = 'Pyrite', Number = 2 },
@@ -89,8 +89,10 @@ NeP.Addon.Interface.Items = {
 				{ ID = 2771, Name = 'Tin', Number = 1 },
 				{ ID = 2770, Name = 'Copper', Number = 1 }
 			}
-			_acSpell, _acTable = 2656, _table
+			_acSpell, _acTable = 2656, _oresTable
+			acCraft_Run = true
 		end},
+		]]
 		{ type = 'rule' },{ type = 'spacer' },
 		{ type = "button", text = "!Stop", width = 230, height = 20, callback = function() acCraft_Run = false end},
 		
@@ -130,18 +132,16 @@ function NeP.Extras.autoCraft(spell, _table)
 		local _craftRunning = false
 		if IsSpellKnown(spell) then
 			for i=1,#_table do
-				local _item = _table[i]
 				if _craftID == 0 then
-					if GetItemCount(_item.ID, false, false) >= _item.Number then
-						_craftID = _item.ID
-						_craftName = _item.Name
-						_craftNumber = _item.Number
+					if GetItemCount(_table[i].ID, false, false) >= _table[i].Number then
+						_craftID = _table[i].ID
+						_craftName = _table[i].Name
+						_craftNumber = _table[i].Number
 						_craftRunning = true
 						break
-					else
+					elseif _table[#_table] and GetItemCount(_table[i].ID, false, false) >= _table[i].Number then
 						NeP.Core.Print('Stoped crafting, you dont have enough mats.')
 						acCraft_Run = false
-						break
 					end
 				end
 			end
@@ -186,7 +186,7 @@ C_Timer.NewTicker(0.5, (function()
 		if not ProbablyEngine.module.player.combat then
 			if not UnitChannelInfo("player") then
 				if NeP.Extras.BagSpace() > 2 then
-					NeP.Extras.autoCraft(_acSpell, _acSpeNum, _acTable)
+					NeP.Extras.autoCraft(_acSpell, _acTable)
 					NeP.Extras.OpenSalvage()
 				end
 			end
