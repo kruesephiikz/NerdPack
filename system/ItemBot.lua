@@ -71,7 +71,10 @@ NeP.Addon.Interface.Items = {
 			print('started')
 		end},
 		{ type = 'rule' },{ type = 'spacer' },
-		{ type = "button", text = "!Stop", width = 230, height = 20, callback = function(self, button) acCraft_Run = false end},
+		{ type = "button", text = "!Stop", width = 230, height = 20, callback = function(self, button) 
+			acCraft_Run = false 
+			_smelt_Run = false
+		end},
 		
 	},
 }
@@ -101,28 +104,24 @@ function NeP.Addon.Interface.itemsBotGUI()
 	end
 end
 
+local smeltGUI = false
 local function _smelt()
 	if _smelt_Run then
-		for k=1, GetNumTradeSkills() do 
+		for k=1, GetNumTradeSkills() do
 			local _name, _, _number = GetTradeSkillInfo(k)
-			print(k)
+			Cast(2656)
 			if _number > 0 then
-				Cast(2656)
 				DoTradeSkill(k, _number)
-				NeP.Core.Print('Smelting: '.._name..' '.._number..' times.')
 				CloseTradeSkill() 
-				_smelt_Run = false
-				break
-			elseif k == GetNumTradeSkills() and not (_number > 0) then
-				NeP.Core.Print('You have no mats.')
+				NeP.Core.Print('Smelting: '.._name..' '.._number..' times.')
+			end
+			if (k == GetNumTradeSkills()) and (_number == 0) then
+				NeP.Core.Print('You dont have enough mats.')
+				CloseTradeSkill() 
 				_smelt_Run = false
 			end
 		end
 	end
-end
-
-for k=1, GetNumTradeSkills() do 
-	print(GetTradeSkillInfo(k))
 end
 
 local function _autoCraft(spell, _table)
