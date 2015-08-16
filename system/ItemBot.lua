@@ -122,7 +122,7 @@ function NeP.Addon.Interface.itemsBotGUI()
 	end
 end
 
-function NeP.Extras.autoCraft(spell, number, _table)
+function NeP.Extras.autoCraft(spell, _table)
 	if acCraft_Run then
 		local _craftID = 0
 		local _craftName = 0
