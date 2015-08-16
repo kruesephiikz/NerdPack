@@ -102,6 +102,7 @@ Classifications:
 ]]
 local _lastDotted = nil
 function NeP.Lib.AutoDots(_spell, _health, _duration, _distance, _classification)
+	if not IsUsableSpell(_spell) then return false end
 	if _classification == nil then _classification = 'all' end
 	if _distance == nil then _distance = 40 end
 	if _health == nil then _health = 100 end
