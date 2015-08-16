@@ -3,6 +3,9 @@ local NeP_OpenConfigWindow = false
 local NeP_ShowingConfigWindow = false
 local _acSpell, _acTable = nil, nil
 local acCraft_Run = false
+local _tsText, _tsID, _tsNumber = nil, nil, nil
+local _smelt_Run = false
+--local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice = GetItemInfo(_smeltingTable[i].ID)
 
 NeP.Addon.Interface.Items = {
 	key = "NePItemConf",
@@ -27,7 +30,7 @@ NeP.Addon.Interface.Items = {
 				{ ID = 109125, Name = 'Fireweed', Number = 5 },
 				{ ID = 109126, Name = 'Gorgrond Flytrap', Number = 5 },
 				{ ID = 109127, Name = 'Starflower', Number = 5 },
-				{ ID = 109128, Name = 'Nagrand Arrowbloom', Number = 5 },
+				{ ID = 109128, Name = 'Nagrand ArRowbloom', Number = 5 },
 				{ ID = 109129, Name = 'Talador Orchid', Number = 5 }
 			}
 			_acSpell, _acTable = 51005, _herbsTable
@@ -62,39 +65,13 @@ NeP.Addon.Interface.Items = {
 			_acSpell, _acTable = 31252, _oresTable
 			acCraft_Run = true
 		end},
-		--[[ It dosent work like this...
 		-- Smelting // REQUIRES TWEAKING ( SOME RECIPES REQUIRE 2 MATS )
 		{ type = "button", text = "Start Smelting", width = 230, height = 20, callback = function(self, button)
-			local _oresTable = {
-				{ ID = 72092, Name = 'Ghost Iron Ore', Number = 5 },
-				{ ID = 52183, Name = 'Pyrite', Number = 2 },
-				{ ID = 52183, Name = 'Pyrite', Number = 2 },
-				{ ID = 52185, Name = 'Elementium', Number = 2 },
-				{ ID = 53038, Name = 'Obsidium', Number = 2 },
-				{ ID = 53038, Name = 'Obsidium', Number = 2 },
-				{ ID = 36910, Name = 'Titanium', Number = 2 },
-				{ ID = 36912, Name = 'Saronite', Number = 2 },
-				{ ID = 23426, Name = 'Khorium', Number = 2 },
-				{ ID = 23446, Name = 'Hardened Adamantite', Number = 10 },
-				{ ID = 36909, Name = 'Cobalt', Number = 1 },
-				{ ID = 23427, Name = 'Eternium', Number = 2 },
-				{ ID = 23425, Name = 'Adamantite', Number = 2 },
-				{ ID = 23424, Name = 'Fel Iron', Number = 2 },
-				{ ID = 10620, Name = 'Thorium', Number = 1 },
-				{ ID = 7911, Name = 'Truesilver', Number = 1 },
-				{ ID = 3858, Name = 'Mithril', Number = 1 },
-				{ ID = 2776, Name = 'Gold', Number = 1 },
-				{ ID = 2772, Name = 'Iron', Number = 1 },
-				{ ID = 2775, Name = 'Silver', Number = 1 },
-				{ ID = 2771, Name = 'Tin', Number = 1 },
-				{ ID = 2770, Name = 'Copper', Number = 1 }
-			}
-			_acSpell, _acTable = 2656, _oresTable
-			acCraft_Run = true
+			_smelt_Run = true
+			print('started')
 		end},
-		]]
 		{ type = 'rule' },{ type = 'spacer' },
-		{ type = "button", text = "!Stop", width = 230, height = 20, callback = function() acCraft_Run = false end},
+		{ type = "button", text = "!Stop", width = 230, height = 20, callback = function(self, button) acCraft_Run = false end},
 		
 	},
 }
@@ -124,7 +101,30 @@ function NeP.Addon.Interface.itemsBotGUI()
 	end
 end
 
-function NeP.Extras.autoCraft(spell, _table)
+local function _smelt()
+	if _smelt_Run then
+		for k=1, GetNumTradeSkills() do 
+			local _name, _, _number = GetTradeSkillInfo(k)
+			if _number > 0 then
+				Cast(2656)
+				CloseTradeSkill() 
+				DoTradeSkill(k, _number)
+				NeP.Core.Print('Smelting: '.._name)
+				_smelt_Run = false
+				break
+			elseif k == GetNumTradeSkills() and not _number > 0 then
+				NeP.Core.Print('You have no mats.')
+				_smelt_Run = false
+			end
+		end
+	end
+end
+
+for k=1, GetNumTradeSkills() do 
+	print(GetTradeSkillInfo(k))
+end
+
+local function _autoCraft(spell, _table)
 	if acCraft_Run then
 		local _craftID = 0
 		local _craftName = 0
@@ -186,7 +186,8 @@ C_Timer.NewTicker(0.5, (function()
 		if not ProbablyEngine.module.player.combat then
 			if not UnitChannelInfo("player") then
 				if NeP.Extras.BagSpace() > 2 then
-					NeP.Extras.autoCraft(_acSpell, _acTable)
+					_autoCraft(_acSpell, _acTable)
+					_smelt()
 					NeP.Extras.OpenSalvage()
 				end
 			end
