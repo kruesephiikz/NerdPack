@@ -8,7 +8,7 @@ NeP.Addon.Interface.Items = {
 	key = "NePItemConf",
 	profiles = true,
 	title = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Nick,
-	subtitle = "Fising Settings",
+	subtitle = "ItemBot Settings",
 	color = NeP.Addon.Interface.GuiColor,
 	width = 250,
 	height = 350,
@@ -21,83 +21,79 @@ NeP.Addon.Interface.Items = {
 		{ type = 'rule' },{ type = 'spacer' },
 		-- Mill
 		{ type = "button", text = "Start Milling", width = 230, height = 20, callback = function(self, button)
-			acCraft_Run = not acCraft_Run
-			if acCraft_Run then
-				local _table = {
-					-- WoD
-					{ ID = 109124, Name = 'Frostweed', Number = 5 },
-					{ ID = 109125, Name = 'Fireweed', Number = 5 },
-					{ ID = 109126, Name = 'Gorgrond Flytrap', Number = 5 },
-					{ ID = 109127, Name = 'Starflower', Number = 5 },
-					{ ID = 109128, Name = 'Nagrand Arrowbloom', Number = 5 },
-					{ ID = 109129, Name = 'Talador Orchid', Number = 5 }
-				}
-				_acSpell, _acTable = 51005, _table
-			end
+			acCraft_Run = true
+			local _table = {
+				-- WoD
+				{ ID = 109124, Name = 'Frostweed', Number = 5 },
+				{ ID = 109125, Name = 'Fireweed', Number = 5 },
+				{ ID = 109126, Name = 'Gorgrond Flytrap', Number = 5 },
+				{ ID = 109127, Name = 'Starflower', Number = 5 },
+				{ ID = 109128, Name = 'Nagrand Arrowbloom', Number = 5 },
+				{ ID = 109129, Name = 'Talador Orchid', Number = 5 }
+			}
+			_acSpell, _acTable = 51005, _table
 		end},
 		-- Prospect
 		{ type = "button", text = "Start Prospecting", width = 230, height = 20, callback = function(self, button)
-			acCraft_Run = not acCraft_Run
-			if acCraft_Run then
+			acCraft_Run = true
 				local _table = {
-					-- MoP
-					{ ID = 72092, Name = 'Ghost Iron Ore', Number = 5 },
-					{ ID = 52183, Name = 'Pyrite', Number = 5 },
-					{ ID = 52183, Name = 'Pyrite', Number = 5 },
-					{ ID = 52185, Name = 'Elementium', Number = 5 },
-					{ ID = 53038, Name = 'Obsidium', Number = 5 },
-					{ ID = 53038, Name = 'Obsidium', Number = 5 },
-					{ ID = 36910, Name = 'Titanium', Number = 5 },
-					{ ID = 36912, Name = 'Saronite', Number = 5 },
-					{ ID = 23426, Name = 'Khorium', Number = 5 },
-					{ ID = 23446, Name = 'Hardened Adamantite', Number = 5 },
-					{ ID = 36909, Name = 'Cobalt', Number = 5 },
-					{ ID = 23427, Name = 'Eternium', Number = 5 },
-					{ ID = 23425, Name = 'Adamantite', Number = 5 },
-					{ ID = 23424, Name = 'Fel Iron', Number = 5 },
-					{ ID = 10620, Name = 'Thorium', Number = 5 },
-					{ ID = 7911, Name = 'Truesilver', Number = 5 },
-					{ ID = 3858, Name = 'Mithril', Number = 5 },
-					{ ID = 2776, Name = 'Gold', Number = 5 },
-					{ ID = 2772, Name = 'Iron', Number = 5 },
-					{ ID = 2775, Name = 'Silver', Number = 5 },
-					{ ID = 2771, Name = 'Tin', Number = 5 },
-					{ ID = 2770, Name = 'Copper', Number = 5 }
-				}
-				_acSpell, _acTable = 31252, _table
-			end
+				{ ID = 72092, Name = 'Ghost Iron Ore', Number = 5 },
+				{ ID = 52183, Name = 'Pyrite', Number = 5 },
+				{ ID = 52183, Name = 'Pyrite', Number = 5 },
+				{ ID = 52185, Name = 'Elementium', Number = 5 },
+				{ ID = 53038, Name = 'Obsidium', Number = 5 },
+				{ ID = 53038, Name = 'Obsidium', Number = 5 },
+				{ ID = 36910, Name = 'Titanium', Number = 5 },
+				{ ID = 36912, Name = 'Saronite', Number = 5 },
+				{ ID = 23426, Name = 'Khorium', Number = 5 },
+				{ ID = 23446, Name = 'Hardened Adamantite', Number = 5 },
+				{ ID = 36909, Name = 'Cobalt', Number = 5 },
+				{ ID = 23427, Name = 'Eternium', Number = 5 },
+				{ ID = 23425, Name = 'Adamantite', Number = 5 },
+				{ ID = 23424, Name = 'Fel Iron', Number = 5 },
+				{ ID = 10620, Name = 'Thorium', Number = 5 },
+				{ ID = 7911, Name = 'Truesilver', Number = 5 },
+				{ ID = 3858, Name = 'Mithril', Number = 5 },
+				{ ID = 2776, Name = 'Gold', Number = 5 },
+				{ ID = 2772, Name = 'Iron', Number = 5 },
+				{ ID = 2775, Name = 'Silver', Number = 5 },
+				{ ID = 2771, Name = 'Tin', Number = 5 },
+				{ ID = 2770, Name = 'Copper', Number = 5 }
+			}
+			_acSpell, _acTable = 31252, _table
 		end},
 		-- Smelting // REQUIRES TWEAKING ( SOME RECIPES REQUIRE 2 MATS )
 		{ type = "button", text = "Start Smelting", width = 230, height = 20, callback = function(self, button)
-			acCraft_Run = not acCraft_Run
-			if acCraft_Run then
-				local _table = {
-					{ ID = 72092, Name = 'Ghost Iron Ore', Number = 5 },
-					{ ID = 52183, Name = 'Pyrite', Number = 2 },
-					{ ID = 52183, Name = 'Pyrite', Number = 2 },
-					{ ID = 52185, Name = 'Elementium', Number = 2 },
-					{ ID = 53038, Name = 'Obsidium', Number = 2 },
-					{ ID = 53038, Name = 'Obsidium', Number = 2 },
-					{ ID = 36910, Name = 'Titanium', Number = 2 },
-					{ ID = 36912, Name = 'Saronite', Number = 2 },
-					{ ID = 23426, Name = 'Khorium', Number = 2 },
-					{ ID = 23446, Name = 'Hardened Adamantite', Number = 10 },
-					{ ID = 36909, Name = 'Cobalt', Number = 1 },
-					{ ID = 23427, Name = 'Eternium', Number = 2 },
-					{ ID = 23425, Name = 'Adamantite', Number = 2 },
-					{ ID = 23424, Name = 'Fel Iron', Number = 2 },
-					{ ID = 10620, Name = 'Thorium', Number = 1 },
-					{ ID = 7911, Name = 'Truesilver', Number = 1 },
-					{ ID = 3858, Name = 'Mithril', Number = 1 },
-					{ ID = 2776, Name = 'Gold', Number = 1 },
-					{ ID = 2772, Name = 'Iron', Number = 1 },
-					{ ID = 2775, Name = 'Silver', Number = 1 },
-					{ ID = 2771, Name = 'Tin', Number = 1 },
-					{ ID = 2770, Name = 'Copper', Number = 1 }
-				}
-				_acSpell, _acTable = 2656, _table
-			end
+			acCraft_Run = true
+			local _table = {
+				{ ID = 72092, Name = 'Ghost Iron Ore', Number = 5 },
+				{ ID = 52183, Name = 'Pyrite', Number = 2 },
+				{ ID = 52183, Name = 'Pyrite', Number = 2 },
+				{ ID = 52185, Name = 'Elementium', Number = 2 },
+				{ ID = 53038, Name = 'Obsidium', Number = 2 },
+				{ ID = 53038, Name = 'Obsidium', Number = 2 },
+				{ ID = 36910, Name = 'Titanium', Number = 2 },
+				{ ID = 36912, Name = 'Saronite', Number = 2 },
+				{ ID = 23426, Name = 'Khorium', Number = 2 },
+				{ ID = 23446, Name = 'Hardened Adamantite', Number = 10 },
+				{ ID = 36909, Name = 'Cobalt', Number = 1 },
+				{ ID = 23427, Name = 'Eternium', Number = 2 },
+				{ ID = 23425, Name = 'Adamantite', Number = 2 },
+				{ ID = 23424, Name = 'Fel Iron', Number = 2 },
+				{ ID = 10620, Name = 'Thorium', Number = 1 },
+				{ ID = 7911, Name = 'Truesilver', Number = 1 },
+				{ ID = 3858, Name = 'Mithril', Number = 1 },
+				{ ID = 2776, Name = 'Gold', Number = 1 },
+				{ ID = 2772, Name = 'Iron', Number = 1 },
+				{ ID = 2775, Name = 'Silver', Number = 1 },
+				{ ID = 2771, Name = 'Tin', Number = 1 },
+				{ ID = 2770, Name = 'Copper', Number = 1 }
+			}
+			_acSpell, _acTable = 2656, _table
 		end},
+		{ type = 'rule' },{ type = 'spacer' },
+		{ type = "button", text = "!Stop", width = 230, height = 20, callback = function() acCraft_Run = false end},
+		
 	},
 }
 
