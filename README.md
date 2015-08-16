@@ -62,3 +62,4 @@ If not enough donations are made to the project, i will stop proving support.
 * Advanced ObjectManager.
 * In-Game Overlays.
 * Smart AoE even when using a generic unlocker.
+* Fishing Bot.
