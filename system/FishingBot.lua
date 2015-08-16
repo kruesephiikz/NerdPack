@@ -122,19 +122,11 @@ local function getBobber()
 	end
 end
 
-local function isBobbing()
-	local bobbing = ObjectField(getBobber(), OBJECT_BOBBING_OFFSET, Types.Short)
-	if bobbing == 1 then
-		return true
-	else
-		return false
-	end
-end
-
-local function goFish()
+local function _startFish()
 	local BobberObject = getBobber()
 	if BobberObject then
-		if isBobbing() then
+		local bobbing = ObjectField(getBobber(), OBJECT_BOBBING_OFFSET, Types.Short)
+		if bobbing == 1 then
 			ObjectInteract(getBobber())
 		end
 	else
@@ -175,7 +167,7 @@ C_Timer.NewTicker(0.5, (function()
 		_AutoBait()
 		_CarpDestruction()
 		if _fishRun then
-			goFish()
+			_startFish()
 		end
 	end
 end), nil)
