@@ -105,14 +105,15 @@ local function _smelt()
 	if _smelt_Run then
 		for k=1, GetNumTradeSkills() do 
 			local _name, _, _number = GetTradeSkillInfo(k)
+			print(k)
 			if _number > 0 then
 				Cast(2656)
-				CloseTradeSkill() 
 				DoTradeSkill(k, _number)
-				NeP.Core.Print('Smelting: '.._name)
+				NeP.Core.Print('Smelting: '.._name..' '.._number..' times.')
+				CloseTradeSkill() 
 				_smelt_Run = false
 				break
-			elseif k == GetNumTradeSkills() and not _number > 0 then
+			elseif k == GetNumTradeSkills() and not (_number > 0) then
 				NeP.Core.Print('You have no mats.')
 				_smelt_Run = false
 			end
