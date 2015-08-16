@@ -14,7 +14,7 @@ local NeP_ObjectCache = {
     width = 210,
     height = 350,
     config = {
-    	{ type = 'header', text = _addonColor.."Cache Options:", size = 25, align = "Center", offset = 0 },
+    	{ type = 'header', text = '|cff'.._addonColor.."Cache Options:", size = 25, align = "Center", offset = 0 },
 		{ type = 'rule' },
 		{ type = 'spacer' },
 			{ type = "checkbox", text = "Use ObjectCache", key = "ObjectCache", default = true },

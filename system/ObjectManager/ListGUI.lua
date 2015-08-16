@@ -6,7 +6,7 @@ local _addonColor = '|cff'..NeP.Addon.Interface.GuiColor
 local _tittleGUI = '|T'..NeP.Addon.Info.Logo..':20:20|t'.._addonColor..NeP.Addon.Info.Nick
 
 local OPTIONS_WIDTH = 510
-local OPTIONS_HEIGHT = 210
+local OPTIONS_HEIGHT = 250
 local scrollMax = 0
 
 local _CacheShow = false
@@ -36,7 +36,7 @@ mainFrame:SetScript("OnDragStop", mainFrame.StopMovingOrSizing)
 
 local title = CreateFrame("Frame", nil, mainFrame)
 title:SetPoint("TOP", mainFrame)
-title:SetWidth(OPTIONS_WIDTH)
+title:SetWidth(OPTIONS_WIDTH-30)
 title:SetHeight(30)
 title.texture = title:CreateTexture() 
 title.texture:SetAllPoints()
@@ -47,7 +47,7 @@ title.text1:SetPoint("LEFT")
 title.text1:SetText(_tittleGUI..'|r ObjectManager GUI')
 title.text2 = title:CreateFontString(nil, "OVERLAY")
 title.text2:SetFont("Fonts\\FRIZQT__.TTF", 15)
-title.text2:SetPoint("RIGHT", -10, 0)
+title.text2:SetPoint("RIGHT", -20, 0)
 title.text2:SetText('')
 title.text3 = title:CreateFontString(nil, "OVERLAY")
 title.text3:SetFont("Fonts\\FRIZQT__.TTF", 15)
@@ -174,6 +174,32 @@ AllButton:SetNormalTexture(AllButton.closeButton1)
 AllButton:SetHighlightTexture(AllButton.closeButton2)
 AllButton:SetPushedTexture(AllButton.closeButton3)
 
+-- Settings Button
+local SettingsButton = CreateFrame("Button", nil, mainFrame)
+SettingsButton:SetPoint("TOPRIGHT", 0, 0)
+SettingsButton:SetWidth(30)
+SettingsButton:SetHeight(30)
+SettingsButton:SetText("|cff000000S")
+SettingsButton:SetNormalFontObject("GameFontNormal")
+SettingsButton:SetScript("OnClick", function() NeP.Addon.Interface.CacheGUI() end)
+SettingsButton.closeButton1 = SettingsButton:CreateTexture()
+SettingsButton.closeButton1:SetTexture(0, 255, 0, 1)
+SettingsButton.closeButton1:SetTexCoord(0, 0.625, 0, 0.6875)
+SettingsButton.closeButton1:SetAllPoints() 
+SettingsButton.closeButton2 = SettingsButton:CreateTexture()
+SettingsButton.closeButton2:SetTexture(0.5,0.5,0.5,1)
+SettingsButton.closeButton2:SetTexCoord(0, 0.625, 0, 0.6875)
+SettingsButton.closeButton2:SetAllPoints()
+SettingsButton.closeButton3 = SettingsButton:CreateTexture()
+SettingsButton.closeButton3:SetTexture(0,0,0,1)
+SettingsButton.closeButton3:SetTexCoord(0, 0.625, 0, 0.6875)
+SettingsButton.closeButton3:SetAllPoints()
+SettingsButton:SetNormalTexture(SettingsButton.closeButton1)
+SettingsButton:SetHighlightTexture(SettingsButton.closeButton2)
+SettingsButton:SetPushedTexture(SettingsButton.closeButton3)
+
+
+
 local scrollframe = CreateFrame("ScrollFrame", nil, mainFrame) 
 scrollframe:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT - 60)  
 scrollframe:SetPoint("TOP", 0, -30) 
@@ -197,8 +223,8 @@ if not scrollbar.bg then
 end
 if not scrollbar.thumb then
    scrollbar.thumb = scrollbar:CreateTexture(nil, "OVERLAY")
-   scrollbar.thumb:SetTexture("Interface\\Buttons\\UI-ScrollBar-Knob")
-   scrollbar.thumb:SetSize(25, 25)
+   scrollbar.thumb:SetTexture(0, 0, 0, 0.5)
+   scrollbar.thumb:SetSize(16, 16)
    scrollbar:SetThumbTexture(scrollbar.thumb)
 end
 --local scrollMax = 10
@@ -287,7 +313,7 @@ C_Timer.NewTicker(0.1, (function()
 			end
 			
 			if height > OPTIONS_HEIGHT then
-				scrollMax = height - (OPTIONS_HEIGHT-70)
+				scrollMax = height - (OPTIONS_HEIGHT-60)
 			else
 				scrollMax = 0
 			end
