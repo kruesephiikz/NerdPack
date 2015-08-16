@@ -40,7 +40,7 @@ NeP_MinimapButton_Dropdown = function(self)
 		info.isTitle = 1
 		info.notCheckable = 1
 	
-	info.text = NeP.Addon.Info.Icon..' '.._addonName.."\nQuick Menu"
+	info.text = '|T'..NeP.Addon.Info.Logo..':15:15|t '.._addonName.."\nQuick Menu"
 	UIDropDownMenu_AddButton(info)
 	
 	info.text = ''
@@ -136,7 +136,7 @@ end
 
 local function onEnter(self)
 	GameTooltip:SetOwner( self, 'ANCHOR_BOTTOMLEFT')
-	GameTooltip:AddLine(NeP.Addon.Info.Icon..' '.._addonName)
+	GameTooltip:AddLine('|T'..NeP.Addon.Info.Logo..':15:15|t '.._addonName)
 	GameTooltip:AddLine(_addonColor..'Version:|cffFFFFFF '..NeP.Addon.Info.Version)
 	GameTooltip:AddLine(_addonColor..'Branch:|cffFFFFFF '..NeP.Addon.Info.Branch)
 	GameTooltip:AddLine(_addonColor..'Click to Open Quick Menu')

@@ -15,7 +15,7 @@ NeP = {
 			Version = "6.2.1.1",
 			Branch = "Beta",
 			WoW_Version = "6.2.0",
-			Icon = "|TInterface\\AddOns\\NerdPack\\media\\logo.blp:20:20|t",
+			Icon = "|TInterface\\AddOns\\NerdPack\\media\\logo.blp:10:10|t",
 			Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
 			Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp"
 		},

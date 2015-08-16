@@ -3,7 +3,7 @@ local TextsUsed = { }
 local _objectTable = NeP.ObjectManager.unitFriendlyCache
 local _Displaying = 'Friendly List'
 local _addonColor = '|cff'..NeP.Addon.Interface.GuiColor
-local _tittleGUI = NeP.Addon.Info.Icon.._addonColor..NeP.Addon.Info.Nick
+local _tittleGUI = '|T'..NeP.Addon.Info.Logo..':20:20|t'.._addonColor..NeP.Addon.Info.Nick
 
 local OPTIONS_WIDTH = 510
 local OPTIONS_HEIGHT = 210
