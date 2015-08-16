@@ -16,7 +16,7 @@ NeP.Addon.Interface.Fishing = {
 	height = 250,
 	config = {
 		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Fishing Bot:", size = 25, align = "Center"},
-		{ type = 'text', text = "Requires to have both "..NeP.Addon.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
+		{ type = 'text', text = "Requires FireHack and to have both "..NeP.Addon.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
 		{ type = 'rule' },{ type = 'spacer' },
 		{
 			type = "checkbox", 
