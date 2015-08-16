@@ -67,8 +67,26 @@ NeP.Addon.Interface.Items = {
 		end},
 		-- Smelting // REQUIRES TWEAKING ( SOME RECIPES REQUIRE 2 MATS )
 		{ type = "button", text = "Start Smelting", width = 230, height = 20, callback = function(self, button)
-			_smelt_Run = true
-			print('started')
+			if GetProfessionInfo(8) ~= nil then
+				local _allRows = GetNumTradeSkills()
+				Cast(2656)
+				for i=1, _allRows do
+					local _iteamName, _, _itemRepeatTimes = GetTradeSkillInfo(i)
+					if IsTradeSkillReady(i) then
+						if _itemRepeatTimes > 0 then
+							NeP.Core.Print('Smelting: '.._iteamName..' '.._itemRepeatTimes..' times.')
+							SelectTradeSkill(i)
+							DoTradeSkill(i, _itemRepeatTimes)
+							self:SetText("Stop Smelting: (".._iteamName..GetTradeskillRepeatCount()..')')
+							break
+						elseif (i == _allRows) and (_itemRepeatTimes == 0) then
+							StopTradeSkillRepeat()
+							self:SetText('You dont have enough mats.')
+							CloseTradeSkill()
+						end
+					end
+				end
+			end
 		end},
 		{ type = 'rule' },{ type = 'spacer' },
 		{ type = "button", text = "!Stop", width = 230, height = 20, callback = function(self, button) 
@@ -101,26 +119,6 @@ function NeP.Addon.Interface.itemsBotGUI()
 		ConfigWindow.parent:Show()
 		NeP_ShowingConfigWindow = true
 	
-	end
-end
-
-local smeltGUI = false
-local function _smelt()
-	if _smelt_Run then
-		for k=1, GetNumTradeSkills() do
-			local _name, _, _number = GetTradeSkillInfo(k)
-			Cast(2656)
-			if _number > 0 then
-				DoTradeSkill(k, _number)
-				CloseTradeSkill() 
-				NeP.Core.Print('Smelting: '.._name..' '.._number..' times.')
-			end
-			if (k == GetNumTradeSkills()) and (_number == 0) then
-				NeP.Core.Print('You dont have enough mats.')
-				CloseTradeSkill() 
-				_smelt_Run = false
-			end
-		end
 	end
 end
 
@@ -187,7 +185,6 @@ C_Timer.NewTicker(0.5, (function()
 			if not UnitChannelInfo("player") then
 				if NeP.Extras.BagSpace() > 2 then
 					_autoCraft(_acSpell, _acTable)
-					_smelt()
 					NeP.Extras.OpenSalvage()
 				end
 			end
