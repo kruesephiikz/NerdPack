@@ -35,7 +35,7 @@ mainFrame:SetScript("OnDragStop", mainFrame.StopMovingOrSizing)
 
 
 local title = CreateFrame("Frame", nil, mainFrame)
-title:SetPoint("TOP", mainFrame)
+title:SetPoint("TOPLEFT", mainFrame)
 title:SetWidth(OPTIONS_WIDTH-30)
 title:SetHeight(30)
 title.texture = title:CreateTexture() 
