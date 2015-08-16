@@ -13,62 +13,54 @@ NeP.Addon.Interface.Fishing = {
 	subtitle = "Fising Settings",
 	color = NeP.Addon.Interface.GuiColor,
 	width = 250,
-	height = 500,
+	height = 250,
 	config = {
-				-- [[Fishing]] (new section)
-				{ type = 'rule' },
-				{ 
-					type = 'header', 
-					text = NeP.Addon.Interface.GuiTextColor.."Fishing:", 
-					size = 25,
-					align = "Center",
-				},
-					{
-						type = "checkbox", 
-						text = "Use Worm Supreme", 
-						key = "WormSupreme", 
-						default = true, 
-						desc = "Enable automatic usage of Worm Supreme."
-					},
-					{  
-					        type = "checkbox",  
-					        text = "Use Sharpened Fish Hook",  
-					        key = "SharpenedFishHook",  
-					        default = false,  
-					        desc = "Enable automatic usage of Sharpened Fish Hook." 
-					},
-					{  
-						type = "checkbox",  
-						text = "Destroy Lunarfall Carp",  
-						key = "LunarfallCarp",  
-						default = false,  
-						desc = "Enable automatic destruction of Lunarfall Carp." 
-					},			    
-					{ 
-						type = "dropdown",
-						text = "Bait:", 
-						key = "bait",
-						width = 170,
-						list = {
-							{text = "None",key = "none"},	
-							{text = "Jawless Skulker",key = "jsb"},
-							{text = "Fat Sleeper",key = "fsb"},
-							{text = "Blind Lake Sturgeon",key = "blsb"},
-							{text = "Fire Ammonite",key = "fab"},
-							{text = "Sea Scorpion",key = "ssb"},
-							{text = "Abyssal Gulper Eel",key = "ageb"},
-							{text = "Blackwater Whiptail",key = "bwb"},
-						}, 
-						default = "none" 
-					},
-					{ type = "button", text = "Start Fishing", width = 230, height = 20, callback = function(self, button)
-						_fishRun = not _fishRun
-						if _fishRun then
-							self:SetText("Stop Fishing")
-						else
-							self:SetText("Start Fishing")
-						end
-					end},
+	{
+		type = "checkbox", 
+		text = "Use Worm Supreme", 
+		key = "WormSupreme", 
+		default = true, 
+		desc = "Enable automatic usage of Worm Supreme."
+	},
+	{  
+		type = "checkbox",  
+		 text = "Use Sharpened Fish Hook",  
+		 key = "SharpenedFishHook",  
+		default = false,  
+		desc = "Enable automatic usage of Sharpened Fish Hook." 
+	},
+	{  
+		type = "checkbox",  
+		text = "Destroy Lunarfall Carp",  
+		key = "LunarfallCarp",  
+		default = false,  
+		desc = "Enable automatic destruction of Lunarfall Carp items." 
+	},			    
+	{ 
+		type = "dropdown",
+		text = "Bait:", 
+		key = "bait",
+		width = 170,
+		list = {
+			{text = "None",key = "none"},	
+			{text = "Jawless Skulker",key = "jsb"},
+			{text = "Fat Sleeper",key = "fsb"},
+			{text = "Blind Lake Sturgeon",key = "blsb"},
+			{text = "Fire Ammonite",key = "fab"},
+			{text = "Sea Scorpion",key = "ssb"},
+			{text = "Abyssal Gulper Eel",key = "ageb"},
+			{text = "Blackwater Whiptail",key = "bwb"},
+		}, 
+		default = "none" 
+	},
+			{ type = "button", text = "Start Fishing", width = 230, height = 20, callback = function(self, button)
+		_fishRun = not _fishRun
+		if _fishRun then
+			self:SetText("Stop Fishing")
+		else
+			self:SetText("Start Fishing")
+		end
+	end},
 	}
 }
 
