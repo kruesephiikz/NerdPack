@@ -140,42 +140,6 @@ NeP.Addon.Interface.General = {
 						step = 1,
 						desc = "Set how long to run dumy testing for in mintes."
 					},
-					{  
-						type = "checkbox",  
-						text = "Auto Open Salvage",  
-						key = "OpenSalvage",  
-						default = false,  
-						desc = "Automatic salvage bags/crates opening." 
-					},
-				-- [[Fishing]] (new section)
-				{ type = 'rule' },
-				{ 
-					type = 'header', 
-					text = NeP.Addon.Interface.GuiTextColor.."Fishing:", 
-					size = 25,
-					align = "Center",
-				},
-					{
-						type = "checkbox", 
-						text = "Use Worm Supreme", 
-						key = "WormSupreme", 
-						default = true, 
-						desc = "Enable automatic usage of Worm Supreme."
-					},
-					{  
-					        type = "checkbox",  
-					        text = "Use Sharpened Fish Hook",  
-					        key = "SharpenedFishHook",  
-					        default = false,  
-					        desc = "Enable automatic usage of Sharpened Fish Hook." 
-					},
-					{  
-						type = "checkbox",  
-						text = "Destroy Lunarfall Carp",  
-						key = "LunarfallCarp",  
-						default = false,  
-						desc = "Enable automatic destruction of Lunarfall Carp." 
-					},
 	}
 }
 

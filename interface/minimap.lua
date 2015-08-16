@@ -105,16 +105,12 @@ NeP_MinimapButton_Dropdown = function(self)
 	info.func = function() NeP.Addon.Interface.FishingGUI() end
 	UIDropDownMenu_AddButton(info)
 	
+	info.text = "Items Bot"
+	info.func = function() NeP.Addon.Interface.itemsBotGUI() end
+	UIDropDownMenu_AddButton(info)
+	
 	info.text = "Dummy Testing"
 	info.func = function() NeP.Extras.dummyTest() end
-	UIDropDownMenu_AddButton(info)
-	
-	info.text = "Auto Milling"
-	info.func = function() NeP.Extras.autoMilling() end
-	UIDropDownMenu_AddButton(info)
-	
-	info.text = "Auto Prospecting"
-	info.func = function() NeP.Extras.autoProspect() end
 	UIDropDownMenu_AddButton(info)
 		
 		info.isTitle = 1

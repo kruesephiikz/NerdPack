@@ -40,8 +40,6 @@ ProbablyEngine.command.register(NeP.Addon.Info.Nick, function(msg, box)
 		NeP.Addon.Interface.ClassGUI()
 	elseif command == 'info' or command == 'i' then
 		NeP.Addon.Interface.InfoGUI()
-	elseif command == 'mill' or command == 'ml' then
-		NeP.Extras.autoMilling()
 	elseif command == 'cache' or command == 'cch' or command == 'om' then
 		NeP.Addon.Interface.CacheGUI()
 	elseif command == 'hide' then
@@ -57,7 +55,6 @@ ProbablyEngine.command.register(NeP.Addon.Info.Nick, function(msg, box)
 		NeP.Core.Print('/status - (Opens Status GUI)')
 		NeP.Core.Print('/class - (Opens Class Settings GUI)')
 		NeP.Core.Print('/Info - (Opens Info GUI)')
-		NeP.Core.Print('/mill - (Starts Auto Milling)')
 		NeP.Core.Print('/cache - (Opens OM Settings GUI)')
 		NeP.Core.Print('/hide - (Hides Everything)')
 		NeP.Core.Print('/show - (Shows Everything)')

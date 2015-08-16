@@ -15,52 +15,54 @@ NeP.Addon.Interface.Fishing = {
 	width = 250,
 	height = 250,
 	config = {
-	{
-		type = "checkbox", 
-		text = "Use Worm Supreme", 
-		key = "WormSupreme", 
-		default = true, 
-		desc = "Enable automatic usage of Worm Supreme."
-	},
-	{  
-		type = "checkbox",  
-		 text = "Use Sharpened Fish Hook",  
-		 key = "SharpenedFishHook",  
-		default = false,  
-		desc = "Enable automatic usage of Sharpened Fish Hook." 
-	},
-	{  
-		type = "checkbox",  
-		text = "Destroy Lunarfall Carp",  
-		key = "LunarfallCarp",  
-		default = false,  
-		desc = "Enable automatic destruction of Lunarfall Carp items." 
-	},			    
-	{ 
-		type = "dropdown",
-		text = "Bait:", 
-		key = "bait",
-		width = 170,
-		list = {
-			{text = "None",key = "none"},	
-			{text = "Jawless Skulker",key = "jsb"},
-			{text = "Fat Sleeper",key = "fsb"},
-			{text = "Blind Lake Sturgeon",key = "blsb"},
-			{text = "Fire Ammonite",key = "fab"},
-			{text = "Sea Scorpion",key = "ssb"},
-			{text = "Abyssal Gulper Eel",key = "ageb"},
-			{text = "Blackwater Whiptail",key = "bwb"},
-		}, 
-		default = "none" 
-	},
-			{ type = "button", text = "Start Fishing", width = 230, height = 20, callback = function(self, button)
-		_fishRun = not _fishRun
-		if _fishRun then
-			self:SetText("Stop Fishing")
-		else
-			self:SetText("Start Fishing")
-		end
-	end},
+		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Fishing Bot:", size = 25, align = "Center"},
+		{ type = 'text', text = "Requires to have both "..NeP.Addon.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
+		{ type = 'rule' },{ type = 'spacer' },
+		{
+			type = "checkbox", 
+			text = "Use Worm Supreme", 
+			key = "WormSupreme", 
+			default = true, 
+		},
+		{  
+			type = "checkbox",  
+			 text = "Use Sharpened Fish Hook",  
+			 key = "SharpenedFishHook",  
+			default = false,  
+		},
+		{  
+			type = "checkbox",  
+			text = "Destroy Lunarfall Carp",  
+			key = "LunarfallCarp",  
+			default = false,  
+		},
+		{ type = 'spacer' },
+		{ 
+			type = "dropdown",
+			text = "Bait:", 
+			key = "bait",
+			width = 170,
+			list = {
+				{text = "None",key = "none"},	
+				{text = "Jawless Skulker",key = "jsb"},
+				{text = "Fat Sleeper",key = "fsb"},
+				{text = "Blind Lake Sturgeon",key = "blsb"},
+				{text = "Fire Ammonite",key = "fab"},
+				{text = "Sea Scorpion",key = "ssb"},
+				{text = "Abyssal Gulper Eel",key = "ageb"},
+				{text = "Blackwater Whiptail",key = "bwb"},
+			}, 
+			default = "none" 
+		},
+		{ type = 'rule' },{ type = 'spacer' },
+		{ type = "button", text = "Start Fishing", width = 230, height = 20, callback = function(self, button)
+			_fishRun = not _fishRun
+			if _fishRun then
+				self:SetText("Stop Fishing")
+			else
+				self:SetText("Start Fishing")
+			end
+		end},
 	}
 }
 
@@ -74,6 +76,7 @@ function NeP.Addon.Interface.FishingGUI()
 		ConfigWindow.parent:SetEventListener('OnClose', function()
 			NeP_OpenConfigWindow = false
 			NeP_ShowingConfigWindow = false
+			_fishRun = false
 		end)
 	
 	-- If a frame has been created and its showing, hide it.
@@ -156,10 +159,12 @@ end
 
 C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR and NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
-		_AutoBait()
-		_CarpDestruction()
-		if _fishRun and FireHack then
-			_startFish()
+		if NeP.Extras.BagSpace() > 2 then
+			_AutoBait()
+			_CarpDestruction()
+			if _fishRun and FireHack then
+				_startFish()
+			end
 		end
 	end
 end), nil)
