@@ -166,7 +166,7 @@ C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR and NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
 		_AutoBait()
 		_CarpDestruction()
-		if _fishRun then
+		if _fishRun and FireHack then
 			_startFish()
 		end
 	end
