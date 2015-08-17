@@ -67,22 +67,26 @@ end)
 								DESC: Global functions.
 ---------------------------------------------------]]
 function NeP.Core.classColor(unit)
-	local _classColors = {
-		["HUNTER"] = { r = 0.67, g = 0.83, b = 0.45, Hex = "abd473" },
-		["WARLOCK"] = { r = 0.58, g = 0.51, b = 0.79, Hex = "9482c9" },
-		["PRIEST"] = { r = 1.0, g = 1.0, b = 1.0, Hex = "ffffff" },
-		["PALADIN"] = { r = 0.96, g = 0.55, b = 0.73, Hex = "f58cba" },
-		["MAGE"] = { r = 0.41, g = 0.8, b = 0.94, Hex = "69ccf0" },
-		["ROGUE"] = { r = 1.0, g = 0.96, b = 0.41, Hex = "fff569" },
-		["DRUID"] = { r = 1.0, g = 0.49, b = 0.04, Hex = "ff7d0a" },
-		["SHAMAN"] = { r = 0.0, g = 0.44, b = 0.87, Hex = "0070de" },
-		["WARRIOR"] = { r = 0.78, g = 0.61, b = 0.43, Hex = "c79c6e" },
-		["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23, Hex = "c41f3b" },
-		["MONK"] = { r = 0.0, g = 1.00 , b = 0.59, Hex = "00ff96" },
-	}
-	local _class, className = UnitClass(unit)
-	local _color = _classColors[className]
-	return _color.Hex
+	if UnitIsPlayer(unit) then
+		local _classColors = {
+			["HUNTER"] = { r = 0.67, g = 0.83, b = 0.45, Hex = "abd473" },
+			["WARLOCK"] = { r = 0.58, g = 0.51, b = 0.79, Hex = "9482c9" },
+			["PRIEST"] = { r = 1.0, g = 1.0, b = 1.0, Hex = "ffffff" },
+			["PALADIN"] = { r = 0.96, g = 0.55, b = 0.73, Hex = "f58cba" },
+			["MAGE"] = { r = 0.41, g = 0.8, b = 0.94, Hex = "69ccf0" },
+			["ROGUE"] = { r = 1.0, g = 0.96, b = 0.41, Hex = "fff569" },
+			["DRUID"] = { r = 1.0, g = 0.49, b = 0.04, Hex = "ff7d0a" },
+			["SHAMAN"] = { r = 0.0, g = 0.44, b = 0.87, Hex = "0070de" },
+			["WARRIOR"] = { r = 0.78, g = 0.61, b = 0.43, Hex = "c79c6e" },
+			["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23, Hex = "c41f3b" },
+			["MONK"] = { r = 0.0, g = 1.00 , b = 0.59, Hex = "00ff96" },
+		}
+		local _class, className = UnitClass(unit)
+		local _color = _classColors[className]
+		return _color.Hex
+	else
+		return NeP.Addon.Interface.GuiColor
+	end
 end
 
 function NeP.Core.GetCrInfo(txt)
