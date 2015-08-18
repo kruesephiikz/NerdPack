@@ -143,14 +143,14 @@ function CreateFrame_VARIABLES_LOADED()
 
 	-- Settings Frame
 	local settingsFrame = _addFrame(mainFrame)
-	settingsFrame:SetSize(SETTINGS_WIDTH, OPTIONS_HEIGHT-30) 
+	settingsFrame:SetSize(SETTINGS_WIDTH, OPTIONS_HEIGHT) 
 	settingsFrame:SetPoint("BOTTOMRIGHT", SETTINGS_WIDTH, 0) 
 	settingsFrame:Hide()
 
 	-- Settings Scroll Frame
 	local SettingsScroll = _addScrollFrame(settingsFrame)
 	SettingsScroll:SetSize(SETTINGS_WIDTH-16, OPTIONS_HEIGHT - 60)  
-	SettingsScroll:SetPoint("TOP", -8, 0)
+	SettingsScroll:SetPoint("TOP", -8, -30)
 	SettingsScroll.scrollbar:SetMinMaxValues(0, 400-OPTIONS_HEIGHT)
 
 	-- Settings Content Frame 
@@ -171,7 +171,6 @@ function CreateFrame_VARIABLES_LOADED()
 	_SettinsCount = _SettinsCount + 1
 	HealthTextCheckbox:SetChecked(readKey('ShowHealthText'));
 	HealthTextCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
-	
 	HealthTextCheckbox:SetScript("OnClick", function(self)
 		writeKey('ShowHealthText', self:GetChecked());
 	end);
@@ -204,6 +203,7 @@ function CreateFrame_VARIABLES_LOADED()
 	titleFrame:SetPoint("TOPLEFT", mainFrame)
 	titleFrame:EnableMouse(true)
 	titleFrame:RegisterForDrag("LeftButton")
+	titleFrame.texture:SetTexture(0,0,0,1)
 	titleFrame:SetScript("OnDragStart", function(self) 
 		self:GetParent():StartMoving()
 	end)
@@ -273,16 +273,23 @@ function CreateFrame_VARIABLES_LOADED()
 	settingsButton:SetPoint("TOPRIGHT", 0, 0)
 	settingsButton:SetSize(30, 30)
 	settingsButton.text:SetText("|cffFFFFFF»")
-	settingsButton:SetScript("OnClick", function() 
-		settingsButton.text:SetText("|cffFFFFFF«")
-		settingsFrame:Show(); 
-		titleFrame:SetSize(OPTIONS_WIDTH+200-30, 30); 
-		settingsButton:SetPoint("TOPRIGHT", 200, 0)  
+	settingsButton:SetScript("OnClick", function()
+		if settingsFrame:IsShown() then
+			settingsFrame:Hide();
+			settingsButton.text:SetText("|cffFFFFFF»")
+			titleFrame:SetSize(OPTIONS_WIDTH-30, 30); 
+			settingsButton:SetPoint("TOPRIGHT", 0, 0) 
+		else
+			settingsButton.text:SetText("|cffFFFFFF«")
+			settingsFrame:Show(); 
+			titleFrame:SetSize(OPTIONS_WIDTH+200-30, 30); 
+			settingsButton:SetPoint("TOPRIGHT", 200, 0)
+		end
 	end)
 
 	-- Settings Frame Close Button
 	local settingsCloseButton = _addButton(settingsFrame)
-	settingsCloseButton:SetText("|cffFFFFFFClose List")
+	settingsCloseButton:SetText("|cffFFFFFFClose Settings")
 	settingsCloseButton:SetPoint("BOTTOM", 0, 0)
 	settingsCloseButton:SetScript("OnClick", function(self) 
 		settingsFrame:Hide();
@@ -414,8 +421,10 @@ function CreateFrame_VARIABLES_LOADED()
 				else
 					scrollMax = 0
 				end
+				
 				objectsContentFrame:SetSize(OPTIONS_WIDTH-16, height)
 				ObjectScroll.scrollbar:SetMinMaxValues(0, scrollMax)
+
 			end
 		end
 	end), nil)
