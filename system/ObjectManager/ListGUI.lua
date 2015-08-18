@@ -8,16 +8,6 @@ local OPTIONS_HEIGHT = 250
 local scrollMax = 0
 local SETTINGS_WIDTH = 200
 
--- Parent mainFrame 
-mainFrame = CreateFrame("Frame", "ObjectManager", UIParent) 
-mainFrame:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT) 
-mainFrame:SetPoint("CENTER") 
-mainFrame:SetMovable(true)
-mainFrame.texture = mainFrame:CreateTexture() 
-mainFrame.texture:SetAllPoints() 
-mainFrame.texture:SetTexture(0,0,0,0.7)
-mainFrame:SetClampedToScreen(true)
-
 local _addText = function(parent)
 	local text = parent:CreateFontString(nil, "OVERLAY")
 	text:SetFont("Fonts\\FRIZQT__.TTF", 15)
@@ -44,6 +34,9 @@ local _addButton = function(parent)
 	Button:SetNormalTexture(Button.Button1)
 	Button:SetHighlightTexture(Button.Button2)
 	Button:SetPushedTexture(Button.Button3)
+	Button.text = Button:CreateFontString(nil, "OVERLAY")
+	Button.text:SetFont("Fonts\\FRIZQT__.TTF", 15)
+	Button.text:SetPoint("CENTER", 0, 0)
 	return Button
 end
 
@@ -92,6 +85,14 @@ local _addFrame = function(parent)
 	return Frame
 end
 
+-- Parent mainFrame 
+local mainFrame = _addFrame(UIParent)
+mainFrame:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT) 
+mainFrame:SetPoint("CENTER") 
+mainFrame:SetMovable(true)
+mainFrame.texture:SetTexture(0,0,0,0.7)
+mainFrame:SetClampedToScreen(true)
+
 -- Settings Frame
 local settingsFrame = _addFrame(mainFrame)
 settingsFrame:SetSize(SETTINGS_WIDTH, OPTIONS_HEIGHT-30) 
@@ -105,17 +106,17 @@ SettingsScroll:SetPoint("TOP", -8, 0)
 SettingsScroll.scrollbar:SetMinMaxValues(0, 400-OPTIONS_HEIGHT)
 
 -- Settings Content Frame 
-SettingsScroll.contentFrame = CreateFrame("Button", nil, SettingsScroll)
-SettingsScroll.contentFrame:SetPoint("TOP", SettingsScroll) 
-SettingsScroll.contentFrame:SetSize(SETTINGS_WIDTH-16, 400)
+local settingsContentFrame = _addFrame(SettingsScroll)
+settingsContentFrame:SetPoint("TOP", SettingsScroll) 
+settingsContentFrame:SetSize(SETTINGS_WIDTH-16, 400)
 
 -- Settings Content Texts
-local SettingsText = _addText(SettingsScroll.contentFrame)
-SettingsText:SetPoint("TOP", SettingsScroll.contentFrame, 0, 0)
+local SettingsText = _addText(settingsContentFrame)
+SettingsText:SetPoint("TOP", settingsContentFrame, 0, 0)
 SettingsText:SetText('Settings:')
 SettingsText:SetSize(SETTINGS_WIDTH-16, 15)
 
-SettingsScroll:SetScrollChild(SettingsScroll.contentFrame)
+SettingsScroll:SetScrollChild(settingsContentFrame)
 
 
 -- Title Frame
@@ -190,10 +191,11 @@ end)
 
 -- Settings Button
 local settingsButton = _addButton(mainFrame)
-settingsButton:SetText("|cff000000S")
 settingsButton:SetPoint("TOPRIGHT", 0, 0)
 settingsButton:SetSize(30, 30)
+settingsButton.text:SetText("|cffFFFFFF»")
 settingsButton:SetScript("OnClick", function() 
+	settingsButton.text:SetText("|cffFFFFFF«")
 	settingsFrame:Show(); 
 	titleFrame:SetSize(OPTIONS_WIDTH+200-30, 30); 
 	settingsButton:SetPoint("TOPRIGHT", 200, 0)  
@@ -204,7 +206,8 @@ local settingsCloseButton = _addButton(settingsFrame)
 settingsCloseButton:SetText("|cffFFFFFFClose List")
 settingsCloseButton:SetPoint("BOTTOM", 0, 0)
 settingsCloseButton:SetScript("OnClick", function(self) 
-	settingsFrame:Hide(); 
+	settingsFrame:Hide();
+	settingsButton.text:SetText("|cffFFFFFF»")
 	titleFrame:SetSize(OPTIONS_WIDTH-30, 30); 
 	settingsButton:SetPoint("TOPRIGHT", 0, 0) 
 end)
