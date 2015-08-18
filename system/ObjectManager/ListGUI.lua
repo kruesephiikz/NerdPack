@@ -215,15 +215,11 @@ ObjectScroll:SetSize(OPTIONS_WIDTH-16, OPTIONS_HEIGHT - 60)
 ObjectScroll:SetPoint("TOPLEFT", 0, -30)
 
 -- Content Frame 
-ObjectScroll.contentFrame = CreateFrame("Frame", nil, ObjectScroll)
-ObjectScroll.contentFrame:SetPoint("TOPLEFT", 0, 0) 
-ObjectScroll.contentFrame:SetPoint("BOTTOMRIGHT", 0, 0) 
-ObjectScroll.contentFrame:SetSize(OPTIONS_WIDTH-16, 0)
-ObjectScroll.contentFrame.texture = ObjectScroll.contentFrame:CreateTexture() 
-ObjectScroll.contentFrame.texture:SetAllPoints() 
-ObjectScroll.contentFrame.texture:SetTexture(0, 0, 0, 0.3)
+local objectsContentFrame = _addFrame(ObjectScroll)
+objectsContentFrame:SetSize(OPTIONS_WIDTH-16, 0)
+objectsContentFrame:SetPoint("TOPLEFT", 0, 0)
 
-ObjectScroll:SetScrollChild(ObjectScroll.contentFrame)
+ObjectScroll:SetScrollChild(objectsContentFrame)
 
 local statusBars = { }
 local statusBarsUsed = { }
@@ -232,7 +228,7 @@ local function getStatusBar()
 	local statusBar = tremove(statusBars)
 	if not statusBar then
 		statusBar = DiesalGUI:Create('StatusBar')
-		statusBar:SetParent(ObjectScroll.contentFrame)
+		statusBar:SetParent(objectsContentFrame)
 		statusBar.frame:SetHeight(15)
 		statusBar.frame.Left:SetPoint("LEFT", statusBar.frame)
 		statusBar.frame:SetStatusBarColor(255, 255, 255, 0.3)
@@ -288,7 +284,7 @@ C_Timer.NewTicker(0.1, (function()
 							local name = (UnitName(Obj) or '???')
 							local health = (UnitHealth(Obj) or 100)
 							local statusBar = getStatusBar()
-							statusBar.frame:SetPoint("TOPLEFT", ObjectScroll.contentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )
+							statusBar.frame:SetPoint("TOPLEFT", objectsContentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )
 							statusBar:SetValue(health)
 							statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(Obj)..name..' |cffFFFFFF( Distance: '..distance..' )')
 							statusBar.frame.Right:SetText('(Health:'..(health)..'%'..')')
@@ -307,7 +303,7 @@ C_Timer.NewTicker(0.1, (function()
 						local health = (_object.health or 100)
 						local distance = (_object.distance or '???')
 						local statusBar = getStatusBar()
-						statusBar.frame:SetPoint("TOPLEFT", ObjectScroll.contentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )
+						statusBar.frame:SetPoint("TOPLEFT", objectsContentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )
 						statusBar:SetValue(health)
 						statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(_object.key)..name..' |cffFFFFFF( Distance: '..distance..' )')
 						statusBar.frame.Right:SetText('(Health:'..(health)..'%'..')')
@@ -323,7 +319,7 @@ C_Timer.NewTicker(0.1, (function()
 			else
 				scrollMax = 0
 			end
-			ObjectScroll.contentFrame:SetSize(OPTIONS_WIDTH-16, height)
+			objectsContentFrame:SetSize(OPTIONS_WIDTH-16, height)
 			ObjectScroll.scrollbar:SetMinMaxValues(0, scrollMax)
 		end
 	end
