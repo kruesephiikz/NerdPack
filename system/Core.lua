@@ -28,6 +28,57 @@ NeP = {
 	}
 }
 
+local defaults = {
+	['CONFIG'] = {
+		['test'] = false,
+	},
+	['OMList'] = {
+		['test'] = false,
+		['ShowDPS'] = false,
+		['ShowHealthText'] = true,
+		['ShowHealthBars'] = true,
+	}
+}
+
+NeP.Config = {}
+
+local MyAddonFrame = CreateFrame("Frame")
+MyAddonFrame:RegisterEvent("VARIABLES_LOADED")
+MyAddonFrame:SetScript("OnEvent", function(self, event, addon)
+	if not NePData then 
+	 	NePData = defaults; 
+	end
+	CreateFrame_VARIABLES_LOADED();
+end)
+
+NeP.Config.resetConfig = function(config)
+	NePData[config] = defaults[config]
+end
+
+NeP.Config.readKey = function(config, key)
+	if NePData[config] ~= nil then
+		if NePData[config][key] ~= nil then
+			return NePData[config][key]
+		else
+			NePData[config][key] = defaults[config][key] 
+		end
+	else
+		NePData[config] = defaults[config]
+	end
+end
+
+NeP.Config.writeKey = function(config, key, value)
+	NePData[config][key] = value
+end
+
+NeP.Config.toggleKey = function(config, key)
+	if NePData[config][key] ~= nil then
+		NePData[config][key] = not NePData[config][key]
+	else
+		NePData[config][key] = defaults[config][key] 
+	end
+end
+
 --[[-----------------------------------------------
 									** Commands **
 							DESC: Slash commands in-game.

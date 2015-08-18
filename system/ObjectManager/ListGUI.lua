@@ -1,31 +1,3 @@
-local defaults = {
-	['test'] = false,
-	['ShowDPS'] = false,
-	['ShowHealthText'] = true,
-	['ShowHealthBars'] = true,
-}
-
-local readKey = function(key)
-	if NePData[key] ~= nil then
-		return NePData[key]
-	else
-		NePData[key] = defaults[key]
-	end
-end
-
-local writeKey = function(key, value)
-	NePData[key] = value
-end
-
-local toggleKey = function(key)
-	if NePData[key] ~= nil then
-		NePData[key] = not NePData[key]
-	else
-		NePData[key] = defaults[key]
-	end
-end
-
-
 local DiesalGUI = LibStub("DiesalGUI-1.0");
 local _addonColor = '|cff'..NeP.Addon.Interface.GuiColor;
 local _tittleGUI = '|T'..NeP.Addon.Info.Logo..':20:20|t'.._addonColor..NeP.Addon.Info.Nick;
@@ -122,14 +94,8 @@ local _addCheckButton = function(parent)
 	return createCheckBox
 end
 
-local MyAddonFrame = CreateFrame("Frame")
-MyAddonFrame:RegisterEvent("VARIABLES_LOADED")
-MyAddonFrame:SetScript("OnEvent", function(self, event, addon)
-	if not NePData then 
-	 	NePData = defaults; 
-	end
-	CreateFrame_VARIABLES_LOADED();
-end)
+local statusBars = { }
+local statusBarsUsed = { }
 
 function CreateFrame_VARIABLES_LOADED()
 	
@@ -169,10 +135,10 @@ function CreateFrame_VARIABLES_LOADED()
 	-- Health Text checkbox
 	local HealthTextCheckbox = _addCheckButton(settingsContentFrame)
 	_SettinsCount = _SettinsCount + 1
-	HealthTextCheckbox:SetChecked(readKey('ShowHealthText'));
+	HealthTextCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowHealthText'));
 	HealthTextCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
 	HealthTextCheckbox:SetScript("OnClick", function(self)
-		writeKey('ShowHealthText', self:GetChecked());
+		NeP.Config.writeKey('OMList', 'ShowHealthText', self:GetChecked());
 	end);
 	local HealthText = _addText(settingsContentFrame)
 	HealthText:SetSize(SETTINGS_WIDTH-31, 10)
@@ -183,10 +149,10 @@ function CreateFrame_VARIABLES_LOADED()
 	-- Health Bars checkbox
 	local HealthBarCheckbox = _addCheckButton(settingsContentFrame)
 	_SettinsCount = _SettinsCount + 1
-	HealthBarCheckbox:SetChecked(readKey('ShowHealthBars'));
+	HealthBarCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowHealthBars'));
 	HealthBarCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
 	HealthBarCheckbox:SetScript("OnClick", function(self)
-		writeKey('ShowHealthBars', self:GetChecked());
+		NeP.Config.writeKey('OMList', 'ShowHealthBars', self:GetChecked());
 	end);
 	local HealthBarText = _addText(settingsContentFrame)
 	HealthBarText:SetSize(SETTINGS_WIDTH-31, 10)
@@ -276,11 +242,11 @@ function CreateFrame_VARIABLES_LOADED()
 	settingsButton:SetScript("OnClick", function()
 		if settingsFrame:IsShown() then
 			settingsFrame:Hide();
-			settingsButton.text:SetText("|cffFFFFFF»")
+			settingsButton.text:SetText("|cffFFFFFFS: »")
 			titleFrame:SetSize(OPTIONS_WIDTH-30, 30); 
 			settingsButton:SetPoint("TOPRIGHT", 0, 0) 
 		else
-			settingsButton.text:SetText("|cffFFFFFF«")
+			settingsButton.text:SetText("|cffFFFFFFS: «")
 			settingsFrame:Show(); 
 			titleFrame:SetSize(OPTIONS_WIDTH+200-30, 30); 
 			settingsButton:SetPoint("TOPRIGHT", 200, 0)
@@ -293,7 +259,7 @@ function CreateFrame_VARIABLES_LOADED()
 	settingsCloseButton:SetPoint("BOTTOM", 0, 0)
 	settingsCloseButton:SetScript("OnClick", function(self) 
 		settingsFrame:Hide();
-		settingsButton.text:SetText("|cffFFFFFF»")
+		settingsButton.text:SetText("|cffFFFFFFS: »")
 		titleFrame:SetSize(OPTIONS_WIDTH-30, 30); 
 		settingsButton:SetPoint("TOPRIGHT", 0, 0) 
 	end)
@@ -302,16 +268,26 @@ function CreateFrame_VARIABLES_LOADED()
 	local ObjectScroll = _addScrollFrame(mainFrame)
 	ObjectScroll:SetSize(OPTIONS_WIDTH-16, OPTIONS_HEIGHT - 60)  
 	ObjectScroll:SetPoint("TOPLEFT", 0, -30)
+	ObjectScroll.texture:SetTexture(0,0,0,0)
 
 	-- Content Frame 
 	local objectsContentFrame = _addFrame(ObjectScroll)
 	objectsContentFrame:SetSize(OPTIONS_WIDTH-16, 0)
 	objectsContentFrame:SetPoint("TOPLEFT", 0, 0)
+	objectsContentFrame.texture:SetTexture(0,0,0,0)
 
 	ObjectScroll:SetScrollChild(objectsContentFrame)
 
-	local statusBars = { }
-	local statusBarsUsed = { }
+	local _CacheShow = false
+
+	function NeP.Addon.Interface.OMGUI()
+		_CacheShow = not _CacheShow
+		if _CacheShow then
+			mainFrame:Show()
+		else
+			mainFrame:Hide()
+		end
+	end
 
 	local function getStatusBar()
 		local statusBar = tremove(statusBars)
@@ -320,7 +296,7 @@ function CreateFrame_VARIABLES_LOADED()
 			statusBar:SetParent(objectsContentFrame)
 			statusBar.frame:SetHeight(15)
 			statusBar.frame.Left:SetPoint("LEFT", statusBar.frame)
-			statusBar.frame:SetStatusBarColor(255, 255, 255, 0.3)
+			statusBar.frame:SetStatusBarColor(255, 255, 255, 0.5)
 			statusBar.frame.Left:SetFont("Fonts\\FRIZQT__.TTF", 13)
 			statusBar.frame.Left:SetShadowColor(0,0,0, 0)
 			statusBar.frame.Left:SetShadowOffset(-1,-1)
@@ -340,18 +316,7 @@ function CreateFrame_VARIABLES_LOADED()
 			tinsert(statusBars, tremove(statusBarsUsed))
 		end
 	end
-
-	local _CacheShow = false
-
-	function NeP.Addon.Interface.OMGUI()
-		_CacheShow = not _CacheShow
-		if _CacheShow then
-			mainFrame:Show()
-		else
-			mainFrame:Hide()
-		end
-	end
-
+	
 	C_Timer.NewTicker(0.1, (function()
 		if NeP.Core.CurrentCR and _CacheShow then
 			if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
@@ -396,21 +361,21 @@ function CreateFrame_VARIABLES_LOADED()
 							statusBar.frame:SetPoint("TOPLEFT", objectsContentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )
 							statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(_object.key)..name..' |cffFFFFFF( Distance: '..distance..' )')
 							
-							if readKey('ShowHealthText') then
+							if NeP.Config.readKey('OMList', 'ShowHealthText') then
 								statusBar.frame.Right:SetText('(Health:'..(health)..'%'..')')
 								statusBar.frame.Right:Show()
 							else
 								statusBar.frame.Right:Hide()
 							end
 							
-							if readKey('ShowHealthBars') then
+							if NeP.Config.readKey('OMList', 'ShowHealthBars') then
 								statusBar:SetValue(health)
 							else
 								statusBar:SetValue(0)
 							end
 							
 							statusBar.frame:SetScript("OnMouseDown", function(self) TargetUnit(_object.key) end)
-							height = height + 15
+							height = height + 16
 							currentRow = currentRow + 1
 						end
 					end
