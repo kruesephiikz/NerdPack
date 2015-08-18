@@ -3,6 +3,7 @@
 ## Dependencies: Probably
 ## Interface: 60200
 ## Author: MrTheSoulz
+## SavedVariables: NePData
 
 external\LibDraw\LibDraw.lua
 external\LibStub.lua
