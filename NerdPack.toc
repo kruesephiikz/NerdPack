@@ -9,8 +9,8 @@ external\LibDraw\LibDraw.lua
 external\LibStub.lua
 external\LibBossIDs.lua
 system\Core.lua
-system\tools.lua
-system\MainFrame.lua
+interface\tools.lua
+interface\MainFrame.lua
 system\PEStuff.lua
 system\ObjectManager\ObjectCache.lua
 system\ObjectManager\SettingsGUI.lua
