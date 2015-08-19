@@ -347,6 +347,11 @@ local exeOnLoad = function()
 		'Interface\\Icons\\Ability_priest_bindingprayers.png', 
 		'Automated Ground Spells', 
 		'Enable the use of automated ground spells like MassDispell & Power Word: Barrier.\nOnly Works if using a Advanced Unlocker.')
+	ProbablyEngine.toggle.create(
+		'focusDps', 
+		'Interface\\Icons\\Ability_priest_bindingprayers.png', 
+		'Enable Agressive Mode', 
+		'Will only heal if lowest is bellow 60%.')
 end
 
 local _Tank = {
@@ -603,6 +608,11 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 				}},
 				{_Cooldowns, "modifier.cooldowns"},
 				{_PainSuppression},
+				{_Attonement, {
+					"lowest.health >= 60",
+					"toggle.focusDps",
+					"target.range < 30"
+				}},
 				{_Attonement, {
 					(function() return NeP.Core.dynamicEval("lowest.health >= " .. NeP.Core.PeFetch('NePconfPriestDisc', 'Attonement')) end), 
 					"!player.buff(81661).count = 5", 

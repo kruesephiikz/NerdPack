@@ -16,11 +16,9 @@ C_Timer.NewTicker(0.01, (function()
 	if ProbablyEngine.rotation.currentStringComp == NePActive then
 		NeP.Core.CurrentCR = true
 		NeP_Frame:Show()
-		NeP.Addon.Interface.MinimapButton:Show()
 	else
 		NeP.Core.CurrentCR = false
 		NeP_Frame:Hide()
-		NeP.Addon.Interface.MinimapButton:Hide()
 	end
 end), nil)
 

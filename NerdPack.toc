@@ -9,6 +9,8 @@ external\LibDraw\LibDraw.lua
 external\LibStub.lua
 external\LibBossIDs.lua
 system\Core.lua
+system\tools.lua
+system\MainFrame.lua
 system\PEStuff.lua
 system\ObjectManager\ObjectCache.lua
 system\ObjectManager\SettingsGUI.lua
@@ -19,9 +21,7 @@ system\Overlays.lua
 system\LibCore.lua
 system\FishingBot.lua
 system\ItemBot.lua
-interface\minimap.lua
 interface\splash.lua
-interface\alert.lua
 interface\info.lua
 interface\config.lua
 interface\class.lua
