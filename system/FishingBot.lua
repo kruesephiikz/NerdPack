@@ -158,7 +158,7 @@ local function _CarpDestruction()
 end
 
 C_Timer.NewTicker(0.5, (function()
-	if NeP.Core.CurrentCR and NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
+	if NeP.Core.CurrentCR then
 		if NeP.Extras.BagSpace() > 2 then
 			_AutoBait()
 			_CarpDestruction()

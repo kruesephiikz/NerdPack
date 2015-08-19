@@ -1,20 +1,31 @@
+local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 local WoWver, WoWbuild, WoWdate, WoWtoc = GetBuildInfo()
+local _addonColor = NeP.Addon.Interface.addonColor
+local NePActive = ''
 local _time = 0
 
-local function onUpdate(npStart,elapsed) 
-	if _time < GetTime() - 5.0 then
-		if npStart:GetAlpha() == 0 then
-			npStart:Hide()
+C_Timer.NewTicker(0.01, (function()
+	if _time < GetTime() - 1.0 then
+		if npSplash:GetAlpha() == 0 then
 			npSplash:Hide()
 		else 
-			npStart:SetAlpha(npStart:GetAlpha() - .05)
-			npSplash:SetAlpha(npStart:GetAlpha() - .05)
+			npSplash:SetAlpha(npSplash:GetAlpha() - .05)
 		end
 	end
-end
+	
+	if ProbablyEngine.rotation.currentStringComp == NePActive then
+		NeP.Core.CurrentCR = true
+		NeP_Frame:Show()
+		NeP.Addon.Interface.MinimapButton:Show()
+	else
+		NeP.Core.CurrentCR = false
+		NeP_Frame:Hide()
+		NeP.Addon.Interface.MinimapButton:Hide()
+	end
+end), nil)
 
 local _StartEvents = function()
-	NeP.Core.CurrentCR = true
+	NePActive = ProbablyEngine.rotation.currentStringComp
 
 	if WoWver ~= NeP.Addon.Info.WoW_Version or ProbablyEngine.version ~= NeP.Core.peRecomemded then
 		if WoWver ~= NeP.Addon.Info.WoW_Version then
@@ -37,22 +48,9 @@ end
 function NeP.Splash()
 	-- Displays a fancy splash.
 	if NeP.Core.PeFetch('npconf', 'Splash') then
-		local _playerInfo = function()
-			local _class = UnitClass('player')
-			local _ClassColor = NeP.Core.classColor('player')
-			local _spec = (GetSpecialization() or '#unknown')
-			local _specName = select(2, GetSpecializationInfo(_spec))
-			local _specIcon = "|T"..select(4, GetSpecializationInfo(_spec))..":13:13|t "
-			return "|r[|cff".._ClassColor.._class.." - ".._specIcon.._specName.."|r]"
-		end
-		local _addonColor = NeP.Addon.Interface.addonColor
-		local _nick = _addonColor .. NeP.Addon.Info.Nick
-		local _infoCR = NeP.Addon.Info.Icon.. '|r[' .. _nick.. "|r]" .. _playerInfo()
-		npStart.text:SetText(_infoCR .. "|r - [" .. _addonColor .. "Loaded|r]")
-		npStart:SetAlpha(1)
+		NeP.Alert(_playerInfo .. "|r - [" .. _addonColor .. "Loaded|r]")
 		npSplash:SetAlpha(1)
 		_time = GetTime()
-		npStart:Show()
 		npSplash:Show()
 		PlaySoundFile("Sound\\Interface\\Levelup.Wav")
 		--PlaySound("UnwrapGift", "master");
@@ -70,16 +68,3 @@ npSplash:SetHeight(256)
 npSplash:SetBackdrop({ bgFile = NeP.Addon.Info.Splash })
 npSplash:SetScript("OnUpdate",onUpdate)
 npSplash:Hide()
-
--- Text on Top
-npStart = CreateFrame("Frame",nil,UIParent)
-npStart:SetWidth(600)
-npStart:SetHeight(30)
-npStart:Hide()
-npStart:SetScript("OnUpdate",onUpdate)
-npStart:SetPoint("TOP",0,0)
-npStart.text = npStart:CreateFontString(nil,"OVERLAY","MovieSubtitleFont")
-npStart.text:SetAllPoints()
-npStart.texture = npStart:CreateTexture()
-npStart.texture:SetAllPoints()
-npStart.texture:SetTexture(0,0,0,0.7)

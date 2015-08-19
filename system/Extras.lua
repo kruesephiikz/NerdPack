@@ -193,7 +193,7 @@ function NeP.Extras.dummyTest(key)
 end
 
 C_Timer.NewTicker(0.5, (function()
-	if NeP.Core.CurrentCR and NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
+	if NeP.Core.CurrentCR then
 		NeP.Extras.dummyTest('Refresh')
 		if ProbablyEngine.module.player.combat then
 			NeP.Extras.MoveTo()

@@ -326,7 +326,7 @@ C_Timer.NewTicker(1, (function()
 	
 	-- Object Manager Core
 	if NeP.Core.CurrentCR then
-		if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
+		--if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
 			-- Master Toggle
 			if NeP.Core.PeFetch("ObjectCache", "ObjectCache")  then
 				-- If we're using FireHack...  
@@ -612,7 +612,7 @@ C_Timer.NewTicker(1, (function()
 					end
 				end
 			end
-		end
+		--end
 	end
 	table.sort(OChUnits, function(a,b) return a.distance < b.distance end)
 	table.sort(OChFriendly, function(a,b) return a.distance < b.distance end)

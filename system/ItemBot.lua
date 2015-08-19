@@ -180,7 +180,7 @@ function NeP.Extras.OpenSalvage()
 end
 
 C_Timer.NewTicker(0.5, (function()
-	if NeP.Core.CurrentCR and NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
+	if NeP.Core.CurrentCR then
 		if not ProbablyEngine.module.player.combat then
 			if not UnitChannelInfo("player") then
 				if NeP.Extras.BagSpace() > 2 then
