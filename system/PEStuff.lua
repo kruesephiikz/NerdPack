@@ -44,3 +44,14 @@ end)
 ProbablyEngine.condition.register("NePinfront", function(target, spell)
 	return NeP.Core.Infront('player', target)
 end)
+
+ProbablyEngine.condition.register("castwithin", function(target, spell)
+	local SpellID = select(7, GetSpellInfo(spell))
+	for k, v in pairs( ProbablyEngine.actionLog.log ) do
+		local id = select(7, GetSpellInfo(v.description))
+		if (id and id == SpellID and v.event == "Spell Cast Succeed") or tonumber( k ) == 20 then
+			return tonumber( k )
+		end
+	end
+	return 20
+end)
