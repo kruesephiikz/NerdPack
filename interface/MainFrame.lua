@@ -1,5 +1,4 @@
 local _addonColor = NeP.Addon.Interface.addonColor
-local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 local buttonColor = "|cffFFFFFF"
 
 local OPTIONS_HEIGHT = 30
@@ -7,6 +6,8 @@ local _StatusText = false
 local buttonsTotalHeight = 10
 
 function StatusGUI_VARIABLES_LOADED()
+	local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
+	
 	NeP_Frame = NeP.Interface.addFrame(UIParent)
 	NeP_Frame:SetPoint("TOP") 
 	NeP_Frame:SetMovable(true)

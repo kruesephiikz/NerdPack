@@ -1,4 +1,3 @@
-local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 local WoWver, WoWbuild, WoWdate, WoWtoc = GetBuildInfo()
 local _addonColor = NeP.Addon.Interface.addonColor
 local NePActive = ''
@@ -44,6 +43,7 @@ local _StartEvents = function()
 end
 
 function NeP.Splash()
+	local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 	-- Displays a fancy splash.
 	if NeP.Core.PeFetch('npconf', 'Splash') then
 		NeP.Alert(_playerInfo .. "|r - [" .. _addonColor .. "Loaded|r]")
