@@ -53,8 +53,8 @@ MyAddonFrame:SetScript("OnEvent", function(self, event, addon)
 	if not NePData then 
 	 	NePData = defaults; 
 	end
-	CreateFrame_VARIABLES_LOADED();
-	StatusGUI_VARIABLES_LOADED();
+	StatusGUI_RUN();
+	OMGUI_RUN()
 end)
 
 NeP.Config.resetConfig = function(config)

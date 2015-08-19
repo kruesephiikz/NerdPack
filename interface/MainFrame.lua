@@ -5,7 +5,7 @@ local OPTIONS_HEIGHT = 30
 local _StatusText = false
 local buttonsTotalHeight = 10
 
-function StatusGUI_VARIABLES_LOADED()
+function StatusGUI_RUN()
 	local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 	
 	NeP_Frame = NeP.Interface.addFrame(UIParent)
@@ -61,7 +61,8 @@ function StatusGUI_VARIABLES_LOADED()
 	OMButton:SetPoint("TOP", statusGUI3, 0, -buttonsTotalHeight)
 	OMButton:SetSize(statusText2:GetStringWidth()-10, 15)
 	OMButton:SetScript("OnClick", function(self)
-		NeP.Addon.Interface.OMGUI()
+		_HideFrames()
+		NeP_OMLIST:Show()
 	end)
 	buttonsTotalHeight = buttonsTotalHeight + 15
 	local ITButtom = NeP.Interface.addButton(statusGUI3)
@@ -147,7 +148,7 @@ function StatusGUI_VARIABLES_LOADED()
 		if _StatusText then
 			_StatusText = not _StatusText
 			statusText1:SetPoint("LEFT", NeP_Frame, 0, 0)
-			statusGUI2:Hide()
+			_HideFrames()
 			minButton.text:SetText(buttonColor.."=")
 		else
 			_StatusText = not _StatusText
@@ -180,6 +181,11 @@ function StatusGUI_VARIABLES_LOADED()
 		statusGUIAlert:SetSize(statusGUIAlertText:GetStringWidth(), statusGUIAlertText:GetStringHeight())
 		statusGUIAlert:Show()
 		--PlaySoundFile("Sound\\Interface\\Levelup.Wav")
+	end
+	
+	function _HideFrames()
+		NeP_OMLIST:Hide()
+		statusGUI2:Hide()
 	end
 	
 end

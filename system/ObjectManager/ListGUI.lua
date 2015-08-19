@@ -3,26 +3,25 @@ local _addonColor = '|cff'..NeP.Addon.Interface.GuiColor;
 local _tittleGUI = '|T'..NeP.Addon.Info.Logo..':20:20|t'.._addonColor..NeP.Addon.Info.Nick;
 local _objectTable = NeP.ObjectManager.unitFriendlyCache;
 local _Displaying = 'Friendly List';
-local OPTIONS_WIDTH = 524;
-local OPTIONS_HEIGHT = 250;
+local OPTIONS_WIDTH = 300;
+local OPTIONS_HEIGHT = 400;
 local scrollMax = 0;
 local SETTINGS_WIDTH = 200;
 
 local statusBars = { }
 local statusBarsUsed = { }
 
-function CreateFrame_VARIABLES_LOADED()
+function OMGUI_RUN()
 	
-	-- Parent mainFrame 
-	local mainFrame = NeP.Interface.addFrame(UIParent)
-	mainFrame:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT) 
-	mainFrame:SetPoint("CENTER") 
-	mainFrame:SetMovable(true)
-	mainFrame.texture:SetTexture(0,0,0,0.7)
-	mainFrame:SetClampedToScreen(true)
+	NeP_OMLIST = NeP.Interface.addFrame(UIParent)
+	NeP_OMLIST:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT) 
+	NeP_OMLIST:SetPoint("TOP", 0, -15) 
+	--NeP_OMLIST:SetMovable(true)
+	NeP_OMLIST.texture:SetTexture(0,0,0,0.7)
+	--NeP_OMLIST:SetClampedToScreen(true)
 
 	-- Settings Frame
-	local settingsFrame = NeP.Interface.addFrame(mainFrame)
+	local settingsFrame = NeP.Interface.addFrame(NeP_OMLIST)
 	settingsFrame:SetSize(SETTINGS_WIDTH, OPTIONS_HEIGHT) 
 	settingsFrame:SetPoint("BOTTOMRIGHT", SETTINGS_WIDTH, 0) 
 	settingsFrame:Hide()
@@ -79,21 +78,21 @@ function CreateFrame_VARIABLES_LOADED()
 	SettingsScroll:SetScrollChild(settingsContentFrame)
 
 	-- Title Frame
-	local titleFrame = NeP.Interface.addFrame(mainFrame)
+	local titleFrame = NeP.Interface.addFrame(NeP_OMLIST)
 	titleFrame:SetSize(OPTIONS_WIDTH-30, 30) 
-	titleFrame:SetPoint("TOPLEFT", mainFrame)
-	titleFrame:EnableMouse(true)
+	titleFrame:SetPoint("TOPLEFT", NeP_OMLIST)
+	--titleFrame:EnableMouse(true)
 	titleFrame:RegisterForDrag("LeftButton")
 	titleFrame.texture:SetTexture(0,0,0,1)
-	titleFrame:SetScript("OnDragStart", function(self) 
-		self:GetParent():StartMoving()
-	end)
-	titleFrame:SetScript("OnDragStop", function(self) 
-		self:GetParent():StopMovingOrSizing()
-	end)
+	--titleFrame:SetScript("OnDragStart", function(self) 
+	--	self:GetParent():StartMoving()
+	--end)
+	--titleFrame:SetScript("OnDragStop", function(self) 
+	--	self:GetParent():StopMovingOrSizing()
+	--end)
 	local titleText1 = NeP.Interface.addText(titleFrame)
-	titleText1:SetPoint("TOPLEFT", 0, 0)
-	titleText1:SetText(_tittleGUI..'|r ObjectManager GUI')
+	titleText1:SetPoint("LEFT", 0, 0)
+	titleText1:SetText('OM')
 	local titleText2 = NeP.Interface.addText(titleFrame)
 	titleText2:SetPoint("RIGHT", -20, 0)
 	titleText2:SetText('')
@@ -101,18 +100,8 @@ function CreateFrame_VARIABLES_LOADED()
 	titleText3:SetPoint("RIGHT", -100, 0)
 	titleText3:SetText('')
 
-	-- Close Button
-	local closeButton = NeP.Interface.addButton(mainFrame)
-	closeButton:SetText("|cff000000Close")
-	closeButton:SetPoint("BOTTOMLEFT", 0, 0)
-	closeButton.Button1:SetTexture(153, 0 ,0 , 0.5)
-	closeButton:SetScript("OnClick", function(self) 
-		mainFrame:Hide(); 
-		_CacheShow = false 
-	end)
-
 	-- Enemy Button
-	local enemieButton = NeP.Interface.addButton(mainFrame)
+	local enemieButton = NeP.Interface.addButton(NeP_OMLIST)
 	enemieButton:SetText("|cffFFFFFFEnemie List")
 	enemieButton:SetPoint("BOTTOMRIGHT", 0, 0)
 	enemieButton:SetScript("OnClick", function(self) 
@@ -121,7 +110,7 @@ function CreateFrame_VARIABLES_LOADED()
 	end)
 
 	-- Friendly Button
-	local friendlyButton = NeP.Interface.addButton(mainFrame)
+	local friendlyButton = NeP.Interface.addButton(NeP_OMLIST)
 	friendlyButton:SetText("|cffFFFFFFFriendly List")
 	friendlyButton:SetPoint("BOTTOMRIGHT", -100, 0)
 	friendlyButton:SetScript("OnClick", function(self) 
@@ -130,7 +119,7 @@ function CreateFrame_VARIABLES_LOADED()
 	end)
 
 	-- Object Button
-	local objectButton = NeP.Interface.addButton(mainFrame)
+	local objectButton = NeP.Interface.addButton(NeP_OMLIST)
 	objectButton:SetText("|cffFFFFFFObjects List")
 	objectButton:SetPoint("BOTTOMRIGHT", -200, 0)
 	objectButton:SetScript("OnClick", function(self) 
@@ -138,19 +127,8 @@ function CreateFrame_VARIABLES_LOADED()
 		_Displaying = 'Objects List' 
 	end)
 
-	-- All Button
-	local allButton = NeP.Interface.addButton(mainFrame)
-	allButton:SetText("|cff000000All List")
-	allButton:SetPoint("BOTTOMRIGHT", -300, 0)
-	allButton:SetSize(50, 30)
-	allButton.Button1:SetTexture(0, 255, 0, 1)
-	allButton:SetScript("OnClick", function(self) 
-		_objectTable = NeP.ObjectManager.objectsCache; 
-		_Displaying = 'All' 
-	end)
-
 	-- Settings Button
-	local settingsButton = NeP.Interface.addButton(mainFrame)
+	local settingsButton = NeP.Interface.addButton(NeP_OMLIST)
 	settingsButton:SetPoint("TOPRIGHT", 0, 0)
 	settingsButton:SetSize(30, 30)
 	settingsButton.text:SetText("|cffFFFFFF»")
@@ -180,7 +158,7 @@ function CreateFrame_VARIABLES_LOADED()
 	end)
 
 	-- Objects Scroll Frame
-	local ObjectScroll = NeP.Interface.addScrollFrame(mainFrame)
+	local ObjectScroll = NeP.Interface.addScrollFrame(NeP_OMLIST)
 	ObjectScroll:SetSize(OPTIONS_WIDTH-16, OPTIONS_HEIGHT - 60)  
 	ObjectScroll:SetPoint("TOPLEFT", 0, -30)
 	ObjectScroll.texture:SetTexture(0,0,0,0)
@@ -199,9 +177,9 @@ function CreateFrame_VARIABLES_LOADED()
 	function NeP.Addon.Interface.OMGUI()
 		_CacheShow = not _CacheShow
 		if _CacheShow then
-			mainFrame:Show()
+			NeP_OMLIST:Show()
 		else
-			mainFrame:Hide()
+			NeP_OMLIST:Hide()
 		end
 	end
 
@@ -234,7 +212,7 @@ function CreateFrame_VARIABLES_LOADED()
 	end
 	
 	C_Timer.NewTicker(0.1, (function()
-		if NeP.Core.CurrentCR and _CacheShow then
+		if NeP.Core.CurrentCR and NeP_OMLIST:IsShown() then
 			if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
 				
 				recycleStatusBars()
@@ -243,28 +221,6 @@ function CreateFrame_VARIABLES_LOADED()
 				local currentRow = 0
 				titleText3:SetText('|cffCCCCCC('.._Displaying..')')
 
-				if _Displaying == 'All' then
-					if FireHack then
-						local totalObjects = ObjectCount()
-						titleText2:SetText('|cffff0000Total: '..totalObjects)
-						for i=1, totalObjects do
-							local Obj = ObjectWithIndex(i)
-							if ObjectExists(Obj) then
-								local distance = (NeP.Core.Distance('player', Obj) or '???')
-								local name = (UnitName(Obj) or '???')
-								local health = (UnitHealth(Obj) or 100)
-								local statusBar = getStatusBar()
-								statusBar.frame:SetPoint("TOPLEFT", objectsContentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )
-								statusBar:SetValue(health)
-								statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(Obj)..name..' |cffFFFFFF( Distance: '..distance..' )')
-								statusBar.frame.Right:SetText('(Health:'..(health)..'%'..')')
-								statusBar.frame:SetScript("OnMouseDown", function(self) TargetUnit(Obj) end)
-								height = height + 15
-								currentRow = currentRow + 1
-							end
-						end
-					end
-				else
 					titleText2:SetText('|cffff0000Total: '..#_objectTable)
 						if #_objectTable > 0 then
 							for i=1,#_objectTable do
@@ -275,10 +231,11 @@ function CreateFrame_VARIABLES_LOADED()
 							local statusBar = getStatusBar()
 
 							statusBar.frame:SetPoint("TOPLEFT", objectsContentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )
-							statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(_object.key)..name..' |cffFFFFFF( Distance: '..distance..' )')
+							statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(_object.key)..name)
+							--statusBar.frame.Left:SetText('|cffFFFFFF( D: '..distance..' )')
 							
 							if NeP.Config.readKey('OMList', 'ShowHealthText') then
-								statusBar.frame.Right:SetText('(Health:'..(health)..'%'..')')
+								statusBar.frame.Right:SetText('(H:'..(health)..'%'..')')
 								statusBar.frame.Right:Show()
 							else
 								statusBar.frame.Right:Hide()
@@ -295,7 +252,6 @@ function CreateFrame_VARIABLES_LOADED()
 							currentRow = currentRow + 1
 						end
 					end
-				end
 				
 				if height > OPTIONS_HEIGHT then
 					scrollMax = height - (OPTIONS_HEIGHT-60)
@@ -310,6 +266,6 @@ function CreateFrame_VARIABLES_LOADED()
 		end
 	end), nil)
 
-mainFrame:Hide()
+NeP_OMLIST:Hide()
 	
  end
