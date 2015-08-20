@@ -33,6 +33,21 @@ NeP = {
 
 local _addonColor = NeP.Addon.Interface.addonColor
 
+_openPEGUIs = {}
+NeP.Core.BuildGUI = function(gui)
+	if _openPEGUIs[gui] ~= nil then
+		if _openPEGUIs[gui] == 'Showing' then
+			ProbablyEngine.interface.buildGUI(gui).parent:Hide()
+		else
+			ProbablyEngine.interface.buildGUI(gui).parent:Show()
+		end
+	else
+		_openPEGUIs[gui] = 'Showing'
+		ProbablyEngine.interface.buildGUI(gui)
+	end
+end
+
+
 local defaults = {
 	['CONFIG'] = {
 		['test'] = false,

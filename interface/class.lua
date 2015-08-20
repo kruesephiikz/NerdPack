@@ -4,47 +4,30 @@ local _OpenClassWindow = false
 local _ShowingClassWindow = false
 
 function NeP.Addon.Interface.ClassGUI()
-	local _Spec = GetSpecialization()
-	
+	_NePClassGUIs = {
+		[250] = NeP.Addon.Interface.DkBlood,
+		[252] = NeP.Addon.Interface.DkUnholy,
+		[103] = NeP.Addon.Interface.DruidFeral,
+		[104] = NeP.Addon.Interface.DruidGuard,
+		[105] = NeP.Addon.Interface.DruidResto,
+		[102] = NeP.Addon.Interface.DruidBalance,
+		[257] = NeP.Addon.Interface.PriestHoly,
+		[258] = NeP.Addon.Interface.PriestShadow,
+		[256] = NeP.Addon.Interface.PriestDisc,
+		[70] = NeP.Addon.Interface.PalaRet,
+		[66] = NeP.Addon.Interface.PalaProt,
+		[65] = NeP.Addon.Interface.PalaHoly,
+		[73] = NeP.Addon.Interface.WarrProt,
+		[72] = NeP.Addon.Interface.WarrFury,
+		[270] = NeP.Addon.Interface.MonkMm,
+		[269] = NeP.Addon.Interface.MonkWw,
+		[262] = NeP.Addon.Interface.ShamanEle,
+		[264] = NeP.Addon.Interface.ShamanResto
+	}
+	local _Spec = GetSpecializationInfo(GetSpecialization())
 	if _Spec ~= nil then
-		local _SpecID =  (GetSpecializationInfo(_Spec) or nil)
-		-- Check wich spec the player is to return the correct window.	
-		if _SpecID == 250 and not _OpenClassWindow then -- DK Blood
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.DkBlood)
-		elseif _SpecID == 252 and not _OpenClassWindow  then -- DK Unholy
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.DkUnholy)
-		elseif _SpecID == 103 and not _OpenClassWindow  then -- Druid Feral
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.DruidFeral)
-		elseif _SpecID == 104 and not _OpenClassWindow  then -- Druid Guardian
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.DruidGuard)
-		elseif _SpecID == 105 and not _OpenClassWindow  then -- Druid Resto
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.DruidResto)
-		elseif _SpecID == 102 and not _OpenClassWindow  then -- Druid Balance
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.DruidBalance)
-		elseif _SpecID == 257 and not _OpenClassWindow  then -- Priest holy
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.PriestHoly)
-		elseif _SpecID == 258 and not _OpenClassWindow  then -- Priest Shadow
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.PriestShadow)
-		elseif _SpecID == 256 and not _OpenClassWindow  then -- Priest Disc
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.PriestDisc)
-		elseif _SpecID == 70 and not _OpenClassWindow  then -- Pala Retribution
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.PalaRet)
-		elseif _SpecID == 66 and not _OpenClassWindow  then -- Pala Protection
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.PalaProt)
-		elseif _SpecID == 65 and not _OpenClassWindow  then -- Pala Holy
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.PalaHoly)	
-		elseif _SpecID == 73 and not _OpenClassWindow  then -- Warrior Protection
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.WarrProt)
-		elseif _SpecID == 72 and not _OpenClassWindow  then -- Warrior Fury
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.WarrFury)	
-		elseif _SpecID == 270 and not _OpenClassWindow  then -- Monk Mistweaver
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.MonkMm)
-		elseif _SpecID == 269 and not _OpenClassWindow  then -- Monk WindWalker
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.MonkWw)
-		elseif _SpecID == 262 and not _OpenClassWindow  then -- Shamman Elemental
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.ShamanEle)
-		elseif _SpecID == 264 and not _OpenClassWindow  then -- Shamman Resto
-			_CurrentSpec = NeP.Core.PeBuildGUI(NeP.Addon.Interface.ShamanResto)		
+		if _NePClassGUIs[_Spec] ~= nil then
+			_CurrentSpec = NeP.Core.BuildGUI(_NePClassGUIs[_Spec])		
 		end
 	end
 
