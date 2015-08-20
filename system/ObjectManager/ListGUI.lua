@@ -13,7 +13,7 @@ local statusBarsUsed = { }
 
 function OMGUI_RUN()
 	
-	NeP_OMLIST = NeP.Interface.addFrame(UIParent)
+	NeP_OMLIST = NeP.Interface.addFrame(NeP_Frame)
 	NeP_OMLIST:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT) 
 	NeP_OMLIST:SetPoint("TOP", 0, -15) 
 	--NeP_OMLIST:SetMovable(true)

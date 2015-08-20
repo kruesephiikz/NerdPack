@@ -142,7 +142,7 @@ function NeP.Core.classColor(unit)
 		local _color = _classColors[className]
 		return _color.Hex
 	else
-		return NeP.Addon.Interface.GuiColor
+		return "FFFFFF"
 	end
 end
 
