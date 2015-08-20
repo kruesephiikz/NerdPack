@@ -43,9 +43,9 @@ local _StartEvents = function()
 end
 
 function NeP.Splash()
-	local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 	-- Displays a fancy splash.
 	if NeP.Core.PeFetch('npconf', 'Splash') then
+		local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 		NeP.Alert(_playerInfo .. "|r - [" .. _addonColor .. "Loaded|r]")
 		npSplash:SetAlpha(1)
 		_time = GetTime()

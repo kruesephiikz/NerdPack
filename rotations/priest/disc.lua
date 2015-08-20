@@ -349,7 +349,7 @@ local exeOnLoad = function()
 		'Enable the use of automated ground spells like MassDispell & Power Word: Barrier.\nOnly Works if using a Advanced Unlocker.')
 	ProbablyEngine.toggle.create(
 		'focusDps', 
-		'Interface\\Icons\\Ability_priest_bindingprayers.png', 
+		'Interface\\Icons\\Ability_priest_atonement.png', 
 		'Enable Agressive Mode', 
 		'Will only heal if lowest is bellow 60%.')
 end
