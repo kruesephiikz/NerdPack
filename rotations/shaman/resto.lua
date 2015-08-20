@@ -33,6 +33,12 @@ NeP.Addon.Interface.ShamanResto = {
 				default = "2", 
 				desc = "Select target to cast Earth Shield on." 
 			},	
+			{ 
+				type = "spinner", 
+				text = "Ancestral Swiftness", 
+				key = "AncestralSwiftness", 
+				default = 30
+			},
 		{ type = "Spacer" },
 		{ type = 'rule' },
 		{ 
@@ -107,12 +113,6 @@ NeP.Addon.Interface.ShamanResto = {
 			{ 
 				type = "spinner", 
 				text = "Ancestral Swiftness", 
-				key = "AncestralSwiftnessPlayer", 
-				default = 35
-			},
-			{ 
-				type = "spinner", 
-				text = "Ancestral Swiftness", 
 				key = "HealingSurgePlayer", 
 				default = 35
 			},
@@ -152,12 +152,6 @@ NeP.Addon.Interface.ShamanResto = {
 				text = "Unleash Life", 
 				key = "UnleashLifeRaid", 
 				default = 25
-			},
-			{ 
-				type = "spinner", 
-				text = "Ancestral Swiftness", 
-				key = "AncestralSwiftnessRaid", 
-				default = 35
 			},
 			{ 
 				type = "spinner", 
@@ -282,7 +276,7 @@ local General = {
 	{ "73920", { -- Healing Rain if not Ascendance // FIX ME: Automate this...
 		"modifier.shift", 
 		"!player.buff(114052)"
-	}, "ground"},
+	}, "mouseover.ground"},
   	{ "/focus [target=mouseover]", "modifier.lalt" }, -- Mouseover Focus
 
 	-- Buffs
@@ -307,17 +301,26 @@ local General = {
 	}, "toggle.NeP_Wolf" },
 }
 
+local _Fast = {
+	{ "73685",{	-- Unleash Life	
+		"!player.buff(73685)",
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'UnleashLifeRaid')) end)
+	}, "lowest" },
+	{ "16188", (function() return NeP.Core.dynamicEval("lowest.health <= 30" .. NeP.Core.PeFetch('NePConfigShammanResto', 'AncestralSwiftness')) end), "lowest" }, -- Ancestral Swiftness
+	{ "8004",nil, "lowest" }, -- Healing Surge
+}
+
 local AoE = {
 	{{ -- Party
 		{ "1064", "@coreHealing.needsHealing(90, 3)", "lowest" },  -- Chain Heal
 	},{
-		"!modifier.members > 5",
+		"!modifier.raid",
 		"modifier.party"
 	}},
 	{{ -- Raid
-		{ "1064", "@coreHealing.needsHealing(90, 3)", "lowest" },  -- Chain Heal
+		{ "1064", "@coreHealing.needsHealing(90, 5)", "lowest" },  -- Chain Heal
 	},{
-		"modifier.members > 5",
+		"modifier.raid",
 		"!modifier.party"
 	}},
 }
@@ -352,11 +355,6 @@ local Focus = {
 }
 
 local RaidHealing = {
-	{ "73685",{	-- Unleash Life	
-		"!player.buff(73685)",
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'UnleashLifeRaid')) end)
-	}},
-	{ "16188", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'AncestralSwiftnessRaid')) end), "lowest" }, -- Ancestral Swiftness
 	{ "8004", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'HealingSurgeRaid')) end), "lowest" }, -- Healing Surge
 	{ "77472", { -- Healing Wave
 		"lowest.health <= 60",
@@ -375,7 +373,6 @@ local _Player = {
 	{ "108271", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'AstralShift')) end), nil }, -- Astral Shift
 	{ "Stoneform", "player.health <= 65" }, -- Stoneform // Dwarf Racial
 	{ "59547", "player.health <= 70", "player" }, -- Gift of the Naaru // Draenei Racial
-	{ "16188", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'AncestralSwiftnessPlayer')) end), "player" }, -- Ancestral Swiftness
 	{ "8004", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'HealingSurgePlayer')) end), "player" }, -- Healing Surge
 	{ "61295", { -- Riptide
 		"!player.buff(53390)", -- Tidal Waves
@@ -426,9 +423,10 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 				}, "target.NePinterrupt" },
 				{Cooldowns, "modifier.cooldowns"},
 				{Totems, "toggle.NeP_Totems"},
+				{_Fast, "lowest.health < 40"},
+				{AoE, {"modifier.multitarget", "!lowest.health < 60"}},
 				{Tank, "tank.range <= 40"},
 				{Focus, "focus.range <= 40"},
-				{AoE, "modifier.multitarget"},
 				{_Player},
 				{RaidHealing},
 				{DPS, {
