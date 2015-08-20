@@ -1,5 +1,5 @@
 NeP.Addon.Interface.ShamanResto = {
-	key = "npconfShamanResto",
+	key = "NePConfigShammanResto",
 	profiles = true,
 	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
 	subtitle = "Shaman-Resto Settings",
@@ -30,7 +30,7 @@ NeP.Addon.Interface.ShamanResto = {
 					  key = "3"
 					}
 				}, 
-				default = "1", 
+				default = "2", 
 				desc = "Select target to cast Earth Shield on." 
 			},	
 		{ type = "Spacer" },
@@ -67,12 +67,6 @@ NeP.Addon.Interface.ShamanResto = {
 			text = NeP.Addon.Interface.GuiTextColor.."Tank/Focus Settings:", 
 			align = "center"
 		},
-			{ 
-				type = "checkbox", 
-				text = "EathShield", 
-				key = "EarthShieldTank", 
-				default = true, 
-			},
 			{ 
 				type = "checkbox", 
 				text = "Riptide", 
@@ -331,41 +325,39 @@ local AoE = {
 local Tank = {
 	-- Tank
 	{ "974", { -- Earth Shield
-		(function() return NeP.Core.PeFetch("npconfShamanResto", "ESo") == '1' end),
-		(function() return NeP.Core.PeFetch("npconfShamanResto", "EarthShieldTank") end),
+		(function() return NeP.Core.PeFetch("NePConfigShammanResto", "ESo") == '1' end),
 		"!tank.buff(974)"
 	}, "tank" },
 	{ "61295", { -- Riptide
-	    (function() return NeP.Core.PeFetch("npconfShamanResto", "ESo") == '1' end),
-		(function() return NeP.Core.PeFetch("npconfShamanResto", "RiptideTank") end)
+	    (function() return NeP.Core.PeFetch("NePConfigShammanResto", "ESo") == '1' end),
+		(function() return NeP.Core.PeFetch("NePConfigShammanResto", "RiptideTank") end)
 	    "tank.buff(61295).duration <= 3" -- Riptide
 	}, "tank" },
-	{ "8004", (function() return NeP.Core.dynamicEval("tank.health <= "..NeP.Core.PeFetch("npconfShamanResto", "HealingSurgeTank")) end), "tank" }, -- Healing Surge
-	{ "77472", (function() return NeP.Core.dynamicEval("tank.health <= "..NeP.Core.PeFetch("npconfShamanResto", "HealingWaveTank")) end), "tank" }, -- Healing Wave
+	{ "8004", (function() return NeP.Core.dynamicEval("tank.health <= "..NeP.Core.PeFetch("NePConfigShammanResto", "HealingSurgeTank")) end), "tank" }, -- Healing Surge
+	{ "77472", (function() return NeP.Core.dynamicEval("tank.health <= "..NeP.Core.PeFetch("NePConfigShammanResto", "HealingWaveTank")) end), "tank" }, -- Healing Wave
 }
 
 local Focus = {					
     { "974", { -- Earth Shield
-    	(function() return NeP.Core.PeFetch("npconfShamanResto", "ESo") == '2' end),
-		(function() return NeP.Core.PeFetch("npconfShamanResto", "EarthShieldTank") end),
+    	(function() return NeP.Core.PeFetch("NePConfigShammanResto", "ESo") == '2' end),
     	"!focus.buff(974)"
     }, "focus" },
 	{ "61295", { -- Riptide
-	    (function() return NeP.Core.PeFetch("npconfShamanResto", "ESo") == '2' end),
-		(function() return NeP.Core.PeFetch("npconfShamanResto", "RiptideTank") end),
+	    (function() return NeP.Core.PeFetch("NePConfigShammanResto", "ESo") == '2' end),
+		(function() return NeP.Core.PeFetch("NePConfigShammanResto", "RiptideTank") end),
 	    "focus.buff(61295).duration <= 3" -- Riptide
 	}, "focus" },
-	{ "8004", (function() return NeP.Core.dynamicEval("focus.health <= "..NeP.Core.PeFetch("npconfShamanResto", "HealingSurgeTank")) end), "focus" }, -- Healing Surge
-	{ "77472", (function() return NeP.Core.dynamicEval("focus.health <= "..NeP.Core.PeFetch("npconfShamanResto", "HealingWaveTank")) end), "focus" }, -- Healing Wave
+	{ "8004", (function() return NeP.Core.dynamicEval("focus.health <= "..NeP.Core.PeFetch("NePConfigShammanResto", "HealingSurgeTank")) end), "focus" }, -- Healing Surge
+	{ "77472", (function() return NeP.Core.dynamicEval("focus.health <= "..NeP.Core.PeFetch("NePConfigShammanResto", "HealingWaveTank")) end), "focus" }, -- Healing Wave
 }
 
 local RaidHealing = {
 	{ "73685",{	-- Unleash Life	
 		"!player.buff(73685)",
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'UnleashLifeRaid')) end)
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'UnleashLifeRaid')) end)
 	}},
-	{ "16188", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'AncestralSwiftnessRaid')) end), "lowest" }, -- Ancestral Swiftness
-	{ "8004", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'HealingSurgeRaid')) end), "lowest" }, -- Healing Surge
+	{ "16188", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'AncestralSwiftnessRaid')) end), "lowest" }, -- Ancestral Swiftness
+	{ "8004", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'HealingSurgeRaid')) end), "lowest" }, -- Healing Surge
 	{ "77472", { -- Healing Wave
 		"lowest.health <= 60",
 		"lowest.buff(61295)" -- Riptide
@@ -373,30 +365,30 @@ local RaidHealing = {
 	{ "61295", { -- Riptide
 		"!player.buff(53390)", -- Tidal Waves
 		"!lowest.buff(61295)", -- Riptide
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'RiptideRaid')) end)
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'RiptideRaid')) end)
 	}, "lowest" },
-	{ "77472", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'HealingWaveRaid')) end), "lowest" }, -- Healing Wave
+	{ "77472", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'HealingWaveRaid')) end), "lowest" }, -- Healing Wave
 }
 
 local _Player = {
 	-- Survival
-	{ "108271", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'AstralShift')) end), nil }, -- Astral Shift
+	{ "108271", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'AstralShift')) end), nil }, -- Astral Shift
 	{ "Stoneform", "player.health <= 65" }, -- Stoneform // Dwarf Racial
 	{ "59547", "player.health <= 70", "player" }, -- Gift of the Naaru // Draenei Racial
-	{ "16188", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'AncestralSwiftnessPlayer')) end), "player" }, -- Ancestral Swiftness
-	{ "8004", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'HealingSurgePlayer')) end), "player" }, -- Healing Surge
+	{ "16188", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'AncestralSwiftnessPlayer')) end), "player" }, -- Ancestral Swiftness
+	{ "8004", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'HealingSurgePlayer')) end), "player" }, -- Healing Surge
 	{ "61295", { -- Riptide
 		"!player.buff(53390)", -- Tidal Waves
 		"!player.buff(61295)", -- Riptide
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'RiptidePlayer')) end),
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'RiptidePlayer')) end),
 		"!lowest.health <= 50" -- Dont use it on sealf if someone needs it more!
 	}, "player" },
-	{ "77472", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'HealingWavePlayer')) end), "player" }, -- Healing Wave
+	{ "77472", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'HealingWavePlayer')) end), "player" }, -- Healing Wave
 	
 	-- Items
-	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Healthstone')) end), nil }, -- Healthstone
-	{ "#trinket1", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Trinket1')) end), nil }, -- Trinket 1
-	{ "#trinket2", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('npconfShamanResto', 'Trinket2')) end), nil }, -- Trinket 2
+	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'Healthstone')) end), nil }, -- Healthstone
+	{ "#trinket1", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'Trinket1')) end), nil }, -- Trinket 1
+	{ "#trinket2", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'Trinket2')) end), nil }, -- Trinket 2
 }
 
 local DPS= {

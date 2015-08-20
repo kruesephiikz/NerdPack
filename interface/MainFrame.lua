@@ -6,7 +6,6 @@ local _StatusText = false
 local buttonsTotalHeight = 10
 
 function StatusGUI_RUN()
-	local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 	
 	NeP_Frame = NeP.Interface.addFrame(UIParent)
 	NeP_Frame:SetPoint("TOP") 
