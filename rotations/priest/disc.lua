@@ -628,7 +628,7 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 		}, "modifier.party" },
 		{{ -- Solo
 			{_All},
-			{_Player},
+			{_Player, "player.health <= 60"},
 			{_Solo, "target.range < 30"}
 		}, "!modifier.party" },
 	},  
