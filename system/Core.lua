@@ -33,34 +33,59 @@ NeP = {
 
 local _addonColor = NeP.Addon.Interface.addonColor
 
-_openPEGUIs = {}
-NeP.Core.BuildGUI = function(gui)
+local _openPEGUIs = {}
+NeP.Core.BuildGUI = function(gui, _table)
+	local gui = tostring(gui)
 	if _openPEGUIs[gui] ~= nil then
-		if _openPEGUIs[gui] == 'Showing' then
-			ProbablyEngine.interface.buildGUI(gui).parent:Hide()
+		if _openPEGUIs[gui].parent:IsShown() then
+			_openPEGUIs[gui].parent:Hide()
 		else
-			ProbablyEngine.interface.buildGUI(gui).parent:Show()
+			_openPEGUIs[gui].parent:Show()
 		end
 	else
-		_openPEGUIs[gui] = 'Showing'
-		ProbablyEngine.interface.buildGUI(gui)
+		_openPEGUIs[gui] = ProbablyEngine.interface.buildGUI(_table)
 	end
 end
 
+NeP.Core.getGUI = function(gui)
+	return _openPEGUIs[gui]
+end
 
-local defaults = {
+function NeP.Addon.Interface.ClassGUI()
+	_NePClassGUIs = {
+		[250] = NeP.Addon.Interface.DkBlood,
+		[252] = NeP.Addon.Interface.DkUnholy,
+		[103] = NeP.Addon.Interface.DruidFeral,
+		[104] = NeP.Addon.Interface.DruidGuard,
+		[105] = NeP.Addon.Interface.DruidResto,
+		[102] = NeP.Addon.Interface.DruidBalance,
+		[257] = NeP.Addon.Interface.PriestHoly,
+		[258] = NeP.Addon.Interface.PriestShadow,
+		[256] = NeP.Addon.Interface.PriestDisc,
+		[70] = NeP.Addon.Interface.PalaRet,
+		[66] = NeP.Addon.Interface.PalaProt,
+		[65] = NeP.Addon.Interface.PalaHoly,
+		[73] = NeP.Addon.Interface.WarrProt,
+		[72] = NeP.Addon.Interface.WarrFury,
+		[270] = NeP.Addon.Interface.MonkMm,
+		[269] = NeP.Addon.Interface.MonkWw,
+		[262] = NeP.Addon.Interface.ShamanEle,
+		[264] = NeP.Addon.Interface.ShamanResto
+	}
+	local _Spec = GetSpecializationInfo(GetSpecialization())
+	if _Spec ~= nil then
+		if _NePClassGUIs[_Spec] ~= nil then
+			NeP.Core.BuildGUI(_Spec, _NePClassGUIs[_Spec])		
+		end
+	end
+end
+NeP.Config = {}
+
+NeP.Config.defaults = {
 	['CONFIG'] = {
 		['test'] = false,
 	},
-	['OMList'] = {
-		['test'] = false,
-		['ShowDPS'] = false,
-		['ShowHealthText'] = true,
-		['ShowHealthBars'] = true,
-	}
 }
-
-NeP.Config = {}
 
 local MyAddonFrame = CreateFrame("Frame")
 MyAddonFrame:RegisterEvent("VARIABLES_LOADED")

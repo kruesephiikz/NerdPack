@@ -11,6 +11,13 @@ local SETTINGS_WIDTH = 200;
 local statusBars = { }
 local statusBarsUsed = { }
 
+NeP.Config.defaults['OMList'] = {
+	['test'] = false,
+	['ShowDPS'] = false,
+	['ShowHealthText'] = true,
+	['ShowHealthBars'] = true,
+}
+
 function OMGUI_RUN()
 	
 	NeP_OMLIST = NeP.Interface.addFrame(NeP_Frame)

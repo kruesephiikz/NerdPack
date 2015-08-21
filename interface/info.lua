@@ -1,8 +1,3 @@
-local InfoWindow
-local NeP_OpenInfoWindow = false
-local NeP_ShowingInfoWindow = false
-local NeP_InfoUpdating = false
-
 NeP.Addon.Interface.info = {
 	key = "npinfo",
 	title = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Name,
@@ -141,41 +136,18 @@ NeP.Addon.Interface.info = {
 	}
 }
 
--- Update Text for Info GUI
-local function NeP_updateLiveInfo()
-	-- General Status
-	InfoWindow.elements.current_Unlocker:SetText(ProbablyEngine.pmethod == nil and ProbablyEngine.protected.method == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. (ProbablyEngine.pmethod or ProbablyEngine.protected.method))
-	InfoWindow.elements.current_PEStatus:SetText(ProbablyEngine.version == NeP.Core.peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
-	InfoWindow.elements.current_MTSProfiles:SetText(NeP.Core.CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
-	-- Advanced Status
-	InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
-	InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
-end
-
 function NeP.Addon.Interface.InfoGUI()
-	if not NeP_OpenInfoWindow then
-		InfoWindow = NeP.Core.PeBuildGUI(NeP.Addon.Interface.info)
-		NeP_InfoUpdating = true
-		NeP_OpenInfoWindow = true
-		NeP_ShowingInfoWindow = true
-		InfoWindow.parent:SetEventListener('OnClose', function()
-			NeP_OpenInfoWindow = false
-			NeP_ShowingInfoWindow = false
-			NeP_InfoUpdating = false
-		end)
-	elseif NeP_OpenInfoWindow == true 
-	and NeP_ShowingInfoWindow == true then
-		NeP_ShowingInfoWindow = false
-		NeP_InfoUpdating = false
-		InfoWindow.parent:Hide()
-	elseif NeP_OpenInfoWindow == true 
-	and NeP_ShowingInfoWindow == false then
-		NeP_ShowingInfoWindow = true
-		NeP_InfoUpdating = true
-		InfoWindow.parent:Show()
-	end
-	
-	if NeP_InfoUpdating then
-		C_Timer.NewTicker(1.00, NeP_updateLiveInfo, nil)
-	end
+	NeP.Core.BuildGUI('Info', NeP.Addon.Interface.info)
+	local InfoWindow = NeP.Core.getGUI('Info')
+		C_Timer.NewTicker(1.00, (function()
+			if InfoWindow.parent:IsShown() then
+			-- General Status
+			InfoWindow.elements.current_Unlocker:SetText(ProbablyEngine.pmethod == nil and ProbablyEngine.protected.method == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. (ProbablyEngine.pmethod or ProbablyEngine.protected.method))
+			InfoWindow.elements.current_PEStatus:SetText(ProbablyEngine.version == NeP.Core.peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
+			InfoWindow.elements.current_MTSProfiles:SetText(NeP.Core.CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
+			-- Advanced Status
+			InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
+			InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
+		end
+	end), nil)
 end

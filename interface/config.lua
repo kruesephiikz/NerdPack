@@ -144,26 +144,5 @@ NeP.Addon.Interface.General = {
 }
 
 function NeP.Addon.Interface.ConfigGUI()
-	-- If a frame has not been created, create one...
-	if not NeP_OpenConfigWindow then
-		ConfigWindow = NeP.Core.PeBuildGUI(NeP.Addon.Interface.General)
-		-- This is so the window isn't opened twice :D
-		NeP_OpenConfigWindow = true
-		NeP_ShowingConfigWindow = true
-		ConfigWindow.parent:SetEventListener('OnClose', function()
-			NeP_OpenConfigWindow = false
-			NeP_ShowingConfigWindow = false
-		end)
-	
-	-- If a frame has been created and its showing, hide it.
-	elseif NeP_OpenConfigWindow == true and NeP_ShowingConfigWindow == true then
-		ConfigWindow.parent:Hide()
-		NeP_ShowingConfigWindow = false
-	
-	-- If a frame has been created and its hiding, show it.
-	elseif NeP_OpenConfigWindow == true and NeP_ShowingConfigWindow == false then
-		ConfigWindow.parent:Show()
-		NeP_ShowingConfigWindow = true
-	
-	end
+	NeP.Core.BuildGUI('config', NeP.Addon.Interface.General)
 end
