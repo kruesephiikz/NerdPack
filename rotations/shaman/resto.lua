@@ -225,11 +225,11 @@ local Totems = {
 		}},
 
 	},{
-		"!modifier.members > 5",
+		"!modifier.raid",
 		"modifier.party"
 	}},
-	{{ -- Raid
 	
+	{{ -- Raid
 		-- Water
 		{{ -- Dont break other Water Totems
 			{{ -- Cooldowns
@@ -258,10 +258,7 @@ local Totems = {
 			"!player.totem(108273)" -- Stop if w/ Windwalk Totem
 		}},
 
-	},{
-		"modifier.members > 5",
-		"!modifier.party"
-	}},
+	}, "modifier.raid" },
 	
 	-- Earth
 	{ "108270", { -- Stone Bulwark Totem
@@ -302,12 +299,12 @@ local General = {
 }
 
 local _Fast = {
-	{ "73685",{	-- Unleash Life	
+	{ "!73685",{	-- Unleash Life	
 		"!player.buff(73685)",
 		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfigShammanResto', 'UnleashLifeRaid')) end)
 	}, "lowest" },
-	{ "16188", (function() return NeP.Core.dynamicEval("lowest.health <= 30" .. NeP.Core.PeFetch('NePConfigShammanResto', 'AncestralSwiftness')) end), "lowest" }, -- Ancestral Swiftness
-	{ "8004",nil, "lowest" }, -- Healing Surge
+	{ "!16188", (function() return NeP.Core.dynamicEval("lowest.health <= 30" .. NeP.Core.PeFetch('NePConfigShammanResto', 'AncestralSwiftness')) end), "lowest" }, -- Ancestral Swiftness
+	{ "!8004",nil, "lowest" }, -- Healing Surge
 }
 
 local AoE = {
@@ -319,10 +316,7 @@ local AoE = {
 	}},
 	{{ -- Raid
 		{ "1064", "@coreHealing.needsHealing(90, 5)", "lowest" },  -- Chain Heal
-	},{
-		"modifier.raid",
-		"!modifier.party"
-	}},
+	}, "modifier.raid" },
 }
 
 local Tank = {
@@ -406,35 +400,35 @@ local DPS= {
 
 ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Restoration'), 
 	{ -- In-Combat
-		{{ -- Solo
-			{_Player},
-			{DPS, "toggle.dps"}
-		}, "!modifier.party" },
+		{General},
 		{{ -- Party/Raid
-			{General},
-			{{ -- Stop if moving
-				{{ -- Dispel
-					{ "77130", (function() return NeP.Lib.Dispell(
-						function() return dispelType == 'Magic' or dispelType == 'Curse' end
-					) end) },
-				}}, 
-				{{-- Interrupt
-					{ "57994" }, -- Wind Shear
-				}, "target.NePinterrupt" },
+			{{ -- Dispel
+				{ "77130", (function() return NeP.Lib.Dispell(
+					function() return dispelType == 'Magic' or dispelType == 'Curse' end
+				) end) },
+			}}, 
+			{{-- Interrupt
+				{ "57994" }, -- Wind Shear
+			}, "target.NePinterrupt" },
+			{{ -- General Conditions
 				{Cooldowns, "modifier.cooldowns"},
 				{Totems, "toggle.NeP_Totems"},
-				{_Fast, "lowest.health < 40"},
+				{_Fast, {"lowest.health < 40", "!player.casting.percent >= 40"}},
 				{AoE, {"modifier.multitarget", "!lowest.health < 60"}},
-				{Tank, "tank.range <= 40"},
-				{Focus, "focus.range <= 40"},
-				{_Player},
-				{RaidHealing},
+				{Tank, {"tank.range <= 40", "tank.health < 100"}},
+				{Focus, {"focus.range <= 40", "focus.health < 100"}},
+				{_Player, "player.health < 100"},
+				{RaidHealing, "lowest.health < 100"},
 				{DPS, {
 					"toggle.dps",
 					"target.range < 40"
 				}},
 			}, "!player.moving" },
 		}, "modifier.party" },
+		{{ -- Solo
+			{_Player},
+			{DPS, "toggle.dps"}
+		}, "!modifier.party" },
 	},{ -- Out-Combat
 		{General},
 		{_Player}
