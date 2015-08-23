@@ -47,6 +47,7 @@ local Pet = {
 		{ "55709", "!player.debuff(55711)"}, -- Heart of the Phoenix
 		{ "982" } -- Revive Pet
 	}, {"pet.dead", "toggle.ressPet"}},
+	{"/cast Call Pet 1", "!pet.exists" },
   	{{ -- Pet Alive
 		{ "53271", "player.state.stun" }, -- Master's Call
 		{ "53271", "player.state.root" }, -- Master's Call
@@ -64,7 +65,7 @@ local Pet = {
 			"!focus.exists", 
 			"target.threat > 85" 
 		}, "pet" },
-	}, "pet.alive" },
+	}, { "player.alive", "pet.exists" } },
 }
 
 local Cooldowns = {
@@ -91,21 +92,9 @@ local Survival = {
 }
 
 local focusFire = {	
-	{ "82692", {
-		"player.buff(19615).count = 5",  -- Frenzy
-		"player.spell(19574).cooldown <= 10", -- Bestial Wrath
-	}},
-	{ "82692", {
-		"player.buff(19615).count = 5", -- Frenzy
-		"player.spell(19574).cooldown >= 19", -- Bestial Wrath
-	}},
-	{ "82692", "player.buff(19574).duration >= 3" }, -- Bestial Wrath
+	{ "82692", "player.buff(19615).count = 5" }, -- Frenzy
 	{ "!82692", "player.buff(19615).duration <= 1" }, -- Frenzy
 	{ "82692", "player.spell(121818).cooldown >= 260" }, -- Stampede
-	{ "82692", {
-		"player.spell(19574).cooldown = 0", -- Bestial Wrath
-		"!player.buff(19574)" -- Bestial Wrath
-	}},
 }
 
 local inCombat = {
@@ -134,7 +123,7 @@ ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksm
 		{{ -- General Conditions
 			{Survival, "player.health < 100"},
 			{Cooldowns, "modifier.cooldowns"},
-			{Pet, { "player.alive", "pet.exists" }},
+			{Pet},
 			{focusFire, { 
 				"pet.exists", 
 				"!player.buff(Focus Fire)", 

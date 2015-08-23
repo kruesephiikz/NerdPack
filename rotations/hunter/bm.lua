@@ -47,6 +47,7 @@ local Pet = {
 		{ "55709", "!player.debuff(55711)"}, -- Heart of the Phoenix
 		{ "982" } -- Revive Pet
 	}, {"pet.dead", "toggle.ressPet"}},
+	{"/cast Call Pet 1", "!pet.exists" },
   	{{ -- Pet Alive
 		{ "53271", "player.state.stun" }, -- Master's Call
 		{ "53271", "player.state.root" }, -- Master's Call
@@ -68,19 +69,19 @@ local Pet = {
 			"player.buff(177668).duration > 4", -- Steady Focus // TALENT
 			"player.focus > 35",
 			"!player.buff(19574)", -- Bestial Wrath
-			"player.spell(19574).cooldown = 0", -- Bestial Wrath
 			"player.spell(34026).cooldown <= 2", -- Kill Command
 			"talent(4,1)",
+			"target.petinmelee"
 		}, "target" },
 		{ "!19574", { -- Bestial Wrath
 			"!player.buff(19574)", -- Bestial Wrath
-			"player.spell(19574).cooldown = 0", -- Bestial Wrath
 			"player.spell(Dire Beast).cooldown < 2",
 			"player.spell(34026).cooldown <= 2", -- Kill Command
 			"talent(4,2)",
+			"target.petinmelee"
 		}, "target" },
 		{ "34026" }, -- Kill Command
-	}, "pet.alive" },
+	}, { "player.alive", "pet.exists" } },
 }
 
 local Cooldowns = {
@@ -149,7 +150,7 @@ ProbablyEngine.rotation.register_custom(253, NeP.Core.GetCrInfo('Hunter - Beast 
 		{{ -- General Conditions
 			{Survival, "player.health < 100"},
 			{Cooldowns, "modifier.cooldowns"},
-			{Pet, { "player.alive", "pet.exists" }},
+			{Pet},
 			{focusFire, { 
 				"pet.exists", 
 				"!player.buff(Focus Fire)", 
