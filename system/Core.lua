@@ -31,6 +31,67 @@ NeP = {
 	}
 }
 
+--[[   Healing engine i'm bulding...
+		USAGE: {"2060", (function() return GetHealTarget() end)}
+
+local healthPercentage = function(unit)
+	return math.floor(((UnitHealth(unit)+UnitGetTotalAbsorbs(unit)+UnitGetTotalAbsorbs(unit)) / UnitHealthMax(unit)) * 100)
+end
+
+GetSpecialPrio = function(unit)
+	
+end
+rosterTable = {
+	prio = {},
+	lowest = {}
+}
+
+BuildRoster = function()
+	wipe(rosterTable.prio)
+	wipe(rosterTable.lowest)
+	for i=1,#NeP.ObjectManager.unitFriendlyCache do -- My OM
+		local object = NeP.ObjectManager.unitFriendlyCache[i]
+		local _health = healthPercentage(object.key)
+		local _role = UnitGroupRolesAssigned(object.key)
+		if (_role == 'TANK' or _role == 'HEALER') or UnitIsPlayer(object.key) or GetUnitName(object.key) == GetUnitName('focus') then
+			rosterTable.prio[#rosterTable.prio+1] = {key=object.key, health=_health, role=_role}
+			rosterTable.lowest[#rosterTable.lowest+1] = {key=object.key, health=_health, role=_role}
+		else
+			rosterTable.lowest[#rosterTable.lowest+1] = {key=object.key, health=_health, role=_role}
+		end
+	end
+	table.sort(rosterTable.prio, function(a,b) return a.health < b.health end)
+	table.sort(rosterTable.lowest, function(a,b) return a.health < b.health end)
+end
+
+C_Timer.NewTicker(1, (function() BuildRoster() end), nil)
+
+GetHealTarget = function()
+	local Prio = rosterTable.prio
+	local Lowest = rosterTable.lowest
+	for i=1, #Lowest do
+		if Lowest[i].health >= 40 then
+			for i=1, #Prio do
+				if Prio[i].health < 100 then
+					print('Prio: '..Prio[i].key)
+					ProbablyEngine.dsl.parsedTarget = Prio[i].key
+					return true
+				end
+			end
+			if Lowest[i].health < 100 then
+				print('Lowest: '..Lowest[i].key)
+				ProbablyEngine.dsl.parsedTarget = Lowest[i].key
+				return true
+			end
+		else
+			print('Lowest: '..Lowest[i].key)
+			ProbablyEngine.dsl.parsedTarget = Lowest[i].key
+			return true
+		end
+	end
+	return false
+end]]
+
 local _addonColor = NeP.Addon.Interface.addonColor
 
 local _openPEGUIs = {}
@@ -44,6 +105,8 @@ NeP.Core.BuildGUI = function(gui, _table)
 		end
 	else
 		_openPEGUIs[gui] = ProbablyEngine.interface.buildGUI(_table)
+		--_openPEGUIs[gui].parent:SetParent(NeP_Frame)
+		--_openPEGUIs[gui].parent:SetPoint('TOP', NeP_Frame)
 	end
 end
 

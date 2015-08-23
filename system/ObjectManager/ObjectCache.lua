@@ -470,7 +470,7 @@ C_Timer.NewTicker(1, (function()
 							-- Enemie
 							local target = prefix..i.."target"
 							if GenericFilter(target) then
-								local _OD = _UnitDistance('player', object)
+								local _OD = _UnitDistance('player', target)
 								if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
 									if NeP.Core.PeFetch("ObjectCache", "EU") then
 										if UnitCanAttack('player', target) then
@@ -490,8 +490,8 @@ C_Timer.NewTicker(1, (function()
 							-- Friendly
 							local friendly = prefix..i
 							if NeP.Core.PeFetch("ObjectCache", "FU") then
-								if GenericFilter(target) then
-									local _OD = _UnitDistance('player', object)
+								if GenericFilter(friendly) then
+									local _OD = _UnitDistance('player', friendly)
 									if _OD <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
 										OChFriendly[#OChFriendly+1] = {
 											key=friendly, 
