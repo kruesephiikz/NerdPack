@@ -50,10 +50,12 @@ function NeP.Lib.canTaunt()
 		for i=1,#NeP.ObjectManager.unitCache do
 			local object = NeP.ObjectManager.unitCache[i].key
 			if UnitIsTappedByPlayer(object) and object.distance <= 40 then
-				if UnitThreatSituation(object) and UnitThreatSituation(object) >= 2 then
-					if NeP.Core.Infront('player', object) then
-						ProbablyEngine.dsl.parsedTarget = object
-						return true 
+				if UnitAffectingCombat(object) then
+					if UnitThreatSituation(object) and UnitThreatSituation(object) >= 2 then
+						if NeP.Core.Infront('player', object) then
+							ProbablyEngine.dsl.parsedTarget = object
+							return true 
+						end
 					end
 				end
 			end
@@ -104,6 +106,7 @@ Classifications:
 ]]
 local _lastDotted = nil
 function NeP.Lib.AutoDots(_spell, _health, _duration, _distance, _classification)
+	if _lastDotted == _object.key then return false end
 	if not IsUsableSpell(_spell) then return false end
 	if _classification == nil then _classification = 'all' end
 	if _distance == nil then _distance = 40 end
@@ -111,18 +114,19 @@ function NeP.Lib.AutoDots(_spell, _health, _duration, _distance, _classification
 	if _duration == nil then _duration = 0 end
 	for i=1,#NeP.ObjectManager.unitCache do
 		local _object = NeP.ObjectManager.unitCache[i]
-		if _lastDotted == _object then return false end
-		if UnitClassification(_object) == _classification or _classification == 'all' then
-			if _object.health <= _health then
-				local _,_,_,_,_,_,debuff = UnitDebuff(_object.key, GetSpellInfo(_spell), nil, "PLAYER")
-				if not debuff or debuff - GetTime() < _duration then
-					if UnitCanAttack("player", _object.key)
-					and _object.distance <= _distance then
-						if NeP.Core.Infront('player', _object.key) then
-							ProbablyEngine.dsl.parsedTarget = _object.key
-							_lastDotted = _object.key
-							return true
-						end					 
+		if UnitAffectingCombat(object.key) then
+			if UnitClassification(_object.key) == _classification or _classification == 'all' then
+				if _object.health <= _health then
+					local _,_,_,_,_,_,debuff = UnitDebuff(_object.key, GetSpellInfo(_spell), nil, "PLAYER")
+					if not debuff or debuff - GetTime() < _duration then
+						if UnitCanAttack("player", _object.key)
+						and _object.distance <= _distance then
+							if NeP.Core.Infront('player', _object.key) then
+								ProbablyEngine.dsl.parsedTarget = _object.key
+								_lastDotted = _object.key
+								return true
+							end					 
+						end
 					end
 				end
 			end
