@@ -9,9 +9,7 @@ NeP = {
 		PeBuildGUI = ProbablyEngine.interface.buildGUI
 	},
 	Interface = {
-		GuiColor = "0070DE",
-		GuiTextColor = "|cff0070DE",
-		addonColor = "|cff0070DE",
+		addonColor = "0070DE",
 		mediaDir = "Interface\\AddOns\\NerdPack\\media\\"
 	},
 	Info = {
@@ -20,7 +18,6 @@ NeP = {
 		Version = "6.2.1.1",
 		Branch = "Beta",
 		WoW_Version = "6.2.0",
-		Icon = "|TInterface\\AddOns\\NerdPack\\media\\logo.blp:10:10|t",
 		Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
 		Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp"
 	}
@@ -87,7 +84,7 @@ GetHealTarget = function()
 	return false
 end]]
 
-local _addonColor = NeP.Interface.addonColor
+local _addonColor = '|cff'..NeP.Interface.addonColor
 
 local _openPEGUIs = {}
 NeP.Core.BuildGUI = function(gui, _table)
@@ -247,7 +244,7 @@ end
 function NeP.Core.GetCrInfo(txt)
 	local _nick = _addonColor..NeP.Info.Nick
 	local _classColor = NeP.Core.classColor('Player')
-	return NeP.Info.Icon.. '|r[' .. _nick .. "|r]|r[|cff" .. _classColor .. txt .. "|r]"
+	return '|T'..NeP.Info.Logo..':10:10|t'.. '|r[' .. _nick .. "|r]|r[|cff" .. _classColor .. txt .. "|r]"
 end
 
 function NeP.Core.HideAll()

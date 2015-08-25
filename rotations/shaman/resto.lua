@@ -1,7 +1,7 @@
 NeP.Interface.ShamanResto = {
 	key = "NePConfigShammanResto",
 	profiles = true,
-	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
+	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Shaman-Resto Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,
@@ -9,7 +9,7 @@ NeP.Interface.ShamanResto = {
 	config = {	
 		{ 
 			type = 'header', 
-			text = NeP.Interface.GuiTextColor.."General Settings:", 
+			text = '|cff'..NeP.Interface.addonColor.."General Settings:", 
 			align = "center"
 		},
 			{ 
@@ -43,7 +43,7 @@ NeP.Interface.ShamanResto = {
 		{ type = 'rule' },
 		{ 
 			type = 'header', 
-			text = NeP.Interface.GuiTextColor.."Items Settings:", 
+			text = '|cff'..NeP.Interface.addonColor.."Items Settings:", 
 			align = "center"
 		},
 			{ 
@@ -70,7 +70,7 @@ NeP.Interface.ShamanResto = {
 		{ type = 'rule' },
 		{ 
 			type = 'header', 
-			text = NeP.Interface.GuiTextColor.."Tank/Focus Settings:", 
+			text = '|cff'..NeP.Interface.addonColor.."Tank/Focus Settings:", 
 			align = "center"
 		},
 			{ 
@@ -101,7 +101,7 @@ NeP.Interface.ShamanResto = {
 		{ type = 'rule' },
 		{ 
 			type = 'header', 
-			text = NeP.Interface.GuiTextColor.."Player Settings:", 
+			text = '|cff'..NeP.Interface.addonColor.."Player Settings:", 
 			align = "center"
 		},
 			{ 
@@ -132,7 +132,7 @@ NeP.Interface.ShamanResto = {
 		{ type = 'rule' },
 		{ 
 			type = 'header', 
-			text = NeP.Interface.GuiTextColor.."Raid Settings:", 
+			text = '|cff'..NeP.Interface.addonColor.."Raid Settings:", 
 			align = "center"
 		},
 			{ 

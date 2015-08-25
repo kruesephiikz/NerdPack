@@ -10,13 +10,13 @@ local _smelt_Run = false
 NeP.Interface.Items = {
 	key = "NePItemConf",
 	profiles = true,
-	title = NeP.Info.Icon.." "..NeP.Info.Nick,
+	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Nick,
 	subtitle = "ItemBot Settings",
-	color = NeP.Interface.GuiColor,
+	color = NeP.Interface.addonColor,
 	width = 250,
 	height = 350,
 	config = {
-		{ type = 'header', text = NeP.Interface.GuiTextColor.."Item Bot:", size = 25,align = "Center" },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Item Bot:", size = 25,align = "Center" },
 		{ type = 'text', text = "Requires to have both "..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
 		{ type = 'rule' },{ type = 'spacer' },
 		-- Open Salvage

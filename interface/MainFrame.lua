@@ -1,4 +1,4 @@
-local _addonColor = NeP.Interface.addonColor
+local _addonColor = '|cff'..NeP.Interface.addonColor
 local buttonColor = "|cffFFFFFF"
 
 local OPTIONS_HEIGHT = 30
@@ -21,7 +21,7 @@ function StatusGUI_RUN()
 	NeP_Frame:SetClampedToScreen(true)
 	local statusText1 = NeP.Interface.addText(NeP_Frame)
 	statusText1:SetPoint("LEFT", NeP_Frame, 0, 0)
-	statusText1:SetText(NeP.Info.Icon.._addonColor..NeP.Info.Name)
+	statusText1:SetText('|T'..NeP.Info.Logo..':10:10|t'.._addonColor..NeP.Info.Name)
 	local minButton = NeP.Interface.addButton(NeP_Frame)
 	minButton.text:SetText(buttonColor.."=")
 	minButton:SetPoint("RIGHT", NeP_Frame, 0, 0)
@@ -180,13 +180,13 @@ function StatusGUI_RUN()
 		for i=1, #NeP.Interface.Alerts do
 			if not statusGUIAlert:IsVisible() and not _alertRunning then
 				if NeP.Interface.Alerts[i] ~= nil and #NeP.Interface.Alerts > 0 then
-					_Time = GetTime()
 					local text = tostring(_addonColor..NeP.Interface.Alerts[i])
 					statusText2:SetText('')
 					statusGUIAlertText:SetText(text)
 					statusGUIAlert:SetAlpha(1)
 					statusGUIAlert:SetSize(statusGUIAlertText:GetStringWidth()+10, statusGUIAlertText:GetStringHeight())
 					statusGUIAlert:Show()
+					_Time = GetTime()
 					_alertRunning = true
 				end
 			end

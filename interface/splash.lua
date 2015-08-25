@@ -1,5 +1,5 @@
 local WoWver, WoWbuild, WoWdate, WoWtoc = GetBuildInfo()
-local _addonColor = NeP.Interface.addonColor
+local _addonColor = '|cff'..NeP.Interface.addonColor
 local NePActive = ''
 local _time = 0
 

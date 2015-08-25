@@ -1,7 +1,7 @@
 NeP.Interface.WarrProt = {
 	key = "npconfigWarrProt",
 	profiles = true,
-	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
+	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Warrior Protection Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

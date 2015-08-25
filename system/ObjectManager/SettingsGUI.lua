@@ -1,5 +1,5 @@
-local _addonColor = NeP.Interface.GuiColor
-local _tittleGUI = NeP.Info.Icon..NeP.Info.Nick
+local _addonColor = NeP.Interface.addonColor
+local _tittleGUI = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick
 
 local NeP_cacheWindow
 local NeP_OpenCacheWindow = false

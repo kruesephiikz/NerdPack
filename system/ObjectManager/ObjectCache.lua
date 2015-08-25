@@ -4,9 +4,6 @@ NeP.ObjectManager = {
 	objectsCache = {},
 }
 
-local _addonColor = NeP.Interface.GuiTextColor
-local _tittleGUI = NeP.Info.Icon..NeP.Info.Nick
-local _GUIColor = NeP.Interface.GuiColor
 local OChUnits = NeP.ObjectManager.unitCache
 local OChFriendly = NeP.ObjectManager.unitFriendlyCache
 local OChObjects = NeP.ObjectManager.objectsCache

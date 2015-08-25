@@ -9,13 +9,13 @@ local _fishRun = false
 NeP.Interface.Fishing = {
 	key = "NePFishingConf",
 	profiles = true,
-	title = NeP.Info.Icon.." "..NeP.Info.Name,
+	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
 	subtitle = "Fising Settings",
-	color = NeP.Interface.GuiColor,
+	color = NeP.Interface.addonColor,
 	width = 250,
 	height = 250,
 	config = {
-		{ type = 'header', text = NeP.Interface.GuiTextColor.."Fishing Bot:", size = 25, align = "Center"},
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Fishing Bot:", size = 25, align = "Center"},
 		{ type = 'text', text = "Requires FireHack and to have both "..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
 		{ type = 'rule' },{ type = 'spacer' },
 		{

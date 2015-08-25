@@ -3,7 +3,7 @@ local LibDraw = LibStub("LibDraw-1.0")
 local _mediaDir = NeP.Interface.mediaDir
 local alpha = 100
 local zOffset = 3
-local _addonColor = NeP.Interface.GuiTextColor
+local _addonColor = '|cff'..NeP.Interface.addonColor
 
 local basicMarker = {
 	{ 0.1, 0, 0, -0.1, 0, 0},
@@ -392,37 +392,37 @@ local NeP_OverlaysGUI_Showing = false
 NeP.Interface.Overlays = {
 	key = "NePconf_Overlays",
 	profiles = true,
-	title = NeP.Info.Icon.." "..NeP.Info.Name,
+	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
 	subtitle = "Overlays Settings",
-	color = NeP.Interface.GuiColor,
+	color = NeP.Interface.addonColor,
 	width = 250,
 	height = 500,
 	config = {
-		{ type = 'header', text = NeP.Interface.GuiTextColor.."Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Overlays:", size = 25, align = "Center" },
 			{ type = "text", text = "Only Works with FireHack ATM!", size = 11, offset = 0, align = "center" },
 		{ type = 'spacer' },
 		{ type = 'rule' },
-		{ type = 'header', text = NeP.Interface.GuiTextColor.."Player Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Player Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Player Melee Range", key = "PlayerMRange", default = false },
 			{ type = "checkbox", text = "Display Player Caster Range", key = "PlayerCRange", default = false },
 			{ type = "checkbox", text = "Display Target Line", key = "TargetLine", default = false },
 			{ type = "checkbox", text = "Display Infront Cone", key = "PlayerInfrontCone", default = false },
 		{ type = 'spacer' },
 		{ type = 'rule' },
-		{ type = 'header', text = NeP.Interface.GuiTextColor.."Target Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Target Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Player Melee Range", key = "TargetMRange", default = false },
 			{ type = "checkbox", text = "Display Player Caster Range", key = "TargetCRange", default = false },
 			{ type = "checkbox", text = "Display Infront Cone", key = "TargetCone", default = false },
 		{ type = 'spacer' },
 		{ type = 'rule' },
-		{ type = 'header', text = NeP.Interface.GuiTextColor.."Objects Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Objects Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Herb Objects", key = "objectsHerbs", default = false },
 			{ type = "checkbox", text = "Display Ore Objects", key = "objectsOres", default = false },
 			{ type = "checkbox", text = "Display Lumbermill Objects", key = "objectsLM", default = false },
 			{ type = "checkbox", text = "Display Fish Objects", key = "objectsFish", default = false },
 		{ type = 'spacer' },
 		{ type = 'rule' },
-		{ type = 'header', text = NeP.Interface.GuiTextColor.."Units Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Units Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Friendly Player Units", key = "objectsFriendlyPlayers", default = false },
 			{ type = "checkbox", text = "Display Enemie Player Units", key = "objectsEnemiePlayers", default = false },
 			{ type = "checkbox", text = "Display Rare Units", key = "objectsRares", default = false },

@@ -1,8 +1,8 @@
 NeP.Interface.info = {
 	key = "npinfo",
-	title = NeP.Info.Icon.." "..NeP.Info.Name,
+	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
 	subtitle = "Information",
-	color = NeP.Interface.GuiColor,
+	color = NeP.Interface.addonColor,
 	width = 350,
 	height = 400,
 	config = {

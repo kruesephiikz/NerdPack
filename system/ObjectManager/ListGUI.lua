@@ -1,5 +1,5 @@
 local DiesalGUI = LibStub("DiesalGUI-1.0");
-local _addonColor = '|cff'..NeP.Interface.GuiColor;
+local _addonColor = '|cff'..NeP.Interface.addonColor;
 local _tittleGUI = '|T'..NeP.Info.Logo..':20:20|t'.._addonColor..NeP.Info.Nick;
 local _objectTable = NeP.ObjectManager.unitFriendlyCache;
 local _Displaying = 'Friendly List';

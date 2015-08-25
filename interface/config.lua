@@ -5,9 +5,9 @@ local NeP_ShowingConfigWindow = false
 NeP.Interface.General = {
 	key = "npconf",
 	profiles = true,
-	title = NeP.Info.Icon.." "..NeP.Info.Name,
+	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
 	subtitle = "General Settings",
-	color = NeP.Interface.GuiColor,
+	color = NeP.Interface.addonColor,
 	width = 250,
 	height = 500,
 	config = {
@@ -25,7 +25,7 @@ NeP.Interface.General = {
 				{ type = 'rule' },
 				{ 
 					type = 'header', 
-					text = NeP.Interface.GuiTextColor.."General:", 
+					text = '|cff'..NeP.Interface.addonColor.."General:", 
 					size = 25,
 					align = "Center",
 				},
@@ -87,7 +87,7 @@ NeP.Interface.General = {
 				{ type = 'rule' },
 				{ 
 					type = 'header', 
-					text = NeP.Interface.GuiTextColor.."Advanced:", 
+					text = '|cff'..NeP.Interface.addonColor.."Advanced:", 
 					size = 25,
 					align = "Center",
 				},
@@ -117,7 +117,7 @@ NeP.Interface.General = {
 				{ type = 'rule' },
 				{ 
 					type = 'header', 
-					text = NeP.Interface.GuiTextColor.."Extras:", 
+					text = '|cff'..NeP.Interface.addonColor.."Extras:", 
 					size = 25,
 					align = "Center",
 				},
