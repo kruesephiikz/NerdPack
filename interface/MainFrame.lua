@@ -181,11 +181,11 @@ function StatusGUI_RUN()
 			if not statusGUIAlert:IsVisible() and not _alertRunning then
 				if NeP.Interface.Alerts[i] ~= nil and #NeP.Interface.Alerts > 0 then
 					_Time = GetTime()
+					local text = tostring(_addonColor..NeP.Interface.Alerts[i])
 					statusText2:SetText('')
-					statusGUIAlertText:SetText(_addonColor..NeP.Interface.Alerts[i])
+					statusGUIAlertText:SetText(text)
 					statusGUIAlert:SetAlpha(1)
-					statusGUIAlertText:SetSize(statusGUIAlertText:GetStringWidth(), statusGUIAlertText:GetStringHeight())
-					statusGUIAlert:SetSize(statusGUIAlertText:GetStringWidth(), statusGUIAlertText:GetStringHeight())
+					statusGUIAlert:SetSize(statusGUIAlertText:GetStringWidth()+10, statusGUIAlertText:GetStringHeight())
 					statusGUIAlert:Show()
 					_alertRunning = true
 				end
