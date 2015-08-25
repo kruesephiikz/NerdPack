@@ -1,5 +1,5 @@
 local WoWver, WoWbuild, WoWdate, WoWtoc = GetBuildInfo()
-local _addonColor = NeP.Addon.Interface.addonColor
+local _addonColor = NeP.Interface.addonColor
 local NePActive = ''
 local _time = 0
 
@@ -24,9 +24,9 @@ end), nil)
 local _StartEvents = function()
 	NePActive = ProbablyEngine.rotation.currentStringComp
 
-	if WoWver ~= NeP.Addon.Info.WoW_Version or ProbablyEngine.version ~= NeP.Core.peRecomemded then
-		if WoWver ~= NeP.Addon.Info.WoW_Version then
-			NeP.Core.Print("Your WoW Version is not supported by MTSP\n Using: "..WoWver.." while supported version is: "..NeP.Addon.Info.WoW_Version.."\nSomethings might not work until updated.")
+	if WoWver ~= NeP.Info.WoW_Version or ProbablyEngine.version ~= NeP.Core.peRecomemded then
+		if WoWver ~= NeP.Info.WoW_Version then
+			NeP.Core.Print("Your WoW Version is not supported by MTSP\n Using: "..WoWver.." while supported version is: "..NeP.Info.WoW_Version.."\nSomethings might not work until updated.")
 		end
 		if ProbablyEngine.version ~= NeP.Core.peRecomemded then
 			NeP.Core.Print("Your PE Version is not supported by MTSP\n Using: "..ProbablyEngine.version.." while supported version is: "..NeP.Core.peRecomemded.."\nSomethings might not work until updated.")
@@ -63,6 +63,6 @@ npSplash = CreateFrame("Frame", nil,UIParent)
 npSplash:SetPoint("CENTER",UIParent)
 npSplash:SetWidth(512)
 npSplash:SetHeight(256)
-npSplash:SetBackdrop({ bgFile = NeP.Addon.Info.Splash })
+npSplash:SetBackdrop({ bgFile = NeP.Info.Splash })
 npSplash:SetScript("OnUpdate",onUpdate)
 npSplash:Hide()

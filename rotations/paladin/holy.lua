@@ -1,7 +1,7 @@
-NeP.Addon.Interface.PalaHoly = {
+NeP.Interface.PalaHoly = {
   key = "npconfPalaHoly",
   profiles = true,
-  title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+  title = NeP.Info.Icon..NeP.Info.Nick.." Config",
   subtitle = "Paladin Holy Settings",
   color = NeP.Core.classColor('player'),
   width = 250,

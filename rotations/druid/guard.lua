@@ -1,7 +1,7 @@
-NeP.Addon.Interface.DruidGuard = {
+NeP.Interface.DruidGuard = {
 	key = "npconfDruidGuard",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Druid Guardian Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

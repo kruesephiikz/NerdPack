@@ -1,6 +1,6 @@
 local DiesalGUI = LibStub("DiesalGUI-1.0");
-local _addonColor = '|cff'..NeP.Addon.Interface.GuiColor;
-local _tittleGUI = '|T'..NeP.Addon.Info.Logo..':20:20|t'.._addonColor..NeP.Addon.Info.Nick;
+local _addonColor = '|cff'..NeP.Interface.GuiColor;
+local _tittleGUI = '|T'..NeP.Info.Logo..':20:20|t'.._addonColor..NeP.Info.Nick;
 local _objectTable = NeP.ObjectManager.unitFriendlyCache;
 local _Displaying = 'Friendly List';
 local OPTIONS_WIDTH = 300;
@@ -181,7 +181,7 @@ function OMGUI_RUN()
 
 	local _CacheShow = false
 
-	function NeP.Addon.Interface.OMGUI()
+	function NeP.Interface.OMGUI()
 		_CacheShow = not _CacheShow
 		if _CacheShow then
 			NeP_OMLIST:Show()

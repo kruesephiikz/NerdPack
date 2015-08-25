@@ -1,7 +1,7 @@
-NeP.Addon.Interface.DkBlood = {
+NeP.Interface.DkBlood = {
 	key = "npconfDkBlood",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Deathknight Blood Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

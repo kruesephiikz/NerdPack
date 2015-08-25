@@ -7,17 +7,17 @@ local _tsText, _tsID, _tsNumber = nil, nil, nil
 local _smelt_Run = false
 --local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice = GetItemInfo(_smeltingTable[i].ID)
 
-NeP.Addon.Interface.Items = {
+NeP.Interface.Items = {
 	key = "NePItemConf",
 	profiles = true,
-	title = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Nick,
+	title = NeP.Info.Icon.." "..NeP.Info.Nick,
 	subtitle = "ItemBot Settings",
-	color = NeP.Addon.Interface.GuiColor,
+	color = NeP.Interface.GuiColor,
 	width = 250,
 	height = 350,
 	config = {
-		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Item Bot:", size = 25,align = "Center" },
-		{ type = 'text', text = "Requires to have both "..NeP.Addon.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
+		{ type = 'header', text = NeP.Interface.GuiTextColor.."Item Bot:", size = 25,align = "Center" },
+		{ type = 'text', text = "Requires to have both "..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
 		{ type = 'rule' },{ type = 'spacer' },
 		-- Open Salvage
 		{  type = "checkbox",  text = "Auto Open Salvage",  key = "OpenSalvage",  default = false },
@@ -97,10 +97,10 @@ NeP.Addon.Interface.Items = {
 	},
 }
 
-function NeP.Addon.Interface.itemsBotGUI()
+function NeP.Interface.itemsBotGUI()
 	-- If a frame has not been created, create one...
 	if not NeP_OpenConfigWindow then
-		ConfigWindow = NeP.Core.PeBuildGUI(NeP.Addon.Interface.Items)
+		ConfigWindow = NeP.Core.PeBuildGUI(NeP.Interface.Items)
 		-- This is so the window isn't opened twice :D
 		NeP_OpenConfigWindow = true
 		NeP_ShowingConfigWindow = true

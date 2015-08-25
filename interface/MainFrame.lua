@@ -1,9 +1,16 @@
-local _addonColor = NeP.Addon.Interface.addonColor
+local _addonColor = NeP.Interface.addonColor
 local buttonColor = "|cffFFFFFF"
 
 local OPTIONS_HEIGHT = 30
 local _StatusText = false
 local buttonsTotalHeight = 10
+
+NeP.Interface.Alerts = {}
+
+function NeP.Alert(txt)
+	local _txt = tostring(txt)
+	table.insert(NeP.Interface.Alerts, _txt)
+end
 
 function StatusGUI_RUN()
 	
@@ -14,7 +21,7 @@ function StatusGUI_RUN()
 	NeP_Frame:SetClampedToScreen(true)
 	local statusText1 = NeP.Interface.addText(NeP_Frame)
 	statusText1:SetPoint("LEFT", NeP_Frame, 0, 0)
-	statusText1:SetText(NeP.Addon.Info.Icon.._addonColor..NeP.Addon.Info.Name)
+	statusText1:SetText(NeP.Info.Icon.._addonColor..NeP.Info.Name)
 	local minButton = NeP.Interface.addButton(NeP_Frame)
 	minButton.text:SetText(buttonColor.."=")
 	minButton:SetPoint("RIGHT", NeP_Frame, 0, 0)
@@ -27,7 +34,7 @@ function StatusGUI_RUN()
 	statusGUI2.texture:SetTexture(0, 0, 0, 0.3)
 	local statusText2 = NeP.Interface.addText(statusGUI2)
 	statusText2:SetPoint("TOP", statusGUI2, 0, 0)
-	statusText2:SetText(_addonColor..'Version:|cffFFFFFF '..NeP.Addon.Info.Version..' '..NeP.Addon.Info.Branch)
+	statusText2:SetText(_addonColor..'Version:|cffFFFFFF '..NeP.Info.Version..' '..NeP.Info.Branch)
 	statusText2:SetSize(statusText2:GetStringWidth(), statusText2:GetStringHeight())
 	statusGUI2:SetSize(statusText2:GetStringWidth(), statusText2:GetStringHeight())
 	statusGUI2:Hide()
@@ -52,7 +59,7 @@ function StatusGUI_RUN()
 	fishingButton:SetSize(statusText2:GetStringWidth()-10, 15)
 	fishingButton:SetScript("OnClick", function(self)
 		_HideFrames()
-		NeP.Addon.Interface.FishingGUI()
+		NeP.Interface.FishingGUI()
 	end)
 	buttonsTotalHeight = buttonsTotalHeight + 15
 	local OMButton = NeP.Interface.addButton(statusGUI3)
@@ -72,7 +79,7 @@ function StatusGUI_RUN()
 	ITButtom:SetSize(statusText2:GetStringWidth()-10, 15)
 	ITButtom:SetScript("OnClick", function(self)
 		_HideFrames()
-		NeP.Addon.Interface.FishingGUI()
+		NeP.Interface.FishingGUI()
 	end)
 	buttonsTotalHeight = buttonsTotalHeight + 15
 	local InfoButtom = NeP.Interface.addButton(statusGUI3)
@@ -82,7 +89,7 @@ function StatusGUI_RUN()
 	InfoButtom:SetSize(statusText2:GetStringWidth()-10, 15)
 	InfoButtom:SetScript("OnClick", function(self)
 		_HideFrames()
-		NeP.Addon.Interface.InfoGUI()
+		NeP.Interface.InfoGUI()
 	end)
 	buttonsTotalHeight = buttonsTotalHeight + 15
 	local ClassButtom = NeP.Interface.addButton(statusGUI3)
@@ -92,7 +99,7 @@ function StatusGUI_RUN()
 	ClassButtom:SetSize(statusText2:GetStringWidth()-10, 15)
 	ClassButtom:SetScript("OnClick", function(self)
 		_HideFrames()
-		NeP.Addon.Interface.ClassGUI()
+		NeP.Interface.ClassGUI()
 	end)
 	buttonsTotalHeight = buttonsTotalHeight + 15
 	local SettingsButtom = NeP.Interface.addButton(statusGUI3)
@@ -102,7 +109,7 @@ function StatusGUI_RUN()
 	SettingsButtom:SetSize(statusText2:GetStringWidth()-10, 15)
 	SettingsButtom:SetScript("OnClick", function(self)
 		_HideFrames()
-		NeP.Addon.Interface.ConfigGUI()
+		NeP.Interface.ConfigGUI()
 	end)
 	buttonsTotalHeight = buttonsTotalHeight + 15
 	local OverlaysButtom = NeP.Interface.addButton(statusGUI3)
@@ -112,7 +119,7 @@ function StatusGUI_RUN()
 	OverlaysButtom:SetSize(statusText2:GetStringWidth()-10, 15)
 	OverlaysButtom:SetScript("OnClick", function(self)
 		_HideFrames()
-		NeP.Addon.Interface.OverlaysGUI()
+		NeP.Interface.OverlaysGUI()
 	end)
 	buttonsTotalHeight = buttonsTotalHeight + 15
 	local DummyButtom = NeP.Interface.addButton(statusGUI3)
@@ -167,29 +174,34 @@ function StatusGUI_RUN()
 	end)
 	
 	local _Time = 0
+	local _alertRunning = false
 
 	C_Timer.NewTicker(0.01, (function()
-		if _Time < GetTime() - 1.0 then
-			if statusGUIAlert:GetAlpha() == 0 then
-				statusGUIAlert:Hide()
-				statusText2:SetText(_addonColor..'Version:|cffFFFFFF '..NeP.Addon.Info.Version..' '..NeP.Addon.Info.Branch)
-			else 
-				statusGUIAlert:SetAlpha(statusGUIAlert:GetAlpha() - .05)
+		for i=1, #NeP.Interface.Alerts do
+			if not statusGUIAlert:IsVisible() and not _alertRunning then
+				if NeP.Interface.Alerts[i] ~= nil and #NeP.Interface.Alerts > 0 then
+					_Time = GetTime()
+					statusText2:SetText('')
+					statusGUIAlertText:SetText(_addonColor..NeP.Interface.Alerts[i])
+					statusGUIAlert:SetAlpha(1)
+					statusGUIAlertText:SetSize(statusGUIAlertText:GetStringWidth(), statusGUIAlertText:GetStringHeight())
+					statusGUIAlert:SetSize(statusGUIAlertText:GetStringWidth(), statusGUIAlertText:GetStringHeight())
+					statusGUIAlert:Show()
+					_alertRunning = true
+				end
+			end
+			if _Time < GetTime() - 1.0 and _alertRunning then
+				if statusGUIAlert:GetAlpha() == 0 then
+					statusGUIAlert:Hide()
+					table.remove(NeP.Interface.Alerts, i)
+					_alertRunning = false
+					statusText2:SetText(_addonColor..'Version:|cffFFFFFF '..NeP.Info.Version..' '..NeP.Info.Branch)
+				else 
+					statusGUIAlert:SetAlpha(statusGUIAlert:GetAlpha() - .05)
+				end
 			end
 		end
 	end), nil)
-
-	function NeP.Alert(txt)
-		local _txt = tostring(txt)
-		_Time = GetTime()
-		statusText2:SetText('')
-		statusGUIAlertText:SetText(_addonColor.._txt)
-		statusGUIAlert:SetAlpha(1)
-		statusGUIAlertText:SetSize(statusGUIAlertText:GetStringWidth(), statusGUIAlertText:GetStringHeight())
-		statusGUIAlert:SetSize(statusGUIAlertText:GetStringWidth(), statusGUIAlertText:GetStringHeight())
-		statusGUIAlert:Show()
-		--PlaySoundFile("Sound\\Interface\\Levelup.Wav")
-	end
 	
 	function _HideFrames()
 		NeP_OMLIST:Hide()

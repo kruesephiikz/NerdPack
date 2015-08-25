@@ -1,12 +1,12 @@
-NeP.Addon.Interface.info = {
+NeP.Interface.info = {
 	key = "npinfo",
-	title = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Name,
+	title = NeP.Info.Icon.." "..NeP.Info.Name,
 	subtitle = "Information",
-	color = NeP.Addon.Interface.GuiColor,
+	color = NeP.Interface.GuiColor,
 	width = 350,
 	height = 400,
 	config = {
-		{ type = "texture",texture = NeP.Addon.Info.Splash,
+		{ type = "texture",texture = NeP.Info.Splash,
 			width = 400, 
 			height = 200, 
 			offset = 190, 
@@ -130,14 +130,14 @@ NeP.Addon.Interface.info = {
 				width = 325, 
 				height = 20,
 				callback = function()
-					NeP.Addon.Interface.InfoGUI()
+					NeP.Interface.InfoGUI()
 				end
 			},
 	}
 }
 
-function NeP.Addon.Interface.InfoGUI()
-	NeP.Core.BuildGUI('Info', NeP.Addon.Interface.info)
+function NeP.Interface.InfoGUI()
+	NeP.Core.BuildGUI('Info', NeP.Interface.info)
 	local InfoWindow = NeP.Core.getGUI('Info')
 		C_Timer.NewTicker(1.00, (function()
 			if InfoWindow.parent:IsShown() then

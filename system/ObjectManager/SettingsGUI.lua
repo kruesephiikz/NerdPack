@@ -1,5 +1,5 @@
-local _addonColor = NeP.Addon.Interface.GuiColor
-local _tittleGUI = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick
+local _addonColor = NeP.Interface.GuiColor
+local _tittleGUI = NeP.Info.Icon..NeP.Info.Nick
 
 local NeP_cacheWindow
 local NeP_OpenCacheWindow = false
@@ -23,11 +23,11 @@ local NeP_ObjectCache = {
 			{ type = "checkbox", text = "Cache Enemies Units", key = "EU", default = true },
 			{ type = "checkbox", text = "Cache Dummys Units", key = "dummys", default = true },
 			{ type = "spinner", text = "Cache Distance:", key = "CD", width = 90, min = 10, max = 200, default = 100, step = 5},
-			{ type = "button", text = "Objects List", width = 190, height = 20, callback = function() NeP.Addon.Interface.OMGUI() end },
+			{ type = "button", text = "Objects List", width = 190, height = 20, callback = function() NeP.Interface.OMGUI() end },
     }
 }
 
-function NeP.Addon.Interface.CacheGUI()
+function NeP.Interface.CacheGUI()
     if not NeP_OpenCacheWindow then
         NeP_cacheWindow = ProbablyEngine.interface.buildGUI(NeP_ObjectCache)
 		NeP_cacheWindow.parent:SetEventListener('OnClose', function()

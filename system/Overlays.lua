@@ -1,9 +1,9 @@
 local LibDraw = LibStub("LibDraw-1.0")
 
-local _mediaDir = NeP.Addon.Interface.mediaDir
+local _mediaDir = NeP.Interface.mediaDir
 local alpha = 100
 local zOffset = 3
-local _addonColor = NeP.Addon.Interface.GuiTextColor
+local _addonColor = NeP.Interface.GuiTextColor
 
 local basicMarker = {
 	{ 0.1, 0, 0, -0.1, 0, 0},
@@ -389,40 +389,40 @@ local NeP_OverlaysGUI
 local NeP_OverlaysGUI_Open = false
 local NeP_OverlaysGUI_Showing = false
 
-NeP.Addon.Interface.Overlays = {
+NeP.Interface.Overlays = {
 	key = "NePconf_Overlays",
 	profiles = true,
-	title = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Name,
+	title = NeP.Info.Icon.." "..NeP.Info.Name,
 	subtitle = "Overlays Settings",
-	color = NeP.Addon.Interface.GuiColor,
+	color = NeP.Interface.GuiColor,
 	width = 250,
 	height = 500,
 	config = {
-		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = NeP.Interface.GuiTextColor.."Overlays:", size = 25, align = "Center" },
 			{ type = "text", text = "Only Works with FireHack ATM!", size = 11, offset = 0, align = "center" },
 		{ type = 'spacer' },
 		{ type = 'rule' },
-		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Player Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = NeP.Interface.GuiTextColor.."Player Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Player Melee Range", key = "PlayerMRange", default = false },
 			{ type = "checkbox", text = "Display Player Caster Range", key = "PlayerCRange", default = false },
 			{ type = "checkbox", text = "Display Target Line", key = "TargetLine", default = false },
 			{ type = "checkbox", text = "Display Infront Cone", key = "PlayerInfrontCone", default = false },
 		{ type = 'spacer' },
 		{ type = 'rule' },
-		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Target Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = NeP.Interface.GuiTextColor.."Target Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Player Melee Range", key = "TargetMRange", default = false },
 			{ type = "checkbox", text = "Display Player Caster Range", key = "TargetCRange", default = false },
 			{ type = "checkbox", text = "Display Infront Cone", key = "TargetCone", default = false },
 		{ type = 'spacer' },
 		{ type = 'rule' },
-		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Objects Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = NeP.Interface.GuiTextColor.."Objects Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Herb Objects", key = "objectsHerbs", default = false },
 			{ type = "checkbox", text = "Display Ore Objects", key = "objectsOres", default = false },
 			{ type = "checkbox", text = "Display Lumbermill Objects", key = "objectsLM", default = false },
 			{ type = "checkbox", text = "Display Fish Objects", key = "objectsFish", default = false },
 		{ type = 'spacer' },
 		{ type = 'rule' },
-		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Units Overlays:", size = 25, align = "Center" },
+		{ type = 'header', text = NeP.Interface.GuiTextColor.."Units Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Friendly Player Units", key = "objectsFriendlyPlayers", default = false },
 			{ type = "checkbox", text = "Display Enemie Player Units", key = "objectsEnemiePlayers", default = false },
 			{ type = "checkbox", text = "Display Rare Units", key = "objectsRares", default = false },
@@ -431,10 +431,10 @@ NeP.Addon.Interface.Overlays = {
 	}
 }
 
-function NeP.Addon.Interface.OverlaysGUI()
+function NeP.Interface.OverlaysGUI()
 	-- If a frame has not been created, create one...
 	if not NeP_OverlaysGUI_Open then
-		NeP_OverlaysGUI = NeP.Core.PeBuildGUI(NeP.Addon.Interface.Overlays)
+		NeP_OverlaysGUI = NeP.Core.PeBuildGUI(NeP.Interface.Overlays)
 		
 		-- This is so the window isn't opened twice :D
 		NeP_OverlaysGUI_Open = true

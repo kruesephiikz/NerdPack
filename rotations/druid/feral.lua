@@ -1,7 +1,7 @@
-NeP.Addon.Interface.DruidFeral = {
+NeP.Interface.DruidFeral = {
 	key = "npconfDruidFeral",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Druid Feral Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

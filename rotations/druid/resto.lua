@@ -1,7 +1,7 @@
-NeP.Addon.Interface.DruidResto = {
+NeP.Interface.DruidResto = {
 	key = "npconfDruidResto",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Druid Restoration Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

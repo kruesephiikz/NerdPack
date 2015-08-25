@@ -1,7 +1,7 @@
-NeP.Addon.Interface.PriestHoly = {
+NeP.Interface.PriestHoly = {
 	key = "npconfPriestHoly",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Priest Holy Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

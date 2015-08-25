@@ -28,14 +28,14 @@ function NeP.Extras.MoveTo()
 		["HUNTER"] = {style = "ranged", Range = 40},
 		["WARLOCK"] = {style = "ranged",  Range = 40},
 		["PRIEST"] = {style = "ranged",  Range = 40},
-		["PALADIN"] = {style = "melee", Range = 5},
+		["PALADIN"] = {style = "melee", Range = 1.5},
 		["MAGE"] = {style = "ranged",  Range = 40},
-		["ROGUE"] = {style = "melee", Range = 5},
-		["DRUID"] = {style = "melee", Range = 5},
+		["ROGUE"] = {style = "melee", Range = 1.5},
+		["DRUID"] = {style = "melee", Range = 1.5},
 		["SHAMAN"] = {style = "ranged",  Range = 40},
-		["WARRIOR"] = {style = "melee", Range = 5},
-		["DEATHKNIGHT"] = {style = "melee", Range = 5},
-		["MONK"] = {style = "melee", Range = 5},
+		["WARRIOR"] = {style = "melee", Range = 1.5},
+		["DEATHKNIGHT"] = {style = "melee", Range = 1.5},
+		["MONK"] = {style = "melee", Range = 1.5},
 	}
 	local _class, _className = UnitClass('player')
 	local _classRange = _rangeTable[_className]

@@ -1,7 +1,7 @@
-NeP.Addon.Interface.DkUnholy = {
+NeP.Interface.DkUnholy = {
 	key = "npconfDkUnholy",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Deathknight Unholy Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

@@ -1,7 +1,7 @@
-NeP.Addon.Interface.DruidBalance = {
+NeP.Interface.DruidBalance = {
 	key = "npconfDruidBalance",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Druid Balance Settings",
 	color = NeP.Core.classColor("player"),
 	width = 250,

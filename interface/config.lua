@@ -2,19 +2,19 @@ local ConfigWindow
 local NeP_OpenConfigWindow = false
 local NeP_ShowingConfigWindow = false
 
-NeP.Addon.Interface.General = {
+NeP.Interface.General = {
 	key = "npconf",
 	profiles = true,
-	title = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Name,
+	title = NeP.Info.Icon.." "..NeP.Info.Name,
 	subtitle = "General Settings",
-	color = NeP.Addon.Interface.GuiColor,
+	color = NeP.Interface.GuiColor,
 	width = 250,
 	height = 500,
 	config = {
 			-- [[HEADER]]		
 			{ 
 				type = "texture",
-				texture = NeP.Addon.Info.Splash,
+				texture = NeP.Info.Splash,
 				width = 200, 
 				height = 100, 
 				offset = 90, 
@@ -25,7 +25,7 @@ NeP.Addon.Interface.General = {
 				{ type = 'rule' },
 				{ 
 					type = 'header', 
-					text = NeP.Addon.Interface.GuiTextColor.."General:", 
+					text = NeP.Interface.GuiTextColor.."General:", 
 					size = 25,
 					align = "Center",
 				},
@@ -87,7 +87,7 @@ NeP.Addon.Interface.General = {
 				{ type = 'rule' },
 				{ 
 					type = 'header', 
-					text = NeP.Addon.Interface.GuiTextColor.."Advanced:", 
+					text = NeP.Interface.GuiTextColor.."Advanced:", 
 					size = 25,
 					align = "Center",
 				},
@@ -117,7 +117,7 @@ NeP.Addon.Interface.General = {
 				{ type = 'rule' },
 				{ 
 					type = 'header', 
-					text = NeP.Addon.Interface.GuiTextColor.."Extras:", 
+					text = NeP.Interface.GuiTextColor.."Extras:", 
 					size = 25,
 					align = "Center",
 				},
@@ -143,6 +143,6 @@ NeP.Addon.Interface.General = {
 	}
 }
 
-function NeP.Addon.Interface.ConfigGUI()
-	NeP.Core.BuildGUI('config', NeP.Addon.Interface.General)
+function NeP.Interface.ConfigGUI()
+	NeP.Core.BuildGUI('config', NeP.Interface.General)
 end

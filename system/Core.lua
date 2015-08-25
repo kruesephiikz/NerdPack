@@ -9,25 +9,20 @@ NeP = {
 		PeBuildGUI = ProbablyEngine.interface.buildGUI
 	},
 	Interface = {
-		
+		GuiColor = "0070DE",
+		GuiTextColor = "|cff0070DE",
+		addonColor = "|cff0070DE",
+		mediaDir = "Interface\\AddOns\\NerdPack\\media\\"
 	},
-	Addon = {
-		Info = {
-			Name = 'NerdPack',
-			Nick = 'NeP',
-			Version = "6.2.1.1",
-			Branch = "Beta",
-			WoW_Version = "6.2.0",
-			Icon = "|TInterface\\AddOns\\NerdPack\\media\\logo.blp:10:10|t",
-			Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
-			Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp"
-		},
-		Interface = {
-			GuiColor = "0070DE",
-			GuiTextColor = "|cff0070DE",
-			addonColor = "|cff0070DE",
-			mediaDir = "Interface\\AddOns\\NerdPack\\media\\"
-		}
+	Info = {
+		Name = 'NerdPack',
+		Nick = 'NeP',
+		Version = "6.2.1.1",
+		Branch = "Beta",
+		WoW_Version = "6.2.0",
+		Icon = "|TInterface\\AddOns\\NerdPack\\media\\logo.blp:10:10|t",
+		Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
+		Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp"
 	}
 }
 
@@ -92,7 +87,7 @@ GetHealTarget = function()
 	return false
 end]]
 
-local _addonColor = NeP.Addon.Interface.addonColor
+local _addonColor = NeP.Interface.addonColor
 
 local _openPEGUIs = {}
 NeP.Core.BuildGUI = function(gui, _table)
@@ -114,26 +109,26 @@ NeP.Core.getGUI = function(gui)
 	return _openPEGUIs[gui]
 end
 
-function NeP.Addon.Interface.ClassGUI()
+function NeP.Interface.ClassGUI()
 	_NePClassGUIs = {
-		[250] = NeP.Addon.Interface.DkBlood,
-		[252] = NeP.Addon.Interface.DkUnholy,
-		[103] = NeP.Addon.Interface.DruidFeral,
-		[104] = NeP.Addon.Interface.DruidGuard,
-		[105] = NeP.Addon.Interface.DruidResto,
-		[102] = NeP.Addon.Interface.DruidBalance,
-		[257] = NeP.Addon.Interface.PriestHoly,
-		[258] = NeP.Addon.Interface.PriestShadow,
-		[256] = NeP.Addon.Interface.PriestDisc,
-		[70] = NeP.Addon.Interface.PalaRet,
-		[66] = NeP.Addon.Interface.PalaProt,
-		[65] = NeP.Addon.Interface.PalaHoly,
-		[73] = NeP.Addon.Interface.WarrProt,
-		[72] = NeP.Addon.Interface.WarrFury,
-		[270] = NeP.Addon.Interface.MonkMm,
-		[269] = NeP.Addon.Interface.MonkWw,
-		[262] = NeP.Addon.Interface.ShamanEle,
-		[264] = NeP.Addon.Interface.ShamanResto
+		[250] = NeP.Interface.DkBlood,
+		[252] = NeP.Interface.DkUnholy,
+		[103] = NeP.Interface.DruidFeral,
+		[104] = NeP.Interface.DruidGuard,
+		[105] = NeP.Interface.DruidResto,
+		[102] = NeP.Interface.DruidBalance,
+		[257] = NeP.Interface.PriestHoly,
+		[258] = NeP.Interface.PriestShadow,
+		[256] = NeP.Interface.PriestDisc,
+		[70] = NeP.Interface.PalaRet,
+		[66] = NeP.Interface.PalaProt,
+		[65] = NeP.Interface.PalaHoly,
+		[73] = NeP.Interface.WarrProt,
+		[72] = NeP.Interface.WarrFury,
+		[270] = NeP.Interface.MonkMm,
+		[269] = NeP.Interface.MonkWw,
+		[262] = NeP.Interface.ShamanEle,
+		[264] = NeP.Interface.ShamanResto
 	}
 	local _Spec = GetSpecializationInfo(GetSpecialization())
 	if _Spec ~= nil then
@@ -192,24 +187,24 @@ end
 									** Commands **
 							DESC: Slash commands in-game.
 ---------------------------------------------------]]
-ProbablyEngine.command.register(NeP.Addon.Info.Nick, function(msg, box)
+ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)
 	local command, text = msg:match("^(%S*)%s*(.-)$")
 	if command == 'config' or command == 'c' then
-		NeP.Addon.Interface.ConfigGUI()
+		NeP.Interface.ConfigGUI()
 	elseif command == 'class' or command == 'cl' then
-		NeP.Addon.Interface.ClassGUI()
+		NeP.Interface.ClassGUI()
 	elseif command == 'info' or command == 'i' then
-		NeP.Addon.Interface.InfoGUI()
+		NeP.Interface.InfoGUI()
 	elseif command == 'cache' or command == 'cch' or command == 'om' then
-		NeP.Addon.Interface.CacheGUI()
+		NeP.Interface.CacheGUI()
 	elseif command == 'hide' then
 		NeP.Core.HideAll()
 	elseif command == 'show' then
 		NeP.Core.HideAll()
 	elseif command == 'overlay' or command == 'ov' or command == 'overlays' then
-		NeP.Addon.Interface.OverlaysGUI()
+		NeP.Interface.OverlaysGUI()
 	elseif command == 'test' then
-		NeP.Addon.Interface.OMGUI()
+		NeP.Interface.OMGUI()
 	else 
 		NeP.Core.Print('/config - (Opens General Settings GUI)')
 		NeP.Core.Print('/status - (Opens Status GUI)')
@@ -250,9 +245,9 @@ function NeP.Core.classColor(unit)
 end
 
 function NeP.Core.GetCrInfo(txt)
-	local _nick = _addonColor..NeP.Addon.Info.Nick
+	local _nick = _addonColor..NeP.Info.Nick
 	local _classColor = NeP.Core.classColor('Player')
-	return NeP.Addon.Info.Icon.. '|r[' .. _nick .. "|r]|r[|cff" .. _classColor .. txt .. "|r]"
+	return NeP.Info.Icon.. '|r[' .. _nick .. "|r]|r[|cff" .. _classColor .. txt .. "|r]"
 end
 
 function NeP.Core.HideAll()
@@ -271,7 +266,7 @@ end
 
 function NeP.Core.Print(txt)
 	if not NeP.Core.hidding and NeP.Core.PeFetch('npconf', 'Prints') then
-		local _name = _addonColor..NeP.Addon.Info.Name
+		local _name = _addonColor..NeP.Info.Name
 		print("|r[".._name.."|r]: "..NeP.Core.printColor..txt)
 	end
 end

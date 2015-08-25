@@ -1,7 +1,7 @@
-NeP.Addon.Interface.MonkMm = {
+NeP.Interface.MonkMm = {
 	key = "npconfigMonkMm",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Monk Mistweaver Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

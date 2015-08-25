@@ -6,17 +6,17 @@ local NeP_OpenConfigWindow = false
 local NeP_ShowingConfigWindow = false
 local _fishRun = false
 
-NeP.Addon.Interface.Fishing = {
+NeP.Interface.Fishing = {
 	key = "NePFishingConf",
 	profiles = true,
-	title = NeP.Addon.Info.Icon.." "..NeP.Addon.Info.Name,
+	title = NeP.Info.Icon.." "..NeP.Info.Name,
 	subtitle = "Fising Settings",
-	color = NeP.Addon.Interface.GuiColor,
+	color = NeP.Interface.GuiColor,
 	width = 250,
 	height = 250,
 	config = {
-		{ type = 'header', text = NeP.Addon.Interface.GuiTextColor.."Fishing Bot:", size = 25, align = "Center"},
-		{ type = 'text', text = "Requires FireHack and to have both "..NeP.Addon.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
+		{ type = 'header', text = NeP.Interface.GuiTextColor.."Fishing Bot:", size = 25, align = "Center"},
+		{ type = 'text', text = "Requires FireHack and to have both "..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
 		{ type = 'rule' },{ type = 'spacer' },
 		{
 			type = "checkbox", 
@@ -66,10 +66,10 @@ NeP.Addon.Interface.Fishing = {
 	}
 }
 
-function NeP.Addon.Interface.FishingGUI()
+function NeP.Interface.FishingGUI()
 	-- If a frame has not been created, create one...
 	if not NeP_OpenConfigWindow then
-		ConfigWindow = NeP.Core.PeBuildGUI(NeP.Addon.Interface.Fishing)
+		ConfigWindow = NeP.Core.PeBuildGUI(NeP.Interface.Fishing)
 		-- This is so the window isn't opened twice :D
 		NeP_OpenConfigWindow = true
 		NeP_ShowingConfigWindow = true

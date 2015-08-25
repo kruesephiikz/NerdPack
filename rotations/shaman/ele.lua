@@ -1,7 +1,7 @@
-NeP.Addon.Interface.ShamanEle = {
+NeP.Interface.ShamanEle = {
 	key = "npconfShamanEle",
 	profiles = true,
-	title = NeP.Addon.Info.Icon..NeP.Addon.Info.Nick.." Config",
+	title = NeP.Info.Icon..NeP.Info.Nick.." Config",
 	subtitle = "Shaman Elemental Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,

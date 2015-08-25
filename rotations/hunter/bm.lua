@@ -157,6 +157,6 @@ ProbablyEngine.rotation.register_custom(253, NeP.Core.GetCrInfo('Hunter - Beast 
 				"!lastcast(Cobra Shot)", 
 				"player.buff(19615).count >= 1" 
 			}},
-			{inCombat, { "target.exists", "target.range <= 40" }},
+			{inCombat, { "target.NePinfront", "target.exists", "target.range <= 40" }},
 		}, "!player.channeling" }
 	}, _All, lib)
