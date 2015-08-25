@@ -409,7 +409,6 @@ function LibDraw.Camera()
 end
 
 function LibDraw.Sync(callback)
-	print('1')
 	tinsert(LibDraw.callbacks, callback)
 end
 
