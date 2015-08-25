@@ -3,13 +3,13 @@ NeP = {
 		peRecomemded = "6.1r16",
 		CurrentCR = false,
 		hidding = false,
-		printColor = "|cffFFFFFF",
 		PeFetch = ProbablyEngine.interface.fetchKey,
 		PeConfig = ProbablyEngine.config,
 		PeBuildGUI = ProbablyEngine.interface.buildGUI
 	},
 	Interface = {
 		addonColor = "0070DE",
+		printColor = "|cffFFFFFF",
 		mediaDir = "Interface\\AddOns\\NerdPack\\media\\"
 	},
 	Info = {
@@ -264,16 +264,7 @@ end
 function NeP.Core.Print(txt)
 	if not NeP.Core.hidding and NeP.Core.PeFetch('npconf', 'Prints') then
 		local _name = _addonColor..NeP.Info.Name
-		print("|r[".._name.."|r]: "..NeP.Core.printColor..txt)
-	end
-end
-
-function NeP.Core.Alert(txt)
-	if not NeP.Core.hidding and NeP.Core.PeFetch('npconf', 'Alerts') then
-		if NeP.Core.PeFetch('npconf', 'Sounds') then
-			PlaySoundFile("Interface\\AddOns\\Probably_MrTheSoulz\\media\\beep.mp3")
-		end
-		npAlert:message("|r[".._addonColor.."MTS|r]: "..NeP.Core.printColor..txt)
+		print("|r[".._name.."|r]: "..NeP.Interface.printColor..txt)
 	end
 end
 
