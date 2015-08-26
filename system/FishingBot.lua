@@ -124,7 +124,7 @@ local function _startFish()
 		if bobbing == 1 then
 			ObjectInteract(getBobber())
 		end
-	else			
+	else
 		Cast(131474)
 	end
 end
