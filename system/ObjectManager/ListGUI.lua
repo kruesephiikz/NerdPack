@@ -193,7 +193,7 @@ function OMGUI_RUN()
 	local function getStatusBar()
 		local statusBar = tremove(statusBars)
 		if not statusBar then
-			statusBar = DiesalGUI:Create('StatusBar')
+			statusBar = DiesalGUI:Create('NePStatusBar')
 			statusBar:SetParent(objectsContentFrame)
 			statusBar.frame:SetHeight(15)
 			statusBar.frame.Left:SetPoint("LEFT", statusBar.frame)
