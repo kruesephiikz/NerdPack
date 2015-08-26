@@ -150,14 +150,26 @@ function StatusGUI_RUN()
 	DonateButtom:SetPoint("TOP", statusGUI3, 0, -buttonsTotalHeight)
 	DonateButtom:SetSize(statusText2:GetStringWidth()-10, 15)
 	DonateButtom:SetScript("OnClick", function(self)
-		_HideFrames()
 		if FireHack then
-			OpenURL("http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-bots-programs/probably-engine/combat-routines/498642-pe-mrthesoulzpack.html");
+			OpenURL(NeP.Info.Forum);
 		else
-			message("|cff00FF96Please Visit:|cffFFFFFF\nhttp://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-bots-programs/probably-engine/combat-routines/498642-pe-mrthesoulzpack.html");
+			message("|cff00FF96Please Visit:|cffFFFFFF\n"..NeP.Info.Forum);
 		end
 	end)
 	buttonsTotalHeight = buttonsTotalHeight + 15
+	local ForumButtom = NeP.Interface.addButton(statusGUI3)
+	ForumButtom.Button1:SetTexture(0, 0, 0, 0.7)
+	ForumButtom.text:SetText(buttonColor.."Visit Forum")
+	ForumButtom:SetPoint("TOP", statusGUI3, 0, -buttonsTotalHeight)
+	ForumButtom:SetSize(statusText2:GetStringWidth()-10, 15)
+	ForumButtom:SetScript("OnClick", function(self)
+		_HideFrames()
+		if FireHack then
+			OpenURL(NeP.Info.Donate);
+		else
+			message("|cff00FF96Please Visit:|cffFFFFFF\n"..NeP.Info.Donate);
+		end
+	end)
 	statusGUI3:SetSize(statusText2:GetStringWidth(), buttonsTotalHeight+20)
 	
 	
