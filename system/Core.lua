@@ -99,8 +99,6 @@ NeP.Core.BuildGUI = function(gui, _table)
 		end
 	else
 		_openPEGUIs[gui] = ProbablyEngine.interface.buildGUI(_table)
-		--_openPEGUIs[gui].parent:SetParent(NeP_Frame)
-		--_openPEGUIs[gui].parent:SetPoint('TOP', NeP_Frame)
 	end
 end
 

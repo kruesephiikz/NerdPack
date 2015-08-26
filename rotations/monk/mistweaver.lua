@@ -102,22 +102,7 @@ end
 
 local _All = {
 	-- Buffs
-  	{ "116781", {-- Legacy of the White Tiger
-      	"!player.buff(116781)",
-      	"!player.buff(17007)",
-      	"!player.buff(1459)",
-      	"!player.buff(61316)",
-      	"!player.buff(24604)",
-      	"!player.buff(90309)",
-      	"!player.buff(126373)",
-      	"!player.buff(126309)"
-    }},
-  	{ "117666", {-- Legacy of the Emperor
-      	"!player.buff(117666)",
-      	"!player.buff(1126)",
-      	"!player.buff(20217)",
-      	"!player.buff(90363)"
-    }},
+  	{ "115921", "!player.buffs.stats"},-- Legacy of the Emperor
 	
 	-- Keybinds
   	{ "115313" , "modifier.control", "tank.ground" },-- Summon Jade Serpent Statue
@@ -163,7 +148,7 @@ local inCombatSerpente = {
 	}, "modifier.cooldowns" },
 
 	{{-- Survival
-		{ "115072", { "player.health <= 80", "player.chi < 4" }}, -- Expel Harm
+		{ "115072", { "player.health <= 80", "player.chi < 5" }}, -- Expel Harm
 		{ "115098", "player.health <= 75" }, -- Chi Wave
 		{ "115203", { -- Forifying Brew at < 30% health and when DM & DH buff is not up
 		  "player.health < 30",
@@ -173,17 +158,15 @@ local inCombatSerpente = {
 		{ "#5512", "player.health < 40" }, -- Healthstone
 	}, "player.health < 100" },
 	
-	-- AoE
-	{ "115310", "@coreHealing.needsHealing(50, 9)", nil }, -- Revival
-  	{ "116680", { -- Uplift with Thunder Focus Tea Condition
-  		"@coreHealing.needsHealing(80, 3)",
-  		"player.chi >= 3", 
-  		"!player.buff(116680)"
-  	}},
-	{ "115098", "@coreHealing.needsHealing(90, 2)", "lowest" },
-
-	--Expel Harm
-	{"115072", "player.health < 70", "player"},
+	{{-- AoE
+		{ "115310", "@coreHealing.needsHealing(50, 3)", nil }, -- Revival
+		{ "115098", "@coreHealing.needsHealing(90, 3)", "lowest" }, -- Chi Wave
+		{ "116680", { -- Uplift with Thunder Focus Tea Condition
+			"@coreHealing.needsHealing(80, 3)",
+			"player.chi >= 3", 
+			"!player.buff(116680)"
+		}},
+	}, "modifier.multitarget" },
 
 	{ "115175", { -- Soothing Mist
 		(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('npconfigMonkMm', 'SM')) end), 
@@ -217,7 +200,7 @@ local inCombatCrane = {
 
 		
 	{{-- Survival
-		{ "115072", { "player.health <= 80", "player.chi < 4" }}, -- Expel Harm
+		{ "115072", { "player.health <= 80", "player.chi < 5" }}, -- Expel Harm
 		{ "115098", "player.health <= 75" }, -- Chi Wave
 		{ "115203", { -- Forifying Brew at < 30% health and when DM & DH buff is not up
 		  "player.health < 30",
@@ -244,7 +227,7 @@ local outCombat = {
 }
 
 ProbablyEngine.rotation.register_custom(270, NeP.Core.GetCrInfo('Monk - Mistweaver'), 
-	{-- In-Combat Change CR dyn
+	{ -- In-Combat Change CR dyn
 		-- Give me Mana
 		{ "115294", { -- mana tea
 			"player.mana < 95", 
@@ -289,4 +272,7 @@ ProbablyEngine.rotation.register_custom(270, NeP.Core.GetCrInfo('Monk - Mistweav
 			{inCombatCrane}
 		}, "player.stance = 2" },
 	},
-  	outCombat, exeOnLoad)
+  	{ -- Out-Combat
+		{_All},
+		{outCombat}
+	}, exeOnLoad)
