@@ -172,9 +172,9 @@ end
 C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR then
 		if NeP.Extras.BagSpace() > 2 then
+			_CarpDestruction()
 			if _fishRun and FireHack then
 				_AutoBait()
-				_CarpDestruction()
 				_WormSupreme()
 				_startFish()
 			end
