@@ -105,7 +105,7 @@ local _All = {
   	{ "115921", "!player.buffs.stats"},-- Legacy of the Emperor
 	
 	-- Keybinds
-  	{ "115313" , "modifier.control", "tank.ground" },-- Summon Jade Serpent Statue
+  	{ "115313" , "modifier.shift", "tank.ground" },-- Summon Jade Serpent Statue
 	
 	-- FREEDOOM!
 	{ "137562", "player.state.disorient" }, -- Nimble Brew = 137562

@@ -13,7 +13,7 @@ NeP.Interface.Fishing = {
 	subtitle = "Fising Settings",
 	color = NeP.Interface.addonColor,
 	width = 250,
-	height = 250,
+	height = 350,
 	config = {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Fishing Bot:", size = 25, align = "Center"},
 		{ type = 'text', text = "Requires FireHack and to have both "..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
