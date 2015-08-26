@@ -19,7 +19,9 @@ NeP = {
 		Branch = "Beta",
 		WoW_Version = "6.2.0",
 		Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
-		Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp"
+		Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp",
+		Forum = "http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-bots-programs/probably-engine/combat-routines/532241-pe-nerdpack.html",
+		Donate = "http://goo.gl/yrctPO"
 	}
 }
 

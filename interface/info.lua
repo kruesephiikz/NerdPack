@@ -20,9 +20,9 @@ NeP.Interface.info = {
 				height = 20,
 				callback = function()
 					if FireHack then
-						OpenURL("http://goo.gl/yrctPO");
+						OpenURL(NeP.Info.Donate);
 					else
-						message("|cff00FF96Please Visit:|cffFFFFFF\nhttp://goo.gl/yrctPO");
+						message("|cff00FF96Please Visit:|cffFFFFFF\n"..NeP.Info.Donate);
 					end
 				end
 			},
@@ -33,9 +33,9 @@ NeP.Interface.info = {
 				height = 20,
 				callback = function()
 					if FireHack then
-						OpenURL("http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-bots-programs/probably-engine/combat-routines/498642-pe-mrthesoulzpack.html");
+						OpenURL(NeP.Info.Forum);
 					else
-						message("|cff00FF96Please Visit:|cffFFFFFF\nhttp://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-bots-programs/probably-engine/combat-routines/498642-pe-mrthesoulzpack.html");
+						message("|cff00FF96Please Visit:|cffFFFFFF\n"..NeP.Info.Forum);
 					end
 				end
 			},
