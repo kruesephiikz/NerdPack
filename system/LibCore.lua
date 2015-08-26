@@ -22,7 +22,7 @@ Build By: MTS
 local _SAoE_Time = nil
 local UnitsTotal = 0
 
-function NeP.Lib.SAoE(units, distance)
+NeP.Lib.SAoE = function(units, distance)
 	if _SAoE_Time == nil or _SAoE_Time + 0.5 <= GetTime() then
 		_SAoE_Time = nil
 		UnitsTotal = 0
@@ -44,8 +44,19 @@ function NeP.Lib.SAoE(units, distance)
 	return UnitsTotal >= units 
 end
 
+NeP.Lib.getUnitRange = function(a, t)
+	local _rangeTable = {
+		["melee"] = 1.5,
+		["ranged"] = 40,
+	}
+	if FireHack then 
+		return _rangeTable[t] + UnitCombatReach('player') + UnitCombatReach(a)
+	else
+		return _unitRange + 3.5
+	end
+end
 
-function NeP.Lib.canTaunt()
+NeP.Lib.canTaunt = function()
 	if NeP.Core.PeFetch('npconf', 'Taunts') then
 		for i=1,#NeP.ObjectManager.unitCache do
 			local object = NeP.ObjectManager.unitCache[i].key
@@ -64,7 +75,7 @@ function NeP.Lib.canTaunt()
 	return false
 end
 
-function NeP.Lib.Dispell(dispelTypes)
+NeP.Lib.Dispell = function(dispelTypes)
 	local blacklistedDebuffs = {
 		'Mark of Arrogance',
 		'Displaced Energy'
@@ -105,7 +116,7 @@ Classifications:
 	all - All Units
 ]]
 local _lastDotted = nil
-function NeP.Lib.AutoDots(_spell, _health, _duration, _distance, _classification)
+NeP.Lib.AutoDots = function(_spell, _health, _duration, _distance, _classification)
 	if not IsUsableSpell(_spell) then return false end
 	if _classification == nil then _classification = 'all' end
 	if _distance == nil then _distance = 40 end

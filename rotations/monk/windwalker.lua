@@ -70,24 +70,7 @@ local _All = {
 	{ "122470", "modifier.alt" }, -- Touch of Karma
 	
 	-- Buffs
-	{ "116781", { -- Legacy of the White Tiger
-		"!player.buff(116781).any", -- Legacy of the White Tiger
-		"!player.buff(17007).any", -- Leader of the Pack
-		"!player.buff(1459).any", -- Arcane Brilliance
-		"!player.buff(61316).any", -- Dalaran Brilliance
-		"!player.buff(97229).any", -- Bellowing Roar
-		"!player.buff(24604).any", -- Furious Howl
-		"!player.buff(90309).any", -- Terrifying Roar
-		"!player.buff(126373).any", -- Fearless Roar
-		"!player.buff(126309).any" -- Still Water
-	}},
-	{ "115921", { -- Legacy of the Emperor
-		"!player.buff(115921).any", -- Legacy of the Emperor
-		"!player.buff(1126).any", -- Mark of the Wild
-		"!player.buff(20217).any", -- Blessing of Kings
-		"!player.buff(90363).any", -- Embrace of the Shale Spider
-		"!player.buff(Blessing of the Forgotten Kings).any"
-	}},
+	{ "115921", "!player.buffs.stats"},-- Legacy of the Emperor
 	
 	-- FREEDOOM!
 	{ "137562", "player.state.disorient" }, -- Nimble Brew = 137562
@@ -175,7 +158,7 @@ ProbablyEngine.rotation.register_custom(269, NeP.Core.GetCrInfo('Monk - Windwalk
 		{_Cooldowns, "modifier.cooldowns"},
 		{_SEF, (function() return NeP.Core.PeFetch('npconfigMonkWw', 'SEF') end)},
 		{{ -- Conditions
-			{_Melle, "target.range <= 5"},
-			{_Ranged}
+			{_Melle, "target.inMelee"},
+			{_Ranged, {"!target.inMelee", "target.inRanged"}}
 		}, {"target.range <= 40", "target.exists"} }
 	}, _All, exeOnLoad)

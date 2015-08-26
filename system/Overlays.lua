@@ -128,15 +128,6 @@ local ally_small = {
 	width = 18, height = 18, scale = 1
 }
 
-local _getUnitRange = function(_type)
-	local _rangeTable = {
-		["melee"] = 1.5,
-		["ranged"] = 40,
-	}
-	local _unitRange = _rangeTable[_type] + UnitCombatReach('player') + UnitCombatReach('target')
-	return _unitRange
-end
-
 LibDraw.Sync(function()
 	if NeP.Core.CurrentCR and FireHack then
 		if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
@@ -170,21 +161,21 @@ LibDraw.Sync(function()
 				end
 				-- Player Melee Range
 				if NeP.Core.PeFetch("NePconf_Overlays", "PlayerMRange") then
-					if NeP.Core.Distance('player', 'target') <= _getUnitRange('melee') then
+					if NeP.Core.Distance('player', 'target') <= NeP.Lib.getUnitRange('target', 'melee') then
 						LibDraw.SetColor(101, 255, 87, 70)
 					else
 						LibDraw.SetColor(255, 87, 87, 70)
 					end
-					LibDraw.Circle(playerX, playerY, playerZ, _getUnitRange('melee'))
+					LibDraw.Circle(playerX, playerY, playerZ, NeP.Lib.getUnitRange('target', 'melee'))
 				end
 				-- Player Caster Range
 				if NeP.Core.PeFetch("NePconf_Overlays", "PlayerCRange") then
-					if NeP.Core.Distance('player', 'target') <= _getUnitRange('ranged') then
+					if NeP.Core.Distance('player', 'target') <= NeP.Lib.getUnitRange('target', 'ranged') then
 						LibDraw.SetColor(101, 255, 87, 50)
 					else
 						LibDraw.SetColor(255, 87, 87, 50)
 					end
-					LibDraw.Circle(playerX, playerY, playerZ, _getUnitRange('ranged'))
+					LibDraw.Circle(playerX, playerY, playerZ, NeP.Lib.getUnitRange('target', 'ranged'))
 				end
 				-- Target Infront Cone
 				if NeP.Core.PeFetch("NePconf_Overlays", "TargetCone") then
@@ -193,21 +184,21 @@ LibDraw.Sync(function()
 				end
 				-- Target Melee Range
 				if NeP.Core.PeFetch("NePconf_Overlays", "TargetMRange") then
-					if NeP.Core.Distance('player', 'target') <= _getUnitRange('melee') then
+					if NeP.Core.Distance('player', 'target') <= NeP.Lib.getUnitRange('target', 'melee') then
 						LibDraw.SetColor(101, 255, 87, 70)
 					else
 						LibDraw.SetColor(255, 87, 87, 70)
 					end
-					LibDraw.Circle(targetX, targetY, targetZ, _getUnitRange('melee'))
+					LibDraw.Circle(targetX, targetY, targetZ, NeP.Lib.getUnitRange('target', 'melee'))
 				end
 				-- Target Caster Range
 				if NeP.Core.PeFetch("NePconf_Overlays", "TargetCRange") then
-					if NeP.Core.Distance('player', 'target') <= _getUnitRange('ranged') then
+					if NeP.Core.Distance('player', 'target') <= NeP.Lib.getUnitRange('target', 'ranged') then
 						LibDraw.SetColor(101, 255, 87, 50)
 					else
 						LibDraw.SetColor(255, 87, 87, 50)
 					end
-					LibDraw.Circle(targetX, targetY, targetZ, _getUnitRange('ranged'))
+					LibDraw.Circle(targetX, targetY, targetZ, NeP.Lib.getUnitRange('target', 'ranged'))
 				end
 			end	
 			-- Objects (Ores/Herbs/LM)

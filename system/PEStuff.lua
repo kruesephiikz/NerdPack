@@ -14,6 +14,14 @@ ProbablyEngine.condition.register("petinmelee", function(target)
    return (IsSpellInRange(GetSpellInfo(2649), target) == 1)
 end)
 
+ProbablyEngine.condition.register("inMelee", function(target)
+   return NeP.Lib.getUnitRange(target, 'melee')
+end)
+
+ProbablyEngine.condition.register("inRanged", function(target)
+   return NeP.Lib.getUnitRange(target, 'ranged')
+end)
+
 ProbablyEngine.condition.register("power.regen", function(target)
   return select(2, GetPowerRegen(target))
 end)
