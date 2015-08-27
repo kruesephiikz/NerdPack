@@ -16,17 +16,16 @@ NeP.Interface.MonkMm = {
 			align = "center" 
 		},
 
-			-- NOTHING IN HERE YET...
-
-		{ type = "spacer" },
-		{ type = 'rule' },
-		{ 
-			type = "header", 
-			text = "Survival Settings", 
-			align = "center" 
-		},
-			
-			-- Survival Settings:
+			{
+				type = "spinner",
+				text = "Soothing Mist STOP",
+				key = "SMSTOP",
+				width = 50,
+				min = 0,
+				max = 100,
+				default = 100,
+				step = 5
+			},
 			{
 				type = "spinner",
 				text = "Soothing Mist",
@@ -34,9 +33,17 @@ NeP.Interface.MonkMm = {
 				width = 50,
 				min = 0,
 				max = 100,
-				default = 100,
+				default = 90,
 				step = 5
 			},
+
+		{ type = "spacer" },
+		{ type = 'rule' },
+		{ 
+			type = "header", 
+			text = "Survival Settings", 
+			align = "center" 
+		},	
 			
 	}
 }
@@ -121,6 +128,8 @@ local _All = {
 
 local inCombatSerpente = {
 
+	-- FIX ME: Need to recast the statue if far away...
+
 	-- Summon Jade Serpent Statue
   	{ "115313" , {
 		"!player.totem(Jade Serpent Statue)",
@@ -139,39 +148,44 @@ local inCombatSerpente = {
 
 	{{ -- Soothing Mist Healing
 	
-		-- Enveloping Mist
-		{ "124682", {
+		-- Cancel SoothingMistHealing (Max Health)
+		{ "/stopcasting", (function() return not _SoothingMist_Health(NeP.Core.PeFetch('npconfigMonkMm', 'SMSTOP')) end) }, 	
+		-- Cancel SoothingMistHealing (Someone else needs more) (MIN HEALTH 60%)
+		{ "/stopcasting", (function() if not _SoothingMist_Health(60) then return NeP.Core.dynamicEval("lowest.health < "..math.floor((UnitHealth(_SoothingMist_Target) / UnitHealthMax(_SoothingMist_Target)) * 100)) end end)},
+		{ "124682", { -- Enveloping Mist
 			"player.chi >= 3",
 			(function() return _SoothingMist_Health(60) end)
 		}, "lowest" },
-		
-		-- Renewing Mist
-		{ "115151", {
+		{ "115151", { -- Renewing Mist
 			(function() return NeP.Core.dynamicEval(_SoothingMist_Target..".buff(119611).duration <= 2") end),
 			(function() return _SoothingMist_Health(90) end),
 		}}, 
-		
-		-- Surging Mist
-		{ "116694", (function() return _SoothingMist_Health(80) end)},
+		{ "116694", { -- Surging Mist
+			(function() return _SoothingMist_Health(80) end)
+			"player.chi < 5"
+		}},
 		
 	}, "player.casting(115175)" },
 	
 	{{ -- Normal Healing
 	
-		{{ -- Survival
-			{ "115072", { "player.health <= 80", "player.chi < 5" }}, -- Expel Harm
-			{ "115098", "player.health <= 75" }, -- Chi Wave
+		{{ -- Survival 
+			{ "115072", { -- Expel Harm
+				"player.health <= 80", 
+				"player.chi < 5",
+				"!player.glyph(146950)"
+			}},
 			{ "115203", { -- Forifying Brew at < 30% health and when DM & DH buff is not up
 			  "player.health < 30",
 			  "!player.buff(122783)", -- Diffuse Magic
-			  "!player.buff(122278)"-- Dampen Harm
+			  "!player.buff(122278) "-- Dampen Harm
 			}}, 
 			{ "#5512", "player.health < 40" }, -- Healthstone
 		}, "player.health < 100" },
 		
 		{{ -- AoE
 			{ "115098", "@coreHealing.needsHealing(90, 3)", "lowest" }, -- Chi Wave
-			{ "115310", "@coreHealing.needsHealing(60, 3)", nil }, -- Revival
+			{ "115310", "@coreHealing.needsHealing(60, 3)" }, -- Revival
 			{ "116680", { -- Uplift with Thunder Focus Tea Condition
 				"@coreHealing.needsHealing(80, 3)",
 				"player.chi >= 3", 
@@ -185,11 +199,17 @@ local inCombatSerpente = {
 			"lowest.health <= 80",
 		}}, 
 		
-		-- Soothing Mist
-		{ "115175", {
-			(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('npconfigMonkMm', 'SM')) end), 
-			"!player.moving"
+		-- Expel Harm (Glyped)
+		{ "115072", { 
+			"lowest.health <= 80", 
+			"lowest.chi < 5",
+			"player.glyph(146950)"
 		}, "lowest" },
+		
+		{{ -- Not Moving
+			-- Soothing Mist
+			{ "115175", (function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('npconfigMonkMm', 'SM')) end), "lowest" },
+		}, "!player.moving" },
 		
 	}, "!player.casting(115175)" },
 }
@@ -263,17 +283,8 @@ ProbablyEngine.rotation.register_custom(270, NeP.Core.GetCrInfo('Monk - Mistweav
 	{ -- In-Combat Change CR dyn
 		{_All},
 		{_SharedIncombat},
-		{{ -- Serpent Stance
-			{ "/stopcasting", { -- Cancel SoothingMistHealing
-				(function() return not _SoothingMist_Health(NeP.Core.PeFetch('npconfigMonkMm', 'SM')) end),
-				"player.casting(115175)", -- Soothing Mist
-				(function() if _SoothingMist_Target ~= nil then return NeP.Core.dynamicEval("lowest.health < "..math.floor((UnitHealth(_SoothingMist_Target) / UnitHealthMax(_SoothingMist_Target)) * 100)) end end)
-			}},
-			{inCombatSerpente}
-		}, "player.stance = 1" },
-		{{ -- Crane Stance
-			{inCombatCrane}
-		}, "player.stance = 2" },
+		{ inCombatSerpente, "player.stance = 1" }, -- Serpent Stance
+		{ inCombatCrane, "player.stance = 2" }, -- Crane Stance
 	},
   	{ -- Out-Combat
 		{_All},
