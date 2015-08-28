@@ -125,7 +125,7 @@ NeP.Lib.AutoDots = function(_spell, _health, _duration, _distance, _classificati
 	for i=1,#NeP.ObjectManager.unitCache do
 		local _object = NeP.ObjectManager.unitCache[i]
 		if _lastDotted == _object.key then return false end
-		if UnitAffectingCombat(object.key) then
+		if UnitAffectingCombat(_object.key) then
 			if UnitClassification(_object.key) == _classification or _classification == 'all' then
 				if _object.health <= _health then
 					local _,_,_,_,_,_,debuff = UnitDebuff(_object.key, GetSpellInfo(_spell), nil, "PLAYER")

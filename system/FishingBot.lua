@@ -26,8 +26,8 @@ NeP.Interface.Fishing = {
 		},
 		{  
 			type = "checkbox",  
-			 text = "Use Sharpened Fish Hook",  
-			 key = "SharpenedFishHook",  
+			text = "Use Sharpened Fish Hook",  
+			key = "SharpenedFishHook",  
 			default = false,  
 		},
 		{  
@@ -129,6 +129,18 @@ local function _startFish()
 	end
 end
 
+local WormSpellID, WormItemID, nexttry = 5386, 118391, 0
+local function _WormSupreme()
+	if NeP.Core.PeFetch('NePFishingConf', 'WormSupreme') and GetTime() > nexttry then
+		if select(7, GetItemInfo(GetInventoryItemLink("player", 16))) == "Fishing Poles" then
+			local hasEnchant, timeleft, _, enchantID = GetWeaponEnchantInfo()
+			if hasEnchant and timeleft / 1000 > 20 and enchantID == WormSpellID then return end
+			nexttry = GetTime() + 5 -- it seems to be chain casting it otherwise :S
+			UseItem(WormItemID)
+		end
+	end
+end
+
 local function _AutoBait()
 	if NeP.Core.PeFetch('NePFishingConf', 'bait') ~= "none" then
 		local _baitsTable = {
@@ -160,9 +172,10 @@ end
 C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR then
 		if NeP.Extras.BagSpace() > 2 then
-			_AutoBait()
 			_CarpDestruction()
 			if _fishRun and FireHack then
+				_AutoBait()
+				_WormSupreme()
 				_startFish()
 			end
 		end
