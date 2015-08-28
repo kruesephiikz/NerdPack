@@ -4,6 +4,24 @@ local DiesalGUI = LibStub("DiesalGUI-1.0")
 local DiesalMenu = LibStub("DiesalMenu-1.0")
 local SharedMedia = LibStub("LibSharedMedia-3.0")
 
+local _openPEGUIs = {}
+NeP.Core.BuildGUI = function(gui, _table)
+	local gui = tostring(gui)
+	if _openPEGUIs[gui] ~= nil then
+		if _openPEGUIs[gui].parent:IsShown() then
+			_openPEGUIs[gui].parent:Hide()
+		else
+			_openPEGUIs[gui].parent:Show()
+		end
+	else
+		_openPEGUIs[gui] = ProbablyEngine.interface.buildGUI(_table)
+	end
+end
+
+NeP.Core.getGUI = function(gui)
+	return _openPEGUIs[gui]
+end
+
 NeP.Interface.addText = function(parent)
 	local text = parent:CreateFontString(nil, "OVERLAY")
 	text:SetFont("Fonts\\FRIZQT__.TTF", 15)

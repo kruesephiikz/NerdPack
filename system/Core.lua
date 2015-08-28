@@ -88,24 +88,6 @@ end]]
 
 local _addonColor = '|cff'..NeP.Interface.addonColor
 
-local _openPEGUIs = {}
-NeP.Core.BuildGUI = function(gui, _table)
-	local gui = tostring(gui)
-	if _openPEGUIs[gui] ~= nil then
-		if _openPEGUIs[gui].parent:IsShown() then
-			_openPEGUIs[gui].parent:Hide()
-		else
-			_openPEGUIs[gui].parent:Show()
-		end
-	else
-		_openPEGUIs[gui] = ProbablyEngine.interface.buildGUI(_table)
-	end
-end
-
-NeP.Core.getGUI = function(gui)
-	return _openPEGUIs[gui]
-end
-
 function NeP.Interface.ClassGUI()
 	_NePClassGUIs = {
 		[250] = NeP.Interface.DkBlood,

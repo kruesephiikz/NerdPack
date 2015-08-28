@@ -118,6 +118,18 @@ function NeP.Extras.autoTarget(unit, name)
 	end
 end
 
+function NeP.Extras.pickupItem(item)
+	if GetItemCount(item, false, false) > 0 then
+		for bag = 0, NUM_BAG_SLOTS do
+			for slot = 1, GetContainerNumSlots(bag) do
+				currentItemID = GetContainerItemID(bag, slot)
+				if currentItemID == item then
+					PickupContainerItem(bag, slot)
+				end
+			end
+		end
+	end
+end
 
 function NeP.Extras.BagSpace()
 	local freeslots = 0
@@ -130,16 +142,9 @@ end
 
 function NeP.Extras.deleteItem(ID, number)
 	if GetItemCount(ID, false, false) > number then
-		for bag = 0, NUM_BAG_SLOTS do
-			for slot = 1, GetContainerNumSlots(bag) do
-				currentItemID = GetContainerItemID(bag, slot)
-				if currentItemID == ID then
-					PickupContainerItem(bag, slot)
-					if CursorHasItem() then
-						DeleteCursorItem();
-					end
-				end
-			end
+		NeP.Extras.pickupItem(ID)
+		if CursorHasItem() then
+			DeleteCursorItem();
 		end
 	end
 end
