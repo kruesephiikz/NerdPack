@@ -8,7 +8,7 @@ local function equipNormalGear()
 	-- Equip the gear we had before starting... 
 	if #_currentGear > 0 then
 		for k=1, #_currentGear do
-			--print('Equiped: '.._currentGear[k]..' remaning: '..#_currentGear-1)
+			NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Reseting Gear): "..GetItemInfo(_currentGear[k]).." (remaning): "..#_currentGear)
 			NeP.Extras.pickupItem(_currentGear[k])
 			AutoEquipCursorItem()
 		end
@@ -84,7 +84,7 @@ NeP.Interface.Fishing = {
 				_timeStarted = currentTime
 			else
 				self:SetText("Start Fishing")
-				JumpOrAscendStart()
+				JumpOrAscendStart() -- Jump to stop channeling.
 				equipNormalGear()
 				_timeStarted = nil
 			end
@@ -179,7 +179,7 @@ local function _equitHat()
 			local headItemID = GetInventoryItemID("player", 1)
 			local bestHat = hatsFound[1]
 			if headItemID ~= bestHat.ID then
-				NeP.Core.Print('[Fishing Bot]:'..'Equiped: '..bestHat.Name)
+				NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Equiped): "..bestHat.Name)
 				_currentGear[#_currentGear+1] = headItemID
 				NeP.Extras.pickupItem(bestHat.ID)
 				AutoEquipCursorItem()
@@ -232,7 +232,7 @@ local function _equitPole()
 			local weaponItemID = GetInventoryItemID("player", 16)
 			local bestPole = polesFound[1]
 			if weaponItemID ~= bestPole.ID then
-				NeP.Core.Print('[Fishing Bot]:'..'Equiped: '..bestPole.Name)
+				NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Equiped): "..bestPole.Name)
 				_currentGear[#_currentGear+1] = weaponItemID
 				-- Also equip OffHand if user had one.
 				if GetInventoryItemID("player", 17) ~= nil then _currentGear[#_currentGear+1] = GetInventoryItemID("player", 17) end
@@ -257,7 +257,7 @@ local function _AutoBait()
 		if _baitsTable[NeP.Core.PeFetch('NePFishingConf', 'bait')] ~= nil then
 			local _Bait = _baitsTable[NeP.Core.PeFetch('NePFishingConf', 'bait')]
 			if GetItemCount(_Bait.ID, false, false) > 0 and not UnitBuff("player", GetSpellInfo(_Bait.Debuff)) then
-				NeP.Core.Print('[Fishing Bot]:'..'Used Bait: '.._Bait.Name)
+				NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Used Bait): ".._Bait.Name)
 				UseItem(_Bait.ID)
 			end
 		end

@@ -245,7 +245,7 @@ end
 
 function NeP.Core.Print(txt)
 	if not NeP.Core.hidding and NeP.Core.PeFetch('npconf', 'Prints') then
-		local _name = _addonColor..NeP.Info.Name
+		local _name = _addonColor..NeP.Info.Nick
 		print("|r[".._name.."|r]: "..NeP.Interface.printColor..txt)
 	end
 end
