@@ -1,6 +1,18 @@
 local OBJECT_BOBBING_OFFSET = 0x1e0
 local OBJECT_CREATOR_OFFSET = 0x30
 local _fishRun = false
+_currentGear = {}
+
+local function equipNormalGear()
+	-- Equip the gear we had before starting... 
+	if #_currentGear > 0 then
+		for i = 1, #_currentGear do
+			NeP.Extras.pickupItem(_currentGear[i])
+			AutoEquipCursorItem()
+			table.remove(_currentGear, i)
+		end
+	end
+end
 
 NeP.Interface.Fishing = {
 	key = "NePFishingConf",
@@ -14,10 +26,33 @@ NeP.Interface.Fishing = {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Fishing Bot:", size = 25, align = "Center"},
 		{ type = 'text', text = "Requires FireHack and to have both "..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
 		{ type = 'rule' },{ type = 'spacer' },
+		{ 
+			type = "dropdown",
+			text = "Bait:", 
+			key = "bait",
+			width = 170,
+			list = {
+				{text = "None", key = "none"},	
+				{text = "Jawless Skulker", key = "jsb"},
+				{text = "Fat Sleeper", key = "fsb"},
+				{text = "Blind Lake Sturgeon", key = "blsb"},
+				{text = "Fire Ammonite", key = "fab"},
+				{text = "Sea Scorpion", key = "ssb"},
+				{text = "Abyssal Gulper Eel", key = "ageb"},
+				{text = "Blackwater Whiptail", key = "bwb"},
+			}, 
+			default = "none" 
+		},
 		{
 			type = "checkbox", 
 			text = "Use Fishing Hat", 
 			key = "FshHat", 
+			default = true, 
+		},
+		{
+			type = "checkbox", 
+			text = "Use Fishing Poles", 
+			key = "FshPole", 
 			default = true, 
 		},
 		{
@@ -38,24 +73,6 @@ NeP.Interface.Fishing = {
 			key = "LunarfallCarp",  
 			default = false,  
 		},
-		{ type = 'spacer' },
-		{ 
-			type = "dropdown",
-			text = "Bait:", 
-			key = "bait",
-			width = 170,
-			list = {
-				{text = "None", key = "none"},	
-				{text = "Jawless Skulker", key = "jsb"},
-				{text = "Fat Sleeper", key = "fsb"},
-				{text = "Blind Lake Sturgeon", key = "blsb"},
-				{text = "Fire Ammonite", key = "fab"},
-				{text = "Sea Scorpion", key = "ssb"},
-				{text = "Abyssal Gulper Eel", key = "ageb"},
-				{text = "Blackwater Whiptail", key = "bwb"},
-			}, 
-			default = "none" 
-		},
 		{ type = 'rule' },{ type = 'spacer' },
 		{ type = "button", text = "Start Fishing", width = 230, height = 20, callback = function(self, button)
 			_fishRun = not _fishRun
@@ -63,6 +80,7 @@ NeP.Interface.Fishing = {
 				self:SetText("Stop Fishing")
 			else
 				self:SetText("Start Fishing")
+				equipNormalGear()
 			end
 		end},
 	}
@@ -150,8 +168,65 @@ local function _equitHat()
 		if #hatsFound > 0 then
 			local headItemID = GetInventoryItemID("player", 1)
 			local bestHat = hatsFound[1]
-			if headItemID ~= bestHat then
-				NeP.Extras.pickupItem(bestHat)
+			if headItemID ~= bestHat.ID then
+				NeP.Core.Print('Equiped: '..bestHat.Name)
+				_currentGear[#_currentGear+1] = headItemID
+				NeP.Extras.pickupItem(bestHat.ID)
+				AutoEquipCursorItem()
+			end
+		end
+	end
+end
+
+local function _findPoles()
+	local polesTable = {
+		[1] = { Name = "Fishing Pole", ID = 6256, Bonus = 0 },
+		[2] = { Name = "Strong Fishing Pole", ID = 6365, Bonus = 5 },
+		[3] = { Name = "Darkwood Fishing Pole", ID = 6366, Bonus = 15 },
+		[4] = { Name = "Big Iron Fishing Pole", ID = 6367, Bonus = 20 },
+		[5] = { Name = "Blump Family Fishing Pole", ID = 12225, Bonus = 3 },
+		[6] = { Name = "Nat Pagle's Extreme Angler FC-5000", ID = 19022, Bonus = 20 },
+		[7] = { Name = "Arcanite Fishing Pole", ID = 19970, Bonus = 40 },
+		[8] = { Name = "Seth's Graphite Fishing Pole", ID = 25978, Bonus = 20 },
+		[9] = { Name = "Mastercraft Kalu'ak Fishing Pole", ID = 44050, Bonus = 30 },
+		[10] = { Name = "Nat's Lucky Fishing Pole", ID = 45858, Bonus = 25 },
+		[11] = { Name = "Bone Fishing Pole", ID = 45991, Bonus = 30 },
+		[12] = { Name = "Jeweled Fishing Pole", ID = 45992, Bonus = 30 },
+		[13] = { Name = "Staats' Fishing Pole", ID = 46337, Bonus = 3 },
+		[14] = { Name = "Pandaren Fishing Pole", ID = 84660, Bonus = 10 },
+		[15] = { Name = "Dragon Fishing Pole", ID = 84661, Bonus = 30 },
+		[16] = { Name = "Savage Fishing Pole", ID = 116825, Bonus = 30 },
+		[17] = { Name = "Draenic Fishing Pole", ID = 116826, Bonus = 30 },
+		[18] = { Name = "Ephemeral Fishing Pole", ID = 118381, Bonus = 100 },
+		[19] = { Name = "Thruk's Fishing Rod", ID = 120163, Bonus = 3 },
+	}
+	local polesFound = {}
+	for i = 1, #polesTable do
+		if GetItemCount(polesTable[i].ID, false, false) > 0 then
+			--print('found:'..polesTable[i].Name)
+			polesFound[#polesFound+1] = {
+				ID = polesTable[i].ID,
+				Name = polesTable[i].Name,
+				Bonus = polesTable[i].Bonus
+			}
+		end
+	end
+	table.sort(polesFound, function(a,b) return a.Bonus < b.Bonus end)
+	return polesFound
+end
+
+local function _equitPole()
+	if NeP.Core.PeFetch('NePFishingConf', 'FshPole') then
+		local polesFound = _findPoles()
+		if #polesFound > 0 then
+			local weaponItemID = GetInventoryItemID("player", 16)
+			local bestPole = polesFound[1]
+			if weaponItemID ~= bestPole.ID then
+				NeP.Core.Print('Equiped: '..bestPole.Name)
+				_currentGear[#_currentGear+1] = weaponItemID
+				-- Also equip OffHand if user had one.
+				if GetInventoryItemID("player", 17) ~= nil then _currentGear[#_currentGear+1] = GetInventoryItemID("player", 17) end
+				NeP.Extras.pickupItem(bestPole.ID)
 				AutoEquipCursorItem()
 			end
 		end
@@ -192,6 +267,7 @@ C_Timer.NewTicker(0.5, (function()
 			_CarpDestruction()
 			if _fishRun then
 				_equitHat()
+				_equitPole()
 				_AutoBait()
 				_WormSupreme()
 				if FireHack then
