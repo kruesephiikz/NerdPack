@@ -84,6 +84,7 @@ NeP.Interface.Fishing = {
 				_timeStarted = currentTime
 			else
 				self:SetText("Start Fishing")
+				JumpOrAscendStart()
 				equipNormalGear()
 				_timeStarted = nil
 			end
