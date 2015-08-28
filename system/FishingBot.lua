@@ -20,13 +20,13 @@ NeP.Interface.Fishing = {
 	key = "NePFishingConf",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
-	subtitle = "Fising Settings",
+	subtitle = "Fishing Settings",
 	color = NeP.Interface.addonColor,
 	width = 250,
 	height = 350,
 	config = {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Fishing Bot:", size = 25, align = "Center"},
-		{ type = 'text', text = "Requires FireHack and to have both "..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
+		{ type = 'text', text = "Requires FireHack", align = "Center" },
 		{ type = 'rule' },{ type = 'spacer' },
 		{ 
 			type = "dropdown",
@@ -135,6 +135,7 @@ local function _startFish()
 	end
 end
 
+-- When applied to your fishing pole, increases Fishing by 200 for 10 min. (WoD)
 local WormSpellID, WormItemID, nexttry = 5386, 118391, 0
 local function _WormSupreme()
 	if NeP.Core.PeFetch('NePFishingConf', 'WormSupreme') and GetTime() > nexttry then
@@ -177,7 +178,7 @@ local function _equitHat()
 			local headItemID = GetInventoryItemID("player", 1)
 			local bestHat = hatsFound[1]
 			if headItemID ~= bestHat.ID then
-				NeP.Core.Print('Equiped: '..bestHat.Name)
+				NeP.Core.Print('[Fishing Bot]:'..'Equiped: '..bestHat.Name)
 				_currentGear[#_currentGear+1] = headItemID
 				NeP.Extras.pickupItem(bestHat.ID)
 				AutoEquipCursorItem()
@@ -230,7 +231,7 @@ local function _equitPole()
 			local weaponItemID = GetInventoryItemID("player", 16)
 			local bestPole = polesFound[1]
 			if weaponItemID ~= bestPole.ID then
-				NeP.Core.Print('Equiped: '..bestPole.Name)
+				NeP.Core.Print('[Fishing Bot]:'..'Equiped: '..bestPole.Name)
 				_currentGear[#_currentGear+1] = weaponItemID
 				-- Also equip OffHand if user had one.
 				if GetInventoryItemID("player", 17) ~= nil then _currentGear[#_currentGear+1] = GetInventoryItemID("player", 17) end
@@ -255,8 +256,7 @@ local function _AutoBait()
 		if _baitsTable[NeP.Core.PeFetch('NePFishingConf', 'bait')] ~= nil then
 			local _Bait = _baitsTable[NeP.Core.PeFetch('NePFishingConf', 'bait')]
 			if GetItemCount(_Bait.ID, false, false) > 0 and not UnitBuff("player", GetSpellInfo(_Bait.Debuff)) then
-				NeP.Core.Print('Used Bait: '.._Bait.ID)
-				NeP.Core.Print('Used Bait: '.._Bait.Name)
+				NeP.Core.Print('[Fishing Bot]:'..'Used Bait: '.._Bait.Name)
 				UseItem(_Bait.ID)
 			end
 		end
