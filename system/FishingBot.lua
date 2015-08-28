@@ -6,12 +6,13 @@ _currentGear = {}
 local function equipNormalGear()
 	-- Equip the gear we had before starting... 
 	if #_currentGear > 0 then
-		for i = 1, #_currentGear do
-			NeP.Extras.pickupItem(_currentGear[i])
+		for k=1, #_currentGear do
+			--print('Equiped: '.._currentGear[k]..' remaning: '..#_currentGear-1)
+			NeP.Extras.pickupItem(_currentGear[k])
 			AutoEquipCursorItem()
-			table.remove(_currentGear, i)
 		end
 	end
+	wipe(_currentGear)
 end
 
 NeP.Interface.Fishing = {
