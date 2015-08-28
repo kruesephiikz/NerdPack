@@ -1,6 +1,7 @@
 local OBJECT_BOBBING_OFFSET = 0x1e0
 local OBJECT_CREATOR_OFFSET = 0x30
 local _fishRun = false
+local _timeStarted = nil
 _currentGear = {}
 
 local function equipNormalGear()
@@ -79,17 +80,23 @@ NeP.Interface.Fishing = {
 			_fishRun = not _fishRun
 			if _fishRun then
 				self:SetText("Stop Fishing")
+				local currentTime = GetTime()
+				_timeStarted = currentTime
 			else
 				self:SetText("Start Fishing")
 				equipNormalGear()
+				_timeStarted = nil
 			end
 		end},
+		{ type = 'rule' },{ type = 'spacer' },
+		-- Timer
+		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Running For: ", size = 11, offset = -11 },
+		{ key = 'current_Time', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		-- Counter // FIX ME: Figure out a proper way to count the loot.
+		--{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Lotted Items: ", size = 11, offset = -11 },
+		--{ key = 'current_Loot', type = "text", text = "...", size = 11, align = "right", offset = 0 },
 	}
 }
-
-function NeP.Interface.FishingGUI()
-	NeP.Core.BuildGUI('fishing', NeP.Interface.Fishing)
-end
 
 local function GetObjectGUID(object)
   return tonumber(ObjectDescriptor(object, 0, Types.ULong))
@@ -262,20 +269,38 @@ local function _CarpDestruction()
 	end
 end
 
-C_Timer.NewTicker(0.5, (function()
-	if NeP.Core.CurrentCR then
-		if NeP.Extras.BagSpace() > 2 then
-			_CarpDestruction()
-			if _fishRun then
-				_equitHat()
-				_equitPole()
-				_AutoBait()
-				_WormSupreme()
-				if FireHack then
-					-- Only Works with FH atm...
-					_startFish()
+local function round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
+local _fshCreated = false
+function NeP.Interface.FishingGUI()
+	NeP.Core.BuildGUI('fishing', NeP.Interface.Fishing)
+	local fshGUI = NeP.Core.getGUI('fishing')
+	if not _fshCreated then
+		_fshCreated = true
+		C_Timer.NewTicker(0.5, (function()
+			if NeP.Core.CurrentCR then
+				-- FIXME: ONlY DISPLAYS SECONDS.
+				if _timeStarted ~= nil then
+					local currentTime = GetTime()
+					fshGUI.elements.current_Time:SetText(round(currentTime-_timeStarted)..' Seconds')
+				end
+				if NeP.Extras.BagSpace() > 2 then
+					_CarpDestruction()
+					if _fishRun then
+						_equitHat()
+						_equitPole()
+						_AutoBait()
+						_WormSupreme()
+						if FireHack then
+							-- Only Works with FH atm...
+							_startFish()
+						end
+					end
 				end
 			end
-		end
+		end), nil)
 	end
-end), nil)
+end

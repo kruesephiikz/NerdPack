@@ -136,18 +136,22 @@ NeP.Interface.info = {
 	}
 }
 
+local _infoCreated = false
 function NeP.Interface.InfoGUI()
 	NeP.Core.BuildGUI('Info', NeP.Interface.info)
 	local InfoWindow = NeP.Core.getGUI('Info')
-		C_Timer.NewTicker(1.00, (function()
-			if InfoWindow.parent:IsShown() then
-			-- General Status
-			InfoWindow.elements.current_Unlocker:SetText(ProbablyEngine.pmethod == nil and ProbablyEngine.protected.method == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. (ProbablyEngine.pmethod or ProbablyEngine.protected.method))
-			InfoWindow.elements.current_PEStatus:SetText(ProbablyEngine.version == NeP.Core.peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
-			InfoWindow.elements.current_MTSProfiles:SetText(NeP.Core.CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
-			-- Advanced Status
-			InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
-			InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
-		end
-	end), nil)
+		if not _infoCreated then
+			_infoCreated = true
+			C_Timer.NewTicker(1.00, (function()
+				if InfoWindow.parent:IsShown() then
+				-- General Status
+				InfoWindow.elements.current_Unlocker:SetText(ProbablyEngine.pmethod == nil and ProbablyEngine.protected.method == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. (ProbablyEngine.pmethod or ProbablyEngine.protected.method))
+				InfoWindow.elements.current_PEStatus:SetText(ProbablyEngine.version == NeP.Core.peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
+				InfoWindow.elements.current_MTSProfiles:SetText(NeP.Core.CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
+				-- Advanced Status
+				InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
+				InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
+			end
+		end), nil)
+	end
 end
