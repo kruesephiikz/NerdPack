@@ -179,7 +179,10 @@ ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)
 	elseif command == 'hide' then
 		NeP.Core.HideAll()
 	elseif command == 'show' then
-		NeP.Core.HideAll()
+		NeP.Core.hiding = false
+		ProbablyEngine.buttons.buttonFrame:Show()
+		NeP_MinimapButton:Show()
+		NeP.Core.Print('Now Showing everything again.')
 	elseif command == 'overlay' or command == 'ov' or command == 'overlays' then
 		NeP.Interface.OverlaysGUI()
 	elseif command == 'test' then
@@ -230,13 +233,13 @@ function NeP.Core.GetCrInfo(txt)
 end
 
 function NeP.Core.HideAll()
-	if not NeP.Core.hidding then
+	if not NeP.Core.hiding then
 		NeP.Core.Print('Now Hidding everything, to re-enable use the command "/np show".')
 		ProbablyEngine.buttons.buttonFrame:Hide()
 		NeP_MinimapButton:Hide()
-		NeP.Core.hidding = true
+		NeP.Core.hiding = true
 	else
-		NeP.Core.hidding = false
+		NeP.Core.hiding = false
 		ProbablyEngine.buttons.buttonFrame:Show()
 		NeP_MinimapButton:Show()
 		NeP.Core.Print('Now Showing everything again.')
@@ -244,7 +247,7 @@ function NeP.Core.HideAll()
 end
 
 function NeP.Core.Print(txt)
-	if not NeP.Core.hidding and NeP.Core.PeFetch('npconf', 'Prints') then
+	if not NeP.Core.hiding and NeP.Core.PeFetch('npconf', 'Prints') then
 		local _name = _addonColor..NeP.Info.Nick
 		print("|r[".._name.."|r]: "..NeP.Interface.printColor..txt)
 	end
