@@ -1,5 +1,5 @@
 NeP.Interface.MonkWw = {
-	key = "npconfigMonkWw",
+	key = "NePConfigMonkWw",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Monk WindWalker Settings",
@@ -156,7 +156,7 @@ ProbablyEngine.rotation.register_custom(269, NeP.Core.GetCrInfo('Monk - Windwalk
 		{_Survival, 'player.health < 100'},
 		{_Interrupts, "target.NePinterrupt"},
 		{_Cooldowns, "modifier.cooldowns"},
-		{_SEF, (function() return NeP.Core.PeFetch('npconfigMonkWw', 'SEF') end)},
+		{_SEF, (function() return NeP.Core.PeFetch('NePConfigMonkWw', 'SEF') end)},
 		{{ -- Conditions
 			{_Melle, "target.inMelee"},
 			{_Ranged, {"!target.inMelee", "target.inRanged"}}

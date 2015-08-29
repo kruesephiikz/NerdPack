@@ -57,7 +57,7 @@ NeP.Lib.getUnitRange = function(a, t)
 end
 
 NeP.Lib.canTaunt = function()
-	if NeP.Core.PeFetch('npconf', 'Taunts') then
+	if NeP.Core.PeFetch('NePConf', 'Taunts') then
 		for i=1,#NeP.ObjectManager.unitCache do
 			local object = NeP.ObjectManager.unitCache[i].key
 			if UnitIsTappedByPlayer(object) and object.distance <= 40 then
@@ -80,7 +80,7 @@ NeP.Lib.Dispell = function(dispelTypes)
 		'Mark of Arrogance',
 		'Displaced Energy'
 	}
-	if NeP.Core.PeFetch('npconf', 'Dispell') then
+	if NeP.Core.PeFetch('NePConf', 'Dispell') then
 		for i=1,#NeP.ObjectManager.unitFriendlyCache do
 			local object = NeP.ObjectManager.unitFriendlyCache[i]
 			if object.distance <= 40 then

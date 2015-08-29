@@ -149,8 +149,8 @@ function NeP.Interface.InfoGUI()
 				InfoWindow.elements.current_PEStatus:SetText(ProbablyEngine.version == NeP.Core.peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
 				InfoWindow.elements.current_MTSProfiles:SetText(NeP.Core.CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
 				-- Advanced Status
-				InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
-				InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('npconf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
+				InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
+				InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
 			end
 		end), nil)
 	end

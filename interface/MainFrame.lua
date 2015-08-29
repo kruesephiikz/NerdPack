@@ -8,7 +8,7 @@ local buttonsTotalHeight = 10
 NeP.Interface.Alerts = {}
 
 function NeP.Alert(txt)
-	if not NeP.Core.hiding and NeP.Core.PeFetch('npconf', 'Alerts') then
+	if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Alerts') then
 		local _txt = tostring(txt)
 		table.insert(NeP.Interface.Alerts, _txt)
 	end
@@ -200,7 +200,7 @@ function StatusGUI_RUN()
 					statusGUIAlert:SetAlpha(1)
 					statusGUIAlert:SetSize(statusGUIAlertText:GetStringWidth()+10, statusGUIAlertText:GetStringHeight())
 					statusGUIAlert:Show()
-					if NeP.Core.PeFetch('npconf', 'Sounds') then
+					if NeP.Core.PeFetch('NePConf', 'Sounds') then
 						PlaySoundFile(NeP.Interface.mediaDir.."beep.mp3")
 					end
 					_Time = GetTime()

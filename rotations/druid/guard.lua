@@ -1,5 +1,5 @@
 NeP.Interface.DruidGuard = {
-	key = "npconfDruidGuard",
+	key = "NePConfDruidGuard",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Druid Guardian Settings",
@@ -154,7 +154,7 @@ local inCombat = {
   			"player.form != 1", -- Stop if bear
   			"!modifier.lalt", -- Stop if pressing left alt
   			"!player.buff(5215)", -- Not in Stealth
-  			(function() return NeP.Core.PeFetch('npconfDruidGuard', 'Bear') end),
+  			(function() return NeP.Core.PeFetch('NePConfDruidGuard', 'Bear') end),
   		}},
 
 	{{-- Interrupts
@@ -163,9 +163,9 @@ local inCombat = {
 	}, "target.NePinterrupt" },
 	
 	-- Items
-		{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'Healthstone')) end) }, -- Healthstone
-		{ "#109223", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'HealingTonic')) end) }, --  Healing Tonic
-		{ "#117415", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'SmuggledTonic')) end) }, --  Smuggled Tonic
+		{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Healthstone')) end) }, -- Healthstone
+		{ "#109223", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'HealingTonic')) end) }, --  Healing Tonic
+		{ "#117415", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SmuggledTonic')) end) }, --  Smuggled Tonic
 	
 	-- Cooldowns
 		{ "50334", "modifier.cooldowns" }, -- Berserk
@@ -175,17 +175,17 @@ local inCombat = {
 	--Defensive
 		{ "62606", { -- Savage Defense
 			"!player.buff", 
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'SavageDefense')) end) 
+			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SavageDefense')) end) 
 		}},
 		{ "22842", { -- Frenzied Regeneration
 			"!player.buff",
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'FrenziedRegeneration')) end),
+			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'FrenziedRegeneration')) end),
 			"player.rage >= 20"
 		}},
-		{ "22812",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'Barkskin')) end) }, -- Barkskin
-		{ "102351",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'CenarionWard')) end), "player" }, -- Cenarion Ward
-		{ "61336",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'SurvivalInstincts')) end) }, -- Survival Instincts
-		{ "108238", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidGuard', 'Renewal')) end) }, -- Renewal		
+		{ "22812",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Barkskin')) end) }, -- Barkskin
+		{ "102351",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'CenarionWard')) end), "player" }, -- Cenarion Ward
+		{ "61336",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SurvivalInstincts')) end) }, -- Survival Instincts
+		{ "108238", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Renewal')) end) }, -- Renewal		
 
 	-- Dream of Cenarious
 		-- Needs a Rebirth here
@@ -264,7 +264,7 @@ local outCombat = {
   			"player.form != 1", -- Stop if bear
   			"!modifier.lalt", -- Stop if pressing left alt
   			"!player.buff(5215)", -- Not in Stealth
-  			(function() return NeP.Core.PeFetch('npconfDruidGuard', 'BearOCC') end),
+  			(function() return NeP.Core.PeFetch('NePConfDruidGuard', 'BearOCC') end),
   		}},
 
 }

@@ -1,5 +1,5 @@
 NeP.Interface.DruidFeral = {
-	key = "npconfDruidFeral",
+	key = "NePConfDruidFeral",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Druid Feral Settings",
@@ -138,13 +138,13 @@ local CatForm = {
 	  	}, "target" },
 
   	-- Survival
-	{ "Renewal", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'Renewal')) end) }, -- Renewal
-	{ "Cenarion Ward", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'CenarionWard')) end) }, -- Cenarion Ward
-	{ "61336",(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'SurvivalInstincts')) end) }, -- Survival Instincts
+	{ "Renewal", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'Renewal')) end) }, -- Renewal
+	{ "Cenarion Ward", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'CenarionWard')) end) }, -- Cenarion Ward
+	{ "61336",(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'SurvivalInstincts')) end) }, -- Survival Instincts
 	  	
 	-- Predatory Swiftness (Passive Proc)
 	{ "5185", {  -- Healing Touch Player
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'HealingTouch')) end),
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'HealingTouch')) end),
 		"player.buff(Predatory Swiftness)",
 		"!talent(7,2)"
 	}, "player" },
@@ -175,7 +175,7 @@ local CatForm = {
 	}, "modifier.cooldowns" },
   	
 	-- Buffs
-	{ "5217", (function() return NeP.Core.dynamicEval("player.energy <= " .. NeP.Core.PeFetch('npconfDruidFeral', 'TigersFury')) end) }, -- Tiger's Fury
+	{ "5217", (function() return NeP.Core.dynamicEval("player.energy <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'TigersFury')) end) }, -- Tiger's Fury
 
 	-- Proc's
 	{ "106830", "player.buff(Omen of Clarity)", "target" }, -- Free Thrash
@@ -233,7 +233,7 @@ local _All = {
 		"!player.buff(69378).any",  -- Blessing of Forgotten Kings
 		"!player.buff(5215)",-- Not in Stealth
 		"player.form = 0", -- Player not in form
-		(function() return NeP.Core.PeFetch('npconfDruidFeral','Buffs') end),
+		(function() return NeP.Core.PeFetch('NePConfDruidFeral','Buffs') end),
 	}},
 	
 	{ "Ursol's Vortex", {
@@ -255,62 +255,62 @@ local _All = {
 local inCombat = {
 	-- Form Hadling Logic
 	{ "/run CancelShapeshiftForm();", (function() 
-	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('npconfDruidFeral', 'Form') == 'MANUAL' then
+	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('NePConfDruidFeral', 'Form') == 'MANUAL' then
 	  		return false
-	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('npconfDruidFeral', 'Form') == '0' then
+	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('NePConfDruidFeral', 'Form') == '0' then
 	  		return true
 	  	else
-	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('npconfDruidFeral', 'Form'))
+	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('NePConfDruidFeral', 'Form'))
 	  	end
 	end) },
 	{ "768", { -- catform
 	  	"player.form != 2", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '2' end),
+	  	(function() return NeP.Core.PeFetch('NePConfDruidFeral','Form') == '2' end),
 	}},
 	{ "783", { -- Travel
 	  	"player.form != 3", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '3' end),
+	  	(function() return NeP.Core.PeFetch('NePConfDruidFeral','Form') == '3' end),
 	}},
 	{ "5487", { -- catform
 	  	"player.form != 1", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','Form') == '1' end),
+	  	(function() return NeP.Core.PeFetch('NePConfDruidFeral','Form') == '1' end),
 	}},
 }
 
 local outCombat = {
 	-- Form Handling Logic
 	{ "/run CancelShapeshiftForm();", (function() 
-		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC') == 'MANUAL' then
+		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC') == 'MANUAL' then
 	  		return false
-	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC') == '0' then
+	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC') == '0' then
 	  		return true
 	  	else
-	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('npconfDruidFeral', 'FormOCC'))
+	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC'))
 	  	end
 	end) },
 	{ "768", { -- catform
 	  	"player.form != 2", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-		(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '2' end),
+		(function() return NeP.Core.PeFetch('NePConfDruidFeral','FormOCC') == '2' end),
 	}},
 	{ "783", { -- Travel
 	  	"player.form != 3", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '3' end),
+	  	(function() return NeP.Core.PeFetch('NePConfDruidFeral','FormOCC') == '3' end),
 	}},
 	{ "5487", { -- catform
 	  	"player.form != 1", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch('npconfDruidFeral','FormOCC') == '1' end),
+	  	(function() return NeP.Core.PeFetch('NePConfDruidFeral','FormOCC') == '1' end),
 	}},
 }
 
@@ -333,7 +333,7 @@ ProbablyEngine.rotation.register_custom(103, NeP.Core.GetCrInfo('Druid - Feral')
 	  		{ "5215", { -- Stealth
 		  		"player.form = 2", -- If cat
 		  		"!player.buff(5215)", -- Not in Stealth
-		  		(function() return NeP.Core.PeFetch('npconfDruidFeral','Prowl') end),
+		  		(function() return NeP.Core.PeFetch('NePConfDruidFeral','Prowl') end),
 		  	}},
 		}, "player.form = 2" },
 	}, exeOnLoad)

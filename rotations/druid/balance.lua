@@ -1,5 +1,5 @@
 NeP.Interface.DruidBalance = {
-	key = "npconfDruidBalance",
+	key = "NePConfDruidBalance",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Druid Balance Settings",
@@ -106,7 +106,7 @@ local _All = {
 		"!player.buff(69378).any",  -- Blessing of Forgotten Kings
 		"!player.buff(5215)",-- Not in Stealth
 		"player.form = 0", -- Player not in form
-		(function() return NeP.Core.PeFetch("npconfDruidBalance", "Buffs", true) end),
+		(function() return NeP.Core.PeFetch("NePConfDruidBalance", "Buffs", true) end),
 	}},
 	--Shared Stuff
 	{ "20484", { -- Rebirth
@@ -119,7 +119,7 @@ local BoomkinForm = {
 			
 	{{-- Interrupts
 		{ "78675" }, -- Solar Beam
-	}, "target.interruptsAt("..(NeP.Core.PeFetch("npconf", "ItA", 40))..")" },
+	}, "target.interruptsAt("..(NeP.Core.PeFetch("NePConf", "ItA", 40))..")" },
 	
 	-- Items
 	{ "#5512", "player.health < 50" }, --Healthstone
@@ -184,74 +184,74 @@ local BoomkinForm = {
 local inCombat = {
 	-- Form Handling Logic
 	{ "/run CancelShapeshiftForm()", (function()
-	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "MANUAL" then
+	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "MANUAL" then
 	  		return false
-	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "0" then
+	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "0" then
 	  		return true
 	  	else
-	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("npconfDruidBalance", "Form", "4"))
+	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4"))
 	  	end
 	end) },
 	{ "768", { -- catform
 	  	"player.form != 2", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "2" end),
+	  	(function() return NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "2" end),
 	}},
 	{ "783", { -- Travel
 	  	"player.form != 3", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "3" end),
+	  	(function() return NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "3" end),
 	}},
 	{ "5487", { -- catform
 	  	"player.form != 1", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "1" end),
+	  	(function() return NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "1" end),
 	}},
 	{ "24858", { -- boomkin
 	  	"player.form != 4", -- Stop if boomkin
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "Form", "4") == "4" end),
+	  	(function() return NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "4" end),
 	}},
 }
 
 local outCombat = {
 	-- Form Handling Logic
 	{ "/run CancelShapeshiftForm()", (function()
-		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "MANUAL" then
+		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "MANUAL" then
 			return false
-		elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "0" then
+		elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "0" then
 			return true
 		else
-			return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4"))
+			return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4"))
 		end
 	end) },
 	{ "768", { -- catform
 	  	"player.form != 2", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "2" end),
+	  	(function() return NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "2" end),
 	}},
 	{ "783", { -- Travel
 	  	"player.form != 3", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "3" end),
+	  	(function() return NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "3" end),
 	}},
 	{ "5487", { -- catform
 		"player.form != 1", -- Stop if cat
 	  	"!modifier.lalt", -- Stop if pressing left alt
 	  	"!player.buff(5215)", -- Not in Stealth
-	  	(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "1" end),
+	  	(function() return NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "1" end),
 	}},
 	{ "24858", { -- boomkin
 		"player.form != 4", -- Stop if boomkin
 		"!modifier.lalt", -- Stop if pressing left alt
 		"!player.buff(5215)", -- Not in Stealth
-	(function() return NeP.Core.PeFetch("npconfDruidBalance", "FormOCC", "4") == "4" end),
+	(function() return NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "4" end),
 	}},
 }
 

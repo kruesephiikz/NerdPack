@@ -1,5 +1,5 @@
 NeP.Interface.WarrFury = {
-	key = "npconfigWarrFury",
+	key = "NePConfigWarrFury",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Warrior Fury Settings",
@@ -96,11 +96,11 @@ local All = {
 
 		{ "6673", {----------------------------------------------- Battle Shout
 			"!player.buffs.attackpower",
-			(function() return NeP.Core.PeFetch("npconfigWarrFury", "Shout") == 'Battle Shout' end),
+			(function() return NeP.Core.PeFetch("NePConfigWarrFury", "Shout") == 'Battle Shout' end),
 		}},
 		{ "469", {------------------------------------------------ Commanding Shout
 			"!player.buffs.stamina",
-			(function() return NeP.Core.PeFetch("npconfigWarrFury", "Shout") == 'Commanding Shout' end),
+			(function() return NeP.Core.PeFetch("NePConfigWarrFury", "Shout") == 'Commanding Shout' end),
 		}}, 
 		{ "6544", "modifier.shift", "target.ground" }, 			-- Heroic Leap // FH
 	  	{ "5246", "modifier.control" }, 						-- Intimidating Shout
@@ -156,10 +156,10 @@ local Cooldowns = {
 
 local Survival = {
 	
-	{ "97462", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfigWarrFury', 'RallyingCry')) end) }, -- Rallying Cry
-  	{ "118038", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfigWarrFury', 'DBTS')) end) }, 		-- Die by the Sword
-  	{ "103840", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfigWarrFury', 'IVT')) end) }, 		-- Impending Victory
-	{ "55694", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfigWarrFury', 'ERG')) end) }, 		-- Enraged Regeneration
+	{ "97462", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrFury', 'RallyingCry')) end) }, -- Rallying Cry
+  	{ "118038", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrFury', 'DBTS')) end) }, 		-- Die by the Sword
+  	{ "103840", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrFury', 'IVT')) end) }, 		-- Impending Victory
+	{ "55694", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrFury', 'ERG')) end) }, 		-- Enraged Regeneration
 
 }
 
@@ -219,8 +219,8 @@ ProbablyEngine.rotation.register_custom(72, NeP.Core.GetCrInfo('Warrior - Fury')
 		{ "57755", "player.range > 10", "target" }, 	-- Heroic Throw // Ranged
 		{ "2457", "player.seal != 1" }, 				-- Battle Stance
 		{{-- Interrupt
-			{ "6552", (function() return NeP.Core.dynamicEval("target.interruptsAt(" .. NeP.Core.PeFetch('npconf', 'ItA') or 40)..")" end) }, 			-- Pummel
-			{ "23920", (function() return NeP.Core.dynamicEval("target.interruptsAt(" .. NeP.Core.PeFetch('npconf', 'ItA') or 40)..")" end) }, 		-- Spell Reflection
+			{ "6552", (function() return NeP.Core.dynamicEval("target.interruptsAt(" .. NeP.Core.PeFetch('NePConf', 'ItA') or 40)..")" end) }, 			-- Pummel
+			{ "23920", (function() return NeP.Core.dynamicEval("target.interruptsAt(" .. NeP.Core.PeFetch('NePConf', 'ItA') or 40)..")" end) }, 		-- Spell Reflection
 		}, "target.NePinterrupt" },
 		{ All },										-- Shared across all
 		{ Survival },									-- Survival

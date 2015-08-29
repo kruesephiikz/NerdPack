@@ -3,7 +3,7 @@ local NeP_OpenConfigWindow = false
 local NeP_ShowingConfigWindow = false
 
 NeP.Interface.General = {
-	key = "npconf",
+	key = "NePConf",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
 	subtitle = "General Settings",

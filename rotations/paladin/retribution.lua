@@ -1,5 +1,5 @@
 NeP.Interface.PalaRet = {
-  key = "npconfPalaRet",
+  key = "NePConfPalaRet",
   profiles = true,
   title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
   subtitle = "Paladin Retribution Settings",
@@ -185,47 +185,47 @@ end
 local Survival = {
 	{ "Eternal Flame", { 
 		"player.buff(Eternal Flame).duration < 3", 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'eternalglory') end) 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'eternalglory') end) 
 	}, "player" },
 	{ "Sacred Shield", { 
 		"player.buff(Sacred Shield).duration < 7", 
 		"target.range > 3", 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'sacredshield') end) 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'sacredshield') end) 
 	}, "player" },
 	{ "Hand of Freedom", { 
 		"!player.buff", 
 		"player.state.snare", 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'handoffreedom') end) 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'handoffreedom') end) 
 	}, "player" },
 	{ "Emancipate", { 
 		"!lastcast(Emancipate)", 
 		"player.state.root", 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'emancipate') end) 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'emancipate') end) 
 	}, "player" },
 	{ "Divine Shield", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaRet', 'divineshield_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'divineshield_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'divineshield_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'divineshield_check') end) 
 	}},
 }
 
 local SelfHeals = {
 	{ "Flash of Light", { 
 		"player.buff(Selfless Healer).count = 3", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaRet', 'flashoflight_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'flashoflight_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'flashoflight_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'flashoflight_check') end) 
 	}},
 	{ "Word of Glory", { 
 		"player.holypower >= 3", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaRet', 'wordofglory_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'wordofglory_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'wordofglory_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'wordofglory_check') end) 
 	}},
 	{ "Lay on Hands", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaRet', 'layonhands_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'layonhands_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'layonhands_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'layonhands_check') end) 
 	}},
 	{ "#5512", { -- Healthstone (5512)
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaRet', 'healthstone_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfPalaRet', 'healthstone_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'healthstone_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'healthstone_check') end) 
 	}},
 }
 
@@ -270,29 +270,29 @@ local Seals = {
 		{{ -- AoE
 			{ "20165", { -- Seal of Insigh
 				"player.seal != 3",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "sealAoE") == 'Insight' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Insight' end),
 			}},
 			{ "20154", { -- Seal of Righteousness
 				"player.seal != 2",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "sealAoE") == 'Righteousness' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Righteousness' end),
 			}},
 			{ "31801", { -- Seal of truth
 				"player.seal != 1",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "sealAoE") == 'Truth' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Truth' end),
 			}},
 		}, (function() return NeP.Lib.SAoE(3, 40) end) },
 		{{ -- Single Target
 			{ "20165", { -- Seal of Insigh
 				"player.seal != 3",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "seal") == 'Insight' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Insight' end),
 			}},
 			{ "20154", { -- Seal of Righteousness
 				"player.seal != 2",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "seal") == 'Righteousness' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Righteousness' end),
 			}},
 			{ "31801", { -- Seal of truth
 				"player.seal != 1",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "seal") == 'Truth' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Truth' end),
 			}},
 		}, "!modifier.multitarget" },
 	}, "!talent(7,1)" },
@@ -398,7 +398,7 @@ ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retrib
 		}, "target.NePinterrupt" },
 		{ "Cleanse", {
 			"player.dispellable(Cleanse)", 
-			(function() return NeP.Core.PeFetch('npconfPalaRet', 'cleanse') end) 
+			(function() return NeP.Core.PeFetch('NePConfPalaRet', 'cleanse') end) 
 		}, "player" },
 		{ Survival },
 		{ SelfHeals },

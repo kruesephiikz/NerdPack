@@ -1,5 +1,5 @@
 NeP.Interface.DkUnholy = {
-	key = "npconfDkUnholy",
+	key = "NePConfDkUnholy",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Deathknight Unholy Settings",
@@ -157,15 +157,15 @@ local _All = {
 	-- Buffs
 	{ "48263", { -- Blood
 		"player.seal != 1", 
-		(function() return NeP.Core.PeFetch("npconfDkUnholy", "Presence") == 'Blood' end),
+		(function() return NeP.Core.PeFetch("NePConfDkUnholy", "Presence") == 'Blood' end),
 	}, nil }, 
 	{ "48266", { -- Frost
 		"player.seal != 2", 
-		(function() return NeP.Core.PeFetch("npconfDkUnholy", "Presence") == 'Frost' end),
+		(function() return NeP.Core.PeFetch("NePConfDkUnholy", "Presence") == 'Frost' end),
 	}, nil },
 	{ "48265", { -- Unholy
 		"player.seal != 3", 
-		(function() return NeP.Core.PeFetch("npconfDkUnholy", "Presence") == 'Unholy' end),
+		(function() return NeP.Core.PeFetch("NePConfDkUnholy", "Presence") == 'Unholy' end),
 	}, nil },
 	{ "57330", "!player.buffs.attackpower" }, -- Horn of Winter
 
@@ -177,9 +177,9 @@ local _All = {
 local _Survival = {
 	-- Def cooldowns & Heals // Add a toggle/tick
 	{ "#5512", "player.health < 85" },--Healthstone
-	{ "48792", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkUnholy', 'IceboundFortitude')) end) }, -- Icebound Fortitude
-	{ "48743", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkUnholy', 'DeathPact')) end) }, -- Death Pact
-	{ "108196", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkUnholy', 'DeathSiphon')) end) },-- Death Siphon
+	{ "48792", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'IceboundFortitude')) end) }, -- Icebound Fortitude
+	{ "48743", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathPact')) end) }, -- Death Pact
+	{ "108196", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathSiphon')) end) },-- Death Siphon
 	{ "49039", { -- Lichborne //fear 
 		"player.state.fear", 
 		"player.runicpower >= 40", 
@@ -197,7 +197,7 @@ local _Survival = {
 	}},
 	{ "49998", { -- Death Strike With Dark Succor
 		"player.buff(10156)", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkUnholy', 'DeathStrikeDS')) end)
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathStrikeDS')) end)
 	}}, 
 }
 
@@ -208,25 +208,25 @@ local _Cooldowns = {
 		"player.runes(unholy).count = 0", 
 		"player.runes(frost).count = 0", 
 		"player.runes(death).count = 0",
-		(function() return NeP.Core.PeFetch("npconfDkUnholy", "ERP") == 'Allways' end)
+		(function() return NeP.Core.PeFetch("NePConfDkUnholy", "ERP") == 'Allways' end)
 	}},
 	{ "96268" }, -- Death's Advance
-	{ "49206", (function() return NeP.Core.PeFetch("npconfDkUnholy", "SG") == 'Allways' end) }, -- Summon Gargoyle
+	{ "49206", (function() return NeP.Core.PeFetch("NePConfDkUnholy", "SG") == 'Allways' end) }, -- Summon Gargoyle
 	{{ -- Unholy Blight
 		{ "115989", { -- Unholy Blight
 			"target.debuff(55095)",
-			(function() return NeP.Core.PeFetch("npconfDkUnholy", "UB") == 'Allways' end) --was "SG"
+			(function() return NeP.Core.PeFetch("NePConfDkUnholy", "UB") == 'Allways' end) --was "SG"
 		}}, 
 		{ "115989", { -- Unholy Blight
 			"target.debuff(55078)",
-			(function() return NeP.Core.PeFetch("npconfDkUnholy", "UB") == 'Allways' end)
+			(function() return NeP.Core.PeFetch("NePConfDkUnholy", "UB") == 'Allways' end)
 		}},
 		{ "115989", { -- Unholy Blight -- For NP
 			"target.debuff(155159)",
-			(function() return NeP.Core.PeFetch("npconfDkUnholy", "UB") == 'Allways' end)
+			(function() return NeP.Core.PeFetch("NePConfDkUnholy", "UB") == 'Allways' end)
 		}},
 	}, "!talent(7, 1)" }, 
-	{ "20572", (function() return NeP.Core.PeFetch("npconfDkUnholy", "BF") == 'Allways' end) }, -- Blood Fury
+	{ "20572", (function() return NeP.Core.PeFetch("NePConfDkUnholy", "BF") == 'Allways' end) }, -- Blood Fury
 	{{-- Boss
 	{ "47568", { -- Empower Rune Weapon
 		"player.runicpower <= 70", 
@@ -234,26 +234,26 @@ local _Cooldowns = {
 		"player.runes(unholy).count = 0", 
 		"player.runes(frost).count = 0", 
 		"player.runes(death).count = 0",
-		(function() return NeP.Core.PeFetch("npconfDkUnholy", "ERP") == 'Boss' end)
+		(function() return NeP.Core.PeFetch("NePConfDkUnholy", "ERP") == 'Boss' end)
 	}}, -- Empower Rune Weapon
 	{ "96268" }, -- Death's Advance
 	{ "#118882" }, -- Scabbrad of Kyanos
-	{ "49206", (function() return NeP.Core.PeFetch("npconfDkUnholy", "SG") == 'Boss' end) }, -- Summon Gargoyle
+	{ "49206", (function() return NeP.Core.PeFetch("NePConfDkUnholy", "SG") == 'Boss' end) }, -- Summon Gargoyle
 		{{-- Unholy Blight
 			{ "115989", { -- Unholy Blight
 				"target.debuff(55095)",
-				(function() return NeP.Core.PeFetch("npconfDkUnholy", "UB") == 'Boss' end)
+				(function() return NeP.Core.PeFetch("NePConfDkUnholy", "UB") == 'Boss' end)
 			}}, 
 			{ "115989", { -- Unholy Blight
 				"target.debuff(55078)",
-				(function() return NeP.Core.PeFetch("npconfDkUnholy", "UB") == 'Boss' end)
+				(function() return NeP.Core.PeFetch("NePConfDkUnholy", "UB") == 'Boss' end)
 			}}, 
 			{ "115989", { -- Unholy Blight -- For NP
 				"target.debuff(155159)",
-				(function() return NeP.Core.PeFetch("npconfDkUnholy", "UB") == 'Boss' end)
+				(function() return NeP.Core.PeFetch("NePConfDkUnholy", "UB") == 'Boss' end)
 			}},
 			}, "!talent(7, 1)" },
-		{ "20572", (function() return NeP.Core.PeFetch("npconfDkUnholy", "BF") == 'Boss' end) }, -- Blood Fury
+		{ "20572", (function() return NeP.Core.PeFetch("NePConfDkUnholy", "BF") == 'Boss' end) }, -- Blood Fury
 	}, "target.boss" },
 }
 
@@ -321,11 +321,11 @@ local _ST = {
 	{ "55090", "player.runes(unholy) = 2", "target"  }, -- Scourge Strike
 	{ "43265", { -- Death and Decay
 		"target.range < 7",
-		(function() return NeP.Core.PeFetch("npconfDkUnholy", "DnD") == 'Allways' end)
+		(function() return NeP.Core.PeFetch("NePConfDkUnholy", "DnD") == 'Allways' end)
 	}, "target.ground" }, 
 	{ "152280", {
 		"target.range < 7",
-		(function() return NeP.Core.PeFetch("npconfDkUnholy", "Defile") == 'Allways' end)
+		(function() return NeP.Core.PeFetch("NePConfDkUnholy", "Defile") == 'Allways' end)
 	}, "target.ground" }, -- Defile
 	{ "85948", { "player.runes(unholy) = 2", "player.runes(blood) = 2" }, "target"  }, --Festering Strike
 	{ "55090" },-- Scourge Strike

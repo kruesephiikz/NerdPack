@@ -1,5 +1,5 @@
 NeP.Interface.MonkWw = {
-	key = "npconfigMonkBM",
+	key = "NePConfigMonkBM",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Monk WindWalker Settings",
@@ -73,7 +73,7 @@ local inCombat = {
 	{{-- SEF
 		{ "137639", (function() return _SEF() end) },
 		{ "/cancelaura "..n, "target.debuff(137639)", "target"}, -- Storm, Earth, and Fire
-	}, (function() return NeP.Core.PeFetch('npconfigMonkWw', 'SEF') end) },
+	}, (function() return NeP.Core.PeFetch('NePConfigMonkWw', 'SEF') end) },
 
 	-- Survival
 	{ "115072", { "player.health <= 80", "player.chi < 4" }}, -- Expel Harm

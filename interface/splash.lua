@@ -5,19 +5,23 @@ local _time = 0
 
 C_Timer.NewTicker(0.01, (function()
 	if _time < GetTime() - 1.0 then
-		if npSplash:GetAlpha() == 0 then
-			npSplash:Hide()
+		if NeP_Splash:GetAlpha() == 0 then
+			NeP_Splash:Hide()
 		else 
-			npSplash:SetAlpha(npSplash:GetAlpha() - .05)
+			NeP_Splash:SetAlpha(NeP_Splash:GetAlpha() - .05)
 		end
 	end
 	
 	if ProbablyEngine.rotation.currentStringComp == NePActive then
-		NeP.Core.CurrentCR = true
-		NeP_Frame:Show()
+		if not NeP.Core.CurrentCR then
+			NeP.Core.CurrentCR = true
+			NeP_Frame:Show()
+		end
 	else
-		NeP.Core.CurrentCR = false
-		NeP_Frame:Hide()
+		if NeP.Core.CurrentCR then
+			NeP.Core.CurrentCR = false
+			NeP_Frame:Hide()
+		end
 	end
 end), nil)
 
@@ -44,12 +48,12 @@ end
 
 function NeP.Splash()
 	-- Displays a fancy splash.
-	if NeP.Core.PeFetch('npconf', 'Splash') then
+	if NeP.Core.PeFetch('NePConf', 'Splash') then
 		local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
 		NeP.Alert(_playerInfo .. "|r - [" .. _addonColor .. "Loaded|r]")
-		npSplash:SetAlpha(1)
+		NeP_Splash:SetAlpha(1)
 		_time = GetTime()
-		npSplash:Show()
+		NeP_Splash:Show()
 		PlaySoundFile("Sound\\Interface\\Levelup.Wav")
 		--PlaySound("UnwrapGift", "master");
 	end
@@ -59,10 +63,10 @@ function NeP.Splash()
 end
 
 -- Logo on Center
-npSplash = CreateFrame("Frame", nil,UIParent)
-npSplash:SetPoint("CENTER",UIParent)
-npSplash:SetWidth(512)
-npSplash:SetHeight(256)
-npSplash:SetBackdrop({ bgFile = NeP.Info.Splash })
-npSplash:SetScript("OnUpdate",onUpdate)
-npSplash:Hide()
+NeP_Splash = CreateFrame("Frame", nil,UIParent)
+NeP_Splash:SetPoint("CENTER",UIParent)
+NeP_Splash:SetWidth(512)
+NeP_Splash:SetHeight(256)
+NeP_Splash:SetBackdrop({ bgFile = NeP.Info.Splash })
+NeP_Splash:SetScript("OnUpdate",onUpdate)
+NeP_Splash:Hide()

@@ -1,5 +1,5 @@
 NeP.Interface.DkBlood = {
-	key = "npconfDkBlood",
+	key = "NePConfDkBlood",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Deathknight Blood Settings",
@@ -117,11 +117,11 @@ local inCombat = {
 		{ "#5512", "player.health < 70"}, --healthstone
 
 	-- Def cooldowns // heals
-		{ "48792", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkBlood', 'IceboundFortitude')) end) }, -- Icebound Fortitude
-		{ "55233", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkBlood', 'VampiricBlood')) end) }, -- Vampiric Blood
-		{ "48743", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkBlood', 'DeathPact')) end) }, -- Death Pact
-		{ "48982", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkBlood', 'RuneTap')) end) }, -- rune tap
-		{ "108196", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfDkBlood', 'DeathSiphon')) end) },-- Death Siphon
+		{ "48792", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'IceboundFortitude')) end) }, -- Icebound Fortitude
+		{ "55233", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'VampiricBlood')) end) }, -- Vampiric Blood
+		{ "48743", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'DeathPact')) end) }, -- Death Pact
+		{ "48982", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'RuneTap')) end) }, -- rune tap
+		{ "108196", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'DeathSiphon')) end) },-- Death Siphon
 		{ "49039", {  -- Lichborne //fear
 			"player.state.fear", 
 			"player.runicpower >= 40", 
@@ -235,7 +235,7 @@ local outCombat = {
 	-- Buffs
 		{ "48265", { -- unholy // moves faster out of combat...
 			"player.seal != 3",
-			(function() return NeP.Core.PeFetch('npconfDkBlood','RunFaster') end)
+			(function() return NeP.Core.PeFetch('NePConfDkBlood','RunFaster') end)
 		}},
 		{ "49222", "!player.buff(49222)" }, -- bone shield
 		{ "57330", "!player.buffs.attackpower" }, -- Horn of Winter

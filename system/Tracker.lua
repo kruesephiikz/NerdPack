@@ -24,7 +24,7 @@ ProbablyEngine.listener.register("ACTIVE_TALENT_GROUP_CHANGED", function(...)
 end)
 
 ProbablyEngine.listener.register("LFG_PROPOSAL_SHOW", function()
-	if NeP.Core.PeFetch('npconf', 'AutoLFG') then
+	if NeP.Core.PeFetch('NePConf', 'AutoLFG') then
 		AcceptProposal()
 	end
 end)

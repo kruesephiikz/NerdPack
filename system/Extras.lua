@@ -40,7 +40,7 @@ function NeP.Extras.MoveTo()
 	local _class, _className = UnitClass('player')
 	local _classRange = _rangeTable[_className]
 	local unitSpeed, _ = GetUnitSpeed('player')
-  	if NeP.Core.PeFetch('npconf', 'AutoMove') then
+  	if NeP.Core.PeFetch('NePConf', 'AutoMove') then
   		if UnitExists('target') then
 			if UnitIsVisible('target') and not UnitChannelInfo("player") then
 				if NeP.Core.LineOfSight('player', 'target') then
@@ -72,7 +72,7 @@ DESC: Checks if unit can/should be faced.
 Build By: MTS
 ---------------------------------------------------]]
 function NeP.Extras.FaceTo()
-	if NeP.Core.PeFetch('npconf', 'AutoFace') then
+	if NeP.Core.PeFetch('NePConf', 'AutoFace') then
 		local unitSpeed, _ = GetUnitSpeed('player')
 		if not _manualMoving() and unitSpeed == 0 then
 			if UnitExists('target') then
@@ -98,7 +98,7 @@ DESC: Checks if unit can/should be targeted.
 Build By: MTS & StinkyTwitch
 ---------------------------------------------------]]
 function NeP.Extras.autoTarget(unit, name)
-	if NeP.Core.PeFetch('npconf', 'AutoTarget') then
+	if NeP.Core.PeFetch('NePConf', 'AutoTarget') then
 		if UnitExists("target") and not UnitIsFriend("player", "target") and not UnitIsDeadOrGhost("target") then
 			-- Do nothing
 		else
@@ -158,7 +158,7 @@ end
     ---------------------------------------------------]]
 function NeP.Extras.dummyTest(key)
 	local hours, minutes = GetGameTime()
-	local TimeRemaning = NeP.Core.PeFetch('npconf', 'testDummy') - (minutes-NeP.Extras.dummyStartedTime)
+	local TimeRemaning = NeP.Core.PeFetch('NePConf', 'testDummy') - (minutes-NeP.Extras.dummyStartedTime)
 	NeP.Extras.dummyTimeRemaning = TimeRemaning
 	
 	-- If Disabled PE while runing a test, abort.
@@ -171,7 +171,7 @@ function NeP.Extras.dummyTest(key)
 	-- If not Calling for refresh, then start it.
 	if key ~= 'Refresh' then
 		NeP.Extras.dummyStartedTime = minutes
-		message('|r[|cff9482C9MTS|r] Dummy test started! \n[|cffC41F3BWill end in: '..NeP.Core.PeFetch('npconf', 'testDummy').."m|r]")
+		message('|r[|cff9482C9MTS|r] Dummy test started! \n[|cffC41F3BWill end in: '..NeP.Core.PeFetch('NePConf', 'testDummy').."m|r]")
 		-- If PE not enabled, then enable it.
 		if not ProbablyEngine.config.read('button_states', 'MasterToggle', false) then
 			ProbablyEngine.buttons.toggle('MasterToggle')
@@ -185,7 +185,7 @@ function NeP.Extras.dummyTest(key)
 			NeP.Extras.dummyLastPrint = TimeRemaning
 			NeP.Core.Print('Dummy Test minutes remaning: '..TimeRemaning)
 		end
-		if minutes >= NeP.Extras.dummyStartedTime + NeP.Core.PeFetch('npconf', 'testDummy') then
+		if minutes >= NeP.Extras.dummyStartedTime + NeP.Core.PeFetch('NePConf', 'testDummy') then
 			NeP.Extras.dummyStartedTime = 0
 			message('|r[|cff9482C9MTS|r] Dummy test ended!')
 			-- If PE enabled, then Disable it.

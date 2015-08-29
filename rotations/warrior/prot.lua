@@ -1,5 +1,5 @@
 NeP.Interface.WarrProt = {
-	key = "npconfigWarrProt",
+	key = "NePConfigWarrProt",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Warrior Protection Settings",
@@ -149,19 +149,19 @@ local AoE = {
 local Survival = {
 	
 	-- Def Cooldowns
-  	{ "Rallying Cry", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfigWarrProt', 'RallyingCry')) end) },  
-  	{ "Last Stand", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfigWarrProt', 'LastStand')) end) },
-  	{ "Shield Wall", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfigWarrProt', 'ShieldWall')) end) },
+  	{ "Rallying Cry", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'RallyingCry')) end) },  
+  	{ "Last Stand", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'LastStand')) end) },
+  	{ "Shield Wall", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'ShieldWall')) end) },
   	{ "Shield Block", "!player.buff(Shield Block)" },
   	{ "Shield Barrier", { 
   		"!player.buff(Shield Barrier)",
-  		(function() return NeP.Core.dynamicEval("player.rage <= " .. NeP.Core.PeFetch('npconfigWarrProt', 'ShieldBarrier')) end)
+  		(function() return NeP.Core.dynamicEval("player.rage <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'ShieldBarrier')) end)
   	}},
 
   	-- Self Heals
   	{ "Impending Victory", "player.health <= 85" },
   	{ "Victory Rush", "player.health <= 85" },
-  	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfigWarrProt', 'Healthstone')) end) }, --Healthstone
+  	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'Healthstone')) end) }, --Healthstone
 
 }
 

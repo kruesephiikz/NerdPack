@@ -1,5 +1,5 @@
 NeP.Interface.PriestShadow = {
-	key = "npconfPriestShadow",
+	key = "NePConfPriestShadow",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Priest Shadow Settings",

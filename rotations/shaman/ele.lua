@@ -1,5 +1,5 @@
 NeP.Interface.ShamanEle = {
-	key = "npconfShamanEle",
+	key = "NePConfShamanEle",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Shaman Elemental Settings",
@@ -219,7 +219,7 @@ local _mouseOvers = {
 		"mouseover.enemy", 
 		"mouseover.alive", 
 		"mouseover.debuff(Flame Shock).duration <= 9", 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'flameshock') end) 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'flameshock') end) 
 	}, "mouseover" },
 }
 
@@ -229,17 +229,17 @@ local _ALL = {
 	
 	-- Self Heals
 	{ "Healing Surge", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanEle', 'healingsurge_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'healingsurge_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingsurge_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healingsurge_check') end) 
 	}},
 	{ "Healing Stream Totem", { 
 		"!player.totem(Healing Stream Totem)", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanEle', 'healingstreamtotem_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'healingstreamtotem_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingstreamtotem_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healingstreamtotem_check') end) 
 	}},
 	{ "#5512", {-- Healthstone (5512)
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanEle', 'healthstone_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'healthstone_check') end)
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healthstone_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healthstone_check') end)
 	}}, 
 }
 
@@ -247,47 +247,47 @@ local _Survival = {
 	{ "Ancestral Guidance", { 
 		"player.buff(Ascendance)", 
 		"player.buff(Spiritwalker's Grace)", 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'guidance') end) 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'guidance') end) 
 	}},	
  	{ "Windwalk Totem", { 
  		"!player.buff", 
  		"player.state.root", 
  		"!player.totem(Windwalk Totem)", 
- 		(function() return NeP.Core.PeFetch('npconfShamanEle', 'windwalktotem') end) 
+ 		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'windwalktotem') end) 
  	}}, 
 	{ "Windwalk Totem", { 
 		"!player.buff", 
 		"player.state.snare", 
 		"!player.totem(Windwalk Totem)", 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'windwalktotem') end) 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'windwalktotem') end) 
 	}}, 
 	{ "Shamanistic Rage", { 
 		"player.state.stun", 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'shamrage') end) 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'shamrage') end) 
 	}},
 	{ "Tremor Totem", { 
 		"!player.buff", 
 		"player.state.fear", 
 		"!player.totem(Tremor Totem)", 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'tremortotem') end) 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'tremortotem') end) 
 	}},
 	{{	-- Proximity Survival
 		{ "Earthbind Totem", { 
 			"!player.totem(Earthbind Totem)", 
 			"!talent(2, 2)", 
-			(function() return NeP.Core.PeFetch('npconfShamanEle', 'earthbind') end) 
+			(function() return NeP.Core.PeFetch('NePConfShamanEle', 'earthbind') end) 
 		}},
   		{ "Earthgrab Totem", { 
   			"!player.totem(Earthbind Totem)", 
   			"talent(2, 2)", 
-  			(function() return NeP.Core.PeFetch('npconfShamanEle', 'earthbind') end) 
+  			(function() return NeP.Core.PeFetch('NePConfShamanEle', 'earthbind') end) 
   		}},
 		{ "Frostshock", { 
 			"talent(2, 1)", 
 			"target.debuff(Flame Shock)", 
-			(function() return NeP.Core.PeFetch('npconfShamanEle', 'frostshock') end) 
+			(function() return NeP.Core.PeFetch('NePConfShamanEle', 'frostshock') end) 
 		}},  
-		{ "Thunderstorm", (function() return NeP.Core.PeFetch('npconfShamanEle', 'thunderstorm') end) }
+		{ "Thunderstorm", (function() return NeP.Core.PeFetch('NePConfShamanEle', 'thunderstorm') end) }
 	}, (function() return NeP.Lib.SAoE(2, 8) end) },
 }
 
@@ -317,8 +317,8 @@ local inCombat = {
 
 local outCombat = {
 	{ "Healing Surge", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfShamanEle', 'healingsurgeOCC_spin')) end), 
-		(function() return NeP.Core.PeFetch('npconfShamanEle', 'healingsurgeOCC_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingsurgeOCC_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healingsurgeOCC_check') end) 
 	}},
 }
 

@@ -1,5 +1,5 @@
 NeP.Interface.PalaProt = {
-  key = "npconfPalaProt",
+  key = "NePConfPalaProt",
   profiles = true,
   title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
   subtitle = "Paladin Protection Settings",
@@ -123,41 +123,41 @@ local InCombat = {
 	-- Buff's
 	{ "20217", { -- Kings
 		"!player.buffs.stats",
-		(function() return NeP.Core.PeFetch("npconfPalaProt", "Buff") == 'Kings' end)
+		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Kings' end)
 	}},
 	{ "19740", { -- Might
 		"!player.buffs.mastery",
-		(function() return NeP.Core.PeFetch("npconfPalaProt", "Buff") == 'Might' end)
+		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Might' end)
 	}},
 	
 	-- Defensive Cooldowns
-	{ "20925", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'SacredShield')) end), "player" }, 	-- Sacred Shield
-	{ "31850", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'ArdentDefender')) end) }, 			-- Ardent Defender
-	{ "498", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'DivineProtection')) end) }, 			-- Divine Protection
-	{ "86659", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'GuardianofAncientKings')) end) }, 	-- Guardian of Ancient Kings
+	{ "20925", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'SacredShield')) end), "player" }, 	-- Sacred Shield
+	{ "31850", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'ArdentDefender')) end) }, 			-- Ardent Defender
+	{ "498", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'DivineProtection')) end) }, 			-- Divine Protection
+	{ "86659", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'GuardianofAncientKings')) end) }, 	-- Guardian of Ancient Kings
 
 	-- Heals
-	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'Healthstone')) end) }, 		-- Healthstone
-	{ "633", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'LayonHands')) end), "player"}, -- Lay on Hands
+	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'Healthstone')) end) }, 		-- Healthstone
+	{ "633", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayonHands')) end), "player"}, -- Lay on Hands
 	{ "114163", { ---------------------------------------------------------------------------------------------------------------- Eternal Flame
 		"!player.buff(114163)", 
 		"player.buff(114637).count = 5", 
 		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'EternalFlame')) end)
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'EternalFlame')) end)
 	}, "player"},
 	{ "85673", { ---------------------------------------------------------------------------------------------------------------- Word of Glory
 		"player.buff(114637).count = 5", 
 		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'WordofGlory')) end)
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'WordofGlory')) end)
 	}, "player" },
 
 	-- Raid Heals
 	{ "Flash of Light", { 
 		"player.buff(Selfless Healer).count = 3", 
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'FlashOfLightRaid')) end), 
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'FlashOfLightRaid')) end), 
 	}, "lowest" },		
-	{ "Lay on Hands", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'LayOnHandsRaid')) end), "lowest" },
-	--{ "Hand of Protection", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'HandOfProtectionRaid')) end), "lowest" },
+	{ "Lay on Hands", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayOnHandsRaid')) end), "lowest" },
+	--{ "Hand of Protection", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'HandOfProtectionRaid')) end), "lowest" },
 
 	-- Keybinds
 	
@@ -208,29 +208,29 @@ local InCombat = {
 		{{ -- AoE
 			{ "20165", { -- Seal of Insigh
 				"player.seal != 3",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "sealAoE") == 'Insight' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Insight' end),
 			}},
 			{ "20154", { -- Seal of Righteousness
 				"player.seal != 2",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "sealAoE") == 'Righteousness' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Righteousness' end),
 			}},
 			{ "31801", { -- Seal of truth
 				"player.seal != 1",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "sealAoE") == 'Truth' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Truth' end),
 			}},
 		}, (function() return NeP.Lib.SAoE(3, 40) end) },
 		{{ -- Single Target
 			{ "20165", { -- Seal of Insigh
 				"player.seal != 3",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "seal") == 'Insight' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Insight' end),
 			}},
 			{ "20154", { -- Seal of Righteousness
 				"player.seal != 2",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "seal") == 'Righteousness' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Righteousness' end),
 			}},
 			{ "31801", { -- Seal of truth
 				"player.seal != 1",
-				(function() return NeP.Core.PeFetch("npconfPalaProt", "seal") == 'Truth' end),
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Truth' end),
 			}},
 		}, "!modifier.multitarget" },
 	}, "!talent(7,1)" },
@@ -286,11 +286,11 @@ local outCombat = {
 	-- Buff's
 	{ "20217", { -- Kings
 		"!player.buffs.stats",
-		(function() return NeP.Core.PeFetch("npconfPalaProt", "Buff") == 'Kings' end)
+		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Kings' end)
 	}},
 	{ "19740", { -- Might
 		"!player.buffs.mastery",
-		(function() return NeP.Core.PeFetch("npconfPalaProt", "Buff") == 'Might' end)
+		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Might' end)
 	}},
 
 	-- Keybinds
@@ -299,18 +299,18 @@ local outCombat = {
 	{ "114158", "modifier.shift", "target.ground" }, 			-- Light´s Hammer
 	
 	-- Heals
-	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'Healthstone')) end) }, 		-- Healthstone
-	{ "633", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'LayonHands')) end), "player"}, -- Lay on Hands
+	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'Healthstone')) end) }, 		-- Healthstone
+	{ "633", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayonHands')) end), "player"}, -- Lay on Hands
 	{ "114163", { ---------------------------------------------------------------------------------------------------------------- Eternal Flame
 		"!player.buff(114163)", 
 		"player.buff(114637).count = 5", 
 		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'EternalFlame')) end)
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'EternalFlame')) end)
 	}, "player"},
 	{ "85673", { ---------------------------------------------------------------------------------------------------------------- Word of Glory
 		"player.buff(114637).count = 5", 
 		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('npconfPalaProt', 'WordofGlory')) end)
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'WordofGlory')) end)
 	}, "player" },
 
 }
