@@ -85,7 +85,7 @@ NeP.Interface.info = {
 				offset = -11 
 			},
 			{ 
-				key = 'current_MTSProfiles', 
+				key = 'current_PackProfiles', 
 				type = "text", 
 				text = "Loading...", 
 				size = 11, 
@@ -147,7 +147,7 @@ function NeP.Interface.InfoGUI()
 				-- General Status
 				InfoWindow.elements.current_Unlocker:SetText(ProbablyEngine.pmethod == nil and ProbablyEngine.protected.method == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. (ProbablyEngine.pmethod or ProbablyEngine.protected.method))
 				InfoWindow.elements.current_PEStatus:SetText(ProbablyEngine.version == NeP.Core.peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
-				InfoWindow.elements.current_MTSProfiles:SetText(NeP.Core.CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
+				InfoWindow.elements.current_PackProfiles:SetText(NeP.Core.CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
 				-- Advanced Status
 				InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
 				InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
