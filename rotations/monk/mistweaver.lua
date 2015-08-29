@@ -1,5 +1,5 @@
 NeP.Interface.MonkMm = {
-	key = "npconfigMonkMm",
+	key = "NePconfigMonkMm",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
 	subtitle = "Monk Mistweaver Settings",
@@ -28,12 +28,12 @@ NeP.Interface.MonkMm = {
 			},
 			{
 				type = "spinner",
-				text = "Soothing Mist",
+				text = "Soothing Mist Healing",
 				key = "SM",
 				width = 50,
 				min = 0,
 				max = 100,
-				default = 90,
+				default = 85,
 				step = 5
 			},
 
@@ -149,19 +149,23 @@ local inCombatSerpente = {
 	{{ -- Soothing Mist Healing
 	
 		-- Cancel SoothingMistHealing (Max Health)
-		{ "/stopcasting", (function() return not _SoothingMist_Health(NeP.Core.PeFetch('npconfigMonkMm', 'SMSTOP')) end) }, 	
+		{ "/stopcasting", (function() return not _SoothingMist_Health(NeP.Core.PeFetch('NePconfigMonkMm', 'SMSTOP')) end) }, 	
 		-- Cancel SoothingMistHealing (Someone else needs more) (MIN HEALTH 60%)
 		{ "/stopcasting", (function() if not _SoothingMist_Health(60) then return NeP.Core.dynamicEval("lowest.health < "..math.floor((UnitHealth(_SoothingMist_Target) / UnitHealthMax(_SoothingMist_Target)) * 100)) end end)},
+		{ "124682", { -- Enveloping Mist (Dump Chi)
+			"player.chi >= 5",
+			(function() return _SoothingMist_Health(95) end)
+		}, "lowest" },
 		{ "124682", { -- Enveloping Mist
 			"player.chi >= 3",
-			(function() return _SoothingMist_Health(60) end)
+			(function() return _SoothingMist_Health(70) end)
 		}, "lowest" },
 		{ "115151", { -- Renewing Mist
 			(function() return NeP.Core.dynamicEval(_SoothingMist_Target..".buff(119611).duration <= 2") end),
-			(function() return _SoothingMist_Health(90) end),
+			(function() return _SoothingMist_Health(95) end),
 		}}, 
 		{ "116694", { -- Surging Mist
-			(function() return _SoothingMist_Health(80) end)
+			(function() return _SoothingMist_Health(90) end)
 			"player.chi < 5"
 		}},
 		
@@ -208,7 +212,19 @@ local inCombatSerpente = {
 		
 		{{ -- Not Moving
 			-- Soothing Mist
-			{ "115175", (function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('npconfigMonkMm', 'SM')) end), "lowest" },
+			{ "115175", (function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfigMonkMm', 'SM')) end), "lowest" },
+			{ "124682", { -- Enveloping Mist(Dump CHI)
+				"player.chi >= 5",
+				"lowest.health < 95"
+			}, "lowest" },
+			{ "124682", { -- Enveloping Mist
+				"player.chi >= 3",
+				"lowest.health < 70"
+			}, "lowest" },
+			{ "116694", { -- Surging Mist
+				"lowest.health < 85",
+				"player.chi < 5"
+			}},
 		}, "!player.moving" },
 		
 	}, "!player.casting(115175)" },
@@ -241,7 +257,7 @@ local outCombat = {
 		"lowest.health < 100"
 	}, "lowest"}, 
 	  { "115175", {-- Soothing Mist
-	  	(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('npconfigMonkMm', 'SM')) end), 
+	  	(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfigMonkMm', 'SM')) end), 
 	  	"!player.moving"
 	}, "lowest" },
 	{"Transcendence", (function() return Trans() end) },
