@@ -603,21 +603,22 @@ C_Timer.NewTicker(1, (function()
 	wipe(NeP.ObjectManager.unitFriendlyCache)
 	wipe(NeP.ObjectManager.objectsCache)
 
-	if NeP.Core.CurrentCR then
-		--if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
-			-- Master Toggle
-			if NeP.Core.PeFetch("ObjectCache", "ObjectCache") then
-				-- FireHack OM
-				if FireHack then
-					NeP_FireHackOM()
-				-- Generic Cache
-				else 
-					NeP_GenericOM()
-				end
+	if NeP.Core.CurrentCR and NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
+		-- Master Toggle
+		if NeP.Core.PeFetch("ObjectCache", "ObjectCache") then
+			-- FireHack OM
+			if FireHack then
+				NeP_FireHackOM()
+			-- Generic Cache
+			else 
+				NeP_GenericOM()
 			end
-		--end
+		end
 	end
+	
+	-- Sort by distance
 	table.sort(NeP.ObjectManager.unitCache, function(a,b) return a.distance < b.distance end)
 	table.sort(NeP.ObjectManager.unitFriendlyCache, function(a,b) return a.distance < b.distance end)
 	table.sort(NeP.ObjectManager.objectsCache, function(a,b) return a.distance < b.distance end)
+	
 end), nil)

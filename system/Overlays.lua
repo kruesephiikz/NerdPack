@@ -129,13 +129,12 @@ local ally_small = {
 }
 
 LibDraw.Sync(function()
+	
 	if NeP.Core.CurrentCR and FireHack then
 		if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
-			-- Reset
-			LibDraw.clearCanvas()
 
 			local playerX, playerY, playerZ = ObjectPosition('player')
-			local cx, cy, cz = GetCameraPosition()
+			--local cx, cy, cz = GetCameraPosition()
 
 			if UnitExists('target') then
 				local targetX, targetY, targetZ = ObjectPosition("target")
@@ -200,7 +199,8 @@ LibDraw.Sync(function()
 					end
 					LibDraw.Circle(targetX, targetY, targetZ, NeP.Lib.getUnitRange('target', 'ranged'))
 				end
-			end	
+			end
+			
 			-- Objects (Ores/Herbs/LM)
 			for i=1,#NeP.ObjectManager.objectsCache do
 				local object = NeP.ObjectManager.objectsCache[i]
@@ -266,6 +266,7 @@ LibDraw.Sync(function()
 					end
 				end
 			end
+			
 			-- Enemie Units
 			for i=1,#NeP.ObjectManager.unitCache do
 				local object = NeP.ObjectManager.unitCache[i]
@@ -341,6 +342,7 @@ LibDraw.Sync(function()
 					end
 				end
 			end
+			
 			-- Friendly Units
 			for i=1,#NeP.ObjectManager.unitFriendlyCache do
 				local object = NeP.ObjectManager.unitFriendlyCache[i]
@@ -382,12 +384,8 @@ LibDraw.Sync(function()
 			end
 		end
 	end
+
 end)
-
-
-local NeP_OverlaysGUI
-local NeP_OverlaysGUI_Open = false
-local NeP_OverlaysGUI_Showing = false
 
 NeP.Interface.Overlays = {
 	key = "NePconf_Overlays",
@@ -432,27 +430,5 @@ NeP.Interface.Overlays = {
 }
 
 function NeP.Interface.OverlaysGUI()
-	-- If a frame has not been created, create one...
-	if not NeP_OverlaysGUI_Open then
-		NeP_OverlaysGUI = NeP.Core.PeBuildGUI(NeP.Interface.Overlays)
-		
-		-- This is so the window isn't opened twice :D
-		NeP_OverlaysGUI_Open = true
-		NeP_OverlaysGUI_Showing = true
-		NeP_OverlaysGUI.parent:SetEventListener('OnClose', function()
-			NeP_OverlaysGUI_Open = false
-			NeP_OverlaysGUI_Showing = false
-			end)
-
-	-- If a frame has been created and its showing, hide it.
-	elseif NeP_OverlaysGUI_Open == true and NeP_OverlaysGUI_Showing == true then
-		NeP_OverlaysGUI.parent:Hide()
-		NeP_OverlaysGUI_Showing = false
-
-	-- If a frame has been created and its hiding, show it.
-	elseif NeP_OverlaysGUI_Open == true and NeP_OverlaysGUI_Showing == false then
-		NeP_OverlaysGUI.parent:Show()
-		NeP_OverlaysGUI_Showing = true
-	end
-	
+	NeP.Core.BuildGUI('Overlays', NeP.Interface.Overlays)
 end
