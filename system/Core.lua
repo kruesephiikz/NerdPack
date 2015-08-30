@@ -119,9 +119,10 @@ end
 
 NeP.Config = {
 	defaults = {
-	['CONFIG'] = {
-		['test'] = false,
-	},
+		['CONFIG'] = {
+			['test'] = false,
+		},
+	}
 }
 
 local LoadNePData = CreateFrame("Frame")
