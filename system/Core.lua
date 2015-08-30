@@ -25,67 +25,6 @@ NeP = {
 	}
 }
 
---[[   Healing engine i'm bulding...
-		USAGE: {"2060", (function() return GetHealTarget() end)}
-
-local healthPercentage = function(unit)
-	return math.floor(((UnitHealth(unit)+UnitGetTotalAbsorbs(unit)+UnitGetTotalAbsorbs(unit)) / UnitHealthMax(unit)) * 100)
-end
-
-GetSpecialPrio = function(unit)
-	
-end
-rosterTable = {
-	prio = {},
-	lowest = {}
-}
-
-BuildRoster = function()
-	wipe(rosterTable.prio)
-	wipe(rosterTable.lowest)
-	for i=1,#NeP.ObjectManager.unitFriendlyCache do -- My OM
-		local object = NeP.ObjectManager.unitFriendlyCache[i]
-		local _health = healthPercentage(object.key)
-		local _role = UnitGroupRolesAssigned(object.key)
-		if (_role == 'TANK' or _role == 'HEALER') or UnitIsPlayer(object.key) or GetUnitName(object.key) == GetUnitName('focus') then
-			rosterTable.prio[#rosterTable.prio+1] = {key=object.key, health=_health, role=_role}
-			rosterTable.lowest[#rosterTable.lowest+1] = {key=object.key, health=_health, role=_role}
-		else
-			rosterTable.lowest[#rosterTable.lowest+1] = {key=object.key, health=_health, role=_role}
-		end
-	end
-	table.sort(rosterTable.prio, function(a,b) return a.health < b.health end)
-	table.sort(rosterTable.lowest, function(a,b) return a.health < b.health end)
-end
-
-C_Timer.NewTicker(1, (function() BuildRoster() end), nil)
-
-GetHealTarget = function()
-	local Prio = rosterTable.prio
-	local Lowest = rosterTable.lowest
-	for i=1, #Lowest do
-		if Lowest[i].health >= 40 then
-			for i=1, #Prio do
-				if Prio[i].health < 100 then
-					print('Prio: '..Prio[i].key)
-					ProbablyEngine.dsl.parsedTarget = Prio[i].key
-					return true
-				end
-			end
-			if Lowest[i].health < 100 then
-				print('Lowest: '..Lowest[i].key)
-				ProbablyEngine.dsl.parsedTarget = Lowest[i].key
-				return true
-			end
-		else
-			print('Lowest: '..Lowest[i].key)
-			ProbablyEngine.dsl.parsedTarget = Lowest[i].key
-			return true
-		end
-	end
-	return false
-end]]
-
 local _addonColor = '|cff'..NeP.Interface.addonColor
 
 function NeP.Interface.ClassGUI()
@@ -128,10 +67,13 @@ NeP.Config = {
 local LoadNePData = CreateFrame("Frame")
 LoadNePData:RegisterEvent("VARIABLES_LOADED")
 LoadNePData:SetScript("OnEvent", function(self, event, addon)
+	
+	-- IF NePData does not exist, then create it with defaults
 	if not NePData or NePData == nil then 
 	 	NePData = NeP.Config.defaults; 
 	end
 	
+	-- Functions to handle VARIABLES.
 	NeP.Config.resetConfig = function(config)
 		NePData[config] = NeP.Config.defaults[config]
 	end
@@ -160,8 +102,10 @@ LoadNePData:SetScript("OnEvent", function(self, event, addon)
 		end
 	end
 	
+	-- GUI's wich depend on NePData
 	StatusGUI_RUN();
 	OMGUI_RUN()
+
 end)
 
 --[[-----------------------------------------------
@@ -317,3 +261,68 @@ function NeP.Core.Infront(a, b)
 		end
 	end
 end
+
+--[[   Healing engine i'm bulding...
+		USAGE: {"2060", (function() return GetHealTarget(health) end)}
+
+local healthPercentage = function(unit)
+	return math.floor(((UnitHealth(unit)+UnitGetTotalAbsorbs(unit)+UnitGetTotalAbsorbs(unit)) / UnitHealthMax(unit)) * 100)
+end
+
+GetSpecialPrio = function(unit)
+	-- TO BE DONE...
+end
+
+rosterTable = {
+	prio = {},
+	lowest = {}
+}
+
+BuildRoster = function()
+	wipe(rosterTable.prio)
+	wipe(rosterTable.lowest)
+	for i=1,#NeP.ObjectManager.unitFriendlyCache do -- My OM
+		local object = NeP.ObjectManager.unitFriendlyCache[i]
+		local _health = healthPercentage(object.key)
+		local _role = UnitGroupRolesAssigned(object.key)
+		if (_role == 'TANK' or _role == 'HEALER') or UnitIsPlayer(object.key) or GetUnitName(object.key) == GetUnitName('focus') then
+			rosterTable.prio[#rosterTable.prio+1] = {key=object.key, health=_health, role=_role}
+			rosterTable.lowest[#rosterTable.lowest+1] = {key=object.key, health=_health, role=_role}
+		else
+			rosterTable.lowest[#rosterTable.lowest+1] = {key=object.key, health=_health, role=_role}
+		end
+	end
+	table.sort(rosterTable.prio, function(a,b) return a.health < b.health end)
+	table.sort(rosterTable.lowest, function(a,b) return a.health < b.health end)
+end
+
+C_Timer.NewTicker(1, (function() BuildRoster() end), nil)
+
+GetHealTarget = function(health)
+	local Prio = rosterTable.prio
+	local Lowest = rosterTable.lowest
+	for i=1, #Lowest do
+		-- Normal Healing (PRIO UNITS > LOWEST)
+		if Lowest[i].health >= 40 then
+			-- There has to be a better way to do this...
+			for i=1, #Prio do
+				if Prio[i].health < health then
+					print('Prio: '..Prio[i].key)
+					ProbablyEngine.dsl.parsedTarget = Prio[i].key
+					return true
+				end
+			end
+			if Lowest[i].health < health then
+				print('Lowest: '..Lowest[i].key)
+				ProbablyEngine.dsl.parsedTarget = Lowest[i].key
+				return true
+			end
+		-- PANIC HEALING (LOWEST ALWAYS!)
+		else
+			print('Lowest: '..Lowest[i].key)
+			ProbablyEngine.dsl.parsedTarget = Lowest[i].key
+			return true
+		end
+	end
+	return false
+end]]
