@@ -116,9 +116,9 @@ function NeP.Interface.ClassGUI()
 		end
 	end
 end
-NeP.Config = {}
 
-NeP.Config.defaults = {
+NeP.Config = {
+	defaults = {
 	['CONFIG'] = {
 		['test'] = false,
 	},
@@ -127,7 +127,7 @@ NeP.Config.defaults = {
 local LoadNePData = CreateFrame("Frame")
 LoadNePData:RegisterEvent("VARIABLES_LOADED")
 LoadNePData:SetScript("OnEvent", function(self, event, addon)
-	if not NePData then 
+	if not NePData or NePData == nil then 
 	 	NePData = NeP.Config.defaults; 
 	end
 	
