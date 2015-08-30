@@ -155,7 +155,7 @@ LoadNePData:SetScript("OnEvent", function(self, event, addon)
 		if NePData[config][key] ~= nil then
 			NePData[config][key] = not NePData[config][key]
 		else
-			NePData[config][key] = defaults[config][key] 
+			NePData[config][key] = NeP.Config.defaults[config][key] 
 		end
 	end
 	
