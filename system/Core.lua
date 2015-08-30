@@ -124,43 +124,44 @@ NeP.Config.defaults = {
 	},
 }
 
-local MyAddonFrame = CreateFrame("Frame")
-MyAddonFrame:RegisterEvent("VARIABLES_LOADED")
-MyAddonFrame:SetScript("OnEvent", function(self, event, addon)
+local LoadNePData = CreateFrame("Frame")
+LoadNePData:RegisterEvent("VARIABLES_LOADED")
+LoadNePData:SetScript("OnEvent", function(self, event, addon)
 	if not NePData then 
-	 	NePData = defaults; 
+	 	NePData = NeP.Config.defaults; 
 	end
-	StatusGUI_RUN();
-	OMGUI_RUN()
-end)
+	
+	NeP.Config.resetConfig = function(config)
+		NePData[config] = NeP.Config.defaults[config]
+	end
 
-NeP.Config.resetConfig = function(config)
-	NePData[config] = defaults[config]
-end
+	NeP.Config.readKey = function(config, key)
+		if NePData[config] ~= nil then
+			if NePData[config][key] ~= nil then
+				return NePData[config][key]
+			else
+				NePData[config][key] = NeP.Config.defaults[config][key] 
+			end
+		else
+			NePData[config] = NeP.Config.defaults[config]
+		end
+	end
 
-NeP.Config.readKey = function(config, key)
-	if NePData[config] ~= nil then
+	NeP.Config.writeKey = function(config, key, value)
+		NePData[config][key] = value
+	end
+
+	NeP.Config.toggleKey = function(config, key)
 		if NePData[config][key] ~= nil then
-			return NePData[config][key]
+			NePData[config][key] = not NePData[config][key]
 		else
 			NePData[config][key] = defaults[config][key] 
 		end
-	else
-		NePData[config] = defaults[config]
 	end
-end
-
-NeP.Config.writeKey = function(config, key, value)
-	NePData[config][key] = value
-end
-
-NeP.Config.toggleKey = function(config, key)
-	if NePData[config][key] ~= nil then
-		NePData[config][key] = not NePData[config][key]
-	else
-		NePData[config][key] = defaults[config][key] 
-	end
-end
+	
+	StatusGUI_RUN();
+	OMGUI_RUN()
+end)
 
 --[[-----------------------------------------------
 									** Commands **
