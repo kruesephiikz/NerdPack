@@ -279,7 +279,7 @@ function OMGUI_RUN()
 							local health = Obj.health or 100
 							local distance = Obj.distance or ""
 							local guid = UnitGUID(Obj.key) or ""
-							local _id = tonumber(guid:match("-(%d+)-%x+$"), 10)
+							local _id = tonumber(guid:match("-(%d+)-%x+$"), 10) or ""
 							local statusBar = getStatusBar()
 
 							statusBar.frame:SetPoint("TOPLEFT", objectsContentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )

@@ -360,31 +360,32 @@ end
 ---------------------------------------------------]]
 local function GenericFilter(unit)
 	if UnitExists(unit) then
+		local objectName = UnitName(unit)
 		if ProbablyEngine.condition["alive"](unit) then
 			if not BlacklistedObject(unit) then
 				if not BlacklistedDebuffs(unit) then
 					if UnitCanAttack('player', unit) then
-						for i=1,#NeP.ObjectManager.unitCache do
+						for i=1, #NeP.ObjectManager.unitCache do
 							local object = NeP.ObjectManager.unitCache[i]
-							if object.health == math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
-							and object.name == UnitName(unit) then
-								return false
+							print(object.key)
+							if object.key ~= unit and object.name ~= objectName then
+								return true
 							end
 						end
 					elseif UnitIsFriend("player", unit) then
-						for i=1,#NeP.ObjectManager.unitFriendlyCache do
+						for i=1, #NeP.ObjectManager.unitFriendlyCache do
 							local object = NeP.ObjectManager.unitFriendlyCache[i]
-							if object.health == math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
-							and object.name == UnitName(unit) then
-								return false
+							if object.key ~= unit and object.name ~= objectName then
+								return true
 							end
 						end
-						return true
 					end
+					return true
 				end
 			end
 		end
 	end
+	return false
 end
 
 local function NeP_GenericOM()
@@ -456,7 +457,7 @@ local function NeP_GenericOM()
 								name=UnitName(object)
 							}
 						end
-						-- Enemie
+					-- Enemie
 					elseif UnitCanAttack('player', object) then
 						if NeP.Core.PeFetch("ObjectCache", "EU") then
 							NeP.ObjectManager.unitCache[#NeP.ObjectManager.unitCache+1] = {
@@ -492,7 +493,7 @@ local function NeP_GenericOM()
 								name=UnitName(object)
 							}
 						end
-						-- Enemie
+					-- Enemie
 					elseif UnitCanAttack('player', object) then
 						if NeP.Core.PeFetch("ObjectCache", "EU") then
 							NeP.ObjectManager.unitCache[#NeP.ObjectManager.unitCache+1] = {
@@ -526,7 +527,7 @@ local function NeP_GenericOM()
 								name=UnitName(object)
 							}
 						end
-						-- Enemie
+					-- Enemie
 					elseif UnitCanAttack('player', object) then
 						if NeP.Core.PeFetch("ObjectCache", "EU") then
 							NeP.ObjectManager.unitCache[#NeP.ObjectManager.unitCache+1] = {
