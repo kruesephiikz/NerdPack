@@ -367,7 +367,6 @@ local function GenericFilter(unit)
 					if UnitCanAttack('player', unit) then
 						for i=1, #NeP.ObjectManager.unitCache do
 							local object = NeP.ObjectManager.unitCache[i]
-							print(object.key)
 							if object.key ~= unit and object.name ~= objectName then
 								return true
 							end
