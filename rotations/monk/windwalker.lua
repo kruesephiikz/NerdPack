@@ -41,16 +41,19 @@ NeP.Interface.MonkWw = {
 local n,r = GetSpellInfo('137639')
 
 local _SEF = function()
-	for i=1,#NeP.ObjectManager.unitCache do
-		local object = NeP.ObjectManager.unitCache[i]
-		if UnitGUID('target') ~= UnitGUID(object.key)
-		and IsSpellInRange(GetSpellInfo(137639), object.key) then
-			if UnitAffectingCombat(object.key) then
-				local _,_,_,_,_,_,debuff = UnitDebuff(object.key, GetSpellInfo(137639), nil, "PLAYER")
-				if not debuff and NeP.Core.dynamicEval("!player.buff(137639).count = 2") then
-					if NeP.Core.Infront('player', object.key) then
-						ProbablyEngine.dsl.parsedTarget = object.key
-						return true 
+	if NeP.Lib.SAoE(3, 40) then
+		for i=1,#NeP.ObjectManager.unitCache do
+			local object = NeP.ObjectManager.unitCache[i]
+			if ProbablyEngine.condition["deathin"](object.key) >= 10 then
+				if UnitGUID('target') ~= UnitGUID(object.key) then
+					if UnitAffectingCombat(object.key) then
+						local _,_,_,_,_,_,debuff = UnitDebuff(object.key, GetSpellInfo(137639), nil, "PLAYER")
+						if not debuff and NeP.Core.dynamicEval("!player.buff(137639).count = 2") then
+							if NeP.Core.Infront('player', object.key) then
+								ProbablyEngine.dsl.parsedTarget = object.key
+								return true 
+							end
+						end
 					end
 				end
 			end
@@ -88,11 +91,12 @@ local _All = {
 local _Cooldowns = {
 	{ "115288", "player.energy <= 30"},-- Energizing Brew
 	{ "123904"}, -- Invoke Xuen, the White Tiger
+	{ "Chi Brew", "player.chi <= 2" },
+	{ "Serenity", "player.chi <= 3" }
 }
 
 local _Survival = {
 	{ "115072", { "player.health <= 80", "player.chi < 4" }}, -- Expel Harm
-	{ "115098", "player.health <= 75" }, -- Chi Wave
 	{ "115203", { -- Forifying Brew at < 30% health and when DM & DH buff is not up
 		"player.health < 30",
 		"!player.buff(122783)", -- Diffuse Magic
@@ -136,18 +140,23 @@ local _Melle = {
 	-- Rotation
 	{{ -- infront
 		{ "115080", "player.buff(121125)", "target" }, -- Touch of Death, Death Note
+		{ "100787", "player.buff(125359).duration < 5", "target" }, -- Tiger Palm if not w/t Tiger Power
 		{ "107428", "target.debuff(130320).duration < 3", "target" }, -- Rising Sun Kick
+		{ "113656", "!player.moving", "target" }, -- Fists of Fury
 		{ "100784", "player.buff(116768)", "target" },-- Blackout Kick w/tCombo Breaker: Blackout Kick
 		{ "100787", "player.buff(118864)", "target" }, -- Tiger Palm w/t Combo Breaker: Tiger Palm
-		{ "113656", "!player.moving", "target" },-- Fists of Fury
-	}, "target.NePinfront" },
-	-- AoE
-		{ "101546", (function() return NeP.Lib.SAoE(3, 8) end) }, -- Spinning Crane Kick
-	{{ -- infront
-		{ "100784", "player.chi >= 3", "target" }, -- Blackout Kick
-		{ "100787", "!player.buff(125359)", "target" }, -- Tiger Palm if not w/t Tiger Power
+		{ "115098", "player.energy <= 65" }, -- Chi Wave
+		{ "100784", "player.chi >= 3", "target" }, -- Blackout Kick /DUMP CHI
 		{ "115698", nil, "target" }, -- Jab
 	}, "target.NePinfront" },
+}
+
+local _AoE = {
+	{ "115080", "player.buff(121125)", "target" }, -- Touch of Death, Death Note
+	{ "100787", "player.buff(125359).duration < 5", "target" }, -- Tiger Palm if not w/t Tiger Power
+	{ "107428", "target.debuff(130320).duration < 3", "target" }, -- Rising Sun Kick
+	{ "113656", "!player.moving", "target" }, -- Fists of Fury
+	{ "101546" }, -- Spinning Crane Kick
 }
 
 ProbablyEngine.rotation.register_custom(269, NeP.Core.GetCrInfo('Monk - Windwalker'),
@@ -158,7 +167,8 @@ ProbablyEngine.rotation.register_custom(269, NeP.Core.GetCrInfo('Monk - Windwalk
 		{_Cooldowns, "modifier.cooldowns"},
 		{_SEF, (function() return NeP.Core.PeFetch('NePConfigMonkWw', 'SEF') end)},
 		{{ -- Conditions
+			{_AoE, (function() return NeP.Lib.SAoE(3, 8) end)},
 			{_Melle, "target.inMelee"},
-			{_Ranged, {"!target.inMelee", "target.inRanged"}}
+			{_Ranged, { "!target.inMelee", "target.inRanged" }}
 		}, {"target.range <= 40", "target.exists"} }
 	}, _All, exeOnLoad)
