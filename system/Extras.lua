@@ -99,21 +99,81 @@ Build By: MTS & StinkyTwitch
 ---------------------------------------------------]]
 function NeP.Extras.autoTarget(unit, name)
 	if NeP.Core.PeFetch('NePConf', 'AutoTarget') then
-		if UnitExists("target") and not UnitIsFriend("player", "target") and not UnitIsDeadOrGhost("target") then
-			-- Do nothing
-		else
+		local _forceTarget = {
+				-- WOD DUNGEONS/RAIDS
+			75966,      -- Defiled Spirit (Shadowmoon Burial Grounds)
+			76220,      -- Blazing Trickster (Auchindoun Normal)
+			76222,      -- Rallying Banner (UBRS Black Iron Grunt)
+			76267,      -- Solar Zealot (Skyreach)
+			76518,      -- Ritual of Bones (Shadowmoon Burial Grounds)
+			77252,      -- Ore Crate (BRF Oregorger)
+			77665,      -- Iron Bomber (BRF Blackhand)
+			77891,      -- Grasping Earth (BRF Kromog)
+			77893,      -- Grasping Earth (BRF Kromog)
+			86752,      -- Stone Pillars (BRF Mythic Kromog)
+			78583,      -- Dominator Turret (BRF Iron Maidens)
+			78584,      -- Dominator Turret (BRF Iron Maidens)
+			79504,      -- Ore Crate (BRF Oregorger)
+			79511,      -- Blazing Trickster (Auchindoun Heroic)
+			81638,      -- Aqueous Globule (The Everbloom)
+			86644,      -- Ore Crate (BRF Oregorger)
+			94873,      -- Felfire Flamebelcher (HFC)
+			90432,      -- Felfire Flamebelcher (HFC)
+			95586,      -- Felfire Demolisher (HFC)
+			93851,      -- Felfire Crusher (HFC)
+			90410,      -- Felfire Crusher (HFC)
+			94840,      -- Felfire Artillery (HFC)
+			90485,      -- Felfire Artillery (HFC)
+			93435,      -- Felfire Transporter (HFC)
+			93717,      -- Volatile Firebomb (HFC)
+			188293,     -- Reinforced Firebomb (HFC)
+			94865,      -- Grasping Hand (HFC)
+			93838,      -- Grasping Hand (HFC)
+			93839,      -- Dragging Hand (HFC)
+			91368,      -- Crushing Hand (HFC)
+			94455,      -- Blademaster Jubei'thos (HFC)
+			90387,      -- Shadowy Construct (HFC)
+			90508,      -- Gorebound Construct (HFC)
+			90568,      -- Gorebound Essence (HFC)
+			94996,      -- Fragment of the Crone (HFC)
+			95656,      -- Carrion Swarm (HFC)
+			91540,      -- Illusionary Outcast (HFC)
+			87318
+		}
+		local NeP_ForcedTarget = false
+
+		if not UnitExists("target") or UnitIsFriend("player", "target") or UnitIsDeadOrGhost("target") then
+	
+			-- Forced Target
 			for i=1,#NeP.ObjectManager.unitCache do
 				local _object = NeP.ObjectManager.unitCache[i]
-				if UnitExists(_object.key) then
-					if (UnitAffectingCombat(_object.key) or _object.dummy) then
-						if _object.distance <= 40 then
-							NeP.Alert('Targeting: '.._object.name) 
-							Macro("/target ".._object.key)
-							break
+				local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(_object.key))
+				for k,v in pairs(_forceTarget) do
+					if tonumber(ObjID) == v then 
+						NeP.Alert('Targeting (S): '.._object.name) 
+						Macro("/target ".._object.key)
+						NeP_ForcedTarget = true
+						break
+					end
+				end
+			end
+			
+			-- Auto Target
+			if not NeP_ForcedTarget then
+				for i=1,#NeP.ObjectManager.unitCache do
+					local _object = NeP.ObjectManager.unitCache[i]
+					if UnitExists(_object.key) then
+						if (UnitAffectingCombat(_object.key) or _object.dummy) then
+							if _object.distance <= 40 then
+								NeP.Alert('Targeting: '.._object.name) 
+								Macro("/target ".._object.key)
+								break
+							end
 						end
 					end
 				end
 			end
+			
 		end
 	end
 end
