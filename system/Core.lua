@@ -207,13 +207,15 @@ local function round(num, idp)
 end
 
 function NeP.Core.Distance(a, b)
-	-- FireHack
-	if FireHack then
-		local ax, ay, az = ObjectPosition(b)
-		local bx, by, bz = ObjectPosition(a)
-		return round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
-	else
-		return ProbablyEngine.condition["distance"](b)
+	if UnitExists(a) and UnitExists(b) then
+		-- FireHack
+		if FireHack then
+			local ax, ay, az = ObjectPosition(b)
+			local bx, by, bz = ObjectPosition(a)
+			return round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
+		else
+			return ProbablyEngine.condition["distance"](b)
+		end
 	end
 	return 0
 end

@@ -3,7 +3,7 @@ local _addonColor = '|cff'..NeP.Interface.addonColor;
 local _tittleGUI = '|T'..NeP.Info.Logo..':20:20|t'.._addonColor..NeP.Info.Nick;
 local _objectTable = NeP.ObjectManager.unitFriendlyCache;
 local _Displaying = 'Friendly List';
-local OPTIONS_WIDTH = 300;
+local OPTIONS_WIDTH = 400;
 local OPTIONS_HEIGHT = 400;
 local scrollMax = 0;
 local SETTINGS_WIDTH = 200;
@@ -14,9 +14,26 @@ local statusBarsUsed = { }
 NeP.Config.defaults['OMList'] = {
 	['test'] = false,
 	['ShowDPS'] = false,
-	['ShowHealthText'] = true,
+	['ShowInfoText'] = true,
 	['ShowHealthBars'] = true,
+	['ShowHealthText'] = true
 }
+
+local getAllObjects = function()
+	local ObjTable = {}
+	if FireHack then
+		for i=1, ObjectCount() do
+			local Obj = ObjectWithIndex(i)
+			if ObjectExists(Obj) then
+				ObjTable[#ObjTable+1] = {
+					key=Obj,
+					name=UnitName(Obj)
+				}
+			end
+		end
+	end
+	return ObjTable
+end
 
 function OMGUI_RUN()
 	
@@ -53,6 +70,20 @@ function OMGUI_RUN()
 	SettingsText:SetText('Settings:')
 	SettingsText:SetSize(SETTINGS_WIDTH-16, 15)
 	
+	-- Status Text checkbox
+	local StatusTextCheckbox = NeP.Interface.addCheckButton(settingsContentFrame)
+	_SettinsCount = _SettinsCount + 1
+	StatusTextCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowInfoText'));
+	StatusTextCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
+	StatusTextCheckbox:SetScript("OnClick", function(self)
+		NeP.Config.writeKey('OMList', 'ShowInfoText', self:GetChecked());
+	end);
+	local StatusText = NeP.Interface.addText(settingsContentFrame)
+	StatusText:SetSize(SETTINGS_WIDTH-31, 10)
+	StatusText:SetText('Show Status Text')
+	StatusText:SetFont("Fonts\\FRIZQT__.TTF", 10)
+	StatusText:SetPoint("TOPRIGHT", 10, -15*_SettinsCount)
+	
 	-- Health Text checkbox
 	local HealthTextCheckbox = NeP.Interface.addCheckButton(settingsContentFrame)
 	_SettinsCount = _SettinsCount + 1
@@ -63,7 +94,7 @@ function OMGUI_RUN()
 	end);
 	local HealthText = NeP.Interface.addText(settingsContentFrame)
 	HealthText:SetSize(SETTINGS_WIDTH-31, 10)
-	HealthText:SetText('Show Health')
+	HealthText:SetText('Show Health Text')
 	HealthText:SetFont("Fonts\\FRIZQT__.TTF", 10)
 	HealthText:SetPoint("TOPRIGHT", 10, -15*_SettinsCount)
 	
@@ -133,6 +164,16 @@ function OMGUI_RUN()
 		_objectTable = NeP.ObjectManager.objectsCache; 
 		_Displaying = 'Objects List' 
 	end)
+	
+	-- ALL Button
+	local objectButton = NeP.Interface.addButton(NeP_OMLIST)
+	objectButton:SetText("|cffFFFFFFAll Objects")
+	objectButton:SetPoint("BOTTOMRIGHT", -300, 0)
+	objectButton:SetScript("OnClick", function(self) 
+		_objectTable = getAllObjects(); 
+		_Displaying = 'All Objects' 
+	end)
+	objectButton.Button1:SetTexture(0, 255, 0, 0.3)
 
 	-- Settings Button
 	local settingsButton = NeP.Interface.addButton(NeP_OMLIST)
@@ -218,6 +259,8 @@ function OMGUI_RUN()
 		end
 	end
 	
+	local ST_Color = "|cfff28f0d"
+	
 	C_Timer.NewTicker(0.1, (function()
 		if NeP.Core.CurrentCR and NeP_OMLIST:IsShown() then
 			if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
@@ -231,15 +274,22 @@ function OMGUI_RUN()
 					titleText2:SetText('|cffff0000Total: '..#_objectTable)
 						if #_objectTable > 0 then
 							for i=1,#_objectTable do
-							local _object = _objectTable[i]
-							local name = (_object.name or '???')
-							local health = (_object.health or 100)
-							local distance = (_object.distance or '???')
+							local Obj = _objectTable[i]
+							local name = Obj.name or ""
+							local health = Obj.health or 100
+							local distance = Obj.distance or ""
+							local guid = UnitGUID(Obj.key) or ""
+							local _id = tonumber(guid:match("-(%d+)-%x+$"), 10)
 							local statusBar = getStatusBar()
 
 							statusBar.frame:SetPoint("TOPLEFT", objectsContentFrame, "TOPLEFT", 2, -1 + (currentRow * -15) + -currentRow )
-							statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(_object.key)..name)
-							--statusBar.frame.Left:SetText('|cffFFFFFF( D: '..distance..' )')
+							statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(Obj.key)..name..ST_Color..' (ID:'.._id..' D:'..distance..')')
+							
+							if NeP.Config.readKey('OMList', 'ShowInfoText') then
+								statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(Obj.key)..name..ST_Color..' (ID:'.._id..' \ D:'..distance..')')
+							else
+								statusBar.frame.Left:SetText('|cff'..NeP.Core.classColor(Obj.key)..name)
+							end
 							
 							if NeP.Config.readKey('OMList', 'ShowHealthText') then
 								statusBar.frame.Right:SetText('(H:'..(health)..'%'..')')
@@ -254,7 +304,7 @@ function OMGUI_RUN()
 								statusBar:SetValue(0)
 							end
 							
-							statusBar.frame:SetScript("OnMouseDown", function(self) TargetUnit(_object.key) end)
+							statusBar.frame:SetScript("OnMouseDown", function(self) TargetUnit(Obj.key) end)
 							height = height + 16
 							currentRow = currentRow + 1
 						end
