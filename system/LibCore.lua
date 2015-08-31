@@ -137,7 +137,7 @@ NeP.Lib.getUnitRange = function(a, t)
 	if FireHack then 
 		return _rangeTable[t] + UnitCombatReach('player') + UnitCombatReach(a)
 	else
-		return _unitRange + 3.5
+		return _rangeTable[t] + 3.5
 	end
 end
 
