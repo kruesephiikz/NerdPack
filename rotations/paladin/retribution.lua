@@ -7,12 +7,6 @@ NeP.Interface.PalaRet = {
   width = 250,
   height = 500,
   config = {
-    { 
-      type = "checkbox",
-      text = "Auto target",
-      key = "auto_target",
-      default_check = false,
-    },
     {
       type = "dropdown",
       text = "Select a Blessing",
@@ -80,9 +74,9 @@ NeP.Interface.PalaRet = {
     { 
       type = "checkspin",
       text = "Enable Divine Shield",
-      key = "divineshield",
+      key = "DivineShield",
       default_spin = 10,
-      default_check = false,
+      default_check = true,
     },
     { 
       type = "checkbox",
@@ -94,7 +88,7 @@ NeP.Interface.PalaRet = {
       type = "checkbox",
       text = "Maintain Sacred Shield",
       key = "sacredshield",     
-      default_check = false,
+      default_check = true,
     },
     { 
       type = "checkbox",
@@ -131,7 +125,7 @@ NeP.Interface.PalaRet = {
           text = "None", 
           key = "none" 
         } 
-      }, default = "None", desc = "Select a third Seal to twist." }, 
+      }, default = "none", desc = "Select a third Seal to twist." }, 
 
     {type = "rule"},
     { 
@@ -203,12 +197,9 @@ local Survival = {
 		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'emancipate') end) 
 	}, "player" },
 	{ "Divine Shield", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'divineshield_spin')) end), 
-		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'divineshield_check') end) 
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'DivineShield_spin')) end), 
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'DivineShield_check') end) 
 	}},
-}
-
-local SelfHeals = {
 	{ "Flash of Light", { 
 		"player.buff(Selfless Healer).count = 3", 
 		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'flashoflight_spin')) end), 
@@ -228,7 +219,6 @@ local SelfHeals = {
 		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'healthstone_check') end) 
 	}},
 }
-
 -- Test these, they came from prot and might not be the same on ret...
 local Seals = {
 	{{ -- Empowered Seals
@@ -400,8 +390,7 @@ ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retrib
 			"player.dispellable(Cleanse)", 
 			(function() return NeP.Core.PeFetch('NePConfPalaRet', 'cleanse') end) 
 		}, "player" },
-		{ Survival },
-		{ SelfHeals },
+		{ Survival, "player.health < 100" },
 		{ Seals },
 		{ inCombat },
 		-- FIXME: Needs smart AOE
