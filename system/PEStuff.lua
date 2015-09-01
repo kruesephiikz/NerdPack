@@ -31,6 +31,14 @@ ProbablyEngine.condition.register("casttime", function(target, spell)
     return cast_time
 end)
 
+ProbablyEngine.condition.register("goLunar", function(target, spell)
+    return GetEclipseDirection() == 'moon'
+end)
+
+ProbablyEngine.condition.register("goSolar", function(target, spell)
+    return GetEclipseDirection() == 'sun'
+end)
+
 ProbablyEngine.condition.register('NePinterrupt', function (target)
 	if ProbablyEngine.condition['modifier.toggle']('interrupt') then
 		if UnitName('player') == UnitName(target) then return false end
