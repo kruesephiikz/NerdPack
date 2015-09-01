@@ -123,9 +123,9 @@ local _Ranged = {
 local _Melle = {
 	{ "Elusive Brew", "player.spell(Elusive Brew).stacks > 9", "target" },
 	-- Purifying Brew to remove your Stagger DoT when Yellow or Red.
-	{ "Blackout Kick", "!player.buff(Shuffle)" },
-	{ "Blackout Kick", "player.chi >= 4" },
-	{ "Tiger Palm", "!player.buff(Tiger Power)"}
+	{ "Blackout Kick", "!player.buff(Shuffle)", "target" },
+	{ "Blackout Kick", "player.chi >= 4", "target"  },
+	{ "Tiger Palm", "!player.buff(Tiger Power)", "target" },
 	{ "Keg Smash", "player.chi <= 2", "target" },
 	{ "Jab" }
 }
