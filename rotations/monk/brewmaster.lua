@@ -2,7 +2,7 @@ NeP.Interface.MonkWw = {
 	key = "NePConfigMonkBM",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
-	subtitle = "Monk WindWalker Settings",
+	subtitle = "Monk Brewmaster Settings",
 	color = NeP.Core.classColor('player'),
 	width = 250,
 	height = 500,
@@ -41,16 +41,19 @@ NeP.Interface.MonkWw = {
 local n,r = GetSpellInfo('137639')
 
 local _SEF = function()
-	for i=1,#NeP.ObjectManager.unitCache do
-		local object = NeP.ObjectManager.unitCache[i]
-		if UnitGUID('target') ~= UnitGUID(object.key)
-		and IsSpellInRange(GetSpellInfo(137639), object.key) then
-			if UnitAffectingCombat(object.key) then
-				local _,_,_,_,_,_,debuff = UnitDebuff(object.key, GetSpellInfo(137639), nil, "PLAYER")
-				if not debuff and NeP.Core.dynamicEval("!player.buff(137639).count = 2") then
-					if NeP.Core.Infront('player', object.key) then
-						ProbablyEngine.dsl.parsedTarget = object.key
-						return true 
+	if NeP.Lib.SAoE(3, 40) then
+		for i=1,#NeP.ObjectManager.unitCache do
+			local object = NeP.ObjectManager.unitCache[i]
+			if ProbablyEngine.condition["deathin"](object.key) >= 10 then
+				if UnitGUID('target') ~= UnitGUID(object.key) then
+					if UnitAffectingCombat(object.key) then
+						local _,_,_,_,_,_,debuff = UnitDebuff(object.key, GetSpellInfo(137639), nil, "PLAYER")
+						if not debuff and NeP.Core.dynamicEval("!player.buff(137639).count = 2") then
+							if NeP.Core.Infront('player', object.key) then
+								ProbablyEngine.dsl.parsedTarget = object.key
+								return true 
+							end
+						end
 					end
 				end
 			end
@@ -59,127 +62,90 @@ local _SEF = function()
 	return false
 end
 
+local castBetwenUnits = function(spell)
+	if UnitExists('target') then
+		Cast(spell)
+		CastAtPosition(GetPositionBetweenObjects('player', 'target', GetDistanceBetweenObjects('player', 'target')/2))
+		CancelPendingSpell()
+		return true
+	end
+	return false
+end
+
 local exeOnLoad = function()
 	NeP.Splash()
 end
 
-local inCombat = {
-
+local _All = {
 	-- Keybinds
 	{ "pause", "modifier.shift" },
 	{ "119381", "modifier.control" }, -- Leg Sweep
 	{ "122470", "modifier.alt" }, -- Touch of Karma
-
-	{{-- SEF
-		{ "137639", (function() return _SEF() end) },
-		{ "/cancelaura "..n, "target.debuff(137639)", "target"}, -- Storm, Earth, and Fire
-	}, (function() return NeP.Core.PeFetch('NePConfigMonkWw', 'SEF') end) },
-
-	-- Survival
-	{ "115072", { "player.health <= 80", "player.chi < 4" }}, -- Expel Harm
-	{ "115098", "player.health <= 75" }, -- Chi Wave
-	{ "115203", { -- Forifying Brew at < 30% health and when DM & DH buff is not up
-		"player.health < 30",
-		"!player.buff(122783)", -- Diffuse Magic
-		"!player.buff(122278)"}}, -- Dampen Harm
-	{ "#5512", "player.health < 40" }, -- Healthstone
-
-	{{-- Interrupts
-		{ "116705" }, -- Spear Hand Strike
-		{ "115078", { -- Paralysis when SHS, and Quaking Palm are all on CD
-		    "!target.debuff(116705)", -- Spear Hand Strike
-		    "player.spell(107079).cooldown > 0", -- Quaking Palm
-		}},
-		{ "116844", "!target.debuff(116705)" }, -- Ring of Peace when SHS is on CD
-		{ "119381", "target.range <= 5" }, -- Leg Sweep when SHS is on CD
-		{ "119392", "target.range <= 30" }, -- Charging Ox Wave when SHS is on CD
-		{ "107079", "!target.debuff(116705)" }, -- Quaking Palm when SHS is on CD
-	}, "target.NePinterrupt" },
-
-	-- Cooldowns
-	{ "115288", { -- Energizing Brew
-		"player.energy <= 30",
-		"modifier.cooldowns"
-	}},
-	{ "123904", "modifier.cooldowns" }, -- Invoke Xuen, the White Tiger
-
+	
+	-- Buffs
+	{ "115921", "!player.buffs.stats"},-- Legacy of the Emperor
+	
 	-- FREEDOOM!
 	{ "137562", "player.state.disorient" }, -- Nimble Brew = 137562
-	{ "137562", "player.state.fear" },
-	{ "137562", "player.state.stun" },
-	{ "137562", "player.state.root" },
-	{ "137562", "player.state.horror" },
-	{ "137562", "player.state.snare" },
 	{ "116841", "player.state.disorient" }, -- Tiger's Lust = 116841
-	{ "116841", "player.state.stun" },
-	{ "116841", "player.state.root" },
-	{ "116841", "player.state.snare" },
-
-	-- Ranged
-	{ "116841", { -- Tiger's Lust if the target is at least 15 yards away and we are moving
-		"target.range >= 15", 
-		"player.moving"
-	}},
-	{ "124081", { -- Zen Sphere. 40 yard range!
-		"!target.debuff(124081)",
-		"target.range >= 15"
-	}},
-	{ "115098", "target.range >= 15" }, -- Chi Wave (40yrd range!)
-	{ "123986", "target.range >= 15" }, -- Chi Burst (40yrd range!)
-	{ "117952", {  -- Crackling Jade Lightning
-		"target.range > 5", 
-		"target.range <= 40", 
-		"!player.moving" 
-	}},
-	{ "115072", { -- Expel Harm
-		"player.chi < 4", 
-		"target.range >= 15"
-	}},
-
-	-- Buffs
-	{ "115080", "player.buff(121125)" }, -- Touch of Death, Death Note
-	{ "116740", { -- Tigereye Brew
-		"player.buff(125195).count >= 10", 
-		"!player.buff(116740)"
-	}},
-
-	-- Procs
-	{ "100784", "player.buff(116768)"},-- Blackout Kick w/tCombo Breaker: Blackout Kick
-	{ "100787", "player.buff(118864)"}, -- Tiger Palm w/t Combo Breaker: Tiger Palm
-
-	-- Rotation
-	{ "107428", "target.debuff(130320).duration < 3" }, -- Rising Sun Kick
-	{ "113656", "!player.moving" },-- Fists of Fury	
-	-- AoE
-		{ "101546", (function() return NeP.Lib.SAoE(3, 8) end) }, -- Spinning Crane Kick
-	{ "100784", "player.chi >= 3" }, -- Blackout Kick
-	{ "100787", "!player.buff(125359)"}, -- Tiger Palm if not w/t Tiger Power
-	{ "115698", "player.chi <= 3" }, -- Jab
-		  
+	{ "137562", "player.state.fear" }, -- Nimble Brew = 137562
+	{ "116841", "player.state.stun" }, -- Tiger's Lust = 116841
+	{ "137562", "player.state.stun" }, -- Nimble Brew = 137562
+	{ "137562", "player.state.root" }, -- Nimble Brew = 137562
+	{ "116841", "player.state.root" }, -- Tiger's Lust = 116841
+	{ "137562", "player.state.horror" }, -- Nimble Brew = 137562
+	{ "137562", "player.state.snare" }, -- Nimble Brew = 137562
+	{ "116841", "player.state.snare" }, -- Tiger's Lust = 116841
 }
 
-local outCombat = {
+local _Cooldowns = {
 
- 	{ "116781", { -- Legacy of the White Tiger
-		"!player.buff(116781).any", -- Legacy of the White Tiger
-		"!player.buff(17007).any", -- Leader of the Pack
-		"!player.buff(1459).any", -- Arcane Brilliance
-		"!player.buff(61316).any", -- Dalaran Brilliance
-		"!player.buff(97229).any", -- Bellowing Roar
-		"!player.buff(24604).any", -- Furious Howl
-		"!player.buff(90309).any", -- Terrifying Roar
-		"!player.buff(126373).any", -- Fearless Roar
-		"!player.buff(126309).any" -- Still Water
-	}},
-	{ "115921", { -- Legacy of the Emperor
-		"!player.buff(115921).any", -- Legacy of the Emperor
-		"!player.buff(1126).any", -- Mark of the Wild
-		"!player.buff(20217).any", -- Blessing of Kings
-		"!player.buff(90363).any", -- Embrace of the Shale Spider
-		"!player.buff(Blessing of the Forgotten Kings).any"
-	}}
-  
 }
 
-ProbablyEngine.rotation.register_custom(268, NeP.Core.GetCrInfo('Monk - Windwalker'),
-	inCombat, outCombat, exeOnLoad)
+local _Survival = {
+	{ "Expel Harm" },
+	{ "Guard" },
+local _Interrupts = {
+
+}
+
+local _SEF = {
+	{ "137639", (function() return _SEF() end) },
+	{ "/cancelaura "..n, "target.debuff(137639)", "target"}, -- Storm, Earth, and Fire
+}
+
+local _Ranged = {
+
+}
+
+local _Melle = {
+	{ "Elusive Brew", "player.spell(Elusive Brew).stacks > 9", "target" },
+	-- Purifying Brew to remove your Stagger DoT when Yellow or Red.
+	{ "Blackout Kick", "!player.buff(Shuffle)" },
+	{ "Blackout Kick", "player.chi >= 4" },
+	{ "Tiger Palm", "!player.buff(Tiger Power)"}
+	{ "Keg Smash", "player.chi <= 2", "target" },
+	{ "Jab" }
+}
+
+local _AoE = {
+}
+
+ProbablyEngine.rotation.register_custom(268, NeP.Core.GetCrInfo('Monk - Brewmaster'),
+	{ -- In-Combat
+		{_All},
+		{_Survival, 'player.health < 100'},
+		{_Interrupts, "target.NePinterrupt"},
+		{_Cooldowns, "modifier.cooldowns"},
+		-- Summon Black Ox Statue
+		{ "115315" , {
+			"!player.totem(Black Ox Statue)",
+			(function() return castBetwenUnits("115313") end)
+		}},
+		{_SEF, (function() return NeP.Core.PeFetch('NePConfigMonkBM', 'SEF') end)},
+		{{ -- Conditions
+			{_AoE, (function() return NeP.Lib.SAoE(3, 8) end)},
+			{_Melle, { "target.inMelee", "target.NePinfront" }},
+			{_Ranged, { "!target.inMelee", "target.inRanged" }}
+		}, {"target.range <= 40", "target.exists"} }
+	}, _All, exeOnLoad)

@@ -42,6 +42,7 @@ rotations\deathknight\frost.lua
 rotations\deathknight\unholy.lua
 rotations\monk\windwalker.lua
 rotations\monk\mistweaver.lua
+rotations\monk\brewmaster.lua
 rotations\warrior\fury.lua
 rotations\warrior\prot.lua
 rotations\priest\disc.lua

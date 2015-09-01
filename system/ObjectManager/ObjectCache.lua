@@ -472,8 +472,8 @@ local function NeP_GenericOM()
 				end
 			end
 		end
-		-- Solo Cache
-		else
+	-- Solo Cache
+	else
 		-- Target
 		if UnitExists('target') then
 			local object = 'target'
