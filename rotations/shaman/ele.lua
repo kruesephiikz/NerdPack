@@ -186,16 +186,16 @@ local _Moving = {
 local _Cleave = {
 	{ "Chain Lightning" },
 	{ "Chain Lightning", { 
-		"!player.buff(Improved Chain Lightning)", 
+		"!player.buff(Enhanced Chain Lightning)", 
 		"player.spell(Earthquake).cooldown < 1" 
 	}},
-	{ "Earthquake", "player.buff(Improved Chain Lightning)", "target.ground" },
+	{ "Earthquake", "player.buff(Enhanced Chain Lightning)", "target.ground" },
 }
 
 local _AoE = {
 	{ "Lava Beam", "player.buff(Ascendance)" },
-	{ "Chain Lightning", "!player.buff(Improved Chain Lightning)" },
-	{ "Earthquake", "player.buff(Improved Chain Lightning)", "target.ground" },
+	{ "Chain Lightning", "!player.buff(Enhanced Chain Lightning)" },
+	{ "Earthquake", "player.buff(Enhanced Chain Lightning)", "target.ground" },
 	{ "Earth Shock", { 
 		"player.buff(Lightning Shield)", 
 		"player.buff(Lightning Shield).count >= 18" 
