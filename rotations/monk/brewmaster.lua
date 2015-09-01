@@ -83,7 +83,7 @@ local _All = {
 	{ "122470", "modifier.alt" }, -- Touch of Karma
 	
 	-- Buffs
-	{ "115921", "!player.buffs.stats"},-- Legacy of the Emperor
+	{ "116781", "!player.buffs.stats" }, -- Legacy of the White Tiger
 	
 	-- FREEDOOM!
 	{ "137562", "player.state.disorient" }, -- Nimble Brew = 137562

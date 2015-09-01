@@ -138,7 +138,6 @@ function NeP.Extras.autoTarget(unit, name)
 			94996,      -- Fragment of the Crone (HFC)
 			95656,      -- Carrion Swarm (HFC)
 			91540,      -- Illusionary Outcast (HFC)
-			87318
 		}
 		local NeP_ForcedTarget = false
 
