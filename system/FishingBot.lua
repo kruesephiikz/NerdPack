@@ -2,6 +2,8 @@ local OBJECT_BOBBING_OFFSET = 0x1e0
 local OBJECT_CREATOR_OFFSET = 0x30
 local _fishRun = false
 local _timeStarted = nil
+local _Lootedcounter = 0
+
 _currentGear = {}
 
 local function equipNormalGear()
@@ -82,6 +84,7 @@ NeP.Interface.Fishing = {
 				self:SetText("Stop Fishing")
 				local currentTime = GetTime()
 				_timeStarted = currentTime
+				_Lootedcounter = 0
 			else
 				self:SetText("Start Fishing")
 				JumpOrAscendStart() -- Jump to stop channeling.
@@ -93,11 +96,29 @@ NeP.Interface.Fishing = {
 		-- Timer
 		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Running For: ", size = 11, offset = -11 },
 		{ key = 'current_Time', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-		-- Counter // FIX ME: Figure out a proper way to count the loot.
-		--{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Lotted Items: ", size = 11, offset = -11 },
-		--{ key = 'current_Loot', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		-- Looted Items Counter
+		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Looted Items: ", size = 11, offset = -11 },
+		{ key = 'current_Loot', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		-- Predicted Average Items Per Hour
+		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Average Items Per Hour: ", size = 11, offset = -11 },
+		{ key = 'current_average', type = "text", text = "...", size = 11, align = "right", offset = 0 },
 	}
 }
+
+local DoCountLoot = false
+local CounterFrame = CreateFrame("frame")
+CounterFrame:RegisterEvent("LOOT_READY")
+CounterFrame:SetScript("OnEvent", function()
+	if DoCountLoot then -- only count when triggered by _startFish()
+		DoCountLoot = false -- trigger once.
+		for i=1,GetNumLootItems() do
+			local lootIcon, lootName, lootQuantity, rarity, locked = GetLootSlotInfo(i)
+			_Lootedcounter = _Lootedcounter + lootQuantity
+			local fshGUI = NeP.Core.getGUI('fishing')
+			fshGUI.elements.current_average:SetText(math.floor(3600 / (GetTime() - _timeStarted) * _Lootedcounter))
+		end
+	end
+end )
 
 local function GetObjectGUID(object)
   return tonumber(ObjectDescriptor(object, 0, Types.ULong))
@@ -107,10 +128,8 @@ local function IsObjectCreatedBy(owner, object)
   return tonumber(ObjectDescriptor(object, OBJECT_CREATOR_OFFSET, Types.ULong)) == GetObjectGUID(owner)
 end
 
+local BobberName = "Fishing Bobber"
 local function getBobber()
-	local BobberName = "Fishing Bobber"
-	local BobberDescriptor = nil
-	
 	for i = 1, ObjectCount(TYPE_GAMEOBJECT) do
 		local Object = ObjectWithIndex(i)
 		local ObjectName = ObjectName(ObjectPointer(Object))
@@ -120,44 +139,49 @@ local function getBobber()
 				return Object
 			end
 		end
-
 	end
 end
 
+local FishCD = 0
 local function _startFish()
 	local BobberObject = getBobber()
 	if BobberObject then
 		local bobbing = ObjectField(getBobber(), OBJECT_BOBBING_OFFSET, Types.Short)
 		if bobbing == 1 then
 			ObjectInteract(getBobber())
+			DoCountLoot = true
 		end
 	else
-		Cast(131474)
+		if (not InCombatLockdown()) and GetNumLootItems() == 0 and FishCD < GetTime() then -- not in combat, not looting, and not soon after trying to cast fishing.
+			FishCD = GetTime() + 1
+			Cast(131474)
+		end
 	end
 end
 
 -- When applied to your fishing pole, increases Fishing by 200 for 10 min. (WoD)
-local WormSpellID, WormItemID, nexttry = 5386, 118391, 0
+local WormSpellID, WormItemID, WormCD = 5386, 118391, 0
 local function _WormSupreme()
-	if NeP.Core.PeFetch('NePFishingConf', 'WormSupreme') and GetTime() > nexttry then
+	if getBobber() then return end
+	if NeP.Core.PeFetch('NePFishingConf', 'WormSupreme') and GetTime() > WormCD then
 		if select(7, GetItemInfo(GetInventoryItemLink("player", 16))) == "Fishing Poles" then
 			local hasEnchant, timeleft, _, enchantID = GetWeaponEnchantInfo()
-			if hasEnchant and timeleft / 1000 > 20 and enchantID == WormSpellID then return end
-			nexttry = GetTime() + 5 -- it seems to be chain casting it otherwise :S
+			if hasEnchant and timeleft / 1000 > 15 and enchantID == WormSpellID then return end -- if we have the itemenchant or if we are fishing don't run.
+			WormCD = GetTime() + 5 -- it seems to be chain casting it otherwise :S
 			UseItem(WormItemID)
 		end
 	end
 end
 
+local hatsTable = {
+	[1] = { Name = "Lucky Fishing Hat", ID = 19972, Bonus = 5 },
+	[2] = { Name = "Nat's Hat", ID = 88710, Bonus = 5 },
+	[3] = { Name = "Darkmoon Fishing Cap", ID = 93732, Bonus = 5 },
+	[4] = { Name = "Nat's Drinking Hat", ID = 117405, Bonus = 10  },
+	[5] = { Name = "Hightfish Cap", ID = 118380, Bonus = 100 },
+	[6] = { Name = "Tentacled Hat", ID = 118393, Bonus = 100 },
+}
 local function _findHats()
-	local hatsTable = {
-		[1] = { Name = "Lucky Fishing Hat", ID = 19972, Bonus = 5 },
-		[2] = { Name = "Nat's Hat", ID = 88710, Bonus = 5 },
-		[3] = { Name = "Darkmoon Fishing Cap", ID = 93732, Bonus = 5 },
-		[4] = { Name = "Nat's Drinking Hat", ID = 117405, Bonus = 10  },
-		[5] = { Name = "Hightfish Cap", ID = 118380, Bonus = 100 },
-		[6] = { Name = "Tentacled Hat", ID = 118393, Bonus = 100 },
-	}
 	local hatsFound = {}
 	for i = 1, #hatsTable do
 		if GetItemCount(hatsTable[i].ID, false, false) > 0 then
@@ -188,28 +212,28 @@ local function _equitHat()
 	end
 end
 
+local polesTable = {
+	[1] = { Name = "Fishing Pole", ID = 6256, Bonus = 0 },
+	[2] = { Name = "Strong Fishing Pole", ID = 6365, Bonus = 5 },
+	[3] = { Name = "Darkwood Fishing Pole", ID = 6366, Bonus = 15 },
+	[4] = { Name = "Big Iron Fishing Pole", ID = 6367, Bonus = 20 },
+	[5] = { Name = "Blump Family Fishing Pole", ID = 12225, Bonus = 3 },
+	[6] = { Name = "Nat Pagle's Extreme Angler FC-5000", ID = 19022, Bonus = 20 },
+	[7] = { Name = "Arcanite Fishing Pole", ID = 19970, Bonus = 40 },
+	[8] = { Name = "Seth's Graphite Fishing Pole", ID = 25978, Bonus = 20 },
+	[9] = { Name = "Mastercraft Kalu'ak Fishing Pole", ID = 44050, Bonus = 30 },
+	[10] = { Name = "Nat's Lucky Fishing Pole", ID = 45858, Bonus = 25 },
+	[11] = { Name = "Bone Fishing Pole", ID = 45991, Bonus = 30 },
+	[12] = { Name = "Jeweled Fishing Pole", ID = 45992, Bonus = 30 },
+	[13] = { Name = "Staats' Fishing Pole", ID = 46337, Bonus = 3 },
+	[14] = { Name = "Pandaren Fishing Pole", ID = 84660, Bonus = 10 },
+	[15] = { Name = "Dragon Fishing Pole", ID = 84661, Bonus = 30 },
+	[16] = { Name = "Savage Fishing Pole", ID = 116825, Bonus = 30 },
+	[17] = { Name = "Draenic Fishing Pole", ID = 116826, Bonus = 30 },
+	[18] = { Name = "Ephemeral Fishing Pole", ID = 118381, Bonus = 100 },
+	[19] = { Name = "Thruk's Fishing Rod", ID = 120163, Bonus = 3 },
+}
 local function _findPoles()
-	local polesTable = {
-		[1] = { Name = "Fishing Pole", ID = 6256, Bonus = 0 },
-		[2] = { Name = "Strong Fishing Pole", ID = 6365, Bonus = 5 },
-		[3] = { Name = "Darkwood Fishing Pole", ID = 6366, Bonus = 15 },
-		[4] = { Name = "Big Iron Fishing Pole", ID = 6367, Bonus = 20 },
-		[5] = { Name = "Blump Family Fishing Pole", ID = 12225, Bonus = 3 },
-		[6] = { Name = "Nat Pagle's Extreme Angler FC-5000", ID = 19022, Bonus = 20 },
-		[7] = { Name = "Arcanite Fishing Pole", ID = 19970, Bonus = 40 },
-		[8] = { Name = "Seth's Graphite Fishing Pole", ID = 25978, Bonus = 20 },
-		[9] = { Name = "Mastercraft Kalu'ak Fishing Pole", ID = 44050, Bonus = 30 },
-		[10] = { Name = "Nat's Lucky Fishing Pole", ID = 45858, Bonus = 25 },
-		[11] = { Name = "Bone Fishing Pole", ID = 45991, Bonus = 30 },
-		[12] = { Name = "Jeweled Fishing Pole", ID = 45992, Bonus = 30 },
-		[13] = { Name = "Staats' Fishing Pole", ID = 46337, Bonus = 3 },
-		[14] = { Name = "Pandaren Fishing Pole", ID = 84660, Bonus = 10 },
-		[15] = { Name = "Dragon Fishing Pole", ID = 84661, Bonus = 30 },
-		[16] = { Name = "Savage Fishing Pole", ID = 116825, Bonus = 30 },
-		[17] = { Name = "Draenic Fishing Pole", ID = 116826, Bonus = 30 },
-		[18] = { Name = "Ephemeral Fishing Pole", ID = 118381, Bonus = 100 },
-		[19] = { Name = "Thruk's Fishing Rod", ID = 120163, Bonus = 3 },
-	}
 	local polesFound = {}
 	for i = 1, #polesTable do
 		if GetItemCount(polesTable[i].ID, false, false) > 0 then
@@ -243,22 +267,26 @@ local function _equitPole()
 	end
 end
 
+local _baitsTable = {
+	['jsb'] = { ID = 110274, Debuff = 158031, Name = 'Jawless Skulker Bait' },
+	['fsb'] = { ID = 110289, Debuff = 158034, Name = 'Fat Sleeper Bait' },
+	['blsb'] = { ID = 110290, Debuff = 158035, Name = 'Blind Lake Sturgeon Bait' },
+	['fab'] = { ID = 110291, Debuff = 158036, Name = 'Fire Ammonite Bait' },
+	['ssb'] = { ID = 110292, Debuff = 158037, Name = 'Sea Scorpion Bait' },
+	['ageb'] = { ID = 110293, Debuff = 158038, Name = 'Abyssal Gulper Eel Bait' },
+	['bwb'] = { ID = 110294, Debuff = 158039, Name = 'Blackwater Whiptail Bait' }
+}
 local function _AutoBait()
+	if getBobber() then return end
 	if NeP.Core.PeFetch('NePFishingConf', 'bait') ~= "none" or NeP.Core.PeFetch('NePFishingConf', 'bait') ~= nil then
-		local _baitsTable = {
-			['jsb'] = { ID = 110274, Debuff = 158031, Name = 'Jawless Skulker Bait' },
-			['fsb'] = { ID = 110289, Debuff = 158034, Name = 'Fat Sleeper Bait' },
-			['blsb'] = { ID = 110290, Debuff = 158035, Name = 'Blind Lake Sturgeon Bait' },
-			['fab'] = { ID = 110291, Debuff = 158036, Name = 'Fire Ammonite Bait' },
-			['ssb'] = { ID = 110292, Debuff = 158037, Name = 'Sea Scorpion Bait' },
-			['ageb'] = { ID = 110293, Debuff = 158038, Name = 'Abyssal Gulper Eel Bait' },
-			['bwb'] = { ID = 110294, Debuff = 158039, Name = 'Blackwater Whiptail Bait' }
-		}
 		if _baitsTable[NeP.Core.PeFetch('NePFishingConf', 'bait')] ~= nil then
 			local _Bait = _baitsTable[NeP.Core.PeFetch('NePFishingConf', 'bait')]
-			if GetItemCount(_Bait.ID, false, false) > 0 and not UnitBuff("player", GetSpellInfo(_Bait.Debuff)) then
-				NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Used Bait): ".._Bait.Name)
-				UseItem(_Bait.ID)
+			if GetItemCount(_Bait.ID, false, false) > 0 then
+				local endtime = select(7, UnitBuff("player", GetSpellInfo(_Bait.Debuff)))
+				if (not endtime) or endtime < GetTime() + 14 then
+					NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Used Bait): ".._Bait.Name)
+					UseItem(_Bait.ID)
+				end
 			end
 		end
 	end
@@ -275,6 +303,19 @@ local function round(num, idp)
   return math.floor(num * mult + 0.5) / mult
 end
 
+local function FormatTime( seconds )
+	if not seconds then return "0 Seconds" end
+	local hours = math.floor(seconds / 3600)
+	local minutes = math.floor((seconds / 60) % 60)
+	local seconds = seconds % 60
+	
+	local firstrow = hours == 1 and hours .. " Hour " or hours > 1 and hours .. " Hours " or ""
+	local secondrow = minutes == 1 and minutes .. " Minute " or minutes > 1 and minutes .. " Minutes " or ""
+	local thirdrow = seconds == 1 and seconds .. " Second " or seconds > 1 and seconds .. " Seconds " or ""
+
+	return firstrow .. secondrow .. thirdrow
+end
+
 local _fshCreated = false
 function NeP.Interface.FishingGUI()
 	NeP.Core.BuildGUI('fishing', NeP.Interface.Fishing)
@@ -283,10 +324,9 @@ function NeP.Interface.FishingGUI()
 		_fshCreated = true
 		C_Timer.NewTicker(0.5, (function()
 			if NeP.Core.CurrentCR then
-				-- FIXME: ONlY DISPLAYS SECONDS.
 				if _timeStarted ~= nil then
-					local currentTime = GetTime()
-					fshGUI.elements.current_Time:SetText(round(currentTime-_timeStarted)..' Seconds')
+					fshGUI.elements.current_Time:SetText(FormatTime(round(GetTime() - _timeStarted)))
+					fshGUI.elements.current_Loot:SetText(_Lootedcounter)
 				end
 				if NeP.Extras.BagSpace() > 2 then
 					_CarpDestruction()
