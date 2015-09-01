@@ -105,6 +105,8 @@ local _Cooldowns = {
 local _Survival = {
 	{ "Expel Harm" },
 	{ "Guard" },
+}
+
 local _Interrupts = {
 
 }
