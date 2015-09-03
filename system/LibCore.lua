@@ -187,9 +187,6 @@ NeP.Lib.AutoDots = function(Spell, Health, Duration, Distance, Classification)
 	-- Check if we have the spell before anything else...
 	if not IsUsableSpell(Spell) then return false end
 	
-	-- Classification Hacks
-	local passThruClassification = false
-	
 	-- So we dont need to fill everything
 	if Classification == nil then Classification = 'elite' end
 	if Distance == nil then Distance = 40 end
@@ -199,7 +196,11 @@ NeP.Lib.AutoDots = function(Spell, Health, Duration, Distance, Classification)
 	for i=1,#enemieCache do
 		local Obj = enemieCache[i]
 		if UnitAffectingCombat(Obj.key) then
+			
+			-- Classification WorkArounds
+			local passThruClassification = false
 			if (Classification == 'elite' and NeP_isElite(Obj.key)) or Classification == 'all' then passThruClassification = true end
+			
 			if UnitClassification(Obj.key) == Classification or passThruClassification then
 				if Obj.health <= Health then
 					local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, "PLAYER")
