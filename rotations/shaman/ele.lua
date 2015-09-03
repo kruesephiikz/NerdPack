@@ -141,10 +141,15 @@ local exeOnLoad = function()
 		'Interface\\Icons\\spell_nature_chainlightning', 'Enable Cleaves', 
 		'Enables casting of earthquake and chain lightning for cleaves.')
 	ProbablyEngine.toggle.create(
-		'mouseovers', 
+		'autoDots', 
 		'Interface\\Icons\\spell_fire_flameshock', 
-		'Enable Mouseovers', 
-		'Enable flameshock on mousover targets.')
+		'Enable Automated Dotting', 
+		'Cast flameshock on all enemie units.')
+	ProbablyEngine.toggle.create(
+		'totems', 
+		'Interface\\Icons\\spell_fire_flameshock', 
+		'Enable Automated use of totems', 
+		'Enable Automated use of totems.') -- Better DESC needed
 end
 
 local _Cooldowns = {
@@ -203,31 +208,12 @@ local _AoE = {
 	{ "Chain Lightning" },
 }
 
-local _mouseOvers = {
-	{ "Earthquake", "modifier.lcontrol", "mouseover.ground" },
-	{ "Cleanse Spirit", { 
-		"modifier.lshift", 
-		"!lastcast(Cleanse Spirit)", 
-		"mouseover.exists", 
-		"mouseover.alive", 
-		"mouseover.friend", 
-		"mouseover.range <= 40", 
-		"mouseover.dispellable(Cleanse Spirit)" 
-	}, "mouseover" },
-	{ "Flame Shock", { 
-		"!modifier.multitarget", 
-		"mouseover.enemy", 
-		"mouseover.alive", 
-		"mouseover.debuff(Flame Shock).duration <= 9", 
-		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'flameshock') end) 
-	}, "mouseover" },
-}
-
 local _ALL = {
 	-- Buffs
 	{ "Lightning Shield", "!player.buff(Lightning Shield)" },
-	
-	-- Self Heals
+}
+
+local _Survival = {
 	{ "Healing Surge", { 
 		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingsurge_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healingsurge_check') end) 
@@ -243,7 +229,7 @@ local _ALL = {
 	}}, 
 }
 
-local _Survival = {
+local _totems = {
 	{ "Ancestral Guidance", { 
 		"player.buff(Ascendance)", 
 		"player.buff(Spiritwalker's Grace)", 
@@ -328,11 +314,15 @@ ProbablyEngine.rotation.register_custom(262, NeP.Core.GetCrInfo('Shamman - Eleme
 		{_Moving, { "player.moving", "!player.buff(Spiritwalker's Grace)" }},
 		{{ -- Conditions
 			{_ALL},
-			{_Cooldowns, "modifier.cooldowns"},
-			{_Survival},
-			{_mouseOvers, "toggle.mouseovers"},
-			{_AoE, (function() return NeP.Lib.SAoE(8, 5) end)},
-			{_Cleave, "toggle.cleavemode"},
+			{_Cooldowns, "modifier.cooldowns" },
+			{_Survival, "player.health < 100" },
+			{_totems, "toggle.totems"},
+			{ "Earth Shock", { 
+				(function() return NeP.Lib.AutoDots(Earth Shock, 100, 0, 40) end),
+				"toggle.autoDots"
+			}},
+			{_AoE, (function() return NeP.Lib.SAoE(8, 5) end) },
+			{_Cleave, "toggle.cleavemode" },
 			{inCombat},
 		}, { "!player.moving", --[[INSERT BUFF CHECK FOR WOLF]] } },
 	},{ -- Out-Combat
