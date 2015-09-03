@@ -43,45 +43,46 @@ local _ALL = {
 }
 
 local Pet = {
+	{"/cast Call Pet 1", "!pet.exists" },
   	{{ -- Pet Dead
 		{ "55709", "!player.debuff(55711)"}, -- Heart of the Phoenix
 		{ "982" } -- Revive Pet
 	}, {"pet.dead", "toggle.ressPet"}},
-	{"/cast Call Pet 1", "!pet.exists" },
-  	{{ -- Pet Alive
-		{ "53271", "player.state.stun" }, -- Master's Call
-		{ "53271", "player.state.root" }, -- Master's Call
-		{ "53271", { -- Master's Call
-			"player.state.snare", 
-			"!player.debuff(Dazed)" 
-		}},
-		{ "53271", "player.state.disorient" }, -- Master's Call
-		{ "136", { -- Mend Pet
-			"pet.health <= 75", 
-			"!pet.buff(136)" 
-		}}, 
-		{ "34477", { -- Missdirect // PET 
-			"!player.buff(35079)", 
-			"!focus.exists", 
-			"target.threat > 85" 
-		}, "pet" },
-		{ "!19574", { -- Bestial Wrath
-			"player.buff(177668).duration > 4", -- Steady Focus // TALENT
-			"player.focus > 35",
-			"!player.buff(19574)", -- Bestial Wrath
-			"player.spell(34026).cooldown <= 2", -- Kill Command
-			"talent(4,1)",
-			"target.petinmelee"
-		}, "target" },
-		{ "!19574", { -- Bestial Wrath
-			"!player.buff(19574)", -- Bestial Wrath
-			"player.spell(Dire Beast).cooldown < 2",
-			"player.spell(34026).cooldown <= 2", -- Kill Command
-			"talent(4,2)",
-			"target.petinmelee"
-		}, "target" },
-		{ "34026" }, -- Kill Command
-	}, { "player.alive", "pet.exists" } },
+}
+
+local Pet_InCombat = {
+	{ "53271", "player.state.stun" }, -- Master's Call
+	{ "53271", "player.state.root" }, -- Master's Call
+	{ "53271", { -- Master's Call
+		"player.state.snare", 
+		"!player.debuff(Dazed)" 
+	}},
+	{ "53271", "player.state.disorient" }, -- Master's Call
+	{ "136", { -- Mend Pet
+		"pet.health <= 75", 
+		"!pet.buff(136)" 
+	}}, 
+	{ "34477", { -- Missdirect // PET 
+		"!player.buff(35079)", 
+		"!focus.exists", 
+		"target.threat > 85" 
+	}, "pet" },
+	{ "!19574", { -- Bestial Wrath
+		"player.buff(177668).duration > 4", -- Steady Focus // TALENT
+		"player.focus > 35",
+		"!player.buff(19574)", -- Bestial Wrath
+		"player.spell(34026).cooldown <= 2", -- Kill Command
+		"talent(4,1)",
+		"target.petinmelee"
+	}, "target" },
+	{ "!19574", { -- Bestial Wrath
+		"!player.buff(19574)", -- Bestial Wrath
+		"player.spell(Dire Beast).cooldown < 2",
+		"player.spell(34026).cooldown <= 2", -- Kill Command
+		"talent(4,2)",
+		"target.petinmelee"
+	}, "target" },
+	{ "34026" }, -- Kill Command
 }
 
 local Cooldowns = {
@@ -151,6 +152,7 @@ ProbablyEngine.rotation.register_custom(253, NeP.Core.GetCrInfo('Hunter - Beast 
 			{Survival, "player.health < 100"},
 			{Cooldowns, "modifier.cooldowns"},
 			{Pet},
+			{Pet_InCombat, { "player.alive", "pet.exists" } },
 			{focusFire, { 
 				"pet.exists", 
 				"!player.buff(Focus Fire)", 
@@ -159,4 +161,7 @@ ProbablyEngine.rotation.register_custom(253, NeP.Core.GetCrInfo('Hunter - Beast 
 			}},
 			{inCombat, { "target.NePinfront", "target.exists", "target.range <= 40" }},
 		}, "!player.channeling" }
-	}, _All, lib)
+	}, { -- Out-Combat
+		{_All},
+		{Pet}
+	}, lib)
