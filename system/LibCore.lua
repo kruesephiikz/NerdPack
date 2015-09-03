@@ -16,6 +16,20 @@ local UnitDebuff = UnitDebuff
 local UnitClassification = UnitClassification
 local UnitIsTappedByPlayer = UnitIsTappedByPlayer
 
+local function NeP_isElite(unit)
+	local boss = LibStub("LibBossIDs")
+	local classification = UnitClassification(unit)
+	if classification == "elite" 
+		or classification == "rareelite" 
+		or classification == "rare" 
+		or classification == "worldboss" 
+		or UnitLevel(unit) == -1 
+		or boss.BossIDs[UnitID(unit)] then 
+			return true 
+		end
+    return false
+end
+
 --[[-----------------------------------------------
 ** dynamicEval **
 DESC: Used to get values from GUIs and use them
@@ -91,17 +105,22 @@ end
 DESC: Checks if a enemie in the OM cache can/should
 be taunted.
 
+Classifications:
+	Elite (Includes all above)
+	All
+
 Build By: MTS
 ---------------------------------------------------]]
-NeP.Lib.canTaunt = function()
+NeP.Lib.canTaunt = function(Classification)
 	if NeP.Core.PeFetch('NePConf', 'Taunts') then
 		for i=1,#enemieCache do
-			local object = enemieCache[i].key
-			if UnitIsTappedByPlayer(object) and object.distance <= 40 then
-				if UnitAffectingCombat(object) then
-					if UnitThreatSituation(object) and UnitThreatSituation(object) >= 2 then
-						if NeP.Core.Infront('player', object) then
-							ProbablyEngine.dsl.parsedTarget = object
+			local Obj = enemieCache[i]
+			if (Classification == "elite" and NeP_isElite(Obj.key)) or Classification == "all" then
+			if UnitIsTappedByPlayer(Obj.key) and Obj.distance <= 40 then
+				if UnitAffectingCombat(Obj.key) then
+					if UnitThreatSituation(Obj.key) and UnitThreatSituation(Obj.key) >= 2 then
+						if NeP.Core.Infront('player', Obj.key) then
+							ProbablyEngine.dsl.parsedTarget = Obj.key
 							return true 
 						end
 					end
