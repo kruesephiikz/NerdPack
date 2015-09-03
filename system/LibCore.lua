@@ -189,7 +189,7 @@ NeP.Lib.AutoDots = function(Spell, Health, Duration, Distance, Classification)
 	if not IsUsableSpell(Spell) then return false end
 	
 	-- So we dont need to fill everything
-	if Classification == nil then Classification = 'elite' end
+	if Classification == nil then Classification = 'all' end
 	if Distance == nil then Distance = 40 end
 	if Health == nil then Health = 100 end
 	if Duration == nil then Duration = 0 end
