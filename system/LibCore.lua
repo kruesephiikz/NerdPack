@@ -52,7 +52,7 @@ Build By: MTS
 local _SAoE_Time = nil
 local UnitsTotal = 0
 
-NeP.Lib.SAoE = function(units, distance)
+NeP.Lib.SAoE = function(Units, Distance)
 	if _SAoE_Time == nil or _SAoE_Time + 0.5 <= GetTime() then
 		_SAoE_Time = nil
 		UnitsTotal = 0
@@ -66,7 +66,7 @@ NeP.Lib.SAoE = function(units, distance)
 			for i=1,#enemieCache do
 				local object = enemieCache[i]
 				if UnitAffectingCombat(object.key) then
-					if object.distance <= distance then
+					if object.distance <= Distance then
 						UnitsTotal = UnitsTotal + 1
 					end
 				end
@@ -74,10 +74,10 @@ NeP.Lib.SAoE = function(units, distance)
 		end
 		
 		_SAoE_Time = GetTime()
-		return UnitsTotal >= units
+		return UnitsTotal >= Units
 	end
 	
-	return UnitsTotal >= units 
+	return UnitsTotal >= Units 
 end
 
 --[[-----------------------------------------------
@@ -91,12 +91,12 @@ local _rangeTable = {
 	["ranged"] = 40,
 }
 
-NeP.Lib.getUnitRange = function(a, t)
+NeP.Lib.getUnitRange = function(Reach, Range)
 	if FireHack then 
-		return _rangeTable[t] + UnitCombatReach('player') + UnitCombatReach(a)
+		return _rangeTable[Range] + UnitCombatReach('player') + UnitCombatReach(Reach)
 	-- Unlockers wich dont have UnitCombatReach like functions...
 	else
-		return _rangeTable[t] + 3.5
+		return _rangeTable[Range] + 3.5
 	end
 end
 
@@ -181,19 +181,6 @@ Classifications:
 	worldboss - World Boss
 	all - All Units
 ]]
-local function NeP_isElite(unit)
-	local boss = LibStub("LibBossIDs")
-	local classification = UnitClassification(unit)
-	if classification == "elite" 
-		or classification == "rareelite" 
-		or classification == "rare" 
-		or classification == "worldboss" 
-		or UnitLevel(unit) == -1 
-		or boss.BossIDs[UnitID(unit)] then 
-			return true 
-		end
-    return false
-end
 
 NeP.Lib.AutoDots = function(Spell, Health, Duration, Distance, Classification)
 	
