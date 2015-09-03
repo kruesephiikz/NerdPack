@@ -41,15 +41,34 @@ ProbablyEngine.condition.register('NePinterrupt', function (target)
 	return false
 end)
 
-ProbablyEngine.condition.register("isBoss", function (target, spell)
+ProbablyEngine.condition.register("isBoss", function (target)
 	local boss = LibStub("LibBossIDs")
 	local classification = UnitClassification(target)
-	if spell == "true" and (classification == "rareelite" or classification == "rare") then return true end
-    if classification == "worldboss" or UnitLevel(target) == -1 or boss.BossIDs[UnitID(target)] then return true end
+	if classification == "rareelite" 
+		or classification == "rare" 
+		or classification == "worldboss" 
+		or UnitLevel(target) == -1 
+		or boss.BossIDs[UnitID(target)] then 
+			return true 
+		end
     return false
 end)
 
-ProbablyEngine.condition.register("NePinfront", function(target, spell)
+ProbablyEngine.condition.register("isElite", function (target)
+	local boss = LibStub("LibBossIDs")
+	local classification = UnitClassification(target)
+	if classification == "elite" 
+		or classification == "rareelite" 
+		or classification == "rare" 
+		or classification == "worldboss" 
+		or UnitLevel(target) == -1 
+		or boss.BossIDs[UnitID(target)] then 
+			return true 
+		end
+    return false
+end)
+
+ProbablyEngine.condition.register("NePinfront", function(target)
 	return NeP.Core.Infront('player', target)
 end)
 
