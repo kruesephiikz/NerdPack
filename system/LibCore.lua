@@ -116,12 +116,13 @@ NeP.Lib.canTaunt = function(Classification)
 		for i=1,#enemieCache do
 			local Obj = enemieCache[i]
 			if (Classification == "elite" and NeP_isElite(Obj.key)) or Classification == "all" then
-			if UnitIsTappedByPlayer(Obj.key) and Obj.distance <= 40 then
-				if UnitAffectingCombat(Obj.key) then
-					if UnitThreatSituation(Obj.key) and UnitThreatSituation(Obj.key) >= 2 then
-						if NeP.Core.Infront('player', Obj.key) then
-							ProbablyEngine.dsl.parsedTarget = Obj.key
-							return true 
+				if UnitIsTappedByPlayer(Obj.key) and Obj.distance <= 40 then
+					if UnitAffectingCombat(Obj.key) then
+						if UnitThreatSituation(Obj.key) and UnitThreatSituation(Obj.key) >= 2 then
+							if NeP.Core.Infront('player', Obj.key) then
+								ProbablyEngine.dsl.parsedTarget = Obj.key
+								return true 
+							end
 						end
 					end
 				end
