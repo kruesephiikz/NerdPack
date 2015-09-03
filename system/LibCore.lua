@@ -151,7 +151,7 @@ end
 
 --[[
 Usage:
-NeP.Lib.AutoDots(_spell, _health, _duration, _distance, _classification)
+NeP.Lib.AutoDots(Spell, Health, Duration, Distance, Classification)
 
 Classifications:
 	elite - Elite
@@ -162,29 +162,46 @@ Classifications:
 	worldboss - World Boss
 	all - All Units
 ]]
-local _lastDotted = nil
-NeP.Lib.AutoDots = function(_spell, _health, _duration, _distance, _classification)
+local function NeP_isElite(unit)
+	local boss = LibStub("LibBossIDs")
+	local classification = UnitClassification(unit)
+	if classification == "elite" 
+		or classification == "rareelite" 
+		or classification == "rare" 
+		or classification == "worldboss" 
+		or UnitLevel(unit) == -1 
+		or boss.BossIDs[UnitID(unit)] then 
+			return true 
+		end
+    return false
+end
+
+NeP.Lib.AutoDots = function(Spell, Health, Duration, Distance, Classification)
+	
+	-- Check if we have the spell before anything else...
+	if not IsUsableSpell(Spell) then return false end
+	
+	-- Classification Hacks
+	local passThruClassification = false
 	
 	-- So we dont need to fill everything
-	if not IsUsableSpell(_spell) then return false end
-	if _classification == nil then _classification = 'all' end
-	if _distance == nil then _distance = 40 end
-	if _health == nil then _health = 100 end
-	if _duration == nil then _duration = 0 end
+	if Classification == nil then Classification = 'elite' end
+	if Distance == nil then Distance = 40 end
+	if Health == nil then Health = 100 end
+	if Duration == nil then Duration = 0 end
 	
 	for i=1,#enemieCache do
-		local _object = enemieCache[i]
-		if _lastDotted == _object.key then return false end
-		if UnitAffectingCombat(_object.key) then
-			if UnitClassification(_object.key) == _classification or _classification == 'all' then
-				if _object.health <= _health then
-					local _,_,_,_,_,_,debuff = UnitDebuff(_object.key, GetSpellInfo(_spell), nil, "PLAYER")
-					if not debuff or debuff - GetTime() < _duration then
-						if UnitCanAttack("player", _object.key)
-						and _object.distance <= _distance then
-							if NeP.Core.Infront('player', _object.key) then
-								ProbablyEngine.dsl.parsedTarget = _object.key
-								_lastDotted = _object.key
+		local Obj = enemieCache[i]
+		if UnitAffectingCombat(Obj.key) then
+			if (Classification == 'elite' and NeP_isElite(Obj.key)) or Classification == 'all' then passThruClassification = true end
+			if UnitClassification(Obj.key) == Classification or passThruClassification then
+				if Obj.health <= Health then
+					local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, "PLAYER")
+					if not debuff or debuff - GetTime() < Duration then
+						if UnitCanAttack("player", Obj.key)
+						and Obj.distance <= Distance then
+							if NeP.Core.Infront('player', Obj.key) then
+								ProbablyEngine.dsl.parsedTarget = Obj.key
 								return true
 							end					 
 						end

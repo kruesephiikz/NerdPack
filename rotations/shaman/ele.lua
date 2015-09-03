@@ -144,7 +144,7 @@ local exeOnLoad = function()
 		'autoDots', 
 		'Interface\\Icons\\spell_fire_flameshock', 
 		'Enable Automated Dotting', 
-		'Cast flameshock on all enemie units.')
+		'Cast flameshock on all elite (or above) enemie units.')
 	ProbablyEngine.toggle.create(
 		'totems', 
 		'Interface\\Icons\\spell_fire_flameshock', 
@@ -318,7 +318,7 @@ ProbablyEngine.rotation.register_custom(262, NeP.Core.GetCrInfo('Shamman - Eleme
 			{_Survival, "player.health < 100" },
 			{_totems, "toggle.totems"},
 			{ "Earth Shock", { 
-				(function() return NeP.Lib.AutoDots(Earth Shock, 100, 0, 40) end),
+				(function() return NeP.Lib.AutoDots("Earth Shock", 100, 0, 40, "elite") end),
 				"toggle.autoDots"
 			}},
 			{_AoE, (function() return NeP.Lib.SAoE(8, 5) end) },
