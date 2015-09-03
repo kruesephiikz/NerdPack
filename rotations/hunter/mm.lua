@@ -43,29 +43,30 @@ local _ALL = {
 }
 
 local Pet = {
+	{"/cast Call Pet 1", "!pet.exists" },
   	{{ -- Pet Dead
 		{ "55709", "!player.debuff(55711)"}, -- Heart of the Phoenix
 		{ "982" } -- Revive Pet
-	}, {"pet.dead", "toggle.ressPet"}},
-	{"/cast Call Pet 1", "!pet.exists" },
-  	{{ -- Pet Alive
-		{ "53271", "player.state.stun" }, -- Master's Call
-		{ "53271", "player.state.root" }, -- Master's Call
-		{ "53271", { -- Master's Call
-			"player.state.snare", 
-			"!player.debuff(Dazed)" 
-		}},
-		{ "53271", "player.state.disorient" }, -- Master's Call
-		{ "136", { -- Mend Pet
-			"pet.health <= 75", 
-			"!pet.buff(136)" 
-		}}, 
-		{ "34477", { -- Missdirect // PET 
-			"!player.buff(35079)", 
-			"!focus.exists", 
-			"target.threat > 85" 
-		}, "pet" },
-	}, { "player.alive", "pet.exists" } },
+	}, {"pet.dead", "toggle.ressPet"}},	
+}
+
+local Pet_inCombat = {
+	{ "53271", "player.state.stun" }, -- Master's Call
+	{ "53271", "player.state.root" }, -- Master's Call
+	{ "53271", { -- Master's Call
+		"player.state.snare", 
+		"!player.debuff(Dazed)" 
+	}},
+	{ "53271", "player.state.disorient" }, -- Master's Call
+	{ "136", { -- Mend Pet
+		"pet.health <= 75", 
+		"!pet.buff(136)" 
+	}}, 
+	{ "34477", { -- Missdirect // PET 
+		"!player.buff(35079)", 
+		"!focus.exists", 
+		"target.threat > 85" 
+	}, "pet" },
 }
 
 local Cooldowns = {
@@ -124,6 +125,7 @@ ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksm
 			{Survival, "player.health < 100"},
 			{Cooldowns, "modifier.cooldowns"},
 			{Pet},
+			{Pet_inCombat, {"player.alive", "pet.exists"} },
 			{focusFire, { 
 				"pet.exists", 
 				"!player.buff(Focus Fire)", 
@@ -132,4 +134,7 @@ ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksm
 			}},
 			{inCombat, { "target.NePinfront", "target.range <= 40" }},
 		}, "!player.channeling" }
-	}, _All, lib)
+	},{ -- Out-Combat
+		{_All},
+		{Pet}
+	}, lib)
