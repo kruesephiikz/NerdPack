@@ -328,7 +328,7 @@ ProbablyEngine.rotation.register_custom(262, NeP.Core.GetCrInfo('Shamman - Eleme
 		{_Moving, { "player.moving", "!player.buff(Spiritwalker's Grace)" }},
 		{{ -- Conditions
 			{_ALL},
-			{_Cooldowns},
+			{_Cooldowns, "modifier.cooldowns"},
 			{_Survival},
 			{_mouseOvers, "toggle.mouseovers"},
 			{_AoE, (function() return NeP.Lib.SAoE(8, 5) end)},
