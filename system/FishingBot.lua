@@ -1,13 +1,20 @@
+-- Offsets
 local OBJECT_BOBBING_OFFSET = 0x1e0
 local OBJECT_CREATOR_OFFSET = 0x30
+
+-- Vars
 local _fishRun = false
 local _timeStarted = nil
 local _Lootedcounter = 0
 
-_currentGear = {}
+--[[-----------------------------------------------
+** equipNormalGear **
+DESC: Equip the gear we had before starting.
 
+Build By: MTS
+---------------------------------------------------]]
+local _currentGear = {}
 local function equipNormalGear()
-	-- Equip the gear we had before starting... 
 	if #_currentGear > 0 then
 		for k=1, #_currentGear do
 			NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Reseting Gear): "..GetItemInfo(_currentGear[k]).." (remaning): "..#_currentGear)
@@ -18,6 +25,12 @@ local function equipNormalGear()
 	wipe(_currentGear)
 end
 
+--[[-----------------------------------------------
+** GUI table **
+DESC: Gets returned to PEs build GUI to create it.
+
+Build By: MTS
+---------------------------------------------------]]
 NeP.Interface.Fishing = {
 	key = "NePFishingConf",
 	profiles = true,
@@ -105,6 +118,12 @@ NeP.Interface.Fishing = {
 	}
 }
 
+--[[-----------------------------------------------
+** DoCountLoot **
+DESC: Counts the loot from fishing.
+
+Build By: darkjacky @ github
+---------------------------------------------------]]
 local DoCountLoot = false
 local CounterFrame = CreateFrame("frame")
 CounterFrame:RegisterEvent("LOOT_READY")
@@ -120,12 +139,19 @@ CounterFrame:SetScript("OnEvent", function()
 	end
 end )
 
+--[[-----------------------------------------------
+** getBobber **
+DESC: Gets the fishing bober object.
+Only Suppoted by FH atm...
+
+Build By: MTS
+---------------------------------------------------]]
 local function GetObjectGUID(object)
-  return tonumber(ObjectDescriptor(object, 0, Types.ULong))
+	return tonumber(ObjectDescriptor(object, 0, Types.ULong))
 end
 
 local function IsObjectCreatedBy(owner, object)
-  return tonumber(ObjectDescriptor(object, OBJECT_CREATOR_OFFSET, Types.ULong)) == GetObjectGUID(owner)
+	return tonumber(ObjectDescriptor(object, OBJECT_CREATOR_OFFSET, Types.ULong)) == GetObjectGUID(owner)
 end
 
 local BobberName = "Fishing Bobber"
@@ -142,6 +168,13 @@ local function getBobber()
 	end
 end
 
+--[[-----------------------------------------------
+** _startFish **
+DESC: Actualy start fishing ;P
+
+Build By: MTS
+Modifed by: darkjacky @ github
+---------------------------------------------------]]
 local FishCD = 0
 local function _startFish()
 	local BobberObject = getBobber()
@@ -159,7 +192,12 @@ local function _startFish()
 	end
 end
 
--- When applied to your fishing pole, increases Fishing by 200 for 10 min. (WoD)
+--[[-----------------------------------------------
+** _WormSupreme **
+DESC: When applied to your fishing pole, increases Fishing by 200 for 10 min. (WoD)
+
+Build By: darkjacky @ github
+---------------------------------------------------]]
 local WormSpellID, WormItemID, WormCD = 5386, 118391, 0
 local function _WormSupreme()
 	if getBobber() then return end
@@ -173,6 +211,12 @@ local function _WormSupreme()
 	end
 end
 
+--[[-----------------------------------------------
+** Hats **
+DESC: finds and equips fishing hats.
+
+Build By: MTS
+---------------------------------------------------]]
 local hatsTable = {
 	[1] = { Name = "Lucky Fishing Hat", ID = 19972, Bonus = 5 },
 	[2] = { Name = "Nat's Hat", ID = 88710, Bonus = 5 },
@@ -212,6 +256,12 @@ local function _equitHat()
 	end
 end
 
+--[[-----------------------------------------------
+** Poles **
+DESC: finds and equips fishing Poles.
+
+Build By: MTS
+---------------------------------------------------]]
 local polesTable = {
 	[1] = { Name = "Fishing Pole", ID = 6256, Bonus = 0 },
 	[2] = { Name = "Strong Fishing Pole", ID = 6365, Bonus = 5 },
@@ -267,6 +317,12 @@ local function _equitPole()
 	end
 end
 
+--[[-----------------------------------------------
+** Baits **
+DESC: finds and equips fishing Baits.
+
+Build By: MTS
+---------------------------------------------------]]
 local _baitsTable = {
 	['jsb'] = { ID = 110274, Debuff = 158031, Name = 'Jawless Skulker Bait' },
 	['fsb'] = { ID = 110289, Debuff = 158034, Name = 'Fat Sleeper Bait' },
@@ -298,6 +354,12 @@ local function _CarpDestruction()
 	end
 end
 
+--[[-----------------------------------------------
+** FormatTime **
+DESC: Takes seconds and returns H:M:S.
+
+Build By: darkjacky @ Github
+---------------------------------------------------]]
 local function round(num, idp)
   local mult = 10^(idp or 0)
   return math.floor(num * mult + 0.5) / mult
@@ -320,14 +382,20 @@ local _fshCreated = false
 function NeP.Interface.FishingGUI()
 	NeP.Core.BuildGUI('fishing', NeP.Interface.Fishing)
 	local fshGUI = NeP.Core.getGUI('fishing')
+	
 	if not _fshCreated then
 		_fshCreated = true
+		
 		C_Timer.NewTicker(0.5, (function()
 			if NeP.Core.CurrentCR then
+				
+				-- Update GUI Elements
 				if _timeStarted ~= nil then
 					fshGUI.elements.current_Time:SetText(FormatTime(round(GetTime() - _timeStarted)))
 					fshGUI.elements.current_Loot:SetText(_Lootedcounter)
 				end
+				
+				-- Run Functions
 				if NeP.Extras.BagSpace() > 2 then
 					_CarpDestruction()
 					if _fishRun then
@@ -336,12 +404,15 @@ function NeP.Interface.FishingGUI()
 						_AutoBait()
 						_WormSupreme()
 						if FireHack then
-							-- Only Works with FH atm...
+							-- Only Works with FH atm, due to object handling...
+							-- (if someday more unlockers alow this then abstract FH only stuff)
 							_startFish()
 						end
 					end
 				end
+				
 			end
 		end), nil)
+		
 	end
 end

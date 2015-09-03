@@ -1,16 +1,3 @@
-local DiesalGUI = LibStub("DiesalGUI-1.0");
-local _addonColor = '|cff'..NeP.Interface.addonColor;
-local _tittleGUI = '|T'..NeP.Info.Logo..':20:20|t'.._addonColor..NeP.Info.Nick;
-local _objectTable = NeP.ObjectManager.unitFriendlyCache;
-local _Displaying = 'Friendly List';
-local OPTIONS_WIDTH = 400;
-local OPTIONS_HEIGHT = 400;
-local scrollMax = 0;
-local SETTINGS_WIDTH = 200;
-
-local statusBars = { }
-local statusBarsUsed = { }
-
 NeP.Config.defaults['OMList'] = {
 	['test'] = false,
 	['ShowDPS'] = false,
@@ -19,19 +6,40 @@ NeP.Config.defaults['OMList'] = {
 	['ShowHealthText'] = true
 }
 
+-- Tables to Control Status Bars Used
+local statusBars = { }
+local statusBarsUsed = { }
+
+-- Vars
+local OPTIONS_WIDTH = 400;
+local OPTIONS_HEIGHT = 400;
+local SETTINGS_WIDTH = 200;
+local _objectTable = NeP.ObjectManager.unitFriendlyCache;
+local _Displaying = 'Friendly List';
+local scrollMax = 0;
+
+-- Locals
+local DiesalGUI = LibStub("DiesalGUI-1.0");
+local _addonColor = '|cff'..NeP.Interface.addonColor;
+local _tittleGUI = '|T'..NeP.Info.Logo..':20:20|t'.._addonColor..NeP.Info.Nick;
+
 local getAllObjects = function()
 	local ObjTable = {}
+	
+	-- Only FH supports game objects yet...
 	if FireHack then
-		for i=1, ObjectCount() do
+		for i=1, ObjectCount(TYPE_GAMEOBJECT) do
 			local Obj = ObjectWithIndex(i)
 			if ObjectExists(Obj) then
 				ObjTable[#ObjTable+1] = {
 					key=Obj,
-					name=UnitName(Obj)
+					name=UnitName(Obj),
+					distance=NeP.Core.Distance('player', Obj)
 				}
 			end
 		end
 	end
+	
 	return ObjTable
 end
 
@@ -323,6 +331,7 @@ function OMGUI_RUN()
 		end
 	end), nil)
 
+-- Hide frame
 NeP_OMLIST:Hide()
 	
  end
