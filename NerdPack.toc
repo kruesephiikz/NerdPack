@@ -21,9 +21,9 @@ system\ObjectManager\ObjectCache.lua
 system\ObjectManager\SettingsGUI.lua
 system\ObjectManager\ListGUI.lua
 system\Tracker.lua
+system\LibCore.lua
 system\Extras.lua
 system\Overlays.lua
-system\LibCore.lua
 system\FishingBot.lua
 system\ItemBot.lua
 interface\splash.lua

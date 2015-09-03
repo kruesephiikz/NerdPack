@@ -13,6 +13,7 @@ local UnitAffectingCombat = UnitAffectingCombat
 local UnitIsVisible = UnitIsVisible
 local UnitExists = UnitExists
 local objectDistance = NeP.Core.Distance
+local getUnitRange = NeP.Lib.getUnitRange
 
 --[[-----------------------------------------------
 ** Automated Movements **
@@ -21,17 +22,17 @@ DESC: Moves to a unit.
 Build By: MTS
 ---------------------------------------------------]]
 local NeP_rangeTable = {
-	["HUNTER"] = {style = "ranged", Range = 40},
-	["WARLOCK"] = {style = "ranged",  Range = 40},
-	["PRIEST"] = {style = "ranged",  Range = 40},
-	["PALADIN"] = {style = "melee", Range = 1.5},
-	["MAGE"] = {style = "ranged",  Range = 40},
-	["ROGUE"] = {style = "melee", Range = 1.5},
-	["DRUID"] = {style = "melee", Range = 1.5},
-	["SHAMAN"] = {style = "ranged",  Range = 40},
-	["WARRIOR"] = {style = "melee", Range = 1.5},
-	["DEATHKNIGHT"] = {style = "melee", Range = 1.5},
-	["MONK"] = {style = "melee", Range = 1.5},
+	["HUNTER"] = "ranged",
+	["WARLOCK"] = "ranged",
+	["PRIEST"] = "ranged",
+	["PALADIN"] = "melee",
+	["MAGE"] = "ranged", 
+	["ROGUE"] = "melee",
+	["DRUID"] = "melee",
+	["SHAMAN"] = "ranged",
+	["WARRIOR"] = "melee",
+	["DEATHKNIGHT"] = "melee",
+	["MONK"] = "melee"
 }
 
 local function _manualMoving()
@@ -50,28 +51,20 @@ local function _manualMoving()
 end
 
 function NeP.Extras.MoveTo()
-	
-	local _class, _className = UnitClass('player')
-	local _classRange = NeP_rangeTable[_className]
-	local unitSpeed = GetUnitSpeed('player')
-  	
 	if NeP.Core.PeFetch('NePConf', 'AutoMove') then
-  		if UnitExists('target') then
-			if UnitIsVisible('target') and not UnitChannelInfo("player") then
-				if inLoS('player', 'target') then
-					if not _manualMoving() then
-						if FireHack then
-							local _Range = _classRange.Range + UnitCombatReach('player') + UnitCombatReach('target')
-							-- Stop Moving
-							if ((_classRange.style == "ranged" and objectDistance("player", 'target') < _Range)
-							or (_classRange.style == "melee" and objectDistance("player", 'target') < _Range))
-							and unitSpeed ~= 0 then 
-								MoveTo(ObjectPosition('player'))
-							-- Start Moving
-							elseif objectDistance("player", 'target') > _Range then
-								NeP.Alert('Moving to: '..GetUnitName('target', false)) 
-								MoveTo(ObjectPosition('target'))
-							end
+		if UnitIsVisible('target') and not UnitChannelInfo("player") then
+			if inLoS('player', 'target') then
+				if not _manualMoving() then
+					local _Range = getUnitRange('target', NeP_rangeTable[select(2, UnitClass('player'))])
+					local unitSpeed = GetUnitSpeed('player')
+					if FireHack then
+						-- Stop Moving
+						if _Range > objectDistance("player", 'target') and unitSpeed ~= 0 then 
+							MoveTo(ObjectPosition('player'))
+						-- Start Moving
+						elseif _Range < objectDistance("player", 'target') then
+							NeP.Alert('Moving to: '..GetUnitName('target', false)) 
+							MoveTo(ObjectPosition('target'))
 						end
 					end
 				end
@@ -90,14 +83,12 @@ function NeP.Extras.FaceTo()
 	if NeP.Core.PeFetch('NePConf', 'AutoFace') then
 		local unitSpeed, _ = GetUnitSpeed('player')
 		if not _manualMoving() and unitSpeed == 0 then
-			if UnitExists('target') then
-				if UnitIsVisible('target') and not UnitChannelInfo("player")then
-					if not NeP.Core.Infront('player', 'target') then
-						if inLoS('player', 'target') then
-							if FireHack then
-								NeP.Alert('Facing: '..GetUnitName('target', false)) 
-								FaceUnit('target')
-							end
+			if UnitIsVisible('target') and not UnitChannelInfo("player")then
+				if not NeP.Core.Infront('player', 'target') then
+					if inLoS('player', 'target') then
+						if FireHack then
+							NeP.Alert('Facing: '..GetUnitName('target', false)) 
+							FaceUnit('target')
 						end
 					end
 				end
@@ -283,8 +274,10 @@ C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR and peConfig.read('button_states', 'MasterToggle', false) then
 		NeP.Extras.dummyTest('Refresh')
 		if ProbablyEngine.module.player.combat then
-			NeP.Extras.MoveTo()
-			NeP.Extras.FaceTo()
+			if UnitExists('target') then
+				NeP.Extras.MoveTo()
+				NeP.Extras.FaceTo()
+			end
 			NeP.Extras.autoTarget()
 		end
 	end
