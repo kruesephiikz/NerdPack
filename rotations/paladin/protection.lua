@@ -249,6 +249,8 @@ local InCombat = {
 		}, "talent(7, 2)" },
 	}, "modifier.cooldowns" },
 
+	{ "62124", (function() return NeP.Lib.canTaunt() end) }, -- Reckoning
+	
 	-- Proc's
 	{ "31935", "player.buff(Grand Crusader)", "target" }, 		-- Avenger's Shield // Proc
 
