@@ -111,14 +111,15 @@ Classifications:
 
 Build By: MTS
 ---------------------------------------------------]]
-NeP.Lib.canTaunt = function(Classification)
-	if NeP.Core.PeFetch('NePConf', 'Taunts') then
+NeP.Lib.canTaunt = function()
+	if NeP.Core.PeFetch('NePConf', 'Taunts') ~= "Disabled" then
 		for i=1,#enemieCache do
 			local Obj = enemieCache[i]
-			if (Classification == "elite" and NeP_isElite(Obj.key)) or Classification == "all" then
+			if (NeP.Core.PeFetch('NePConf', 'Taunts') == "elite" and NeP_isElite(Obj.key)) 
+			or NeP.Core.PeFetch('NePConf', 'Taunts') == "all" then
 				if UnitIsTappedByPlayer(Obj.key) and Obj.distance <= 40 then
 					if UnitAffectingCombat(Obj.key) then
-						if UnitThreatSituation(Obj.key) and UnitThreatSituation(Obj.key) >= 2 then
+						if UnitThreatSituation("player", Obj.key) and UnitThreatSituation("player", Obj.key) <= 2 then
 							if NeP.Core.Infront('player', Obj.key) then
 								ProbablyEngine.dsl.parsedTarget = Obj.key
 								return true 

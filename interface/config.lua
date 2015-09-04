@@ -48,12 +48,26 @@ NeP.Interface.General = {
 						default = true,
 						desc = "Enables the use of automated dispelling."
 					},
-					{ 
-						type = "checkbox", 
-						text = "Automated Taunting", 
-						key = "Taunts", 
-						default = false, 
-						desc = "Enables or disables using smart automatic taunts."
+					{
+						type = "dropdown",
+						text = "Automated Tauting",
+						desc = "Enables or disables using smart automatic taunting.",
+						key = "Taunts",
+						list = {
+							{
+								text = "All",
+								key = "all"
+							},
+							{
+								text = "Elites",
+								key = "elite"
+							},
+							{
+								text = "Disabled",
+								key = "Disabled"
+							},
+						},
+						default = "elite",
 					},
 					{ 
 						type = "checkbox", 
