@@ -1,3 +1,7 @@
+local dynEval = NeP.Core.dynamicEval
+local PeFetch = NeP.Core.PeFetch
+local Battle_Print = false
+
 NeP.Interface.WarrProt = {
 	key = "NePConfigWarrProt",
 	profiles = true,
@@ -81,32 +85,26 @@ NeP.Interface.WarrProt = {
 	}
 }
 
-local Battle_Print = false
-
 local exeOnLoad = function()
 	NeP.Splash()
 end
 
 local inCombat_Defensive = {
-
-	-- Rotation normal
-		{ "Heroic Strike", {
-			"player.rage > 75", 
-			"target.health >=20"
-		}, "target"},
-		{ "Execute", {
-			"player.rage > 75", 
-			"target.health <=20"
-		}, "target"},
-		{ "Shield Slam"},
-		{ "Revenge"},
-		{ "Devastate"},
-		{ "Thunder Clap", "target.debuff(Deep Wounds).duration < 2" },
-		
+	{ "Heroic Strike", {
+		"player.rage > 75", 
+		"target.health >=20"
+	}, "target"},
+	{ "Execute", {
+		"player.rage > 75", 
+		"target.health <=20"
+	}, "target"},
+	{ "Shield Slam"},
+	{ "Revenge"},
+	{ "Devastate"},
+	{ "Thunder Clap", "target.debuff(Deep Wounds).duration < 2" },	
 }
 
 local inCombat_Gladiator = {
-
 	{ "Shield Charge", "!player.buff(Shield Charge)" },
 	{ "Shield Charge", "spell(Shield Charge).charges >= 2" },
 	{ "Heroic Strike", "player.buff(Shield Charge)" },
@@ -116,11 +114,9 @@ local inCombat_Gladiator = {
 	{ "Revenge" },
 	{ "Execute" },
 	{ "Devastate" }
-
 }
 
 local inCombat_Battle = {
-
 	{ "/run print('[MTS] This stance is not yet supported! :(')", 
 		(function() 
 			if Battle_Print == false then 
@@ -136,37 +132,31 @@ local inCombat_Battle = {
 			Battle_Print = false 
 			return true
 		end)
-	} },
-
+	}},
 }
 
 local AoE = {
-	
 	{ "Thunder Clap" },
-
 }
 
 local Survival = {
-	
 	-- Def Cooldowns
-  	{ "Rallying Cry", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'RallyingCry')) end) },  
-  	{ "Last Stand", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'LastStand')) end) },
-  	{ "Shield Wall", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'ShieldWall')) end) },
+  	{ "Rallying Cry", (function() return dynEval("player.health <= " .. PeFetch('NePConfigWarrProt', 'RallyingCry')) end) },  
+  	{ "Last Stand", (function() return dynEval("player.health <= " .. PeFetch('NePConfigWarrProt', 'LastStand')) end) },
+  	{ "Shield Wall", (function() return dynEval("player.health <= " .. PeFetch('NePConfigWarrProt', 'ShieldWall')) end) },
   	{ "Shield Block", "!player.buff(Shield Block)" },
   	{ "Shield Barrier", { 
   		"!player.buff(Shield Barrier)",
-  		(function() return NeP.Core.dynamicEval("player.rage <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'ShieldBarrier')) end)
+  		(function() return dynEval("player.rage >= " .. PeFetch('NePConfigWarrProt', 'ShieldBarrier')) end)
   	}},
 
   	-- Self Heals
   	{ "Impending Victory", "player.health <= 85" },
   	{ "Victory Rush", "player.health <= 85" },
-  	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfigWarrProt', 'Healthstone')) end) }, --Healthstone
-
+  	{ "#5512", (function() return dynEval("player.health <= " .. PeFetch('NePConfigWarrProt', 'Healthstone')) end) }, --Healthstone
 }
 
 local Cooldowns = {
-	
 	{ "Bloodbath" },
   	{ "Avatar" },
   	{ "Recklessness", "target.range <= 8" },
@@ -174,7 +164,6 @@ local Cooldowns = {
   	{ "Bladestorm", "target.range <= 8" },
   	{ "Berserker Rage" },
   	{ "#gloves" },
-
 }
 
 ProbablyEngine.rotation.register_custom(73, NeP.Core.GetCrInfo('Warrior - Protection'), 
