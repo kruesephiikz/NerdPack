@@ -73,16 +73,16 @@ NeP.Interface.Fishing = {
 			default = true, 
 		},
 		{
-			type = "checkbox", 
-			text = "Use Worm Supreme", 
-			key = "WormSupreme", 
-			default = true, 
+			type = "checkbox",
+			text = "Use Fish Hooks",
+			key = "ApplyFishHooks",
+			default = true,
 		},
-		{  
-			type = "checkbox",  
-			text = "Use Sharpened Fish Hook",  
-			key = "SharpenedFishHook",  
-			default = false,  
+		{
+			type = "checkbox",
+			text = "Use Bladebone Hooks",
+			key = "BladeBoneHook",
+			default = false,
 		},
 		{  
 			type = "checkbox",  
@@ -117,6 +117,30 @@ NeP.Interface.Fishing = {
 		{ key = 'current_average', type = "text", text = "...", size = 11, align = "right", offset = 0 },
 	}
 }
+
+--[[-----------------------------------------------
+** ItemInBag **
+DESC: returns true and a count if it finds the specified ItemID in your bags.
+
+Build By: darkjacky @ github
+---------------------------------------------------]]
+
+local function ItemInBag( ItemID )
+	local ItemCount = 0
+	local ItemFound = false
+	for bag=0,4 do
+		for slot=1,GetContainerNumSlots(bag) do
+			if select(10, GetContainerItemInfo(bag, slot)) == ItemID then
+				ItemFound = true
+				ItemCount = ItemCount + select(2, GetContainerItemInfo(bag, slot))
+			end
+		end
+	end
+	if ItemFound then
+		return true, ItemCount
+	end
+	return false, 0
+end
 
 --[[-----------------------------------------------
 ** DoCountLoot **
@@ -193,20 +217,74 @@ local function _startFish()
 end
 
 --[[-----------------------------------------------
-** _WormSupreme **
-DESC: When applied to your fishing pole, increases Fishing by 200 for 10 min. (WoD)
+** _FishHook **
+DESC: Applies the best of any fishing hooks found in bag.
 
 Build By: darkjacky @ github
 ---------------------------------------------------]]
-local WormSpellID, WormItemID, WormCD = 5386, 118391, 0
-local function _WormSupreme()
-	if getBobber() then return end
-	if NeP.Core.PeFetch('NePFishingConf', 'WormSupreme') and GetTime() > WormCD then
+local FishHooks = {
+	{ ItemID = 118391, BuffID = 5386, Weight = 200,	ItemName = "Worm Supreme"               }, -- 10 min
+	{ ItemID = 124674, BuffID = 5386, Weight = 200,	ItemName = "Day-Old Darkmoon Doughnut"  }, -- 10 min
+	{ ItemID = 68049,  BuffID = 4225, Weight = 150,	ItemName = "Heat-Treated Spinning Lure" }, -- 15 min
+	{ ItemID = 46006,  BuffID = 3868, Weight = 100,	ItemName = "Glow Worm"                  }, -- 1 hour
+	{ ItemID = 34861,  BuffID = 266,  Weight = 100,	ItemName = "Sharpened Fish Hook"        }, -- 10 min
+	{ ItemID = 6533,   BuffID = 266,  Weight = 100,	ItemName = "Aquadynamic Fish Attractor" }, -- 10 min
+	{ ItemID = 7307,   BuffID = 265,  Weight = 75,	ItemName = "Flesh Eating Worm"          }, -- 10 min
+	{ ItemID = 6532,   BuffID = 265,  Weight = 75,	ItemName = "Bright Baubles"             }, -- 10 min
+	{ ItemID = 62673,  BuffID = 266,  Weight = 75,	ItemName = "Feathered Lure"             }, -- 10 min
+	{ ItemID = 6811,   BuffID = 264,  Weight = 50,	ItemName = "Aquadynamic Fish Lens"      }, -- 10 min
+	{ ItemID = 6530,   BuffID = 264,  Weight = 50,	ItemName = "Nightcrawlers"              }, -- 10 min
+	{ ItemID = 69907,  BuffID = 263,  Weight = 25,	ItemName = "Corpse Worm"                }, -- 10 min
+	{ ItemID = 6529,   BuffID = 263,  Weight = 25,	ItemName = "Shiny Bauble"               }, -- 10 min
+	{ ItemID = 67404,  BuffID = 4264, Weight = 15,	ItemName = "Glass Fishing Bobber"       }, -- 10 min
+}
+
+local HookCD = 0
+local function _FishHook()
+	if getBobber() then return end -- if we are fishing we don't want to interrupt it.
+	if UnitCastingInfo("player") then return true end -- we are casting stop here.
+	if NeP.Core.PeFetch('NePFishingConf', "ApplyFishHooks") and GetTime() > HookCD then
 		if select(7, GetItemInfo(GetInventoryItemLink("player", 16))) == "Fishing Poles" then
 			local hasEnchant, timeleft, _, enchantID = GetWeaponEnchantInfo()
-			if hasEnchant and timeleft / 1000 > 15 and enchantID == WormSpellID then return end -- if we have the itemenchant or if we are fishing don't run.
-			WormCD = GetTime() + 5 -- it seems to be chain casting it otherwise :S
-			UseItem(WormItemID)
+			if hasEnchant and timeleft / 1000 > 15 then
+				for i=1,#FishHooks do
+					if enchantID == FishHooks[i].BuffID then
+						return -- if we have the item enchant don't run.
+					end
+				end
+			end
+			for i=1,#FishHooks do
+				local HasItem, Count = ItemInBag(FishHooks[i].ItemID)
+				if HasItem then
+					HookCD = GetTime() + 5 -- it seems to be chain casting it otherwise :S
+					UseItem(FishHooks[i].ItemID)
+					NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Used Hook): "..FishHooks[i].ItemName.." " ..tostring(Count - 1).." left." )
+					return true
+				end
+			end
+		end
+	end
+end
+
+--[[-----------------------------------------------
+** _BladeBone **
+DESC: Applies the best of any fishing hook found in bag.
+
+Build By: darkjacky @ github
+---------------------------------------------------]]
+local BladeBoneCD = 0
+local function _BladeBone()
+	if getBobber() then return end -- if we are fishing we don't want to interrupt it.
+	if UnitCastingInfo("player") then return true end -- we are casting stop here.
+	if NeP.Core.PeFetch('NePFishingConf', "BladeBoneHook") and GetTime() > BladeBoneCD then
+		local expires = select(7, UnitBuff("player", GetSpellInfo(182226)))
+		if expires and expires - GetTime() > 15 then return end
+		local HasItem, Count = ItemInBag(122742)
+		if HasItem then
+			BladeBoneCD = GetTime() + 5 -- it seems to be chain casting it otherwise :S
+			UseItem(122742)
+			NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Used Hook): "..GetSpellInfo(182226).." " ..tostring(Count - 1).." left." )
+			return true
 		end
 	end
 end
@@ -402,7 +480,8 @@ function NeP.Interface.FishingGUI()
 						_equitHat()
 						_equitPole()
 						_AutoBait()
-						_WormSupreme()
+						if _FishHook() then return end -- If it is true we stop because we have to wait.
+						if _BladeBone() then return end -- Same here
 						if FireHack then
 							-- Only Works with FH atm, due to object handling...
 							-- (if someday more unlockers alow this then abstract FH only stuff)
