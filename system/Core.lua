@@ -6,7 +6,7 @@ NeP = {
 		CurrentCR = false,
 		hiding = false,
 		--[[
-				** PE Warps **
+				** PE Abstract's **
 			These are used to have a easly way to update stuff related
 			to ProbablyEngine.
 		]]
@@ -87,11 +87,7 @@ DESC: Saved variables.
 Build By: MTS
 ---------------------------------------------------]]
 NeP.Config = {
-	defaults = {
-		['CONFIG'] = {
-			['test'] = false,
-		},
-	}
+	defaults = {}
 }
 
 local LoadNePData = CreateFrame("Frame")
@@ -102,12 +98,13 @@ LoadNePData:SetScript("OnEvent", function(self, event, addon)
 	if not NePData or NePData == nil then 
 	 	NePData = NeP.Config.defaults; 
 	end
-	
-	-- Functions to handle VARIABLES.
+
+	-- Reset
 	NeP.Config.resetConfig = function(config)
 		NePData[config] = NeP.Config.defaults[config]
 	end
 
+	-- Read
 	NeP.Config.readKey = function(config, key)
 		if NePData[config] ~= nil then
 			if NePData[config][key] ~= nil then
@@ -120,10 +117,12 @@ LoadNePData:SetScript("OnEvent", function(self, event, addon)
 		end
 	end
 
+	-- Write
 	NeP.Config.writeKey = function(config, key, value)
 		NePData[config][key] = value
 	end
 
+	-- Toggle
 	NeP.Config.toggleKey = function(config, key)
 		if NePData[config][key] ~= nil then
 			NePData[config][key] = not NePData[config][key]
@@ -132,7 +131,11 @@ LoadNePData:SetScript("OnEvent", function(self, event, addon)
 		end
 	end
 	
-	-- GUI's wich depend on NePData
+	--[[
+		Run GUI's wich depend on NePData.
+		This is the best way i could think of to make sure nothing
+		wich depends on NePData gets loaded too early.
+	]]
 	StatusGUI_RUN();
 	OMGUI_RUN()
 
@@ -146,16 +149,22 @@ Build By: MTS
 ---------------------------------------------------]]
 ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)
 	local command, text = msg:match("^(%S*)%s*(.-)$")
+	
 	if command == 'config' or command == 'c' then
 		NeP.Interface.ConfigGUI()
+	
 	elseif command == 'class' or command == 'cl' then
 		NeP.Interface.ClassGUI()
+	
 	elseif command == 'info' or command == 'i' then
 		NeP.Interface.InfoGUI()
+	
 	elseif command == 'cache' or command == 'cch' or command == 'om' then
 		NeP.Interface.CacheGUI()
+	
 	elseif command == 'hide' then
 		NeP.Core.HideAll()
+	
 	elseif command == 'show' then
 		if NeP.Core.hiding then
 			NeP.Core.hiding = false
@@ -163,11 +172,12 @@ ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)
 			NeP_Frame:Show()
 			NeP.Core.Print('Now Showing everything again.')
 		end
+
 	elseif command == 'overlay' or command == 'ov' or command == 'overlays' then
 		NeP.Interface.OverlaysGUI()
-	elseif command == 'test' then
-		NeP.Interface.OMGUI()
+	
 	else 
+		-- Print all available commands.
 		NeP.Core.Print('/config - (Opens General Settings GUI)')
 		NeP.Core.Print('/status - (Opens Status GUI)')
 		NeP.Core.Print('/class - (Opens Class Settings GUI)')
@@ -230,6 +240,8 @@ DESC: Hide everything, you might need this for
 livestreams or recording.
 While hiding all alerts/notifications, sounds &
 prints should not be displayed.
+
+Could be improved...
 
 Build By: MTS
 ---------------------------------------------------]]
