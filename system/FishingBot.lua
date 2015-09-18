@@ -438,11 +438,6 @@ DESC: Takes seconds and returns H:M:S.
 
 Build By: darkjacky @ Github
 ---------------------------------------------------]]
-local function round(num, idp)
-  local mult = 10^(idp or 0)
-  return math.floor(num * mult + 0.5) / mult
-end
-
 local function FormatTime( seconds )
 	if not seconds then return "0 Seconds" end
 	local hours = math.floor(seconds / 3600)
@@ -469,7 +464,7 @@ function NeP.Interface.FishingGUI()
 				
 				-- Update GUI Elements
 				if _timeStarted ~= nil then
-					fshGUI.elements.current_Time:SetText(FormatTime(round(GetTime() - _timeStarted)))
+					fshGUI.elements.current_Time:SetText(FormatTime(NeP.Core.Round(GetTime() - _timeStarted)))
 					fshGUI.elements.current_Loot:SetText(_Lootedcounter)
 				end
 				

@@ -51,6 +51,9 @@ NeP = {
 	}
 }
 
+--[[-----------------------------------------------
+	** Locals **
+---------------------------------------------------]]
 local _addonColor = '|cff'..NeP.Interface.addonColor
 
 --[[-----------------------------------------------
@@ -69,6 +72,12 @@ function NeP.Interface.ClassGUI()
 	end
 end
 
+--[[-----------------------------------------------
+	** NePData **
+DESC: Saved variables.
+
+Build By: MTS
+---------------------------------------------------]]
 NeP.Config = {
 	defaults = {
 		['CONFIG'] = {
@@ -122,8 +131,10 @@ LoadNePData:SetScript("OnEvent", function(self, event, addon)
 end)
 
 --[[-----------------------------------------------
-									** Commands **
-							DESC: Slash commands in-game.
+	** Commands **
+DESC: Slash commands in-game.
+
+Build By: MTS
 ---------------------------------------------------]]
 ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)
 	local command, text = msg:match("^(%S*)%s*(.-)$")
@@ -161,8 +172,11 @@ ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)
 end)
 
 --[[-----------------------------------------------
-									** Gobal's **
-								DESC: Global functions.
+	** Class Color **
+DESC: Decide wich class we're then return the
+proper class color.
+
+Build By: MTS
 ---------------------------------------------------]]
 function NeP.Core.classColor(unit)
 	if UnitIsPlayer(unit) then
@@ -187,12 +201,30 @@ function NeP.Core.classColor(unit)
 	end
 end
 
+--[[-----------------------------------------------
+	** GetCrInfo **
+DESC: This is used to easly change the name of
+every CR at the same time.
+Requires manual class/spec insert.
+Example: [ NeP.Core.GetCrInfo('Warrior - Arms') ]
+
+Build By: MTS
+---------------------------------------------------]]
 function NeP.Core.GetCrInfo(txt)
 	local _nick = _addonColor..NeP.Info.Nick
 	local _classColor = NeP.Core.classColor('Player')
 	return '|T'..NeP.Info.Logo..':10:10|t'.. '|r[' .. _nick .. "|r]|r[|cff" .. _classColor .. txt .. "|r]"
 end
 
+--[[-----------------------------------------------
+	** HideAll **
+DESC: Hide everything, you might need this for
+livestreams or recording.
+While hiding all alerts/notifications, sounds &
+prints should not be displayed.
+
+Build By: MTS
+---------------------------------------------------]]
 function NeP.Core.HideAll()
 	if not NeP.Core.hiding then
 		NeP.Core.Print("Now hiding everything, to re-enable use the command ( "..NeP.Info.Nick.." show ).")
@@ -207,6 +239,13 @@ function NeP.Core.HideAll()
 	end
 end
 
+--[[-----------------------------------------------
+	** Print **
+DESC: Print to chat window a message, this adds a
+prefix and checks if it should print.
+
+Build By: MTS
+---------------------------------------------------]]
 function NeP.Core.Print(txt)
 	if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Prints') then
 		local _name = _addonColor..NeP.Info.Nick
@@ -214,18 +253,31 @@ function NeP.Core.Print(txt)
 	end
 end
 
-local function round(num, idp)
+--[[-----------------------------------------------
+	** Round **
+DESC: Round a number.
+Example: [ if < 4.5 then return 4, else if >= 4.5 return 5 ].
+
+Build By: MTS
+---------------------------------------------------]]
+local function NeP.Core.Round(num, idp)
   local mult = 10^(idp or 0)
   return math.floor(num * mult + 0.5) / mult
 end
 
+--[[-----------------------------------------------
+	** Distance **
+DESC: returns the distance betwen 2 units/objetcs.
+
+Build By: MTS
+---------------------------------------------------]]
 function NeP.Core.Distance(a, b)
 	if UnitExists(a) and UnitExists(b) then
 		-- FireHack
 		if FireHack then
 			local ax, ay, az = ObjectPosition(b)
 			local bx, by, bz = ObjectPosition(a)
-			return round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
+			return NeP.Core.Round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
 		else
 			return ProbablyEngine.condition["distance"](b)
 		end
@@ -233,34 +285,49 @@ function NeP.Core.Distance(a, b)
 	return 0
 end
 
+--[[-----------------------------------------------
+	** LineOfSight **
+DESC: returns the LineOfSight betwen 2 units/objetcs.
+
+Build By: MTS
+---------------------------------------------------]]
 function NeP.Core.LineOfSight(a, b)
+	
+	-- Workaround LoS issues.
+	local aCheck = select(6,strsplit("-",UnitGUID(a)))
+	local bCheck = select(6,strsplit("-",UnitGUID(b)))
+	local ignoreLOS = {
+		[76585] = true,     -- Ragewing the Untamed (UBRS)
+		[77063] = true,     -- Ragewing the Untamed (UBRS)
+		[77182] = true,     -- Oregorger (BRF)
+		[77891] = true,     -- Grasping Earth (BRF)
+		[77893] = true,     -- Grasping Earth (BRF)
+		[78981] = true,     -- Iron Gunnery Sergeant (BRF)
+		[81318] = true,     -- Iron Gunnery Sergeant (BRF)
+		[83745] = true,     -- Ragewing Whelp (UBRS)
+		[86252] = true,     -- Ragewing the Untamed (UBRS)
+	}
+	if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
+	if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
+	
 	if FireHack then
 		if UnitExists(a) and UnitExists(b) then
 			local ax, ay, az = ObjectPosition(a)
 			local bx, by, bz = ObjectPosition(b)
 			local losFlags =  bit.bor(0x10, 0x100)
-			local aCheck = select(6,strsplit("-",UnitGUID(a)))
-			local bCheck = select(6,strsplit("-",UnitGUID(b)))
-			local ignoreLOS = {
-				[76585] = true,     -- Ragewing the Untamed (UBRS)
-				[77063] = true,     -- Ragewing the Untamed (UBRS)
-				[77182] = true,     -- Oregorger (BRF)
-				[77891] = true,     -- Grasping Earth (BRF)
-				[77893] = true,     -- Grasping Earth (BRF)
-				[78981] = true,     -- Iron Gunnery Sergeant (BRF)
-				[81318] = true,     -- Iron Gunnery Sergeant (BRF)
-				[83745] = true,     -- Ragewing Whelp (UBRS)
-				[86252] = true,     -- Ragewing the Untamed (UBRS)
-			}
-			if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
-			if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
-			if ax == nil or ay == nil or az == nil or bx == nil or by == nil or bz == nil then return false end
 			return not TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags)
 		end
 	end
+	
 	return false
 end
 
+--[[-----------------------------------------------
+	** Infront **
+DESC: returns if a unit is infront of other or not.
+
+Build By: MTS
+---------------------------------------------------]]
 function NeP.Core.Infront(a, b)
 	if (UnitExists(a) and UnitExists(b)) then
 		-- FireHack
@@ -276,68 +343,3 @@ function NeP.Core.Infront(a, b)
 		end
 	end
 end
-
---[[   Healing engine i'm bulding...
-		USAGE: {"2060", (function() return GetHealTarget(health) end)}
-
-local healthPercentage = function(unit)
-	return math.floor(((UnitHealth(unit)+UnitGetTotalAbsorbs(unit)+UnitGetTotalAbsorbs(unit)) / UnitHealthMax(unit)) * 100)
-end
-
-GetSpecialPrio = function(unit)
-	-- TO BE DONE...
-end
-
-rosterTable = {
-	prio = {},
-	lowest = {}
-}
-
-BuildRoster = function()
-	wipe(rosterTable.prio)
-	wipe(rosterTable.lowest)
-	for i=1,#NeP.ObjectManager.unitFriendlyCache do -- My OM
-		local object = NeP.ObjectManager.unitFriendlyCache[i]
-		local _health = healthPercentage(object.key)
-		local _role = UnitGroupRolesAssigned(object.key)
-		if (_role == 'TANK' or _role == 'HEALER') or UnitIsPlayer(object.key) or GetUnitName(object.key) == GetUnitName('focus') then
-			rosterTable.prio[#rosterTable.prio+1] = {key=object.key, health=_health, role=_role}
-			rosterTable.lowest[#rosterTable.lowest+1] = {key=object.key, health=_health, role=_role}
-		else
-			rosterTable.lowest[#rosterTable.lowest+1] = {key=object.key, health=_health, role=_role}
-		end
-	end
-	table.sort(rosterTable.prio, function(a,b) return a.health < b.health end)
-	table.sort(rosterTable.lowest, function(a,b) return a.health < b.health end)
-end
-
-C_Timer.NewTicker(1, (function() BuildRoster() end), nil)
-
-GetHealTarget = function(health)
-	local Prio = rosterTable.prio
-	local Lowest = rosterTable.lowest
-	for i=1, #Lowest do
-		-- Normal Healing (PRIO UNITS > LOWEST)
-		if Lowest[i].health >= 40 then
-			-- There has to be a better way to do this...
-			for i=1, #Prio do
-				if Prio[i].health < health then
-					print('Prio: '..Prio[i].key)
-					ProbablyEngine.dsl.parsedTarget = Prio[i].key
-					return true
-				end
-			end
-			if Lowest[i].health < health then
-				print('Lowest: '..Lowest[i].key)
-				ProbablyEngine.dsl.parsedTarget = Lowest[i].key
-				return true
-			end
-		-- PANIC HEALING (LOWEST ALWAYS!)
-		else
-			print('Lowest: '..Lowest[i].key)
-			ProbablyEngine.dsl.parsedTarget = Lowest[i].key
-			return true
-		end
-	end
-	return false
-end]]
