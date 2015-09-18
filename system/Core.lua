@@ -18,33 +18,8 @@ NeP = {
 	Interface = {
 		addonColor = "0070DE",
 		printColor = "|cffFFFFFF",
-		mediaDir = "Interface\\AddOns\\NerdPack\\media\\"
-		classGUIs = {
-			--[[ DEPRECATED //  FIXME: 
-				keep this untill all CRs have been updated.
-				The new way dosent need to mess with this anymore, 
-				instead just add [ NeP.Interface.classGUIs[SPECID] = SpecLocalTable ].
-			]]
-			[250] = NeP.Interface.DkBlood,
-			[252] = NeP.Interface.DkUnholy,
-			[103] = NeP.Interface.DruidFeral,
-			[104] = NeP.Interface.DruidGuard,
-			[105] = NeP.Interface.DruidResto,
-			[102] = NeP.Interface.DruidBalance,
-			[257] = NeP.Interface.PriestHoly,
-			[258] = NeP.Interface.PriestShadow,
-			[256] = NeP.Interface.PriestDisc,
-			[70] = NeP.Interface.PalaRet,
-			[66] = NeP.Interface.PalaProt,
-			[65] = NeP.Interface.PalaHoly,
-			--[73] = NeP.Interface.WarrProt,
-			--[72] = NeP.Interface.WarrFury,
-			--[71] = NeP.Interface.WarrArms,
-			[270] = NeP.Interface.MonkMm,
-			[269] = NeP.Interface.MonkWw,
-			[262] = NeP.Interface.ShamanEle,
-			[264] = NeP.Interface.ShamanResto
-		},
+		mediaDir = "Interface\\AddOns\\NerdPack\\media\\",
+		classGUIs = {},
 	},
 	Info = {
 		Name = 'NerdPack',
@@ -58,6 +33,29 @@ NeP = {
 		Donate = "http://goo.gl/yrctPO"
 	}
 }
+
+--[[ DEPRECATED //  FIXME: 
+	keep this untill all CRs have been updated. 
+]]
+NeP.Interface.classGUIs[250] = NeP.Interface.DkBlood
+NeP.Interface.classGUIs[252] = NeP.Interface.DkUnholy
+NeP.Interface.classGUIs[103] = NeP.Interface.DruidFeral
+NeP.Interface.classGUIs[104] = NeP.Interface.DruidGuard
+NeP.Interface.classGUIs[105] = NeP.Interface.DruidResto
+NeP.Interface.classGUIs[102] = NeP.Interface.DruidBalance
+NeP.Interface.classGUIs[257] = NeP.Interface.PriestHoly
+NeP.Interface.classGUIs[258] = NeP.Interface.PriestShadow
+NeP.Interface.classGUIs[256] = NeP.Interface.PriestDisc
+NeP.Interface.classGUIs[70] = NeP.Interface.PalaRet
+NeP.Interface.classGUIs[66] = NeP.Interface.PalaProt
+NeP.Interface.classGUIs[65] = NeP.Interface.PalaHoly
+--NeP.Interface.classGUIs[73] = NeP.Interface.WarrProt
+--NeP.Interface.classGUIs[72] = NeP.Interface.WarrFury
+--NeP.Interface.classGUIs[71] = NeP.Interface.WarrArms
+NeP.Interface.classGUIs[270] = NeP.Interface.MonkMm
+NeP.Interface.classGUIs[269] = NeP.Interface.MonkWw
+NeP.Interface.classGUIs[262] = NeP.Interface.ShamanEle
+NeP.Interface.classGUIs[264] = NeP.Interface.ShamanResto
 
 --[[-----------------------------------------------
 	** Locals **
@@ -280,7 +278,7 @@ Example: [ if < 4.5 then return 4, else if >= 4.5 return 5 ].
 
 Build By: MTS
 ---------------------------------------------------]]
-local function NeP.Core.Round(num, idp)
+function NeP.Core.Round(num, idp)
   local mult = 10^(idp or 0)
   return math.floor(num * mult + 0.5) / mult
 end
