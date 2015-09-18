@@ -1,8 +1,16 @@
+--[[-----------------------------------------------
+	** Main Tables. **
+---------------------------------------------------]]
 NeP = {
 	Core = {
-		peRecomemded = "6.1r16",
 		CurrentCR = false,
 		hiding = false,
+		--[[
+				** PE Warps **
+			These are used to have a easly way to update stuff related
+			to ProbablyEngine.
+		]]
+		peRecomemded = "6.1r16",
 		PeFetch = ProbablyEngine.interface.fetchKey,
 		PeConfig = ProbablyEngine.config,
 		PeBuildGUI = ProbablyEngine.interface.buildGUI
@@ -42,7 +50,7 @@ NeP = {
 		Name = 'NerdPack',
 		Nick = 'NeP',
 		Version = "6.2.1.1",
-		Branch = "Beta4",
+		Branch = "Beta5",
 		WoW_Version = "6.2.0",
 		Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
 		Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp",
