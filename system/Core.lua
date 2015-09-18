@@ -26,7 +26,7 @@ NeP = {
 		Nick = 'NeP',
 		Version = "6.2.1.1",
 		Branch = "Beta5",
-		WoW_Version = "6.2.0",
+		WoW_Version = "6.2.2",
 		Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
 		Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp",
 		Forum = "http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-bots-programs/probably-engine/combat-routines/532241-pe-nerdpack.html",
@@ -73,8 +73,13 @@ function NeP.Interface.ClassGUI()
 	local _Spec = GetSpecializationInfo(GetSpecialization())
 	if _Spec ~= nil then
 		if NeP.Interface.classGUIs[_Spec] ~= nil then
-			NeP.Core.BuildGUI(_Spec, NeP.Interface.classGUIs[_Spec])		
+			NeP.Core.BuildGUI(_Spec, NeP.Interface.classGUIs[_Spec])	
+		
+		else
+			NeP.Core.Print('Sorry This Spec does not have a GUI yet.')
 		end
+	else
+		NeP.Core.Print('Sorry this character does not have a Spec yet.')
 	end
 end
 
