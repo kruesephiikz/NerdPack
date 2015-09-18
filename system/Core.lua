@@ -11,8 +11,12 @@ NeP = {
 		addonColor = "0070DE",
 		printColor = "|cffFFFFFF",
 		mediaDir = "Interface\\AddOns\\NerdPack\\media\\"
-		-- DEPRECATED: keep this untill all CRs have been updated.
 		classGUIs = {
+			--[[ DEPRECATED //  FIXME: 
+				keep this untill all CRs have been updated.
+				The new way dosent need to mess with this anymore, 
+				instead just add [ NeP.Interface.classGUIs[SPECID] = SpecLocalTable ].
+			]]
 			[250] = NeP.Interface.DkBlood,
 			[252] = NeP.Interface.DkUnholy,
 			[103] = NeP.Interface.DruidFeral,
