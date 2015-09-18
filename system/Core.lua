@@ -11,6 +11,28 @@ NeP = {
 		addonColor = "0070DE",
 		printColor = "|cffFFFFFF",
 		mediaDir = "Interface\\AddOns\\NerdPack\\media\\"
+		-- DEPRECATED: keep this untill all CRs have been updated.
+		classGUIs = {
+			[250] = NeP.Interface.DkBlood,
+			[252] = NeP.Interface.DkUnholy,
+			[103] = NeP.Interface.DruidFeral,
+			[104] = NeP.Interface.DruidGuard,
+			[105] = NeP.Interface.DruidResto,
+			[102] = NeP.Interface.DruidBalance,
+			[257] = NeP.Interface.PriestHoly,
+			[258] = NeP.Interface.PriestShadow,
+			[256] = NeP.Interface.PriestDisc,
+			[70] = NeP.Interface.PalaRet,
+			[66] = NeP.Interface.PalaProt,
+			[65] = NeP.Interface.PalaHoly,
+			--[73] = NeP.Interface.WarrProt,
+			--[72] = NeP.Interface.WarrFury,
+			--[71] = NeP.Interface.WarrArms,
+			[270] = NeP.Interface.MonkMm,
+			[269] = NeP.Interface.MonkWw,
+			[262] = NeP.Interface.ShamanEle,
+			[264] = NeP.Interface.ShamanResto
+		},
 	},
 	Info = {
 		Name = 'NerdPack',
@@ -27,31 +49,18 @@ NeP = {
 
 local _addonColor = '|cff'..NeP.Interface.addonColor
 
+--[[-----------------------------------------------
+	** Class GUI **
+DESC: Decide wich class/spec we're then build ONLY the GUI for
+That class.
+
+Build By: MTS
+---------------------------------------------------]]
 function NeP.Interface.ClassGUI()
-	_NePClassGUIs = {
-		[250] = NeP.Interface.DkBlood,
-		[252] = NeP.Interface.DkUnholy,
-		[103] = NeP.Interface.DruidFeral,
-		[104] = NeP.Interface.DruidGuard,
-		[105] = NeP.Interface.DruidResto,
-		[102] = NeP.Interface.DruidBalance,
-		[257] = NeP.Interface.PriestHoly,
-		[258] = NeP.Interface.PriestShadow,
-		[256] = NeP.Interface.PriestDisc,
-		[70] = NeP.Interface.PalaRet,
-		[66] = NeP.Interface.PalaProt,
-		[65] = NeP.Interface.PalaHoly,
-		[73] = NeP.Interface.WarrProt,
-		[72] = NeP.Interface.WarrFury,
-		[270] = NeP.Interface.MonkMm,
-		[269] = NeP.Interface.MonkWw,
-		[262] = NeP.Interface.ShamanEle,
-		[264] = NeP.Interface.ShamanResto
-	}
 	local _Spec = GetSpecializationInfo(GetSpecialization())
 	if _Spec ~= nil then
-		if _NePClassGUIs[_Spec] ~= nil then
-			NeP.Core.BuildGUI(_Spec, _NePClassGUIs[_Spec])		
+		if NeP.Interface.classGUIs[_Spec] ~= nil then
+			NeP.Core.BuildGUI(_Spec, NeP.Interface.classGUIs[_Spec])		
 		end
 	end
 end

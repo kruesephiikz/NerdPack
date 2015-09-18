@@ -1,8 +1,7 @@
 local dynEval = NeP.Core.dynamicEval
 local PeFetch = NeP.Core.PeFetch
-local Battle_Print = false
 
-NeP.Interface.WarrProt = {
+local GUI_WarrProt = {
 	key = "NePConfigWarrProt",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
@@ -85,6 +84,8 @@ NeP.Interface.WarrProt = {
 	}
 }
 
+NeP.Interface.classGUIs[73] = GUI_WarrProt
+
 local exeOnLoad = function()
 	NeP.Splash()
 end
@@ -115,6 +116,8 @@ local inCombat_Gladiator = {
 	{ "Execute" },
 	{ "Devastate" }
 }
+
+local Battle_Print = false
 
 local inCombat_Battle = {
 	{ "/run print('[MTS] This stance is not yet supported! :(')", 
