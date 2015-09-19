@@ -298,12 +298,12 @@ DESC: finds and equips fishing hats.
 Build By: MTS
 ---------------------------------------------------]]
 local hatsTable = {
-	{ Name = "Lucky Fishing Hat", 		ID = 19972, 	Bonus = 5 },
-	{ Name = "Nat's Hat", 				ID = 88710, 	Bonus = 5 },
-	{ Name = "Darkmoon Fishing Cap", 	ID = 93732, 	Bonus = 5 },
-	{ Name = "Nat's Drinking Hat", 		ID = 117405, 	Bonus = 10  },
-	{ Name = "Hightfish Cap", 			ID = 118380, 	Bonus = 100 },
-	{ Name = "Tentacled Hat", 			ID = 118393, 	Bonus = 100 },
+	{ ID = 118380, Bonus = 100, Name = "Hightfish Cap" },
+	{ ID = 118393, Bonus = 100, Name = "Tentacled Hat" },
+	{ ID = 117405, Bonus = 10,  Name = "Nat's Drinking Hat" },
+	{ ID = 19972,  Bonus = 5,   Name = "Lucky Fishing Hat" },
+	{ ID = 88710,  Bonus = 5,   Name = "Nat's Hat" },
+	{ ID = 93732,  Bonus = 5,   Name = "Darkmoon Fishing Cap" },
 }
 local function _findHats()
 	local hatsFound = {}
@@ -343,26 +343,27 @@ DESC: finds and equips fishing Poles.
 Build By: MTS
 ---------------------------------------------------]]
 local polesTable = {
-	{ Name = "Fishing Pole", 						ID = 6256, 		Bonus = 0 },
-	{ Name = "Strong Fishing Pole", 				ID = 6365, 		Bonus = 5 },
-	{ Name = "Darkwood Fishing Pole", 				ID = 6366, 		Bonus = 15 },
-	{ Name = "Big Iron Fishing Pole", 				ID = 6367, 		Bonus = 20 },
-	{ Name = "Blump Family Fishing Pole", 			ID = 12225, 	Bonus = 3 },
-	{ Name = "Nat Pagle's Extreme Angler FC-5000", 	ID = 19022, 	Bonus = 20 },
-	{ Name = "Arcanite Fishing Pole", 				ID = 19970, 	Bonus = 40 },
-	{ Name = "Seth's Graphite Fishing Pole", 		ID = 25978, 	Bonus = 20 },
-	{ Name = "Mastercraft Kalu'ak Fishing Pole", 	ID = 44050, 	Bonus = 30 },
-	{ Name = "Nat's Lucky Fishing Pole", 			ID = 45858, 	Bonus = 25 },
-	{ Name = "Bone Fishing Pole", 					ID = 45991, 	Bonus = 30 },
-	{ Name = "Jeweled Fishing Pole", 				ID = 45992, 	Bonus = 30 },
-	{ Name = "Staats' Fishing Pole", 				ID = 46337, 	Bonus = 3 },
-	{ Name = "Pandaren Fishing Pole", 				ID = 84660, 	Bonus = 10 },
-	{ Name = "Dragon Fishing Pole", 				ID = 84661, 	Bonus = 30 },
-	{ Name = "Savage Fishing Pole", 				ID = 116825, 	Bonus = 30 },
-	{ Name = "Draenic Fishing Pole", 				ID = 116826, 	Bonus = 30 },
-	{ Name = "Ephemeral Fishing Pole", 				ID = 118381, 	Bonus = 100 },
-	{ Name = "Thruk's Fishing Rod", 				ID = 120163, 	Bonus = 3 },
+	{ ID = 118381, Bonus = 100, Name = "Ephemeral Fishing Pole" },
+	{ ID = 19970,  Bonus = 40,  Name = "Arcanite Fishing Pole" },
+	{ ID = 84661,  Bonus = 30,  Name = "Dragon Fishing Pole" },
+	{ ID = 116825, Bonus = 30,  Name = "Savage Fishing Pole" },
+	{ ID = 116826, Bonus = 30,  Name = "Draenic Fishing Pole" },
+	{ ID = 45991,  Bonus = 30,  Name = "Bone Fishing Pole" },
+	{ ID = 45992,  Bonus = 30,  Name = "Jeweled Fishing Pole" },
+	{ ID = 44050,  Bonus = 30,  Name = "Mastercraft Kalu'ak Fishing Pole" },
+	{ ID = 45858,  Bonus = 25,  Name = "Nat's Lucky Fishing Pole" },
+	{ ID = 6367,   Bonus = 20,  Name = "Big Iron Fishing Pole" },
+	{ ID = 19022,  Bonus = 20,  Name = "Nat Pagle's Extreme Angler FC-5000" },
+	{ ID = 25978,  Bonus = 20,  Name = "Seth's Graphite Fishing Pole" },
+	{ ID = 6366,   Bonus = 15,  Name = "Darkwood Fishing Pole" },
+	{ ID = 84660,  Bonus = 10,  Name = "Pandaren Fishing Pole" },
+	{ ID = 6365,   Bonus = 5,   Name = "Strong Fishing Pole" },
+	{ ID = 12225,  Bonus = 3,   Name = "Blump Family Fishing Pole" },
+	{ ID = 46337,  Bonus = 3,   Name = "Staats' Fishing Pole" },
+	{ ID = 120163, Bonus = 3,   Name = "Thruk's Fishing Rod" },
+	{ ID = 6256,   Bonus = 0,   Name = "Fishing Pole" },
 }
+
 local function _findPoles()
 	local polesFound = {}
 	for i = 1, #polesTable do
