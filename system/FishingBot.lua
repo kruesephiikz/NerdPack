@@ -38,7 +38,7 @@ NeP.Interface.Fishing = {
 	subtitle = "Fishing Settings",
 	color = NeP.Interface.addonColor,
 	width = 250,
-	height = 350,
+	height = 300,
 	config = {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Fishing Bot:", size = 25, align = "Center"},
 		{ type = 'text', text = "Requires FireHack", align = "Center" },
@@ -91,6 +91,18 @@ NeP.Interface.Fishing = {
 			default = false,  
 		},
 		{ type = 'rule' },{ type = 'spacer' },
+		-- Timer
+		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Running For: ", size = 11, offset = -11 },
+		{ key = 'current_Time', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		-- Looted Items Counter
+		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Looted Items: ", size = 11, offset = -11 },
+		{ key = 'current_Loot', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		-- Predicted Average Items Per Hour
+		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Average Items Per Hour: ", size = 11, offset = -11 },
+		{ key = 'current_average', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		
+		-- Start Button
+		{ type = "spacer" },
 		{ type = "button", text = "Start Fishing", width = 230, height = 20, callback = function(self, button)
 			_fishRun = not _fishRun
 			if _fishRun then
@@ -105,17 +117,7 @@ NeP.Interface.Fishing = {
 				_timeStarted = nil
 			end
 		end},
-		{ type = 'rule' },{ type = 'spacer' },
-		-- Timer
-		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Running For: ", size = 11, offset = -11 },
-		{ key = 'current_Time', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-		-- Looted Items Counter
-		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Looted Items: ", size = 11, offset = -11 },
-		{ key = 'current_Loot', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-		-- Predicted Average Items Per Hour
-		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Average Items Per Hour: ", size = 11, offset = -11 },
-		{ key = 'current_average', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-	}
+	}	
 }
 
 --[[-----------------------------------------------
