@@ -298,12 +298,12 @@ DESC: finds and equips fishing hats.
 Build By: MTS
 ---------------------------------------------------]]
 local hatsTable = {
-	[1] = { Name = "Lucky Fishing Hat", ID = 19972, Bonus = 5 },
-	[2] = { Name = "Nat's Hat", ID = 88710, Bonus = 5 },
-	[3] = { Name = "Darkmoon Fishing Cap", ID = 93732, Bonus = 5 },
-	[4] = { Name = "Nat's Drinking Hat", ID = 117405, Bonus = 10  },
-	[5] = { Name = "Hightfish Cap", ID = 118380, Bonus = 100 },
-	[6] = { Name = "Tentacled Hat", ID = 118393, Bonus = 100 },
+	{ Name = "Lucky Fishing Hat", 		ID = 19972, 	Bonus = 5 },
+	{ Name = "Nat's Hat", 				ID = 88710, 	Bonus = 5 },
+	{ Name = "Darkmoon Fishing Cap", 	ID = 93732, 	Bonus = 5 },
+	{ Name = "Nat's Drinking Hat", 		ID = 117405, 	Bonus = 10  },
+	{ Name = "Hightfish Cap", 			ID = 118380, 	Bonus = 100 },
+	{ Name = "Tentacled Hat", 			ID = 118393, 	Bonus = 100 },
 }
 local function _findHats()
 	local hatsFound = {}
@@ -343,25 +343,25 @@ DESC: finds and equips fishing Poles.
 Build By: MTS
 ---------------------------------------------------]]
 local polesTable = {
-	[1] = { Name = "Fishing Pole", ID = 6256, Bonus = 0 },
-	[2] = { Name = "Strong Fishing Pole", ID = 6365, Bonus = 5 },
-	[3] = { Name = "Darkwood Fishing Pole", ID = 6366, Bonus = 15 },
-	[4] = { Name = "Big Iron Fishing Pole", ID = 6367, Bonus = 20 },
-	[5] = { Name = "Blump Family Fishing Pole", ID = 12225, Bonus = 3 },
-	[6] = { Name = "Nat Pagle's Extreme Angler FC-5000", ID = 19022, Bonus = 20 },
-	[7] = { Name = "Arcanite Fishing Pole", ID = 19970, Bonus = 40 },
-	[8] = { Name = "Seth's Graphite Fishing Pole", ID = 25978, Bonus = 20 },
-	[9] = { Name = "Mastercraft Kalu'ak Fishing Pole", ID = 44050, Bonus = 30 },
-	[10] = { Name = "Nat's Lucky Fishing Pole", ID = 45858, Bonus = 25 },
-	[11] = { Name = "Bone Fishing Pole", ID = 45991, Bonus = 30 },
-	[12] = { Name = "Jeweled Fishing Pole", ID = 45992, Bonus = 30 },
-	[13] = { Name = "Staats' Fishing Pole", ID = 46337, Bonus = 3 },
-	[14] = { Name = "Pandaren Fishing Pole", ID = 84660, Bonus = 10 },
-	[15] = { Name = "Dragon Fishing Pole", ID = 84661, Bonus = 30 },
-	[16] = { Name = "Savage Fishing Pole", ID = 116825, Bonus = 30 },
-	[17] = { Name = "Draenic Fishing Pole", ID = 116826, Bonus = 30 },
-	[18] = { Name = "Ephemeral Fishing Pole", ID = 118381, Bonus = 100 },
-	[19] = { Name = "Thruk's Fishing Rod", ID = 120163, Bonus = 3 },
+	{ Name = "Fishing Pole", 						ID = 6256, 		Bonus = 0 },
+	{ Name = "Strong Fishing Pole", 				ID = 6365, 		Bonus = 5 },
+	{ Name = "Darkwood Fishing Pole", 				ID = 6366, 		Bonus = 15 },
+	{ Name = "Big Iron Fishing Pole", 				ID = 6367, 		Bonus = 20 },
+	{ Name = "Blump Family Fishing Pole", 			ID = 12225, 	Bonus = 3 },
+	{ Name = "Nat Pagle's Extreme Angler FC-5000", 	ID = 19022, 	Bonus = 20 },
+	{ Name = "Arcanite Fishing Pole", 				ID = 19970, 	Bonus = 40 },
+	{ Name = "Seth's Graphite Fishing Pole", 		ID = 25978, 	Bonus = 20 },
+	{ Name = "Mastercraft Kalu'ak Fishing Pole", 	ID = 44050, 	Bonus = 30 },
+	{ Name = "Nat's Lucky Fishing Pole", 			ID = 45858, 	Bonus = 25 },
+	{ Name = "Bone Fishing Pole", 					ID = 45991, 	Bonus = 30 },
+	{ Name = "Jeweled Fishing Pole", 				ID = 45992, 	Bonus = 30 },
+	{ Name = "Staats' Fishing Pole", 				ID = 46337, 	Bonus = 3 },
+	{ Name = "Pandaren Fishing Pole", 				ID = 84660, 	Bonus = 10 },
+	{ Name = "Dragon Fishing Pole", 				ID = 84661, 	Bonus = 30 },
+	{ Name = "Savage Fishing Pole", 				ID = 116825, 	Bonus = 30 },
+	{ Name = "Draenic Fishing Pole", 				ID = 116826, 	Bonus = 30 },
+	{ Name = "Ephemeral Fishing Pole", 				ID = 118381, 	Bonus = 100 },
+	{ Name = "Thruk's Fishing Rod", 				ID = 120163, 	Bonus = 3 },
 }
 local function _findPoles()
 	local polesFound = {}
@@ -404,13 +404,13 @@ DESC: finds and equips fishing Baits.
 Build By: MTS
 ---------------------------------------------------]]
 local _baitsTable = {
-	['jsb'] = { ID = 110274, Debuff = 158031, Name = 'Jawless Skulker Bait' },
-	['fsb'] = { ID = 110289, Debuff = 158034, Name = 'Fat Sleeper Bait' },
-	['blsb'] = { ID = 110290, Debuff = 158035, Name = 'Blind Lake Sturgeon Bait' },
-	['fab'] = { ID = 110291, Debuff = 158036, Name = 'Fire Ammonite Bait' },
-	['ssb'] = { ID = 110292, Debuff = 158037, Name = 'Sea Scorpion Bait' },
-	['ageb'] = { ID = 110293, Debuff = 158038, Name = 'Abyssal Gulper Eel Bait' },
-	['bwb'] = { ID = 110294, Debuff = 158039, Name = 'Blackwater Whiptail Bait' }
+	['jsb'] = 	{ ID = 110274, Debuff = 158031, Name = 'Jawless Skulker Bait' },
+	['fsb'] = 	{ ID = 110289, Debuff = 158034, Name = 'Fat Sleeper Bait' },
+	['blsb'] = 	{ ID = 110290, Debuff = 158035, Name = 'Blind Lake Sturgeon Bait' },
+	['fab'] = 	{ ID = 110291, Debuff = 158036, Name = 'Fire Ammonite Bait' },
+	['ssb'] = 	{ ID = 110292, Debuff = 158037, Name = 'Sea Scorpion Bait' },
+	['ageb'] = 	{ ID = 110293, Debuff = 158038, Name = 'Abyssal Gulper Eel Bait' },
+	['bwb'] = 	{ ID = 110294, Debuff = 158039, Name = 'Blackwater Whiptail Bait' }
 }
 local function _AutoBait()
 	if getBobber() then return end
