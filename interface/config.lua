@@ -79,6 +79,50 @@ NeP.Interface.General = {
 						},
 						default = "black"
 					},
+					{ -- NeP Frame Color
+						type = "dropdown",
+						text = "NeP Frame Position",
+						key = "NePFramePos",
+						list = {
+							{
+							  text = "TOP LEFT",
+							  key = "TOPLEFT"
+							},
+							{
+							  text = "TOP",
+							  key = "TOP"
+							},
+							{
+							  text = "TOP RIGHT",
+							  key = "TOPRIGHT"
+							},
+							{
+							  text = "LEFT",
+							  key = "LEFT"
+							},
+							{
+							  text = "CENTER",
+							  key = "CENTER"
+							},
+							{
+							  text = "RIGHT",
+							  key = "RIGHT"
+							},
+							{
+							  text = "BOTTOM LEFT",
+							  key = "BOTTOMLEFT"
+							},
+							{
+							  text = "BOTTOM",
+							  key = "BOTTOM"
+							},
+							{
+							  text = "BOTTOM RIGHT",
+							  key = "BOTTOMRIGHT"
+							},
+						},
+						default = "TOP"
+					},
 					{ -- Reload BT
 						type = "button", 
 						text = "Apply", 
