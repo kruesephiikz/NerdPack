@@ -60,6 +60,22 @@ NeP.Interface.General = {
 							  text = "White",
 							  key = "white"
 							},
+							{
+							  text = "Blue",
+							  key = "blue"
+							},
+							{
+							  text = "Green",
+							  key = "green"
+							},
+							{
+							  text = "Red",
+							  key = "red"
+							},
+							{
+							  text = "Class Color",
+							  key = "class"
+							},
 						},
 						default = "black"
 					},

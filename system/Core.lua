@@ -176,7 +176,8 @@ proper class color.
 
 Build By: MTS
 ---------------------------------------------------]]
-function NeP.Core.classColor(unit)
+function NeP.Core.classColor(unit, _type)
+	if _type == nil then _type = "HEX" end
 	if UnitIsPlayer(unit) then
 		local _classColors = {
 			["HUNTER"] = { r = 0.67, g = 0.83, b = 0.45, Hex = "abd473" },
@@ -193,7 +194,12 @@ function NeP.Core.classColor(unit)
 		}
 		local _class, className = UnitClass(unit)
 		local _color = _classColors[className]
-		return _color.Hex
+		
+		if _type == "HEX" then
+			return _color.Hex
+		elseif _type == "RBG" then
+			return _color.r, _color.g, _color.b
+		end
 	else
 		return "FFFFFF"
 	end

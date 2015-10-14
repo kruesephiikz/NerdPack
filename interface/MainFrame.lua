@@ -6,8 +6,12 @@ local _StatusText = false
 local buttonsTotalHeight = 10
 
 local _RBGColors = {
-	["black"] = { r = 0, g = 0, b = 0 },
-	["white"] = { r = 255, g = 255, b = 255 },
+	["black"] = { r = 0.00, g = 0.00, b = 0.00 },
+	["white"] = { r = 1.00, g = 1.00, b = 1.00 },
+	["green"] = { r = 0.33, g = 0.54, b = 0.52 },
+	["blue"] = { r = 0.00, g = 0.44, b = 0.87 },
+	["red"] = { r = 0.77, g = 0.12, b = 0.23 },
+	["class"] = { r = select(1, NeP.Core.classColor("player", "RBG")), g = select(2, NeP.Core.classColor("player", "RBG")), b = select(3, NeP.Core.classColor("player", "RBG")) },
 }
 local function _getRGB(color)
 	if color == nil then color = "black" end
