@@ -5,6 +5,16 @@ local OPTIONS_HEIGHT = 30
 local _StatusText = false
 local buttonsTotalHeight = 10
 
+local _RBGColors = {
+	["black"] = { r = 0, g = 0, b = 0 },
+	["white"] = { r = 255, g = 255, b = 255 },
+}
+local function _getRGB(color)
+	if color == nil then color = "black" end
+	print(color)
+	return _RBGColors[color].r, _RBGColors[color].g, _RBGColors[color].b ,0.7
+end
+
 NeP.Interface.Alerts = {}
 
 function NeP.Alert(txt)
@@ -19,11 +29,12 @@ function StatusGUI_RUN()
 	NeP_Frame = NeP.Interface.addFrame(UIParent)
 	NeP_Frame:SetPoint("TOP") 
 	NeP_Frame:SetMovable(true)
-	NeP_Frame.texture:SetTexture(0,0,0,0.7)
+	NeP_Frame.texture:SetTexture(_getRGB(NeP.Core.PeFetch('NePConf', 'NePFrameColor')))
 	NeP_Frame:SetClampedToScreen(true)
 	local statusText1 = NeP.Interface.addText(NeP_Frame)
 	statusText1:SetPoint("LEFT", NeP_Frame, 0, 0)
 	statusText1:SetText('|T'..NeP.Info.Logo..':10:10|t'.._addonColor..NeP.Info.Name)
+	statusText1:SetFont("Fonts\\FRIZQT__.TTF", NeP.Core.PeFetch('NePConf', 'NePFrameSize') or 20)
 	local minButton = NeP.Interface.addButton(NeP_Frame)
 	minButton.text:SetText(buttonColor.."=")
 	minButton:SetPoint("RIGHT", NeP_Frame, 0, 0)
@@ -223,6 +234,12 @@ function StatusGUI_RUN()
 	function _HideFrames()
 		NeP_OMLIST:Hide()
 		statusGUI2:Hide()
+	end
+	
+	NeP_Frame:Hide()
+	
+	if NeP.Core.PeFetch('NePConf', 'NePFrame') then
+		NeP_Frame:Show()
 	end
 	
 end

@@ -21,6 +21,57 @@ NeP.Interface.General = {
 				y = 42, 
 				center = true 
 			},
+				-- [[GUI]]
+				{ type = 'rule' },
+				{ 
+					type = 'header', 
+					text = '|cff'..NeP.Interface.addonColor.."GUIs:", 
+					size = 25,
+					align = "Center",
+				},
+				{ type = 'spacer' },
+					{ -- NeP Frame
+						type = "checkbox", 
+						text = "Enable NeP Frame", 
+						key = "NePFrame", 
+						default = true,
+						desc = "|cfffd1c15[Warning]|r Disabling this may mean you no longer have acess to some or all GUIs."
+					},
+					{ -- NeP Frame Size
+						type = "spinner",
+						text = "NeP Frame Size:",
+						key = "NePFrameSize",
+						width = 150,
+						min = 10,
+						max = 100,
+						default = 20,
+						step = 1,
+					},
+					{ -- NeP Frame Color
+						type = "dropdown",
+						text = "NeP Frame Color",
+						key = "NePFrameColor",
+						list = {
+							{
+							  text = "Black",
+							  key = "black"
+							},
+							{
+							  text = "White",
+							  key = "white"
+							},
+						},
+						default = "black"
+					},
+					{ -- Reload BT
+						type = "button", 
+						text = "Apply", 
+						width = 225, 
+						height = 20,
+						callback = function()
+							ReloadUI();
+						end
+					},
 				-- [[General]]
 				{ type = 'rule' },
 				{ 
@@ -29,7 +80,7 @@ NeP.Interface.General = {
 					size = 25,
 					align = "Center",
 				},
-					{ type = 'spacer' },
+				{ type = 'spacer' },
 					{
 						type = "spinner",
 						text = "Interrupt At:",

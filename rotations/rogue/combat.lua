@@ -18,8 +18,7 @@ NeP.Interface.classGUIs[260] = {
 			text = "General settings:", 
 			align = "center" 
 		},
-
-			{
+			{ -- Letal Poison
 		      	type = "dropdown",
 		      	text = "Letal Posion",
 		      	key = "LetalPosion",
@@ -36,7 +35,6 @@ NeP.Interface.classGUIs[260] = {
 		    	default = "Deadly",
 		    	desc = "Select what Letal Posion to use."
 		    },
-
 		{ type = "spacer" },
 		{ type = 'rule' },
 		{ 
