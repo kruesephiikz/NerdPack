@@ -37,6 +37,12 @@ NeP.Interface.General = {
 						default = true,
 						desc = "|cfffd1c15[Warning]|r Disabling this may mean you no longer have acess to some or all GUIs."
 					},
+					{ -- NeP Frame Move
+						type = "checkbox", 
+						text = "Enable Moving NeP Frame", 
+						key = "NePFrameMove", 
+						default = true,
+					},
 					{ -- NeP Frame Size
 						type = "spinner",
 						text = "NeP Frame Size:",
@@ -78,50 +84,6 @@ NeP.Interface.General = {
 							},
 						},
 						default = "black"
-					},
-					{ -- NeP Frame Color
-						type = "dropdown",
-						text = "NeP Frame Position",
-						key = "NePFramePos",
-						list = {
-							{
-							  text = "TOP LEFT",
-							  key = "TOPLEFT"
-							},
-							{
-							  text = "TOP",
-							  key = "TOP"
-							},
-							{
-							  text = "TOP RIGHT",
-							  key = "TOPRIGHT"
-							},
-							{
-							  text = "LEFT",
-							  key = "LEFT"
-							},
-							{
-							  text = "CENTER",
-							  key = "CENTER"
-							},
-							{
-							  text = "RIGHT",
-							  key = "RIGHT"
-							},
-							{
-							  text = "BOTTOM LEFT",
-							  key = "BOTTOMLEFT"
-							},
-							{
-							  text = "BOTTOM",
-							  key = "BOTTOM"
-							},
-							{
-							  text = "BOTTOM RIGHT",
-							  key = "BOTTOMRIGHT"
-							},
-						},
-						default = "TOP"
 					},
 					{ -- Reload BT
 						type = "button", 
