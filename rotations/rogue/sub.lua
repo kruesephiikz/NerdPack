@@ -49,24 +49,20 @@ local ST = {
 }
 
 local outCombat = {
-	-- Auto Attack after vanish
-	{"Ambush", {
+	{"8676", { -- Ambush after vanish
 		"target.alive",
-		"lastcast(Vanish)",
-		"player.health > 15"
+		"lastcast(1856)" -- Vanish
 	}, "target" },
 
-	-- Poison
-		-- Letal
-			{"Deadly Poison", {
-				"!lastcast(Deadly Poison)",
-				"!player.buff(Deadly Poison)"
-			}},
-		-- Non-Letal
-			{"Crippling Poison", {
-				"!lastcast(Crippling Poison)",
-				"!player.buff(Crippling Poison)"
-			}},
+	-- Poisons
+	{"2823", { -- Deadly Poison / Letal
+		"!lastcast(2823)",
+		"!player.buff(2823)"
+	}},
+	{"3408", { -- Crippling Poison / Non-Letal
+		"!lastcast(3408)",
+		"!player.buff(3408)"
+	}},
 }
 
 ProbablyEngine.rotation.register_custom(261, NeP.Core.GetCrInfo('Rogue - Subtlety'), 

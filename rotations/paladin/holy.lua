@@ -1,4 +1,4 @@
-NeP.Interface.PalaHoly = {
+NeP.Interface.classGUIs[65] = {
   key = "NePConfPalaHoly",
   profiles = true,
   title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",

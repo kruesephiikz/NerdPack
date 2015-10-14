@@ -1,4 +1,4 @@
-NeP.Interface.MonkWw = {
+NeP.Interface.classGUIs[269] = {
 	key = "NePConfigMonkWw",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",

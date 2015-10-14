@@ -56,23 +56,20 @@ local inCombat = {
 }
 
 local outCombat = {
-	-- Auto Attack after vanish
-	{"8676", { -- Ambush
+	{"8676", { -- Ambush after vanish
 		"target.alive",
-		"lastcast(1856)"
+		"lastcast(1856)" -- Vanish
 	}, "target" },
 
-	-- Poison
-		-- Letal
-		{"2823", { -- Deadly Poison
-			"!lastcast(2823)",
-			"!player.buff(2823)"
-		}},
-		-- Non-Letal
-		{"3408", { -- Crippling Poison
-			"!lastcast(3408)",
-			"!player.buff(3408)"
-		}},
+	-- Poisons
+	{"2823", { -- Deadly Poison / Letal
+		"!lastcast(2823)",
+		"!player.buff(2823)"
+	}},
+	{"3408", { -- Crippling Poison / Non-Letal
+		"!lastcast(3408)",
+		"!player.buff(3408)"
+	}},
 }
 
 ProbablyEngine.rotation.register_custom(259, NeP.Core.GetCrInfo('Rogue - Assassination'), 

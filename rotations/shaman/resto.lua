@@ -1,4 +1,4 @@
-NeP.Interface.ShamanResto = {
+NeP.Interface.classGUIs[264] = {
 	key = "NePConfigShammanResto",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",

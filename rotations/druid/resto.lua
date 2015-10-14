@@ -1,4 +1,4 @@
-NeP.Interface.DruidResto = {
+NeP.Interface.classGUIs[105] = {
 	key = "NePConfDruidResto",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",

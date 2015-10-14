@@ -1,4 +1,4 @@
-NeP.Interface.DruidFeral = {
+NeP.Interface.classGUIs[103] = {
 	key = "NePConfDruidFeral",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",

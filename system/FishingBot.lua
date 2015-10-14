@@ -90,6 +90,7 @@ NeP.Interface.Fishing = {
 			key = "LunarfallCarp",  
 			default = false,  
 		},
+		
 		{ type = 'rule' },{ type = 'spacer' },
 		-- Timer
 		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Running For: ", size = 11, offset = -11 },

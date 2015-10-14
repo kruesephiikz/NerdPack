@@ -1,3 +1,64 @@
+local dynEval = NeP.Core.dynamicEval
+local PeFetch = NeP.Core.PeFetch
+
+NeP.Interface.classGUIs[260] = {
+	key = "NePConfigRogueCombat",
+	profiles = true,
+	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
+	subtitle = "Rogue Combat Settings",
+	color = NeP.Core.classColor('player'),
+	width = 250,
+	height = 500,
+	config = {
+		
+		-- General
+		{ type = 'rule' },
+		{ 
+			type = 'header',
+			text = "General settings:", 
+			align = "center" 
+		},
+
+			{
+		      	type = "dropdown",
+		      	text = "Letal Posion",
+		      	key = "LetalPosion",
+		      	list = {
+			        {
+			          text = "Wound Posion",
+			          key = "Wound"
+			        },
+			        {
+			          text = "Deadly Posion",
+			          key = "Deadly"
+			        },
+			    },
+		    	default = "Deadly",
+		    	desc = "Select what Letal Posion to use."
+		    },
+
+		{ type = "spacer" },
+		{ type = 'rule' },
+		{ 
+			type = "header", 
+			text = "Survival Settings", 
+			align = "center" 
+		},
+			
+			-- Survival Settings:
+			{
+				type = "spinner",
+				text = "Healthstone - HP",
+				key = "Healthstone",
+				width = 50,
+				min = 0,
+				max = 100,
+				default = 75,
+				step = 5
+			},
+	}
+}
+
 local exeOnLoad = function()
 	NeP.Splash()
 	ProbablyEngine.toggle.create(
@@ -22,13 +83,21 @@ local Cooldowns = {
 	}},
 }
 
+local Survival = {
+	{ "#5512", (function() return dynEval("player.health <= " .. PeFetch('NePConfigRogueCombat', 'Healthstone')) end) }, --Healthstone
+	{"Recuperate",{
+		"player.combopoints <= 3",
+		"player.health < 35",
+		"player.buff(Recuperate).duration <= 5"
+	}},
+	{"Tricks of the Trade", "player.aggro > 60", "tank"},
+}
+
 local AoE = {
-	{{-- Force
-		{ "Blade Flurry" },
-		{"Crimson Tempest", {
-			"player.combopoints >= 5",
-		}, "target"},
-	}, (function() return NeP.Lib.SAoE(6, 10) end) },
+	{ "Blade Flurry" },
+	{"Crimson Tempest", {
+		"player.combopoints >= 5",
+	}, "target"},
 }
 
 local ST = {
@@ -49,24 +118,28 @@ local ST = {
 }
 
 local outCombat = {
-	-- Auto Attack after vanish
-	{"Ambush", {
+	{"8676", { -- Ambush after vanish
 		"target.alive",
-		"lastcast(Vanish)",
+		"lastcast(1856)" -- Vanish
 	}, "target" },
 
-	-- Poison's
-		-- Letal
-		{"Instant Poison", {
-			"!lastcast(Instant Poison)",
-			"!player.buff(Instant Poison)"
-		}},
-		
-		-- Non-Letal
-		{"Crippling Poison", {
-			"!lastcast(Crippling Poison)",
-			"!player.buff(Crippling Poison)"
-		}},
+	-- Letal Poisons
+	{"2823", { -- Deadly Poison / Letal
+		"!lastcast(2823)",
+		"!player.buff(2823)",
+		(function() return NeP.Core.PeFetch("NePConfigRogueCombat", "LetalPosion") == "Deadly" end)
+	}},
+	{"8679", { -- Deadly Poison / Letal
+		"!lastcast(8679)",
+		"!player.buff(8679)",
+		(function() return NeP.Core.PeFetch("NePConfigRogueCombat", "LetalPosion") == "Wound" end)
+	}},
+	
+	-- Non-Letal Poisons
+	{"3408", { -- Crippling Poison / Non-Letal
+		"!lastcast(3408)",
+		"!player.buff(3408)"
+	}},
 }
 
 ProbablyEngine.rotation.register_custom(260, NeP.Core.GetCrInfo('Rogue - Combat'), 
@@ -75,19 +148,13 @@ ProbablyEngine.rotation.register_custom(260, NeP.Core.GetCrInfo('Rogue - Combat'
 			{{-- Interrupts
 				{ "Kick" },
 			}, "target.NePinterrupt" },
-			{"Recuperate",{
-				"player.combopoints <= 3",
-				"player.health < 35",
-				"player.buff(Recuperate).duration <= 5"
-			}},
 			{"Marked for Death", {
 				"player.combopoints = 0",
 				"toggle.MfD"
 			}},
-			{"Tricks of the Trade", "player.aggro > 60", "tank"},
 			{"Evasion", "player.health < 30"},
 			{Cooldowns, "modifier.cooldowns" },
-			{AoE, (function() return NeP.Lib.SAoE(3, 10) end) },
+			{AoE, (function() return NeP.Lib.SAoE(6, 10) end) },
 			{ST},
 		}, {"!player.buff(Vanish)", "target.range < 7"} },
 	}, outCombat, exeOnLoad)

@@ -1,4 +1,4 @@
-NeP.Interface.DruidBalance = {
+NeP.Interface.classGUIs[102] = {
 	key = "NePConfDruidBalance",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",

@@ -1,7 +1,7 @@
 local dynEval = NeP.Core.dynamicEval
 local PeFetch = NeP.Core.PeFetch
 
-local GUI_WarrFury = {
+NeP.Interface.classGUIs[72] = {
 	key = "NePConfigWarrFury",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
@@ -90,8 +90,6 @@ local GUI_WarrFury = {
 
 	}
 }
-
-NeP.Interface.classGUIs[72] = GUI_WarrFury
 
 local exeOnLoad = function()
 	NeP.Splash()

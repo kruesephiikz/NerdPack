@@ -1,4 +1,4 @@
-NeP.Interface.PalaProt = {
+NeP.Interface.classGUIs[66] = {
   key = "NePConfPalaProt",
   profiles = true,
   title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",

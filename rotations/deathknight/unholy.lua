@@ -1,4 +1,4 @@
-NeP.Interface.DkUnholy = {
+NeP.Interface.classGUIs[252] = {
 	key = "NePConfDkUnholy",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",

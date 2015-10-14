@@ -1,4 +1,4 @@
-NeP.Interface.DkBlood = {
+NeP.Interface.classGUIs[250] = {
 	key = "NePConfDkBlood",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
