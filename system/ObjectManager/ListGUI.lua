@@ -47,10 +47,9 @@ function OMGUI_RUN()
 	
 	NeP_OMLIST = NeP.Interface.addFrame(NeP_Frame)
 	NeP_OMLIST:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT) 
-	NeP_OMLIST:SetPoint("TOP", 0, -15) 
-	--NeP_OMLIST:SetMovable(true)
+	NeP_OMLIST:SetPoint("TOP", 0, -NeP_Frame:GetHeight()) 
 	NeP_OMLIST.texture:SetTexture(0,0,0,0.7)
-	--NeP_OMLIST:SetClampedToScreen(true)
+	NeP_OMLIST:SetClampedToScreen(true)
 
 	-- Settings Frame
 	local settingsFrame = NeP.Interface.addFrame(NeP_OMLIST)
