@@ -1,3 +1,7 @@
+NeP.Config.defaults['NePFrame'] = {
+	['POS'] = "TOP"
+}
+
 local _addonColor = '|cff'..NeP.Interface.addonColor
 local buttonColor = "|cffFFFFFF"
 
@@ -28,15 +32,27 @@ function NeP.Alert(txt)
 	end
 end
 
+NeP.Config.defaults['NePFrame'] = {
+	['POS1'] = "TOP",
+	['POS2'] = "0",
+	['POS3'] = "0"
+}
+
 function StatusGUI_RUN()
 	
 	NeP_Frame = NeP.Interface.addFrame(UIParent)
-	NeP_Frame:SetPoint("TOP") 
+	NeP_Frame:SetPoint(NeP.Config.readKey("NePFrame", "POS1"), NeP.Config.readKey("NePFrame", "POS2"), NeP.Config.readKey("NePFrame", "POS3"))
 	NeP_Frame:SetMovable(NeP.Core.PeFetch('NePConf', 'NePFrameMove'))
 	NeP_Frame:EnableMouse(NeP.Core.PeFetch('NePConf', 'NePFrameMove'))
 	NeP_Frame:RegisterForDrag("LeftButton")
 	NeP_Frame:SetScript("OnDragStart", NeP_Frame.StartMoving)
-	NeP_Frame:SetScript("OnDragStop", NeP_Frame.StopMovingOrSizing)
+	NeP_Frame:SetScript("OnDragStop", function(self)
+		local from, _, to, x, y = self:GetPoint()
+		self:StopMovingOrSizing()
+		NeP.Config.writeKey("NePFrame", "POS1", select(1, from))
+		NeP.Config.writeKey("NePFrame", "POS2", x)
+		NeP.Config.writeKey("NePFrame", "POS3", y)
+	end)
 	NeP_Frame:SetFrameLevel(0)
 	NeP_Frame:SetFrameStrata("HIGH")
 	NeP_Frame.texture:SetTexture(_getRGB(NeP.Core.PeFetch('NePConf', 'NePFrameColor')))
