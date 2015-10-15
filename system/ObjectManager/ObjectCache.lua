@@ -382,7 +382,6 @@ local function GenericFilter(unit)
 							local object = enemieCache[i]
 							if object.distance == objectDis and object.name == objectName then
 								alreadyExists = true
-								print("1 - "..object.key.." - "..unit)
 							end
 						end
 					elseif UnitIsFriend("player", unit) then
@@ -390,11 +389,10 @@ local function GenericFilter(unit)
 							local object = friendlyCache[i]
 							if object.distance == objectDis and object.name == objectName then
 								alreadyExists = true
-								print("2 - "..object.key.." - "..unit)
 							end
 						end
 					end
-					if not alreadyExists then print("3") return true end
+					if not alreadyExists then return true end
 				end
 			end
 		end
