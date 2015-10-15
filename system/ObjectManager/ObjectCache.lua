@@ -371,26 +371,30 @@ end
 ---------------------------------------------------]]
 local function GenericFilter(unit)
 	if UnitExists(unit) then
-		local objectName = UnitName(unit)
 		if ProbablyEngine.condition["alive"](unit) then
 			if not BlacklistedObject(unit) then
 				if not BlacklistedDebuffs(unit) then
+					local objectName = UnitName(unit)
+					local objectDis = objectDistance('player', unit)
+					local alreadyExists = false
 					if UnitCanAttack('player', unit) then
 						for i=1, #enemieCache do
 							local object = enemieCache[i]
-							if object.key ~= unit and object.name ~= objectName then
-								return true
+							if object.distance == objectDis and object.name == objectName then
+								alreadyExists = true
+								print("1 - "..object.key.." - "..unit)
 							end
 						end
 					elseif UnitIsFriend("player", unit) then
 						for i=1, #friendlyCache do
 							local object = friendlyCache[i]
-							if object.key ~= unit and object.name ~= objectName then
-								return true
+							if object.distance == objectDis and object.name == objectName then
+								alreadyExists = true
+								print("2 - "..object.key.." - "..unit)
 							end
 						end
 					end
-					return true
+					if not alreadyExists then print("3") return true end
 				end
 			end
 		end
