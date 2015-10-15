@@ -83,8 +83,9 @@ NeP.Interface.General = {
 							  key = "class"
 							},
 						},
-						default = "black"
+						default = "white"
 					},
+					{ type = 'spacer' },
 					{ -- Reload BT
 						type = "button", 
 						text = "Apply", 
