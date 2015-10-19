@@ -83,7 +83,7 @@ NeP.Interface.General = {
 							  key = "class"
 							},
 						},
-						default = "white"
+						default = "black"
 					},
 					{ type = 'spacer' },
 					{ -- Reload BT
