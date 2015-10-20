@@ -12,138 +12,6 @@ local peConfig = NeP.Core.PeConfig
 local UnitExists = UnitExists
 local objectDistance = NeP.Core.Distance
 
-local lumbermillIDs = {
-		--[[ //// WOD //// ]]
-	234127,
-	234193,
-	234023,
-	234099,
-	233634,
-	237727,
-	234126,
-	234111,
-	233922,
-	234128,
-	234000,
-	234195,
-	234196,
-	234097,
-	234198,
-	234197,
-	234123,
-	234098,
-	234022,
-	233604,
-	234120,
-	234194,
-	234021,
-	234080,
-	234110,
-	230964,
-	233635,
-	234119,
-	234122,
-	234007,
-	234199,
-	234124
-}
-
-local function NeP_objectIsLumber(Obj)
-	if NeP.Core.PeFetch('NePconf_Overlays', 'objectsLM') then
-		local guid = UnitGUID(Obj)
-		local _, _, _, _, _, _id, _ = strsplit('-', guid)
-		local ObjID = tonumber(_id)
-		for k,v in pairs(lumbermillIDs) do
-			if tonumber(ObjID) == v then return true end
-		end
-	end
-end
-
-local oresIDs = {
-		--[[ //// WOD //// ]]
-	228510, --[[ Rich True Iron Deposit ]]
-	228493, --[[ True Iron Deposit ]]
-	228564, --[[ Rich Blackrock Deposit ]]
-	228563, --[[ Blackrock Deposit ]]
-	232544, --[[ True Iron Deposit ]]
-	232545, --[[ Rich True Iron Deposit ]]
-	232542, --[[ Blackrock Deposit ]]
-	232543, --[[ Rich Blackrock Deposit ]]
-	232541, --[[ Mine Cart ]]
-}
-
-local function NeP_objectIsOre(Obj)
-	if NeP.Core.PeFetch('NePconf_Overlays', 'objectsOres') then
-		local guid = UnitGUID(Obj)
-		local _, _, _, _, _, _id, _ = strsplit('-', guid)
-		local ObjID = tonumber(_id)
-		for k,v in pairs(oresIDs) do
-			if tonumber(ObjID) == v then return true end
-		end
-	end
-end
-
-local herbsIDs = {
-		--[[ //// WOD //// ]]
-	237400,
-	228576,
-	235391,
-	237404,
-	228574,
-	235389,
-	228575,
-	237406,
-	235390,
-	235388,
-	228573,
-	237402,
-	228571,
-	237398,
-	233117,
-	235376,
-	228991,
-	235387,
-	237396,
-	228572
-}
-
-local function NeP_objectIsHerb(Obj)
-	if NeP.Core.PeFetch('NePconf_Overlays', 'objectsHerbs') then
-		local guid = UnitGUID(Obj)
-		local _, _, _, _, _, _id, _ = strsplit('-', guid)
-		local ObjID = tonumber(_id)
-		for k,v in pairs(herbsIDs) do
-			if tonumber(ObjID) == v then return true end
-		end
-	end
-end
-
-local fishIDs = {
-		--[[ //// WOD //// ]]
-	229072,
-	229073,
-	229069,
-	229068,
-	243325,
-	243354,
-	229070,
-	229067,
-	236756,
-	237295,
-	229071,
-}
-
-local function NeP_objectIsFish(Obj)
-	if NeP.Core.PeFetch('NePconf_Overlays', 'objectsFishs') then
-		local guid = UnitGUID(Obj)
-		local _, _, _, _, _, _id, _ = strsplit('-', guid)
-		local ObjID = tonumber(_id)
-		for k,v in pairs(fishIDs) do
-			if tonumber(ObjID) == v then return true end
-		end
-	end
-end
-
 --[[
 	DESC: Checks if unit has a Blacklisted Debuff.
 	This will remove the unit from the OM cache.
@@ -265,12 +133,97 @@ local function UnitIsDummy(unit)
 	end
 end
 
-local function isGameObject(object)
-	if NeP_objectIsLumber(object) then return true, 'LM' end
-	if NeP_objectIsOre(object) then return true, 'Ore' end
-	if NeP_objectIsHerb(object) then return true, 'Herb' end
-	if NeP_objectIsFish(object) then return true, 'Fish' end
-	return false, nil
+GameObjects = {
+	--[[ //// lumbermillIDs //// ]]
+			--[[ //// WOD //// ]]
+		[234127] = 'LM',
+		[234193] = 'LM',
+		[234023] = 'LM',
+		[234099] = 'LM',
+		[233634] = 'LM',
+		[237727] = 'LM',
+		[234126] = 'LM',
+		[234111] = 'LM',
+		[233922] = 'LM',
+		[234128] = 'LM',
+		[234000] = 'LM',
+		[234195] = 'LM',
+		[234196] = 'LM',
+		[234097] = 'LM',
+		[234198] = 'LM',
+		[234197] = 'LM',
+		[234123] = 'LM',
+		[234098] = 'LM',
+		[234022] = 'LM',
+		[233604] = 'LM',
+		[234120] = 'LM',
+		[234194] = 'LM',
+		[234021] = 'LM',
+		[234080] = 'LM',
+		[234110] = 'LM',
+		[230964] = 'LM',
+		[233635] = 'LM',
+		[234119] = 'LM',
+		[234122] = 'LM',
+		[234007] = 'LM',
+		[234199] = 'LM',
+		[234124] = 'LM',
+	--[[ //// oresIDs //// ]]
+			--[[ //// WOD //// ]]
+		[228510] = 'Ore', --[[ Rich True Iron Deposit ]]
+		[228493] = 'Ore', --[[ True Iron Deposit ]]
+		[228564] = 'Ore', --[[ Rich Blackrock Deposit ]]
+		[228563] = 'Ore', --[[ Blackrock Deposit ]]
+		[232544] = 'Ore', --[[ True Iron Deposit ]]
+		[232545] = 'Ore', --[[ Rich True Iron Deposit ]]
+		[232542] = 'Ore', --[[ Blackrock Deposit ]]
+		[232543] = 'Ore', --[[ Rich Blackrock Deposit ]]
+		[232541] = 'Ore', --[[ Mine Cart ]]
+	--[[ //// herbsIDs //// ]]
+			--[[ //// WOD //// ]]
+		[237400] = 'Herb',
+		[228576] = 'Herb',
+		[235391] = 'Herb',
+		[237404] = 'Herb',
+		[228574] = 'Herb',
+		[235389] = 'Herb',
+		[228575] = 'Herb',
+		[237406] = 'Herb',
+		[235390] = 'Herb',
+		[235388] = 'Herb',
+		[228573] = 'Herb',
+		[237402] = 'Herb',
+		[228571] = 'Herb',
+		[237398] = 'Herb',
+		[233117] = 'Herb',
+		[235376] = 'Herb',
+		[228991] = 'Herb',
+		[235387] = 'Herb',
+		[237396] = 'Herb',
+		[228572] = "Herb",
+	--[[ //// fishIDs //// ]]
+			--[[ //// WOD //// ]]
+		[229072] = 'Fish',
+		[229073] = 'Fish',
+		[229069] = 'Fish',
+		[229068] = 'Fish',
+		[243325] = 'Fish',
+		[243354] = 'Fish',
+		[229070] = 'Fish',
+		[229067] = 'Fish',
+		[236756] = 'Fish',
+		[237295] = 'Fish',
+		[229071] = 'Fish',
+}
+
+function isGameObject(Obj)
+	local guid = UnitGUID(Obj)
+	local _, _, _, _, _, _id, _ = strsplit('-', guid)
+	local ObjID = tonumber(_id)
+	if GameObjects[ObjID] ~= nil then
+		return tostring(GameObjects[ObjID]), true
+	end
+	return 'nothing', false
 end
 
 --[[
@@ -280,7 +233,7 @@ end
 ---------------------------------------------------]]
 local function addToOM(Obj, Dist)
 	-- Game Object
-	local isGameObject, _type = isGameObject(Obj)
+	local _type, isGameObject = isGameObject(Obj)
 	if isGameObject then
 		objectsCache[#objectsCache+1] = {
 			key = Obj, 
