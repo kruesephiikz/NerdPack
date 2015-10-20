@@ -4,7 +4,7 @@ NeP.ObjectManager = {
 	objectsCache = {},
 }
 
--- Local stuff to reduce gobal calls
+-- Local stuff to reduce global calls
 local enemieCache = NeP.ObjectManager.unitCache
 local friendlyCache = NeP.ObjectManager.unitFriendlyCache
 local objectsCache = NeP.ObjectManager.objectsCache
@@ -361,14 +361,7 @@ local function NeP_FireHackOM()
 	for i=1, totalObjects do
 		local Obj = ObjectWithIndex(i)
 		if ObjectExists(Obj) then
-			-- Objects OM
-			if ObjectIsType(Obj, ObjectTypes.GameObject) then
-				local ObjDistance = objectDistance('player', Obj)
-				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					addToOM(Obj, ObjDistance)
-				end
-			-- Units OM
-			elseif ObjectIsType(Obj, ObjectTypes.Unit) then
+			if ObjectIsType(Obj, ObjectTypes.Unit) or ObjectIsType(Obj, ObjectTypes.GameObject) then
 				local ObjDistance = objectDistance('player', Obj)
 				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
 					if not BlacklistedObject(Obj) and ProbablyEngine.condition["alive"](Obj) then

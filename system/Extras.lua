@@ -4,7 +4,7 @@ NeP.Extras = {
 	dummyTimeRemaning = 0
 }
 
--- Local stuff to reduce gobal calls
+-- Local stuff to reduce global calls
 local enemieCache = NeP.ObjectManager.unitCache
 local friendlyCache = NeP.ObjectManager.unitFriendlyCache
 local peConfig = NeP.Core.PeConfig

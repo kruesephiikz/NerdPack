@@ -4,7 +4,7 @@
 ]]
 NeP.Lib = {}
 
--- Local stuff to reduce gobal calls
+-- Local stuff to reduce global calls
 local _parse = ProbablyEngine.dsl.parse
 local enemieCache = NeP.ObjectManager.unitCache
 local friendlyCache = NeP.ObjectManager.unitFriendlyCache
