@@ -265,6 +265,97 @@ local function UnitIsDummy(unit)
 	end
 end
 
+--[[
+	DESC: Places the object in its correct place.
+	This is done in a seperate function so we dont have
+	to repeate code over and over again for all unlockers.
+---------------------------------------------------]]
+local function addToOM(object, distance)
+	-- Lumbermill
+	if NeP_objectIsLumber(Obj) then
+		objectsCache[#objectsCache+1] = {
+			key = object, 
+			distance = distance, 
+			health = 1, 
+			maxHealth = 1, 
+			actualHealth = 1, 
+			name = UnitName(object),
+			is = 'LM'
+		}
+	-- Ores
+	elseif NeP_objectIsOre(Obj) then
+		objectsCache[#objectsCache+1] = {
+			key = object, 
+			distance = distance, 
+			health = 1, 
+			maxHealth = 1, 
+			actualHealth = 1, 
+			name = UnitName(object),
+			is = 'Ore'
+		}
+	-- Herbs
+	elseif NeP_objectIsHerb(Obj) then
+		objectsCache[#objectsCache+1] = {
+			key = object, 
+			distance = distance, 
+			health = 1, 
+			maxHealth = 1, 
+			actualHealth = 1, 
+			name = UnitName(object),
+			is = 'Herb'
+		}
+	-- Fish
+	elseif NeP_objectIsFish(Obj) then
+		objectsCache[#objectsCache+1] = {
+			key = object, 
+			distance = distance, 
+			health = 1, 
+			maxHealth = 1, 
+			actualHealth = 1, 
+			name = UnitName(object),
+			is = 'Fish'
+		}
+	elseif UnitIsFriend("player", object) then
+		if NeP.Core.PeFetch("ObjectCache", "FU") then
+			friendlyCache[#friendlyCache+1] = {
+				key = object, 
+				distance = distance, 
+				health = math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+				maxHealth = UnitHealthMax(object), 
+				actualHealth = UnitHealth(object), 
+				name = UnitName(object),
+				is = "friendly"
+			}
+		end
+	-- Enemie
+	elseif UnitCanAttack('player', object) then
+		if NeP.Core.PeFetch("ObjectCache", "EU") then
+			enemieCache[#enemieCache+1] = {
+				key = object, 
+				distance = distance, 
+				health = math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+				maxHealth = UnitHealthMax(object), 
+				actualHealth = UnitHealth(object), 
+				name = UnitName(object),
+				is = "enemie"
+			}
+		end
+	-- Dummy
+	elseif UnitIsDummy(Obj) then
+		if NeP.Core.PeFetch("ObjectCache", "dummys") then
+			enemieCache[#enemieCache+1] = {
+				key = object, 
+				distance = distance, 
+				health = math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
+				maxHealth = UnitHealthMax(object), 
+				actualHealth = UnitHealth(object), 
+				name = UnitName(object),
+				is = "dummy"
+			}
+		end
+	end
+end
+
 local function NeP_FireHackOM()
 	local totalObjects = ObjectCount()
 	for i=1, totalObjects do
@@ -274,42 +365,7 @@ local function NeP_FireHackOM()
 			if ObjectIsType(Obj, ObjectTypes.GameObject) then
 				local ObjDistance = objectDistance('player', Obj)
 				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					-- Lumbermill
-					if NeP_objectIsLumber(Obj) then
-						objectsCache[#objectsCache+1] = {
-							key=Obj,
-							distance=ObjDistance,
-							name = UnitName(Obj), 
-							is='LM'
-						}
-					end
-					-- Ores
-					if NeP_objectIsOre(Obj) then
-						objectsCache[#objectsCache+1] = {
-							key=Obj, 
-							distance=ObjDistance,
-							name = UnitName(Obj), 
-							is='Ore'
-						}
-					end
-					-- Herbs
-					if NeP_objectIsHerb(Obj) then
-						objectsCache[#objectsCache+1] = {
-							key=Obj, 
-							distance=ObjDistance, 
-							name = UnitName(Obj), 
-							is='Herb'
-						}
-					end
-					-- Fish
-					if NeP_objectIsFish(Obj) then
-						objectsCache[#objectsCache+1] = {
-							key=Obj, 
-							distance=ObjDistance, 
-							name = UnitName(Obj), 
-							is='Fish'
-						}
-					end
+					addToOM(Obj, ObjDistance)
 				end
 			-- Units OM
 			elseif ObjectIsType(Obj, ObjectTypes.Unit) then
@@ -317,47 +373,7 @@ local function NeP_FireHackOM()
 				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
 					if not BlacklistedObject(Obj) and ProbablyEngine.condition["alive"](Obj) then
 						if not BlacklistedDebuffs(Obj) then
-							-- Friendly Cache
-							if UnitIsFriend("player", Obj) then
-								-- Enabled on GUI
-								if NeP.Core.PeFetch("ObjectCache", "FU") then
-									friendlyCache[#friendlyCache+1] = {
-										key=Obj, 
-										distance=ObjDistance, 
-										health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-										maxHealth = UnitHealthMax(Obj),
-										actualHealth = UnitHealth(Obj),
-										name = UnitName(Obj),
-									}
-								end
-								-- INSERT DUMMYS!
-							elseif UnitIsDummy(Obj) then
-									if NeP.Core.PeFetch("ObjectCache", "dummys") then
-									enemieCache[#enemieCache+1] = {
-										key=Obj, 
-										distance=ObjDistance, 
-										health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-										maxHealth = UnitHealthMax(Obj),
-										actualHealth = UnitHealth(Obj),
-										name = UnitName(Obj),
-										dummy = true
-									}
-								end
-								-- Enemie Units
-							elseif UnitCanAttack('player', Obj) then
-								-- Enabled on GUI and unit affecting combat
-								if NeP.Core.PeFetch("ObjectCache", "EU") then
-									enemieCache[#enemieCache+1] = {
-										key=Obj, 
-										distance=ObjDistance, 
-										health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-										maxHealth = UnitHealthMax(Obj),
-										actualHealth = UnitHealth(Obj),
-										name = UnitName(Obj), 
-										class = UnitClassification(Obj)
-									}
-								end
-							end
+							addToOM(Obj, ObjDistance)
 						end
 					end
 				end
@@ -369,13 +385,12 @@ end
 --[[
 	Generic OM
 ---------------------------------------------------]]
-local function GenericFilter(unit)
+local function GenericFilter(unit, objectDis)
 	if UnitExists(unit) then
 		if ProbablyEngine.condition["alive"](unit) then
 			if not BlacklistedObject(unit) then
 				if not BlacklistedDebuffs(unit) then
 					local objectName = UnitName(unit)
-					local objectDis = objectDistance('player', unit)
 					local alreadyExists = false
 					if UnitCanAttack('player', unit) then
 						for i=1, #enemieCache do
@@ -402,86 +417,35 @@ end
 
 local function NeP_GenericOM()
 	-- Self
-	friendlyCache[#friendlyCache+1] = {
-		key='Player', 
-		distance=0, 
-		health=math.floor((UnitHealth('player') / UnitHealthMax('player')) * 100), 
-		maxHealth=UnitHealthMax('player'), 
-		actualHealth=UnitHealth('player'), 
-		name=UnitName('player')
-	}
+	addToOM('player', 5)
 	-- If in Group scan frames...
 	if IsInGroup() or IsInRaid() then
 		local prefix = (IsInRaid() and 'raid') or 'party'
 		for i = 1, GetNumGroupMembers() do
 			-- Enemie
 			local target = prefix..i.."target"
-			if GenericFilter(target) then
-				local ObjDistance = objectDistance('player', target)
+			local ObjDistance = objectDistance('player', target)
+			if GenericFilter(target, ObjDistance) then
 				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					if NeP.Core.PeFetch("ObjectCache", "EU") then
-						if UnitCanAttack('player', target) then
-							enemieCache[#enemieCache+1] = {
-								key=target, 
-								distance=ObjDistance, 
-								health=math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100), 
-								maxHealth=UnitHealthMax(target), 
-								actualHealth=UnitHealth(target), 
-								name=UnitName(target)
-							}
-						end
-					end
+					addToOM(target, ObjDistance)
 				end
 			end
 			-- Friendly
 			local friendly = prefix..i
-			if NeP.Core.PeFetch("ObjectCache", "FU") then
-				if GenericFilter(friendly) then
-					local ObjDistance = objectDistance('player', friendly)
-					if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-						friendlyCache[#friendlyCache+1] = {
-							key=friendly, 
-							distance=ObjDistance, 
-							health=math.floor((UnitHealth(friendly) / UnitHealthMax(friendly)) * 100), 
-							maxHealth=UnitHealthMax(friendly), 
-							actualHealth=UnitHealth(friendly), 
-							name=UnitName(friendly)
-						}
-					end
+			local ObjDistance = objectDistance('player', friendly)
+			if GenericFilter(friendly, ObjDistance) then
+				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
+					addToOM(friendly, ObjDistance)
 				end
 			end
 		end
 		-- Mouseover
 		if UnitExists('mouseover') then
 			local object = 'mouseover'
-			if GenericFilter(object) then
-				local ObjDistance = objectDistance('player', object)
+			local ObjDistance = objectDistance('player', object)
+			if GenericFilter(object, ObjDistance) then
 				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					-- Friendly
-					if UnitIsFriend("player", object) then
-						if NeP.Core.PeFetch("ObjectCache", "FU") then
-							friendlyCache[#friendlyCache+1] = {
-								key=object, 
-								distance=ObjDistance, 
-								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-								maxHealth=UnitHealthMax(object), 
-								actualHealth=UnitHealth(object), 
-								name=UnitName(object)
-							}
-						end
-					-- Enemie
-					elseif UnitCanAttack('player', object) then
-						if NeP.Core.PeFetch("ObjectCache", "EU") then
-							enemieCache[#enemieCache+1] = {
-								key=object, 
-								distance=ObjDistance, 
-								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-								maxHealth=UnitHealthMax(object), 
-								actualHealth=UnitHealth(object), 
-								name=UnitName(object)
-							}
-						end
-					end
+					addToOM(object, ObjDistance)
 				end
 			end
 		end
@@ -490,68 +454,20 @@ local function NeP_GenericOM()
 		-- Target
 		if UnitExists('target') then
 			local object = 'target'
-			if GenericFilter(object) then
-				local ObjDistance = objectDistance('player', object)
+			local ObjDistance = objectDistance('player', object)
+			if GenericFilter(object, ObjDistance) then
 				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					-- Friendly
-					if UnitIsFriend("player", object) then
-						if NeP.Core.PeFetch("ObjectCache", "FU") then
-							friendlyCache[#friendlyCache+1] = {
-								key=object, 
-								distance=ObjDistance, 
-								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-								maxHealth=UnitHealthMax(object), 
-								actualHealth=UnitHealth(object), 
-								name=UnitName(object)
-							}
-						end
-					-- Enemie
-					elseif UnitCanAttack('player', object) then
-						if NeP.Core.PeFetch("ObjectCache", "EU") then
-							enemieCache[#enemieCache+1] = {
-								key=object, 
-								distance=ObjDistance, 
-								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-								maxHealth=UnitHealthMax(object), 
-								actualHealth=UnitHealth(object), 
-								name=UnitName(object)
-							}
-						end
-					end
+					addToOM(object, ObjDistance)
 				end
 			end
 		end
 		-- Mouseover
 		if UnitExists('mouseover') then
 			local object = 'mouseover'
-			if GenericFilter(object) then
-				local ObjDistance = objectDistance('player', object)
+			local ObjDistance = objectDistance('player', object)
+			if GenericFilter(object, ObjDistance) then
 				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					-- Friendly
-					if UnitIsFriend("player", object) then
-						if NeP.Core.PeFetch("ObjectCache", "FU") then
-							friendlyCache[#friendlyCache+1] = {
-								key=object, 
-								distance=ObjDistance, 
-								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-								maxHealth=UnitHealthMax(object), 
-								actualHealth=UnitHealth(object), 
-								name=UnitName(object)
-							}
-						end
-					-- Enemie
-					elseif UnitCanAttack('player', object) then
-						if NeP.Core.PeFetch("ObjectCache", "EU") then
-							enemieCache[#enemieCache+1] = {
-								key=object, 
-								distance=ObjDistance, 
-								health=math.floor((UnitHealth(object) / UnitHealthMax(object)) * 100), 
-								maxHealth=UnitHealthMax(object), 
-								actualHealth=UnitHealth(object), 
-								name=UnitName(object),
-							}
-						end
-					end
+					addToOM(object, ObjDistance)
 				end
 			end
 		end
