@@ -1,5 +1,4 @@
-NeP.Config.defaults['OMList'] = {
-	['test'] = false,
+NeP.Config.Defaults['OMList'] = {
 	['ShowDPS'] = false,
 	['ShowInfoText'] = true,
 	['ShowHealthBars'] = true,
@@ -126,15 +125,8 @@ function OMGUI_RUN()
 	local titleFrame = NeP.Interface.addFrame(NeP_OMLIST)
 	titleFrame:SetSize(OPTIONS_WIDTH-30, 30) 
 	titleFrame:SetPoint("TOPLEFT", NeP_OMLIST)
-	--titleFrame:EnableMouse(true)
 	titleFrame:RegisterForDrag("LeftButton")
 	titleFrame.texture:SetTexture(0,0,0,1)
-	--titleFrame:SetScript("OnDragStart", function(self) 
-	--	self:GetParent():StartMoving()
-	--end)
-	--titleFrame:SetScript("OnDragStop", function(self) 
-	--	self:GetParent():StopMovingOrSizing()
-	--end)
 	local titleText1 = NeP.Interface.addText(titleFrame)
 	titleText1:SetPoint("LEFT", 0, 0)
 	titleText1:SetText('OM')
@@ -226,17 +218,6 @@ function OMGUI_RUN()
 	objectsContentFrame.texture:SetTexture(0,0,0,0)
 
 	ObjectScroll:SetScrollChild(objectsContentFrame)
-
-	local _CacheShow = false
-
-	function NeP.Interface.OMGUI()
-		_CacheShow = not _CacheShow
-		if _CacheShow then
-			NeP_OMLIST:Show()
-		else
-			NeP_OMLIST:Hide()
-		end
-	end
 
 	local function getStatusBar()
 		local statusBar = tremove(statusBars)

@@ -1,7 +1,7 @@
-NeP.Config.defaults['NePFrame'] = {
-	['POS1'] = "TOP",
-	['POS2'] = "0",
-	['POS3'] = "0"
+NeP.Config.Defaults['NePFrame'] = {
+	['POS_1'] = 'TOP',
+	['POS_2'] = 0,
+	['POS_3'] = 0
 }
 
 -- Store and delay Alerts until ready.
@@ -15,75 +15,75 @@ end
 
 -- Get RGB colors
 local _RBGColors = {
-	["black"] = { r = 0.00, g = 0.00, b = 0.00 },
-	["white"] = { r = 1.00, g = 1.00, b = 1.00 },
-	["green"] = { r = 0.33, g = 0.54, b = 0.52 },
-	["blue"] = { r = 0.00, g = 0.44, b = 0.87 },
-	["red"] = { r = 0.77, g = 0.12, b = 0.23 },
-	["class"] = { r = select(1, NeP.Core.classColor("player", "RBG")), g = select(2, NeP.Core.classColor("player", "RBG")), b = select(3, NeP.Core.classColor("player", "RBG")) },
+	['black'] = { r = 0.00, g = 0.00, b = 0.00 },
+	['white'] = { r = 1.00, g = 1.00, b = 1.00 },
+	['green'] = { r = 0.33, g = 0.54, b = 0.52 },
+	['blue'] = { r = 0.00, g = 0.44, b = 0.87 },
+	['red'] = { r = 0.77, g = 0.12, b = 0.23 },
+	['class'] = { r = select(1, NeP.Core.classColor('player', 'RBG')), g = select(2, NeP.Core.classColor('player', 'RBG')), b = select(3, NeP.Core.classColor('player', 'RBG')) },
 }
 local function _getRGB(color)
-	if color == nil then color = "black" end
+	if color == nil then color = 'black' end
 	return _RBGColors[color].r, _RBGColors[color].g, _RBGColors[color].b
 end
 
 function StatusGUI_RUN()
 	
 	local _addonColor = '|cff'..NeP.Interface.addonColor
-	local textColor = "|cffFFFFFF"
+	local textColor = '|cffFFFFFF'
 	local bC_R, bC_G, bC_B = _getRGB(NeP.Core.PeFetch('NePConf', 'NePFrameColor'))
 	local OPTIONS_HEIGHT = 30
 	
 	-- Main Farme (PARENT)
 	NeP_Frame = NeP.Interface.addFrame(UIParent)
-	NeP_Frame:SetPoint(NeP.Config.readKey("NePFrame", "POS1"), NeP.Config.readKey("NePFrame", "POS2"), NeP.Config.readKey("NePFrame", "POS3"))
+	NeP_Frame:SetPoint(NeP.Config.readKey('NePFrame', 'POS_1'), NeP.Config.readKey('NePFrame', 'POS_2'), NeP.Config.readKey('NePFrame', 'POS_3'))
 	NeP_Frame:SetMovable(NeP.Core.PeFetch('NePConf', 'NePFrameMove'))
 	NeP_Frame:EnableMouse(NeP.Core.PeFetch('NePConf', 'NePFrameMove'))
-	NeP_Frame:RegisterForDrag("LeftButton")
-	NeP_Frame:SetScript("OnDragStart", NeP_Frame.StartMoving)
-	NeP_Frame:SetScript("OnDragStop", function(self)
+	NeP_Frame:RegisterForDrag('LeftButton')
+	NeP_Frame:SetScript('OnDragStart', NeP_Frame.StartMoving)
+	NeP_Frame:SetScript('OnDragStop', function(self)
 		local from, _, to, x, y = self:GetPoint()
 		self:StopMovingOrSizing()
-		NeP.Config.writeKey("NePFrame", "POS1", from)
-		NeP.Config.writeKey("NePFrame", "POS2", x)
-		NeP.Config.writeKey("NePFrame", "POS3", y)
+		NeP.Config.writeKey('NePFrame', 'POS_1', from)
+		NeP.Config.writeKey('NePFrame', 'POS_2', x)
+		NeP.Config.writeKey('NePFrame', 'POS_3', y)
 	end)
 	NeP_Frame:SetFrameLevel(0)
-	NeP_Frame:SetFrameStrata("HIGH")
+	NeP_Frame:SetFrameStrata('HIGH')
 	NeP_Frame.texture:SetTexture(bC_R, bC_G, bC_B, 0.7)
 	NeP_Frame:SetClampedToScreen(true)
 	
 		-- Addon Name text.
 		local Tittle_Text = NeP.Interface.addText(NeP_Frame)
-		Tittle_Text:SetPoint("LEFT", NeP_Frame, 0, 0)
+		Tittle_Text:SetPoint('LEFT', NeP_Frame, 0, 0)
 		Tittle_Text:SetText('|T'..NeP.Info.Logo..':10:10|t'.._addonColor..NeP.Info.Name)
-		Tittle_Text:SetFont("Fonts\\FRIZQT__.TTF", NeP.Core.PeFetch('NePConf', 'NePFrameSize') or 20)
+		Tittle_Text:SetFont('Fonts\\FRIZQT__.TTF', NeP.Core.PeFetch('NePConf', 'NePFrameSize') or 20)
 		Tittle_Text:SetSize(Tittle_Text:GetStringWidth(), Tittle_Text:GetStringHeight())
 		
 		-- Button for minimizing menus or other child GUI's.
 		local minButton = NeP.Interface.addButton(NeP_Frame)
-		minButton.text:SetText(textColor.."=")
-		minButton:SetPoint("RIGHT", NeP_Frame, 0, 0)
+		minButton.text:SetText(textColor..'=')
+		minButton:SetPoint('RIGHT', NeP_Frame, 0, 0)
 		minButton:SetSize(15, Tittle_Text:GetStringHeight()) 
 	
-	-- Set Main Frame size depending on "Tittle_Text" and "minButton".
+	-- Set Main Frame size depending on 'Tittle_Text' and 'minButton'.
 	NeP_Frame:SetSize(Tittle_Text:GetStringWidth()+minButton:GetWidth(), Tittle_Text:GetStringHeight())
 	
 		-- GUI wich displays alerts
 		local AlertGUI = NeP.Interface.addFrame(NeP_Frame)
-		AlertGUI:SetPoint("TOP", NeP_Frame, 0, -Tittle_Text:GetStringHeight()) 
+		AlertGUI:SetPoint('TOP', NeP_Frame, 0, -Tittle_Text:GetStringHeight()) 
 		AlertGUI.texture:SetTexture(bC_R, bC_G, bC_B, 0.7)
 		AlertGUI:SetClampedToScreen(true)
 		local AlertGUI_Text = NeP.Interface.addText(AlertGUI)
-		AlertGUI_Text:SetPoint("TOP", AlertGUI, 0, 0)
+		AlertGUI_Text:SetPoint('TOP', AlertGUI, 0, 0)
 		AlertGUI_Text:SetText('')
-		AlertGUI_Text:SetFont("Fonts\\FRIZQT__.TTF", 30)
+		AlertGUI_Text:SetFont('Fonts\\FRIZQT__.TTF', 30)
 		AlertGUI:SetAlpha(1)
 		AlertGUI:Hide()
 		
 		-- Menu wich contains all buttons
 		local MenuGUI = NeP.Interface.addFrame(NeP_Frame)
-		MenuGUI:SetPoint("TOP", NeP_Frame, 0, -Tittle_Text:GetStringHeight())
+		MenuGUI:SetPoint('TOP', NeP_Frame, 0, -Tittle_Text:GetStringHeight())
 		MenuGUI:SetClampedToScreen(true)
 		MenuGUI.texture:SetTexture(bC_R, bC_G, bC_B, 0.5)
 		
@@ -93,19 +93,19 @@ function StatusGUI_RUN()
 			local buttonsTH = 5
 			
 			local statusText2 = NeP.Interface.addText(MenuGUI)
-			statusText2:SetPoint("TOP", MenuGUI, 0, 0)
+			statusText2:SetPoint('TOP', MenuGUI, 0, 0)
 			statusText2:SetText(_addonColor..'Version:|cffFFFFFF '..NeP.Info.Version..' '..NeP.Info.Branch)
-			statusText2:SetFont("Fonts\\FRIZQT__.TTF", 15)
+			statusText2:SetFont('Fonts\\FRIZQT__.TTF', 15)
 			statusText2:SetSize(statusText2:GetStringWidth(), statusText2:GetStringHeight())
 			
 			-- Fishing
 			buttonsTH = buttonsTH + buttonH
 			local fishingButton = NeP.Interface.addButton(MenuGUI)
-			fishingButton.text:SetText(textColor.."FishingBot")
+			fishingButton.text:SetText(textColor..'FishingBot')
 			fishingButton.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			fishingButton:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			fishingButton:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			fishingButton:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			fishingButton:SetScript("OnClick", function(self)
+			fishingButton:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP.Interface.FishingGUI()
 			end)
@@ -114,10 +114,10 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local OMButton = NeP.Interface.addButton(MenuGUI)
 			OMButton.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			OMButton.text:SetText(textColor.."ObjectManager")
-			OMButton:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			OMButton.text:SetText(textColor..'ObjectManager')
+			OMButton:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			OMButton:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			OMButton:SetScript("OnClick", function(self)
+			OMButton:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP_OMLIST:Show()
 			end)
@@ -126,10 +126,10 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local ITButtom = NeP.Interface.addButton(MenuGUI)
 			ITButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			ITButtom.text:SetText(textColor.."ItemBot")
-			ITButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			ITButtom.text:SetText(textColor..'ItemBot')
+			ITButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			ITButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			ITButtom:SetScript("OnClick", function(self)
+			ITButtom:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP.Interface.FishingGUI()
 			end)
@@ -138,10 +138,10 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local InfoButtom = NeP.Interface.addButton(MenuGUI)
 			InfoButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			InfoButtom.text:SetText(textColor.."Information")
-			InfoButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			InfoButtom.text:SetText(textColor..'Information')
+			InfoButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			InfoButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			InfoButtom:SetScript("OnClick", function(self)
+			InfoButtom:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP.Interface.InfoGUI()
 			end)
@@ -150,10 +150,10 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local ClassButtom = NeP.Interface.addButton(MenuGUI)
 			ClassButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			ClassButtom.text:SetText(textColor.."Class Settings")
-			ClassButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			ClassButtom.text:SetText(textColor..'Class Settings')
+			ClassButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			ClassButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			ClassButtom:SetScript("OnClick", function(self)
+			ClassButtom:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP.Interface.ClassGUI()
 			end)
@@ -162,10 +162,10 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local SettingsButtom = NeP.Interface.addButton(MenuGUI)
 			SettingsButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			SettingsButtom.text:SetText(textColor.."General Settings")
-			SettingsButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			SettingsButtom.text:SetText(textColor..'General Settings')
+			SettingsButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			SettingsButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			SettingsButtom:SetScript("OnClick", function(self)
+			SettingsButtom:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP.Interface.ConfigGUI()
 			end)
@@ -174,10 +174,10 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local OverlaysButtom = NeP.Interface.addButton(MenuGUI)
 			OverlaysButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			OverlaysButtom.text:SetText(textColor.."Overlays")
-			OverlaysButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			OverlaysButtom.text:SetText(textColor..'Overlays')
+			OverlaysButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			OverlaysButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			OverlaysButtom:SetScript("OnClick", function(self)
+			OverlaysButtom:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP.Interface.OverlaysGUI()
 			end)
@@ -186,10 +186,10 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local DummyButtom = NeP.Interface.addButton(MenuGUI)
 			DummyButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			DummyButtom.text:SetText(textColor.."Dummy Testing")
-			DummyButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			DummyButtom.text:SetText(textColor..'Dummy Testing')
+			DummyButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			DummyButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			DummyButtom:SetScript("OnClick", function(self)
+			DummyButtom:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP.Extras.dummyTest()
 			end)
@@ -198,10 +198,10 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local HideButtom = NeP.Interface.addButton(MenuGUI)
 			HideButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			HideButtom.text:SetText(textColor.."Hide Everything")
-			HideButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			HideButtom.text:SetText(textColor..'Hide Everything')
+			HideButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			HideButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			HideButtom:SetScript("OnClick", function(self)
+			HideButtom:SetScript('OnClick', function(self)
 				_handleFrames()
 				NeP.Core.HideAll()
 			end)
@@ -210,14 +210,14 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local DonateButtom = NeP.Interface.addButton(MenuGUI)
 			DonateButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			DonateButtom.text:SetText(textColor.."Donate")
-			DonateButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			DonateButtom.text:SetText(textColor..'Donate')
+			DonateButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			DonateButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			DonateButtom:SetScript("OnClick", function(self)
+			DonateButtom:SetScript('OnClick', function(self)
 				if FireHack then
 					OpenURL(NeP.Info.Forum);
 				else
-					message("|cff00FF96Please Visit:|cffFFFFFF\n"..NeP.Info.Forum);
+					message('|cff00FF96Please Visit:|cffFFFFFF\n'..NeP.Info.Forum);
 				end
 			end)
 			
@@ -225,15 +225,15 @@ function StatusGUI_RUN()
 			buttonsTH = buttonsTH + buttonH
 			local ForumButtom = NeP.Interface.addButton(MenuGUI)
 			ForumButtom.Button1:SetTexture(bC_R, bC_G, bC_B, 0.7)
-			ForumButtom.text:SetText(textColor.."Visit Forum")
-			ForumButtom:SetPoint("TOP", MenuGUI, 0, -buttonsTH)
+			ForumButtom.text:SetText(textColor..'Visit Forum')
+			ForumButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			ForumButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
-			ForumButtom:SetScript("OnClick", function(self)
+			ForumButtom:SetScript('OnClick', function(self)
 				_handleFrames()
 				if FireHack then
 					OpenURL(NeP.Info.Donate);
 				else
-					message("|cff00FF96Please Visit:|cffFFFFFF\n"..NeP.Info.Donate);
+					message('|cff00FF96Please Visit:|cffFFFFFF\n'..NeP.Info.Donate);
 				end
 			end)
 		
@@ -251,15 +251,15 @@ function StatusGUI_RUN()
 			
 		if MenuGUI:IsVisible() then
 			MenuGUI:Hide()
-			minButton.text:SetText(textColor.."=")
+			minButton.text:SetText(textColor..'=')
 		else
 			MenuGUI:Show()
-			minButton.text:SetText(textColor.."^")
+			minButton.text:SetText(textColor..'^')
 		end
 	end
 	
 	-- Close Childs button script (has to be here because it depends on prior things)
-	minButton:SetScript("OnClick", function(self) _handleFrames() end)
+	minButton:SetScript('OnClick', function(self) _handleFrames() end)
 	
 	-- Only show if enabled
 	NeP_Frame:Hide()
@@ -289,7 +289,7 @@ function StatusGUI_RUN()
 					AlertGUI:SetSize(AlertGUI_Text:GetStringWidth()+10, AlertGUI_Text:GetStringHeight())
 					AlertGUI:Show()
 					if NeP.Core.PeFetch('NePConf', 'Sounds') then
-						PlaySoundFile(NeP.Interface.mediaDir.."beep.mp3")
+						PlaySoundFile(NeP.Interface.mediaDir..'beep.mp3')
 					end
 					_Time = GetTime()
 					_alertRunning = true

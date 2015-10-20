@@ -25,7 +25,7 @@ NeP = {
 		Name = 'NerdPack',
 		Nick = 'NeP',
 		Version = "6.2.1.1",
-		Branch = "Beta5.1",
+		Branch = "Beta6",
 		WoW_Version = "6.2.2",
 		Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
 		Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp",
@@ -67,7 +67,7 @@ DESC: Saved variables.
 Build By: MTS
 ---------------------------------------------------]]
 NeP.Config = {
-	defaults = {}
+	Defaults = {}
 }
 
 local LoadNePData = CreateFrame("Frame")
@@ -76,38 +76,38 @@ LoadNePData:SetScript("OnEvent", function(self, event, addon)
 	
 	-- IF NePData does not exist, then create it with defaults
 	if not NePData or NePData == nil then 
-	 	NePData = NeP.Config.defaults; 
+	 	NePData = NeP.Config.Defaults
 	end
 
 	-- Reset
-	NeP.Config.resetConfig = function(config)
-		NePData[config] = NeP.Config.defaults[config]
+	function NeP.Config.resetConfig(config)
+		NePData[config] = NeP.Config.Defaults[config]
 	end
-
+	
 	-- Read
-	NeP.Config.readKey = function(config, key)
+	function NeP.Config.readKey(config, key)
 		if NePData[config] ~= nil then
 			if NePData[config][key] ~= nil then
 				return NePData[config][key]
 			else
-				NePData[config][key] = NeP.Config.defaults[config][key] 
+				NePData[config][key] = NeP.Config.Defaults[config][key] 
 			end
 		else
-			NePData[config] = NeP.Config.defaults[config]
+			NePData[config] = NeP.Config.Defaults[config]
 		end
 	end
 
 	-- Write
-	NeP.Config.writeKey = function(config, key, value)
+	function NeP.Config.writeKey(config, key, value)
 		NePData[config][key] = value
 	end
 
 	-- Toggle
-	NeP.Config.toggleKey = function(config, key)
+	function NeP.Config.toggleKey(config, key)
 		if NePData[config][key] ~= nil then
 			NePData[config][key] = not NePData[config][key]
 		else
-			NePData[config][key] = NeP.Config.defaults[config][key] 
+			NePData[config][key] = NeP.Config.Defaults[config][key] 
 		end
 	end
 	

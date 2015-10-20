@@ -2,52 +2,79 @@ local dynEval = NeP.Core.dynamicEval
 local PeFetch = NeP.Core.PeFetch
 
 NeP.Interface.classGUIs[260] = {
-	key = "NePConfigRogueCombat",
+	key = 'NePConfigRogueCombat',
 	profiles = true,
-	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
-	subtitle = "Rogue Combat Settings",
+	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick..' Config',
+	subtitle = 'Rogue Combat Settings',
 	color = NeP.Core.classColor('player'),
 	width = 250,
 	height = 500,
 	config = {
 		
 		-- General
-		{ type = 'rule' },
 		{ 
 			type = 'header',
-			text = "General settings:", 
-			align = "center" 
+			text = 'General:', 
+			align = 'center'		
+		},
+			-- ...Empty...
+			{ 
+				type = 'text',
+				text = 'Nothing here yet... :C',
+				align = 'center'
+			},
+		-- Poisons
+		{ type = "spacer" },{ type = 'rule' },
+		{ 
+			type = 'header',
+			text = 'Poisons:', 
+			align = 'center' 
 		},
 			{ -- Letal Poison
-		      	type = "dropdown",
-		      	text = "Letal Posion",
-		      	key = "LetalPosion",
+		      	type = 'dropdown',
+		      	text = 'Letal Posion',
+		      	key = 'LetalPosion',
 		      	list = {
 			        {
-			          text = "Wound Posion",
-			          key = "Wound"
+			          text = 'Wound Posion',
+			          key = 'Wound'
 			        },
 			        {
-			          text = "Deadly Posion",
-			          key = "Deadly"
+			          text = 'Deadly Posion',
+			          key = 'Deadly'
 			        },
 			    },
-		    	default = "Deadly",
-		    	desc = "Select what Letal Posion to use."
+		    	default = 'Deadly',
+		    	desc = 'Select what Letal Posion to use.'
 		    },
-		{ type = "spacer" },
-		{ type = 'rule' },
+			{ -- Non-Letal Poison
+		      	type = 'dropdown',
+		      	text = 'Non-Letal Posion',
+		      	key = 'NoLetalPosion',
+		      	list = {
+			        {
+			          text = 'Crippling Poison',
+			          key = 'Crippling'
+			        },
+			        {
+			          text = 'Leeching Posion',
+			          key = 'Leeching'
+			        },
+			    },
+		    	default = 'Crippling',
+		    	desc = 'Select what Non-Letal Posion to use.'
+		    },
+		-- Survival
+		{ type = 'spacer' },{ type = 'rule' },
 		{ 
-			type = "header", 
-			text = "Survival Settings", 
-			align = "center" 
+			type = 'header', 
+			text = 'Survival:', 
+			align = 'center' 
 		},
-			
-			-- Survival Settings:
 			{
-				type = "spinner",
-				text = "Healthstone - HP",
-				key = "Healthstone",
+				type = 'spinner',
+				text = 'Healthstone - HP',
+				key = 'Healthstone',
 				width = 50,
 				min = 0,
 				max = 100,
@@ -72,71 +99,77 @@ local exeOnLoad = function()
 end
 
 local Cooldowns = {
-	{ "Vanish" },
-	{ "Preparation", "player.spell(Vanish).cooldown >= 10" },
-	{ "Adrenaline Rush", "player.energy < 20" },
-	{ "Killing Spree", {
-		"player.energy < 20",
-		"player.spell(Adrenaline Rush).cooldown >= 10"
+	{ 'Vanish' },
+	{ 'Preparation', 'player.spell(Vanish).cooldown >= 10' },
+	{ 'Adrenaline Rush', 'player.energy < 20' },
+	{ 'Killing Spree', {
+		'player.energy < 20',
+		'player.spell(Adrenaline Rush).cooldown >= 10'
 	}},
 }
 
 local Survival = {
-	{ "#5512", (function() return dynEval("player.health <= " .. PeFetch('NePConfigRogueCombat', 'Healthstone')) end) }, --Healthstone
-	{"Recuperate",{
-		"player.combopoints <= 3",
-		"player.health < 35",
-		"player.buff(Recuperate).duration <= 5"
+	{ '#5512', (function() return dynEval('player.health <= ' .. PeFetch('NePConfigRogueCombat', 'Healthstone')) end) }, --Healthstone
+	{'Recuperate',{
+		'player.combopoints <= 3',
+		'player.health < 35',
+		'player.buff(Recuperate).duration <= 5'
 	}},
-	{"Tricks of the Trade", "player.aggro > 60", "tank"},
+	{'Tricks of the Trade', 'player.aggro > 60', 'tank'},
 }
 
 local AoE = {
-	{ "Blade Flurry" },
-	{"Crimson Tempest", {
-		"player.combopoints >= 5",
-	}, "target"},
+	{ 'Blade Flurry' },
+	{'Crimson Tempest', {
+		'player.combopoints >= 5',
+	}, 'target'},
 }
 
 local ST = {
 	{{-- Auto Dotting
-		{"Rupture", {
-			"player.combopoints >= 5",
+		{'Rupture', {
+			'player.combopoints >= 5',
 			(function() return NeP.Lib.AutoDots('Rupture', 100, 7, 5) end)
-		}, "target" },
-	}, "toggle.dotEverything" },
-	{ "Ambush" },
-	{ "Revealing Strike", "!target.debuff(Revealing Strike)", "target" },
-	{ "Slice and Dice", {
-		"!player.buff(Slice and Dice)",
-		"player.combopoints < 4"
+		}, 'target' },
+	}, 'toggle.dotEverything' },
+	{ 'Ambush' },
+	{ 'Revealing Strike', '!target.debuff(Revealing Strike)', 'target' },
+	{ 'Slice and Dice', {
+		'!player.buff(Slice and Dice)',
+		'player.combopoints < 4'
 	}},
-	{ "Eviscerate", "player.combopoints >= 5", "target" },
-	{ "Sinister Strike" }
+	{ 'Eviscerate', 'player.combopoints >= 5', 'target' },
+	{ 'Sinister Strike' }
 }
 
 local outCombat = {
-	{"8676", { -- Ambush after vanish
-		"target.alive",
-		"lastcast(1856)" -- Vanish
-	}, "target" },
+	{'8676', { -- Ambush after vanish
+		'target.alive',
+		'lastcast(1856)' -- Vanish
+	}, 'target' },
 
 	-- Letal Poisons
-	{"2823", { -- Deadly Poison / Letal
-		"!lastcast(2823)",
-		"!player.buff(2823)",
-		(function() return NeP.Core.PeFetch("NePConfigRogueCombat", "LetalPosion") == "Deadly" end)
+	{'2823', { -- Deadly Poison / Letal
+		'!lastcast(2823)',
+		'!player.buff(2823)',
+		(function() return NeP.Core.PeFetch('NePConfigRogueCombat', 'LetalPosion') == 'Deadly' end)
 	}},
-	{"8679", { -- Deadly Poison / Letal
-		"!lastcast(8679)",
-		"!player.buff(8679)",
-		(function() return NeP.Core.PeFetch("NePConfigRogueCombat", "LetalPosion") == "Wound" end)
+	{'8679', { -- Deadly Poison / Letal
+		'!lastcast(8679)',
+		'!player.buff(8679)',
+		(function() return NeP.Core.PeFetch('NePConfigRogueCombat', 'LetalPosion') == 'Wound' end)
 	}},
 	
 	-- Non-Letal Poisons
-	{"3408", { -- Crippling Poison / Non-Letal
-		"!lastcast(3408)",
-		"!player.buff(3408)"
+	{'3408', { -- Crippling Poison / Non-Letal
+		'!lastcast(3408)',
+		'!player.buff(3408)',
+		(function() return NeP.Core.PeFetch('NePConfigRogueCombat', 'NoLetalPosion') == 'Crippling' end)
+	}},
+	{'108211', { -- Leeching Poison / Non-Letal
+		'!lastcast(108211)',
+		'!player.buff(108211)',
+		(function() return NeP.Core.PeFetch('NePConfigRogueCombat', 'NoLetalPosion') == 'Leeching' end)
 	}},
 }
 
@@ -144,15 +177,15 @@ ProbablyEngine.rotation.register_custom(260, NeP.Core.GetCrInfo('Rogue - Combat'
 	{-- In-Combat
 		{{ -- Dont Break Sealth && Melee Range
 			{{-- Interrupts
-				{ "Kick" },
-			}, "target.NePinterrupt" },
-			{"Marked for Death", {
-				"player.combopoints = 0",
-				"toggle.MfD"
+				{ 'Kick' },
+			}, 'target.NePinterrupt' },
+			{'Marked for Death', {
+				'player.combopoints = 0',
+				'toggle.MfD'
 			}},
-			{"Evasion", "player.health < 30"},
-			{Cooldowns, "modifier.cooldowns" },
+			{'Evasion', 'player.health < 30'},
+			{Cooldowns, 'modifier.cooldowns' },
 			{AoE, (function() return NeP.Lib.SAoE(6, 10) end) },
 			{ST},
-		}, {"!player.buff(Vanish)", "target.range < 7"} },
+		}, {'!player.buff(Vanish)', 'target.range < 7'} },
 	}, outCombat, exeOnLoad)
