@@ -133,7 +133,7 @@ local function UnitIsDummy(unit)
 	end
 end
 
-GameObjects = {
+local GameObjects = {
 	--[[ //// lumbermillIDs //// ]]
 			--[[ //// WOD //// ]]
 		[234127] = 'LM',
@@ -216,7 +216,7 @@ GameObjects = {
 		[229071] = 'Fish',
 }
 
-function isGameObject(Obj)
+local function isGameObject(Obj)
 	local guid = UnitGUID(Obj)
 	local _, _, _, _, _, _id, _ = strsplit('-', guid)
 	local ObjID = tonumber(_id)
