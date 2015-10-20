@@ -10,27 +10,27 @@ NeP = {
 			These are used to have a easly way to update stuff related
 			to ProbablyEngine.
 		]]
-		peRecomemded = "6.1r16",
+		peRecomemded = '6.1r16',
 		PeFetch = ProbablyEngine.interface.fetchKey,
 		PeConfig = ProbablyEngine.config,
 		PeBuildGUI = ProbablyEngine.interface.buildGUI
 	},
 	Interface = {
-		addonColor = "0070DE",
-		printColor = "|cffFFFFFF",
-		mediaDir = "Interface\\AddOns\\NerdPack\\media\\",
+		addonColor = '0070DE',
+		printColor = '|cffFFFFFF',
+		mediaDir = 'Interface\\AddOns\\NerdPack\\media\\',
 		classGUIs = {},
 	},
 	Info = {
 		Name = 'NerdPack',
 		Nick = 'NeP',
-		Version = "6.2.1.1",
-		Branch = "Beta7",
-		WoW_Version = "6.2.2",
-		Logo = "Interface\\AddOns\\NerdPack\\media\\logo.blp",
-		Splash = "Interface\\AddOns\\NerdPack\\media\\splash.blp",
-		Forum = "http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-bots-programs/probably-engine/combat-routines/532241-pe-nerdpack.html",
-		Donate = "http://goo.gl/yrctPO"
+		Version = '6.2.1.1',
+		Branch = 'Beta7.1',
+		WoW_Version = '6.2.2',
+		Logo = 'Interface\\AddOns\\NerdPack\\media\\logo.blp',
+		Splash = 'Interface\\AddOns\\NerdPack\\media\\splash.blp',
+		Forum = 'http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-bots-programs/probably-engine/combat-routines/532241-pe-nerdpack.html',
+		Donate = 'http://goo.gl/yrctPO'
 	}
 }
 
@@ -70,9 +70,9 @@ NeP.Config = {
 	Defaults = {}
 }
 
-local LoadNePData = CreateFrame("Frame")
-LoadNePData:RegisterEvent("VARIABLES_LOADED")
-LoadNePData:SetScript("OnEvent", function(self, event, addon)
+local LoadNePData = CreateFrame('Frame')
+LoadNePData:RegisterEvent('VARIABLES_LOADED')
+LoadNePData:SetScript('OnEvent', function(self, event, addon)
 	
 	-- IF NePData does not exist, then create it with defaults
 	if not NePData or NePData == nil then 
@@ -128,7 +128,7 @@ DESC: Slash commands in-game.
 Build By: MTS
 ---------------------------------------------------]]
 ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)
-	local command, text = msg:match("^(%S*)%s*(.-)$")
+	local command, text = msg:match('^(%S*)%s*(.-)$')
 	
 	if command == 'config' or command == 'c' then
 		NeP.Interface.ConfigGUI()
@@ -177,31 +177,31 @@ proper class color.
 Build By: MTS
 ---------------------------------------------------]]
 function NeP.Core.classColor(unit, _type)
-	if _type == nil then _type = "HEX" end
+	if _type == nil then _type = 'HEX' end
 	if UnitIsPlayer(unit) then
 		local _classColors = {
-			["HUNTER"] = { r = 0.67, g = 0.83, b = 0.45, Hex = "abd473" },
-			["WARLOCK"] = { r = 0.58, g = 0.51, b = 0.79, Hex = "9482c9" },
-			["PRIEST"] = { r = 1.0, g = 1.0, b = 1.0, Hex = "ffffff" },
-			["PALADIN"] = { r = 0.96, g = 0.55, b = 0.73, Hex = "f58cba" },
-			["MAGE"] = { r = 0.41, g = 0.8, b = 0.94, Hex = "69ccf0" },
-			["ROGUE"] = { r = 1.0, g = 0.96, b = 0.41, Hex = "fff569" },
-			["DRUID"] = { r = 1.0, g = 0.49, b = 0.04, Hex = "ff7d0a" },
-			["SHAMAN"] = { r = 0.0, g = 0.44, b = 0.87, Hex = "0070de" },
-			["WARRIOR"] = { r = 0.78, g = 0.61, b = 0.43, Hex = "c79c6e" },
-			["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23, Hex = "c41f3b" },
-			["MONK"] = { r = 0.0, g = 1.00 , b = 0.59, Hex = "00ff96" },
+			['HUNTER'] = { r = 0.67, g = 0.83, b = 0.45, Hex = 'abd473' },
+			['WARLOCK'] = { r = 0.58, g = 0.51, b = 0.79, Hex = '9482c9' },
+			['PRIEST'] = { r = 1.0, g = 1.0, b = 1.0, Hex = 'ffffff' },
+			['PALADIN'] = { r = 0.96, g = 0.55, b = 0.73, Hex = 'f58cba' },
+			['MAGE'] = { r = 0.41, g = 0.8, b = 0.94, Hex = '69ccf0' },
+			['ROGUE'] = { r = 1.0, g = 0.96, b = 0.41, Hex = 'fff569' },
+			['DRUID'] = { r = 1.0, g = 0.49, b = 0.04, Hex = 'ff7d0a' },
+			['SHAMAN'] = { r = 0.0, g = 0.44, b = 0.87, Hex = '0070de' },
+			['WARRIOR'] = { r = 0.78, g = 0.61, b = 0.43, Hex = 'c79c6e' },
+			['DEATHKNIGHT'] = { r = 0.77, g = 0.12 , b = 0.23, Hex = 'c41f3b' },
+			['MONK'] = { r = 0.0, g = 1.00 , b = 0.59, Hex = '00ff96' },
 		}
 		local _class, className = UnitClass(unit)
 		local _color = _classColors[className]
 		
-		if _type == "HEX" then
+		if _type == 'HEX' then
 			return _color.Hex
-		elseif _type == "RBG" then
+		elseif _type == 'RBG' then
 			return _color.r, _color.g, _color.b
 		end
 	else
-		return "FFFFFF"
+		return 'FFFFFF'
 	end
 end
 
@@ -217,7 +217,7 @@ Build By: MTS
 function NeP.Core.GetCrInfo(txt)
 	local _nick = _addonColor..NeP.Info.Nick
 	local _classColor = NeP.Core.classColor('Player')
-	return '|T'..NeP.Info.Logo..':10:10|t'.. '|r[' .. _nick .. "|r]|r[|cff" .. _classColor .. txt .. "|r]"
+	return '|T'..NeP.Info.Logo..':10:10|t'.. '|r[' .. _nick .. '|r]|r[|cff' .. _classColor .. txt .. '|r]'
 end
 
 --[[-----------------------------------------------
@@ -233,7 +233,7 @@ Build By: MTS
 ---------------------------------------------------]]
 function NeP.Core.HideAll()
 	if not NeP.Core.hiding then
-		NeP.Core.Print("Now hiding everything, to re-enable use the command ( "..NeP.Info.Nick.." show ).")
+		NeP.Core.Print('Now hiding everything, to re-enable use the command ( '..NeP.Info.Nick..' show ).')
 		ProbablyEngine.buttons.buttonFrame:Hide()
 		NeP_Frame:Hide()
 		NeP.Core.hiding = true
@@ -255,7 +255,7 @@ Build By: MTS
 function NeP.Core.Print(txt)
 	if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Prints') then
 		local _name = _addonColor..NeP.Info.Nick
-		print("|r[".._name.."|r]: "..NeP.Interface.printColor..txt)
+		print('|r['.._name..'|r]: '..NeP.Interface.printColor..txt)
 	end
 end
 
@@ -285,7 +285,7 @@ function NeP.Core.Distance(a, b)
 			local bx, by, bz = ObjectPosition(a)
 			return NeP.Core.Round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
 		else
-			return ProbablyEngine.condition["distance"](b)
+			return ProbablyEngine.condition['distance'](b)
 		end
 	end
 	return 0
@@ -300,8 +300,8 @@ Build By: MTS
 function NeP.Core.LineOfSight(a, b)
 	
 	-- Workaround LoS issues.
-	local aCheck = select(6,strsplit("-",UnitGUID(a)))
-	local bCheck = select(6,strsplit("-",UnitGUID(b)))
+	local aCheck = select(6,strsplit('-',UnitGUID(a)))
+	local bCheck = select(6,strsplit('-',UnitGUID(b)))
 	local ignoreLOS = {
 		[76585] = true,     -- Ragewing the Untamed (UBRS)
 		[77063] = true,     -- Ragewing the Untamed (UBRS)
@@ -345,7 +345,7 @@ function NeP.Core.Infront(a, b)
 			return math.abs(math.deg(math.abs(playerFacing - (facing)))-180) < 90
 		-- Fallback to PE's
 		else
-			return ProbablyEngine.condition["infront"](b)
+			return ProbablyEngine.condition['infront'](b)
 		end
 	end
 end
