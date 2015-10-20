@@ -432,36 +432,24 @@ local function NeP_GenericOM()
 				end
 			end
 		end
-		-- Mouseover
-		if UnitExists('mouseover') then
-			local object = 'mouseover'
-			local ObjDistance = objectDistance('player', object)
-			if GenericFilter(object, ObjDistance) then
-				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					addToOM(object, ObjDistance)
-				end
+	end
+	-- Mouseover
+	if UnitExists('mouseover') then
+		local object = 'mouseover'
+		local ObjDistance = objectDistance('player', object)
+		if GenericFilter(object, ObjDistance) then
+			if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
+				addToOM(object, ObjDistance)
 			end
 		end
-	-- Solo Cache
-	else
-		-- Target
-		if UnitExists('target') then
-			local object = 'target'
-			local ObjDistance = objectDistance('player', object)
-			if GenericFilter(object, ObjDistance) then
-				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					addToOM(object, ObjDistance)
-				end
-			end
-		end
-		-- Mouseover
-		if UnitExists('mouseover') then
-			local object = 'mouseover'
-			local ObjDistance = objectDistance('player', object)
-			if GenericFilter(object, ObjDistance) then
-				if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
-					addToOM(object, ObjDistance)
-				end
+	end
+	-- Target Cache
+	if UnitExists('target') then
+		local object = 'target'
+		local ObjDistance = objectDistance('player', object)
+		if GenericFilter(object, ObjDistance) then
+			if ObjDistance <= (NeP.Core.PeFetch("ObjectCache", "CD") or 100) then
+				addToOM(object, ObjDistance)
 			end
 		end
 	end
