@@ -18,55 +18,53 @@ local objectDistance = NeP.Core.Distance
 ---------------------------------------------------]]
 local NeP_ImmuneAuras = {
 		-- CROWD CONTROL
-	118,        -- Polymorph
-	1513,       -- Scare Beast
-	1776,       -- Gouge
-	2637,       -- Hibernate
-	3355,       -- Freezing Trap
-	6770,       -- Sap
-	9484,       -- Shackle Undead
-	19386,      -- Wyvern Sting
-	20066,      -- Repentance
-	28271,      -- Polymorph (turtle)
-	28272,      -- Polymorph (pig)
-	49203,      -- Hungering Cold
-	51514,      -- Hex
-	61025,      -- Polymorph (serpent) -- FIXME: gone ?
-	61305,      -- Polymorph (black cat)
-	61721,      -- Polymorph (rabbit)
-	61780,      -- Polymorph (turkey)
-	76780,      -- Bind Elemental
-	82676,      -- Ring of Frost
-	90337,      -- Bad Manner (Monkey) -- FIXME: to check
-	115078,     -- Paralysis
-	115268,     -- Mesmerize
+	[118] = "",        -- Polymorph
+	[1513] = "",       -- Scare Beast
+	[1776] = "",       -- Gouge
+	[2637] = "",       -- Hibernate
+	[3355] = "",       -- Freezing Trap
+	[6770] = "",       -- Sap
+	[9484] = "",       -- Shackle Undead
+	[19386] = "",      -- Wyvern Sting
+	[20066] = "",      -- Repentance
+	[28271] = "",      -- Polymorph (turtle)
+	[28272] = "",      -- Polymorph (pig)
+	[49203] = "",      -- Hungering Cold
+	[51514] = "",      -- Hex
+	[61025] = "",      -- Polymorph (serpent) -- FIXME: gone ?
+	[61305] = "",      -- Polymorph (black cat)
+	[61721] = "",      -- Polymorph (rabbit)
+	[61780] = "",      -- Polymorph (turkey)
+	[76780] = "",      -- Bind Elemental
+	[82676] = "",      -- Ring of Frost
+	[90337] = "",      -- Bad Manner (Monkey) -- FIXME: to check
+	[115078] = "",     -- Paralysis
+	[115268] = "",     -- Mesmerize
 		-- MOP DUNGEONS/RAIDS/ELITES
-	106062,     -- Water Bubble (Wise Mari)
-	110945,     -- Charging Soul (Gu Cloudstrike)
-	116994,     -- Unstable Energy (Elegon)
-	122540,     -- Amber Carapace (Amber Monstrosity - Heat of Fear)
-	123250,     -- Protect (Lei Shi)
-	143574,     -- Swelling Corruption (Immerseus)
-	143593,     -- Defensive Stance (General Nazgrim)
+	[106062] = "",     -- Water Bubble (Wise Mari)
+	[110945] = "",     -- Charging Soul (Gu Cloudstrike)
+	[116994] = "",     -- Unstable Energy (Elegon)
+	[122540] = "",     -- Amber Carapace (Amber Monstrosity - Heat of Fear)
+	[123250] = "",     -- Protect (Lei Shi)
+	[143574] = "",     -- Swelling Corruption (Immerseus)
+	[143593] = "",     -- Defensive Stance (General Nazgrim)
 		-- WOD DUNGEONS/RAIDS/ELITES
-	155176,     -- Damage Shield (Primal Elementalists - Blast Furnace)
-	155185,     -- Cotainment (Primal Elementalists - BRF)
-	155233,     -- Dormant (Blast Furnace)
-	155265,     -- Cotainment (Primal Elementalists - BRF)
-	155266,     -- Cotainment (Primal Elementalists - BRF)
-	155267,     -- Cotainment (Primal Elementalists - BRF)
-	157289,     -- Arcane Protection (Imperator Mar'Gok)
-	174057,     -- Arcane Protection (Imperator Mar'Gok)
-	182055,     -- Full Charge (Iron Reaver)
-	184053,     -- Fel Barrier (Socrethar)
+	[155176] = "",     -- Damage Shield (Primal Elementalists - Blast Furnace)
+	[155185] = "",     -- Cotainment (Primal Elementalists - BRF)
+	[155233] = "",     -- Dormant (Blast Furnace)
+	[155265] = "",     -- Cotainment (Primal Elementalists - BRF)
+	[155266] = "",     -- Cotainment (Primal Elementalists - BRF)
+	[155267] = "",     -- Cotainment (Primal Elementalists - BRF)
+	[157289] = "",     -- Arcane Protection (Imperator Mar'Gok)
+	[174057] = "",     -- Arcane Protection (Imperator Mar'Gok)
+	[182055] = "",     -- Full Charge (Iron Reaver)
+	[184053] = "",     -- Fel Barrier (Socrethar)
 }
 
-local function BlacklistedDebuffs(unit)
+local function BlacklistedDebuffs(Obj)
 	for i = 1, 40 do
-		local _,_,_,_,_,_,_,_,_,_,spellId = _G['UnitDebuff'](unit, i)
-		for k,v in pairs(NeP_ImmuneAuras) do
-			if spellId == v then return true end
-		end
+		local _,_,_,_,_,_,_,_,_,_, spellID = UnitDebuff(Obj, i)
+		if NeP_ImmuneAuras[spellID] ~= nil then return true end
 	end
 end
 
@@ -75,62 +73,21 @@ end
 	This will remove the Object from the OM cache.
 ---------------------------------------------------]]
 local BlacklistedObjects = {
-	76829,		-- Slag Elemental (BrF - Blast Furnace)
-	78463,		-- Slag Elemental (BrF - Blast Furnace)
-	60197,      -- Scarlet Monastery Dummy
-	64446,      -- Scarlet Monastery Dummy
-	93391,      -- Captured Prisoner (HFC)
-	93392,      -- Captured Prisoner (HFC)
-	93828,      -- Training Dummy (HFC)
-	234021,
-	234022,
-	234023
+	[76829] = "",		-- Slag Elemental (BrF - Blast Furnace)
+	[78463] = "",		-- Slag Elemental (BrF - Blast Furnace)
+	[60197] = "",		-- Scarlet Monastery Dummy
+	[64446] = "",		-- Scarlet Monastery Dummy
+	[93391] = "",		-- Captured Prisoner (HFC)
+	[93392] = "",		-- Captured Prisoner (HFC)
+	[93828] = "",		-- Training Dummy (HFC)
+	[234021] = "",
+	[234022] = "",
+	[234023] = "",
 }
 
 local function BlacklistedObject(unit)
 	local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(unit))
-	for k,v in pairs(BlacklistedObjects) do
-		if tonumber(ObjID) == v then return true end
-	end
-end
-
---[[
-	DESC: Checks if unit is a Dummy.
-	This will force the unit from the OM cache.
----------------------------------------------------]]
-local dummyObjects = {
-	31144,      -- Training Dummy - Lvl 80
-	31146,		-- Raider's Training Dummy - Lvl ??
-	32541, 		-- Initiate's Training Dummy - Lvl 55 (Scarlet Enclave)
-	32542,		-- Disciple's Training Dummy - Lvl 65
-	32545,		-- Initiate's Training Dummy - Lvl 55
-	32546,		-- Ebon Knight's Training Dummy - Lvl 80
-	32666,		-- Training Dummy - Lvl 60
-	32667,		-- Training Dummy - Lvl 70
-	46647,		-- Training Dummy - Lvl 85
-	67127,		-- Training Dummy - Lvl 90
-	87318,		-- Dungeoneer's Training Dummy <Damage> ALLIANCE GARRISON
-	87761,		-- Dungeoneer's Training Dummy <Damage> HORDE GARRISON
-	87322,		-- Dungeoneer's Training Dummy <Tanking> ALLIANCE ASHRAN BASE
-	88314,		-- Dungeoneer's Training Dummy <Tanking> ALLIANCE GARRISON
-	88836,		-- Dungeoneer's Training Dummy <Tanking> HORDE ASHRAN BASE
-	88288,		-- Dunteoneer's Training Dummy <Tanking> HORDE GARRISON
-	87317,		-- Dungeoneer's Training Dummy - Lvl 102 (Lunarfall - Damage)
-	87320,		-- Raider's Training Dummy - Lvl ?? (Stormshield - Damage)
-	87321,		-- Training Dummy - Lvl 100 (Stormshield, Warspear - Healing)
-	87329,		-- Raider's Training Dummy - Lvl ?? (Stormshield - Tank)
-	87762,		-- Raider's Training Dummy - Lvl ?? (Warspear - Damage)
-	88837,		-- Raider's Training Dummy - Lvl ?? (Warspear - Tank)
-	88906,		-- Combat Dummy - Lvl 100 (Nagrand)
-	88967,		-- Training Dummy - Lvl 100 (Lunarfall, Frostwall)
-	89078,		-- Training Dummy - Lvl 100 (Lunarfall, Frostwall)
-}
-
-local function UnitIsDummy(unit)
-	local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(unit))
-	for k,v in pairs(dummyObjects) do
-		if tonumber(ObjID) == v then return true end
-	end
+	if BlacklistedObjects[ObjID] ~= nil then return true end
 end
 
 local GameObjects = {
@@ -170,15 +127,15 @@ local GameObjects = {
 		[234124] = 'LM',
 	--[[ //// oresIDs //// ]]
 			--[[ //// WOD //// ]]
-		[228510] = 'Ore', --[[ Rich True Iron Deposit ]]
-		[228493] = 'Ore', --[[ True Iron Deposit ]]
-		[228564] = 'Ore', --[[ Rich Blackrock Deposit ]]
-		[228563] = 'Ore', --[[ Blackrock Deposit ]]
-		[232544] = 'Ore', --[[ True Iron Deposit ]]
-		[232545] = 'Ore', --[[ Rich True Iron Deposit ]]
-		[232542] = 'Ore', --[[ Blackrock Deposit ]]
-		[232543] = 'Ore', --[[ Rich Blackrock Deposit ]]
-		[232541] = 'Ore', --[[ Mine Cart ]]
+		[228510] = 'Ore', 		--[[ Rich True Iron Deposit ]]
+		[228493] = 'Ore', 		--[[ True Iron Deposit ]]
+		[228564] = 'Ore', 		--[[ Rich Blackrock Deposit ]]
+		[228563] = 'Ore', 		--[[ Blackrock Deposit ]]
+		[232544] = 'Ore', 		--[[ True Iron Deposit ]]
+		[232545] = 'Ore', 		--[[ Rich True Iron Deposit ]]
+		[232542] = 'Ore',		--[[ Blackrock Deposit ]]
+		[232543] = 'Ore',		--[[ Rich Blackrock Deposit ]]
+		[232541] = 'Ore',		--[[ Mine Cart ]]
 	--[[ //// herbsIDs //// ]]
 			--[[ //// WOD //// ]]
 		[237400] = 'Herb',
@@ -214,6 +171,32 @@ local GameObjects = {
 		[236756] = 'Fish',
 		[237295] = 'Fish',
 		[229071] = 'Fish',
+	--[[ //// dummyIDs //// ]]
+		[31144] = "dummy",		-- Training Dummy - Lvl 80
+		[31146] = "dummy",		-- Raider's Training Dummy - Lvl ??
+		[32541] = "dummy", 		-- Initiate's Training Dummy - Lvl 55 (Scarlet Enclave)
+		[32542] = "dummy",		-- Disciple's Training Dummy - Lvl 65
+		[32545] = "dummy",		-- Initiate's Training Dummy - Lvl 55
+		[32546] = "dummy",		-- Ebon Knight's Training Dummy - Lvl 80
+		[32666] = "dummy",		-- Training Dummy - Lvl 60
+		[32667] = "dummy",		-- Training Dummy - Lvl 70
+		[46647] = "dummy",		-- Training Dummy - Lvl 85
+		[67127] = "dummy",		-- Training Dummy - Lvl 90
+		[87318] = "dummy",		-- Dungeoneer's Training Dummy <Damage> ALLIANCE GARRISON
+		[87761] = "dummy",		-- Dungeoneer's Training Dummy <Damage> HORDE GARRISON
+		[87322] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> ALLIANCE ASHRAN BASE
+		[88314] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> ALLIANCE GARRISON
+		[88836] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> HORDE ASHRAN BASE
+		[88288] = "dummy",		-- Dunteoneer's Training Dummy <Tanking> HORDE GARRISON
+		[87317] = "dummy",		-- Dungeoneer's Training Dummy - Lvl 102 (Lunarfall - Damage)
+		[87320] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Stormshield - Damage)
+		[87321] = "dummy",		-- Training Dummy - Lvl 100 (Stormshield, Warspear - Healing)
+		[87329] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Stormshield - Tank)
+		[87762] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Warspear - Damage)
+		[88837] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Warspear - Tank)
+		[88906] = "dummy",		-- Combat Dummy - Lvl 100 (Nagrand)
+		[88967] = "dummy",		-- Training Dummy - Lvl 100 (Lunarfall, Frostwall)
+		[89078] = "dummy",		-- Training Dummy - Lvl 100 (Lunarfall, Frostwall)
 }
 
 local function isGameObject(Obj)
@@ -267,19 +250,6 @@ local function addToOM(Obj, Dist)
 				actualHealth = UnitHealth(Obj), 
 				name = UnitName(Obj),
 				is = 'enemie'
-			}
-		end
-	-- Dummy
-	elseif UnitIsDummy(Obj) then
-		if NeP.Core.PeFetch('ObjectCache', 'dummys') then
-			enemieCache[#enemieCache+1] = {
-				key = Obj, 
-				distance = Dist, 
-				health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-				maxHealth = UnitHealthMax(Obj), 
-				actualHealth = UnitHealth(Obj), 
-				name = UnitName(Obj),
-				is = 'dummy'
 			}
 		end
 	end
