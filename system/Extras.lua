@@ -170,7 +170,7 @@ function NeP.Extras.autoTarget(unit, name)
 				for i=1,#enemieCache do
 					local Obj = enemieCache[i]
 					if UnitExists(Obj.key) then
-						if (UnitAffectingCombat(Obj.key) or Obj.dummy) then
+						if (UnitAffectingCombat(Obj.key) or Obj.is == "dummy") then
 							if Obj.distance <= 40 then
 								NeP.Alert('Targeting: '..Obj.name) 
 								Macro("/target "..Obj.key)
