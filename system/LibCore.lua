@@ -6,8 +6,8 @@ NeP.Lib = {}
 
 -- Local stuff to reduce global calls
 local _parse = ProbablyEngine.dsl.parse
-local enemieCache = NeP.ObjectManager.unitCache
-local friendlyCache = NeP.ObjectManager.unitFriendlyCache
+local enemieCache = NeP.OM.unitEnemie
+local friendlyCache = NeP.OM.unitFriend
 local peConfig = NeP.Core.PeConfig
 local UnitAffectingCombat = UnitAffectingCombat
 local UnitThreatSituation = UnitThreatSituation

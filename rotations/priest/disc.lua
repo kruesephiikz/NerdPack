@@ -242,8 +242,8 @@ local _MassDispell = function()
 			_Count = NeP.Core.PeFetch("NePconfPriestDisc", "MDispellParty") 
 		end
 		local total = 0        
-		for i=1,#NeP.ObjectManager.unitFriendlyCache do
-			local object = NeP.ObjectManager.unitFriendlyCache[i]
+		for i=1,#NeP.OM.unitFriend do
+			local object = NeP.OM.unitFriend[i]
 			if object.distance <= 40 then
 				for j = 1, 40 do
 					local debuffName, _,_,_, dispelType, duration, expires,_,_,_,_,_,_, _,_,_ = UnitDebuff(object.key, j)
@@ -273,8 +273,8 @@ local _PWBarrier = function()
 		end
 		local minHeal = GetSpellBonusDamage(2) * 1.125
 		local total = 0
-		for i=1,#NeP.ObjectManager.unitFriendlyCache do
-			local object = NeP.ObjectManager.unitFriendlyCache[i]
+		for i=1,#NeP.OM.unitFriend do
+			local object = NeP.OM.unitFriend[i]
 			if object.distance <= 40 then
 				if max(0, object.maxHealth - object.actualHealth) > minHeal then
 					total = total + 1
@@ -293,8 +293,8 @@ end
 local _holyNova = function()
 	local minHeal = GetSpellBonusDamage(2) * 1.125
 	local total = 0
-		for i=1,#NeP.ObjectManager.unitFriendlyCache do
-			local object = NeP.ObjectManager.unitFriendlyCache[i]
+		for i=1,#NeP.OM.unitFriend do
+			local object = NeP.OM.unitFriend[i]
 			if object.distance <= 12 then
 				if max(0, object.maxHealth - object.actualHealth) > minHeal then
 					total = total + 1

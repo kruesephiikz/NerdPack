@@ -268,8 +268,8 @@ LibDraw.Sync(function()
 			end
 			
 			-- Enemie Units
-			for i=1,#NeP.ObjectManager.unitCache do
-				local object = NeP.ObjectManager.unitCache[i]
+			for i=1,#NeP.OM.unitEnemie do
+				local object = NeP.OM.unitEnemie[i]
 				if ObjectExists(object.key) then
 					local distance = object.distance
 					local ox, oy, oz = ObjectPosition(object.key)
@@ -344,8 +344,8 @@ LibDraw.Sync(function()
 			end
 			
 			-- Friendly Units
-			for i=1,#NeP.ObjectManager.unitFriendlyCache do
-				local object = NeP.ObjectManager.unitFriendlyCache[i]
+			for i=1,#NeP.OM.unitFriend do
+				local object = NeP.OM.unitFriend[i]
 					if ObjectExists(object.key) then
 					local distance = object.distance
 					local ox, oy, oz = ObjectPosition(object.key)

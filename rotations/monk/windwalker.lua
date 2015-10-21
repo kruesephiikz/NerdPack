@@ -42,8 +42,8 @@ local n,r = GetSpellInfo('137639')
 
 local _SEF = function()
 	if NeP.Lib.SAoE(3, 40) then
-		for i=1,#NeP.ObjectManager.unitCache do
-			local object = NeP.ObjectManager.unitCache[i]
+		for i=1,#NeP.OM.unitEnemie do
+			local object = NeP.OM.unitEnemie[i]
 			if ProbablyEngine.condition["deathin"](object.key) >= 10 then
 				if UnitGUID('target') ~= UnitGUID(object.key) then
 					if UnitAffectingCombat(object.key) then

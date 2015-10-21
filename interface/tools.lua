@@ -4,6 +4,29 @@ local DiesalGUI = LibStub("DiesalGUI-1.0")
 local DiesalMenu = LibStub("DiesalMenu-1.0")
 local SharedMedia = LibStub("LibSharedMedia-3.0")
 
+-- Get RGB colors
+local _RBGColors = {
+	['black'] = { r = 0.00, g = 0.00, b = 0.00 },
+	['white'] = { r = 1.00, g = 1.00, b = 1.00 },
+	['green'] = { r = 0.33, g = 0.54, b = 0.52 },
+	['blue'] = { r = 0.00, g = 0.44, b = 0.87 },
+	['red'] = { r = 0.77, g = 0.12, b = 0.23 },
+	['class'] = { r = select(1, NeP.Core.classColor('player', 'RBG')), g = select(2, NeP.Core.classColor('player', 'RBG')), b = select(3, NeP.Core.classColor('player', 'RBG')) },
+}
+local function _getRGB(color)
+	if color == nil then color = 'black' end
+	return _RBGColors[color].r, _RBGColors[color].g, _RBGColors[color].b
+end
+
+local bC_R, bC_G, bC_B = _getRGB(NeP.Core.PeFetch('NePConf', 'NePFrameColor'))
+local textColor = function() 
+	if NeP.Core.PeFetch('NePConf', 'NePFrameColor') ~= "black" then
+		return _getRGB('black')
+	else
+		return _getRGB('white')
+	end
+end
+
 local _openPEGUIs = {}
 NeP.Core.BuildGUI = function(gui, _table)
 	local gui = tostring(gui)
@@ -25,6 +48,7 @@ end
 NeP.Interface.addText = function(parent)
 	local text = parent:CreateFontString(nil, "OVERLAY")
 	text:SetFont("Fonts\\FRIZQT__.TTF", 15)
+	text:SetTextColor(textColor())
 	return text
 end
 
@@ -92,21 +116,22 @@ NeP.Interface.addButton = function(parent)
 	Button:SetHeight(30)
 	Button:SetNormalFontObject("GameFontNormal")
 	Button.Button1 = Button:CreateTexture()
-	Button.Button1:SetTexture(255, 255 ,255 , 0.1)
+	Button.Button1:SetTexture(bC_R, bC_G, bC_B, 0.50)
 	Button.Button1:SetTexCoord(0, 0.625, 0, 0.6875)
 	Button.Button1:SetAllPoints() 
 	Button.Button2 = Button:CreateTexture()
-	Button.Button2:SetTexture(0.5,0.5,0.5,1)
+	Button.Button2:SetTexture(1.0, 1.0, 1.0, 0.75)
 	Button.Button2:SetTexCoord(0, 0.625, 0, 0.6875)
 	Button.Button2:SetAllPoints()
 	Button.Button3 = Button:CreateTexture()
-	Button.Button3:SetTexture(0,0,0,1)
+	Button.Button3:SetTexture(bC_R, bC_G, bC_B, 1)
 	Button.Button3:SetTexCoord(0, 0.625, 0, 0.6875)
 	Button.Button3:SetAllPoints()
 	Button:SetNormalTexture(Button.Button1)
 	Button:SetHighlightTexture(Button.Button2)
 	Button:SetPushedTexture(Button.Button3)
 	Button.text = Button:CreateFontString(nil, "OVERLAY")
+	Button.text:SetTextColor(textColor())
 	Button.text:SetFont("Fonts\\FRIZQT__.TTF", 15)
 	Button.text:SetPoint("CENTER", 0, 0)
 	return Button
@@ -116,15 +141,16 @@ NeP.Interface.addScrollFrame = function(parent)
 	local scrollframe = CreateFrame("ScrollFrame", nil, parent) 
 	scrollframe.texture = scrollframe:CreateTexture() 
 	scrollframe.texture:SetAllPoints() 
-	scrollframe.texture:SetTexture(255,255,255,0.3)
+	scrollframe.texture:SetTexture(bC_R, bC_G, bC_B, 0.3)
 	scrollframe.scrollbar = CreateFrame("Slider", "FPreviewScrollBar", scrollframe)
 	scrollframe.scrollbar.bg = scrollframe.scrollbar:CreateTexture(nil, "BACKGROUND")
 	scrollframe.scrollbar.bg:SetAllPoints(true)
-	scrollframe.scrollbar.bg:SetTexture(255, 255, 255, 0.1)
+	scrollframe.scrollbar.bg:SetTexture(bC_R, bC_G, bC_B, 0.50)
 	scrollframe.scrollbar.thumb = scrollframe.scrollbar:CreateTexture(nil, "OVERLAY")
-	scrollframe.scrollbar.thumb:SetTexture(255, 255, 255, 0.7)
+	scrollframe.scrollbar.thumb:SetTexture(1.0, 1.0, 1.0, 1.0)
 	scrollframe.scrollbar.thumb:SetSize(16, 16)
 	scrollframe.scrollbar.text = scrollframe.scrollbar:CreateFontString(nil, "OVERLAY")
+	scrollframe.scrollbar.text:SetTextColor(textColor())
 	scrollframe.scrollbar.text:SetFont("Fonts\\FRIZQT__.TTF", 15)
 	scrollframe.scrollbar.text:SetSize(16, 16)
 	scrollframe.scrollbar.text:SetText('|cff000000=')
@@ -144,7 +170,7 @@ NeP.Interface.addFrame = function(parent)
 	local Frame = CreateFrame("Frame", nil, parent)
 	Frame.texture = Frame:CreateTexture() 
 	Frame.texture:SetAllPoints() 
-	Frame.texture:SetTexture(0,0,0,0.7)
+	Frame.texture:SetTexture(bC_R, bC_G, bC_B, 0.7)
 	return Frame
 end
 
@@ -153,6 +179,7 @@ NeP.Interface.addCheckButton = function(parent)
 	createCheckBox:ClearAllPoints();
 	createCheckBox:SetSize(15, 15)
 	createCheckBox.text = parent:CreateFontString(nil, "OVERLAY")
+	createCheckBox.text:SetTextColor(textColor())
 	
 	return createCheckBox
 end

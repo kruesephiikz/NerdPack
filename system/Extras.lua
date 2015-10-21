@@ -5,8 +5,8 @@ NeP.Extras = {
 }
 
 -- Local stuff to reduce global calls
-local enemieCache = NeP.ObjectManager.unitCache
-local friendlyCache = NeP.ObjectManager.unitFriendlyCache
+local enemieCache = NeP.OM.unitEnemie
+local friendlyCache = NeP.OM.unitFriend
 local peConfig = NeP.Core.PeConfig
 local inLoS = NeP.Core.LineOfSight
 local UnitAffectingCombat = UnitAffectingCombat

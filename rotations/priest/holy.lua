@@ -280,8 +280,8 @@ end
 local _ClarityOfPurpose = function()
 	local minHeal = GetSpellBonusDamage(2) * 1.125
 	local total = 0
-	for i=1,#NeP.ObjectManager.unitFriendlyCache do
-		local object = NeP.ObjectManager.unitFriendlyCache[i]
+	for i=1,#NeP.OM.unitFriend do
+		local object = NeP.OM.unitFriend[i]
 		local healthMissing = max(0, object.maxHealth - object.actualHealth)
 		if healthMissing > minHeal 
 		and UnitIsFriend("player", object.key) then
