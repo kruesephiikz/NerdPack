@@ -83,7 +83,6 @@ local BlacklistedObjects = {
 	[234021] = "",
 	[234022] = "",
 	[234023] = "",
-	[61636] = "",
 }
 
 local function BlacklistedObject(Obj)
