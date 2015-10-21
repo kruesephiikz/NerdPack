@@ -178,7 +178,7 @@ function OMGUI_RUN()
 	objectButton.text:SetText("Objects List")
 	objectButton:SetPoint("BOTTOMLEFT", 0, 0)
 	objectButton:SetScript("OnClick", function(self) 
-		_objectTable = NeP.ObjectManager.objectsCache; 
+		_objectTable = NeP.OM.GameObjects; 
 		_Displaying = 'Objects List' 
 	end)
 

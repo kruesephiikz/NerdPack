@@ -202,8 +202,8 @@ LibDraw.Sync(function()
 			end
 			
 			-- Objects (Ores/Herbs/LM)
-			for i=1,#NeP.ObjectManager.objectsCache do
-				local object = NeP.ObjectManager.objectsCache[i]
+			for i=1,#NeP.OM.GameObjects do
+				local object = NeP.OM.GameObjects[i]
 				if ObjectExists(object.key) then
 					local distance = object.distance
 					local ox, oy, oz = ObjectPosition(object.key)
