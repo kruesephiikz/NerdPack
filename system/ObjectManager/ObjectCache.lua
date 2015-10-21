@@ -83,10 +83,12 @@ local BlacklistedObjects = {
 	[234021] = "",
 	[234022] = "",
 	[234023] = "",
+	[61636] = "",
 }
 
-local function BlacklistedObject(unit)
-	local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(unit))
+local function BlacklistedObject(Obj)
+	local _,_,_,_,_,_id = strsplit('-', UnitGUID(Obj))
+	local ObjID = tonumber(_id)
 	if BlacklistedObjects[ObjID] ~= nil then return true end
 end
 
@@ -200,8 +202,7 @@ local GameObjects = {
 }
 
 local function isGameObject(Obj)
-	local guid = UnitGUID(Obj)
-	local _, _, _, _, _, _id, _ = strsplit('-', guid)
+	local _,_,_,_,_,_id = strsplit('-', UnitGUID(Obj))
 	local ObjID = tonumber(_id)
 	if GameObjects[ObjID] ~= nil then
 		return tostring(GameObjects[ObjID]), true
