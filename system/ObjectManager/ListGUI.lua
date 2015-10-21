@@ -2,7 +2,10 @@ NeP.Config.Defaults['OMList'] = {
 	['ShowDPS'] = false,
 	['ShowInfoText'] = true,
 	['ShowHealthBars'] = true,
-	['ShowHealthText'] = true
+	['ShowHealthText'] = true,
+	['POS_1'] = 'CENTER',
+	['POS_2'] = 0,
+	['POS_3'] = 0
 }
 
 -- Tables to Control Status Bars Used
@@ -10,10 +13,10 @@ local statusBars = { }
 local statusBarsUsed = { }
 
 -- Vars
-local OPTIONS_WIDTH = 400;
-local OPTIONS_HEIGHT = 400;
+local OPTIONS_WIDTH = 500;
+local OPTIONS_HEIGHT = 300;
 local SETTINGS_WIDTH = 200;
-local _objectTable = NeP.ObjectManager.unitFriendlyCache;
+local _objectTable = NeP.OM.unitFriend;
 local _Displaying = 'Friendly List';
 local scrollMax = 0;
 
@@ -22,202 +25,175 @@ local DiesalGUI = LibStub("DiesalGUI-1.0");
 local _addonColor = '|cff'..NeP.Interface.addonColor;
 local _tittleGUI = '|T'..NeP.Info.Logo..':20:20|t'.._addonColor..NeP.Info.Nick;
 
-local getAllObjects = function()
-	local ObjTable = {}
-	
-	-- Only FH supports game objects yet...
-	if FireHack then
-		for i=1, ObjectCount(TYPE_GAMEOBJECT) do
-			local Obj = ObjectWithIndex(i)
-			if ObjectExists(Obj) then
-				ObjTable[#ObjTable+1] = {
-					key=Obj,
-					name=UnitName(Obj),
-					distance=NeP.Core.Distance('player', Obj)
-				}
-			end
-		end
-	end
-	
-	return ObjTable
-end
-
 function OMGUI_RUN()
 	
-	NeP_OMLIST = NeP.Interface.addFrame(NeP_Frame)
+	NeP_OMLIST = NeP.Interface.addFrame(UIParent)
 	NeP_OMLIST:SetSize(OPTIONS_WIDTH, OPTIONS_HEIGHT) 
-	NeP_OMLIST:SetPoint("TOP", 0, -NeP_Frame:GetHeight()) 
-	NeP_OMLIST.texture:SetTexture(0,0,0,0.7)
-	NeP_OMLIST:SetClampedToScreen(true)
-
-	-- Settings Frame
-	local settingsFrame = NeP.Interface.addFrame(NeP_OMLIST)
-	settingsFrame:SetSize(SETTINGS_WIDTH, OPTIONS_HEIGHT) 
-	settingsFrame:SetPoint("BOTTOMRIGHT", SETTINGS_WIDTH, 0) 
-	settingsFrame:Hide()
-
-	-- Settings Scroll Frame
-	local SettingsScroll = NeP.Interface.addScrollFrame(settingsFrame)
-	SettingsScroll:SetSize(SETTINGS_WIDTH-16, OPTIONS_HEIGHT - 60)  
-	SettingsScroll:SetPoint("TOP", -8, -30)
-	SettingsScroll.scrollbar:SetMinMaxValues(0, 400-OPTIONS_HEIGHT)
-	SettingsScroll.scrollbar:SetSize(16, OPTIONS_HEIGHT - 60)  
-
-	-- Settings Content Frame 
-	local settingsContentFrame = NeP.Interface.addFrame(SettingsScroll)
-	settingsContentFrame:SetPoint("TOP", SettingsScroll) 
-	settingsContentFrame:SetSize(SETTINGS_WIDTH-16, 400)
-
-	local _SettinsCount = 0
-	-- Settings Content
-	local SettingsText = NeP.Interface.addText(settingsContentFrame)
-	_SettinsCount = _SettinsCount + 1
-	SettingsText:SetPoint("TOP", settingsContentFrame, 0, 0)
-	SettingsText:SetText('Settings:')
-	SettingsText:SetSize(SETTINGS_WIDTH-16, 15)
-	
-	-- Status Text checkbox
-	local StatusTextCheckbox = NeP.Interface.addCheckButton(settingsContentFrame)
-	_SettinsCount = _SettinsCount + 1
-	StatusTextCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowInfoText'));
-	StatusTextCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
-	StatusTextCheckbox:SetScript("OnClick", function(self)
-		NeP.Config.writeKey('OMList', 'ShowInfoText', self:GetChecked());
-	end);
-	local StatusText = NeP.Interface.addText(settingsContentFrame)
-	StatusText:SetSize(SETTINGS_WIDTH-31, 10)
-	StatusText:SetText('Show Status Text')
-	StatusText:SetFont("Fonts\\FRIZQT__.TTF", 10)
-	StatusText:SetPoint("TOPRIGHT", 10, -15*_SettinsCount)
-	
-	-- Health Text checkbox
-	local HealthTextCheckbox = NeP.Interface.addCheckButton(settingsContentFrame)
-	_SettinsCount = _SettinsCount + 1
-	HealthTextCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowHealthText'));
-	HealthTextCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
-	HealthTextCheckbox:SetScript("OnClick", function(self)
-		NeP.Config.writeKey('OMList', 'ShowHealthText', self:GetChecked());
-	end);
-	local HealthText = NeP.Interface.addText(settingsContentFrame)
-	HealthText:SetSize(SETTINGS_WIDTH-31, 10)
-	HealthText:SetText('Show Health Text')
-	HealthText:SetFont("Fonts\\FRIZQT__.TTF", 10)
-	HealthText:SetPoint("TOPRIGHT", 10, -15*_SettinsCount)
-	
-	-- Health Bars checkbox
-	local HealthBarCheckbox = NeP.Interface.addCheckButton(settingsContentFrame)
-	_SettinsCount = _SettinsCount + 1
-	HealthBarCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowHealthBars'));
-	HealthBarCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
-	HealthBarCheckbox:SetScript("OnClick", function(self)
-		NeP.Config.writeKey('OMList', 'ShowHealthBars', self:GetChecked());
-	end);
-	local HealthBarText = NeP.Interface.addText(settingsContentFrame)
-	HealthBarText:SetSize(SETTINGS_WIDTH-31, 10)
-	HealthBarText:SetText('Enable Health Bars')
-	HealthBarText:SetFont("Fonts\\FRIZQT__.TTF", 10)
-	HealthBarText:SetPoint("TOPRIGHT", 10, -15*_SettinsCount)
-	
-	
-	SettingsScroll:SetScrollChild(settingsContentFrame)
-
-	-- Title Frame
-	local titleFrame = NeP.Interface.addFrame(NeP_OMLIST)
-	titleFrame:SetSize(OPTIONS_WIDTH-30, 30) 
-	titleFrame:SetPoint("TOPLEFT", NeP_OMLIST)
-	titleFrame:RegisterForDrag("LeftButton")
-	titleFrame.texture:SetTexture(0,0,0,1)
-	local titleText1 = NeP.Interface.addText(titleFrame)
-	titleText1:SetPoint("LEFT", 0, 0)
+	NeP_OMLIST:SetPoint(NeP.Config.readKey('OMList', 'POS_1'), NeP.Config.readKey('OMList', 'POS_2'), NeP.Config.readKey('OMList', 'POS_3'))
+	NeP_OMLIST:SetMovable(true)
+	NeP_OMLIST:SetFrameLevel(0)
+	NeP_OMLIST:RegisterForDrag("LeftButton")
+	NeP_OMLIST:EnableMouse(true)
+	NeP_OMLIST:RegisterForDrag('LeftButton')
+	NeP_OMLIST:SetScript('OnDragStart', NeP_OMLIST.StartMoving)
+	NeP_OMLIST:SetScript('OnDragStop', function(self)
+		local from, _, to, x, y = self:GetPoint()
+		self:StopMovingOrSizing()
+		NeP.Config.writeKey('OMList', 'POS_1', from)
+		NeP.Config.writeKey('OMList', 'POS_2', x)
+		NeP.Config.writeKey('OMList', 'POS_3', y)
+	end)
+	-- Title
+	local titleText1 = NeP.Interface.addText(NeP_OMLIST)
+	titleText1:SetPoint("TOPLEFT", 0, -7)
 	titleText1:SetText('OM')
-	local titleText2 = NeP.Interface.addText(titleFrame)
-	titleText2:SetPoint("RIGHT", -20, 0)
+	local titleText2 = NeP.Interface.addText(NeP_OMLIST)
+	titleText2:SetPoint("TOP", 0, -7)
 	titleText2:SetText('')
-	local titleText3 = NeP.Interface.addText(titleFrame)
-	titleText3:SetPoint("RIGHT", -100, 0)
+	local titleText3 = NeP.Interface.addText(NeP_OMLIST)
+	titleText3:SetPoint("TOPRIGHT", -35, -7)
 	titleText3:SetText('')
+
+		-- Settings Frame
+		local settingsFrame = NeP.Interface.addFrame(NeP_OMLIST)
+		settingsFrame:SetSize(200, NeP_OMLIST:GetHeight()) 
+		settingsFrame:SetPoint("BOTTOMRIGHT", 200, 0)
+		settingsFrame:Hide()
+
+			-- Tittle
+			local SettingsText = NeP.Interface.addText(settingsFrame)
+			SettingsText:SetPoint("TOP", 0, -7)
+			SettingsText:SetText('Settings:')
+			SettingsText:SetSize(settingsFrame:GetWidth(), 15)
+			
+			-- Settings Scroll Frame
+			local SettingsScroll = NeP.Interface.addScrollFrame(settingsFrame)
+			SettingsScroll:SetSize(settingsFrame:GetWidth()-16, settingsFrame:GetHeight()-60)  
+			SettingsScroll:SetPoint("TOPLEFT", 0, -30)
+			--SettingsScroll.scrollbar:SetMinMaxValues(0, 400-NeP_OMLIST:GetHeight())
+			SettingsScroll.scrollbar:SetSize(16, settingsFrame:GetHeight()-60)  
+
+			-- Settings Content Frame 
+			local settingsContentFrame = NeP.Interface.addFrame(SettingsScroll)
+			settingsContentFrame:SetPoint("TOP", 0, 0) 
+			settingsContentFrame:SetSize(SettingsScroll:GetWidth(), SettingsScroll:GetHeight())
+
+				-- Settings Content
+				local _SettinsCount = 0
+				
+				-- Status Text checkbox
+				local StatusTextCheckbox = NeP.Interface.addCheckButton(settingsContentFrame)
+				_SettinsCount = _SettinsCount + 1
+				StatusTextCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowInfoText'));
+				StatusTextCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
+				StatusTextCheckbox:SetScript("OnClick", function(self)
+					NeP.Config.writeKey('OMList', 'ShowInfoText', self:GetChecked());
+				end);
+				local StatusText = NeP.Interface.addText(settingsContentFrame)
+				StatusText:SetSize(SETTINGS_WIDTH-31, 10)
+				StatusText:SetText('Show Status Text')
+				StatusText:SetFont("Fonts\\FRIZQT__.TTF", 10)
+				StatusText:SetPoint("TOPRIGHT", 10, -15*_SettinsCount)
+				
+				-- Health Text checkbox
+				local HealthTextCheckbox = NeP.Interface.addCheckButton(settingsContentFrame)
+				_SettinsCount = _SettinsCount + 1
+				HealthTextCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowHealthText'));
+				HealthTextCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
+				HealthTextCheckbox:SetScript("OnClick", function(self)
+					NeP.Config.writeKey('OMList', 'ShowHealthText', self:GetChecked());
+				end);
+				local HealthText = NeP.Interface.addText(settingsContentFrame)
+				HealthText:SetSize(SETTINGS_WIDTH-31, 10)
+				HealthText:SetText('Show Health Text')
+				HealthText:SetFont("Fonts\\FRIZQT__.TTF", 10)
+				HealthText:SetPoint("TOPRIGHT", 10, -15*_SettinsCount)
+				
+				-- Health Bars checkbox
+				local HealthBarCheckbox = NeP.Interface.addCheckButton(settingsContentFrame)
+				_SettinsCount = _SettinsCount + 1
+				HealthBarCheckbox:SetChecked(NeP.Config.readKey('OMList', 'ShowHealthBars'));
+				HealthBarCheckbox:SetPoint("TOPLEFT", 10, -15*_SettinsCount)
+				HealthBarCheckbox:SetScript("OnClick", function(self)
+					NeP.Config.writeKey('OMList', 'ShowHealthBars', self:GetChecked());
+				end);
+				local HealthBarText = NeP.Interface.addText(settingsContentFrame)
+				HealthBarText:SetSize(SETTINGS_WIDTH-31, 10)
+				HealthBarText:SetText('Enable Health Bars')
+				HealthBarText:SetFont("Fonts\\FRIZQT__.TTF", 10)
+				HealthBarText:SetPoint("TOPRIGHT", 10, -15*_SettinsCount)
+				
+			-- Settings Frame Close Button
+			local settingsCloseButton = NeP.Interface.addButton(settingsFrame)
+			settingsCloseButton:SetSize(settingsFrame:GetWidth(), 30)
+			settingsCloseButton.text:SetText("Close Settings")
+			settingsCloseButton:SetPoint("BOTTOM", 0, 0)
+			settingsCloseButton:SetScript("OnClick", function(self) 
+				settingsFrame:Hide();
+				settingsButton.text:SetText(": »")
+				--titleFrame:SetSize(NeP_OMLIST:GetWidth()-30, 30); 
+				settingsButton:SetPoint("TOPRIGHT", 0, 0) 
+			end)	
+			
+		SettingsScroll:SetScrollChild(settingsContentFrame)
+	
+	-- Settings Button
+	settingsButton = NeP.Interface.addButton(NeP_OMLIST)
+	settingsButton:SetPoint("TOPRIGHT", 0, 0)
+	settingsButton:SetSize(30, 30)
+	settingsButton.text:SetText("»")
+	settingsButton:SetScript("OnClick", function()
+		if settingsFrame:IsShown() then
+			settingsFrame:Hide()
+			settingsButton.text:SetText("S: »")
+		else
+			settingsButton.text:SetText("S: «")
+			settingsFrame:Show()
+		end
+	end)
 
 	-- Enemy Button
 	local enemieButton = NeP.Interface.addButton(NeP_OMLIST)
-	enemieButton:SetText("|cffFFFFFFEnemie List")
+	enemieButton:SetSize(NeP_OMLIST:GetWidth()/3, 30)
+	enemieButton.text:SetText("Enemie List")
 	enemieButton:SetPoint("BOTTOMRIGHT", 0, 0)
 	enemieButton:SetScript("OnClick", function(self) 
-		_objectTable = NeP.ObjectManager.unitCache; 
+		_objectTable = NeP.OM.unitEnemie; 
 		_Displaying = 'Enemy List' 
 	end)
 
 	-- Friendly Button
 	local friendlyButton = NeP.Interface.addButton(NeP_OMLIST)
-	friendlyButton:SetText("|cffFFFFFFFriendly List")
-	friendlyButton:SetPoint("BOTTOMRIGHT", -100, 0)
+	friendlyButton:SetSize(NeP_OMLIST:GetWidth()/3, 30)
+	friendlyButton.text:SetText("Friendly List")
+	friendlyButton:SetPoint("BOTTOM", 0, 0)
 	friendlyButton:SetScript("OnClick", function(self) 
-		_objectTable = NeP.ObjectManager.unitFriendlyCache; 
+		_objectTable = NeP.OM.unitFriend; 
 		_Displaying = 'Friendly List' 
 	end)
 
 	-- Object Button
 	local objectButton = NeP.Interface.addButton(NeP_OMLIST)
-	objectButton:SetText("|cffFFFFFFObjects List")
-	objectButton:SetPoint("BOTTOMRIGHT", -200, 0)
+	objectButton:SetSize(NeP_OMLIST:GetWidth()/3, 30)
+	objectButton.text:SetText("Objects List")
+	objectButton:SetPoint("BOTTOMLEFT", 0, 0)
 	objectButton:SetScript("OnClick", function(self) 
 		_objectTable = NeP.ObjectManager.objectsCache; 
 		_Displaying = 'Objects List' 
 	end)
-	
-	-- ALL Button
-	local objectButton = NeP.Interface.addButton(NeP_OMLIST)
-	objectButton:SetText("|cffFFFFFFAll Objects")
-	objectButton:SetPoint("BOTTOMRIGHT", -300, 0)
-	objectButton:SetScript("OnClick", function(self) 
-		_objectTable = getAllObjects(); 
-		_Displaying = 'All Objects' 
-	end)
-	objectButton.Button1:SetTexture(0, 255, 0, 0.3)
 
-	-- Settings Button
-	local settingsButton = NeP.Interface.addButton(NeP_OMLIST)
-	settingsButton:SetPoint("TOPRIGHT", 0, 0)
-	settingsButton:SetSize(30, 30)
-	settingsButton.text:SetText("|cffFFFFFF»")
-	settingsButton:SetScript("OnClick", function()
-		if settingsFrame:IsShown() then
-			settingsFrame:Hide();
-			settingsButton.text:SetText("|cffFFFFFFS: »")
-			titleFrame:SetSize(OPTIONS_WIDTH-30, 30); 
-			settingsButton:SetPoint("TOPRIGHT", 0, 0) 
-		else
-			settingsButton.text:SetText("|cffFFFFFFS: «")
-			settingsFrame:Show(); 
-			titleFrame:SetSize(OPTIONS_WIDTH+200-30, 30); 
-			settingsButton:SetPoint("TOPRIGHT", 200, 0)
-		end
-	end)
+		-- Objects Scroll Frame
+		local ObjectScroll = NeP.Interface.addScrollFrame(NeP_OMLIST)
+		ObjectScroll:SetSize(NeP_OMLIST:GetWidth()-16, NeP_OMLIST:GetHeight() - 60)  
+		ObjectScroll:SetPoint("TOPLEFT", 0, -30)
+		ObjectScroll.scrollbar:SetSize(16, NeP_OMLIST:GetHeight() - 60)  
 
-	-- Settings Frame Close Button
-	local settingsCloseButton = NeP.Interface.addButton(settingsFrame)
-	settingsCloseButton:SetText("|cffFFFFFFClose Settings")
-	settingsCloseButton:SetPoint("BOTTOM", 0, 0)
-	settingsCloseButton:SetScript("OnClick", function(self) 
-		settingsFrame:Hide();
-		settingsButton.text:SetText("|cffFFFFFFS: »")
-		titleFrame:SetSize(OPTIONS_WIDTH-30, 30); 
-		settingsButton:SetPoint("TOPRIGHT", 0, 0) 
-	end)
+		-- Content Frame 
+		local objectsContentFrame = NeP.Interface.addFrame(ObjectScroll)
+		objectsContentFrame:SetSize(NeP_OMLIST:GetWidth()-16, 0)
+		objectsContentFrame:SetPoint("TOPLEFT", 0, 0)
 
-	-- Objects Scroll Frame
-	local ObjectScroll = NeP.Interface.addScrollFrame(NeP_OMLIST)
-	ObjectScroll:SetSize(OPTIONS_WIDTH-16, OPTIONS_HEIGHT - 60)  
-	ObjectScroll:SetPoint("TOPLEFT", 0, -30)
-	ObjectScroll.texture:SetTexture(0,0,0,0)
-	ObjectScroll.scrollbar:SetSize(16, OPTIONS_HEIGHT - 60)  
-
-	-- Content Frame 
-	local objectsContentFrame = NeP.Interface.addFrame(ObjectScroll)
-	objectsContentFrame:SetSize(OPTIONS_WIDTH-16, 0)
-	objectsContentFrame:SetPoint("TOPLEFT", 0, 0)
-	objectsContentFrame.texture:SetTexture(0,0,0,0)
-
-	ObjectScroll:SetScrollChild(objectsContentFrame)
+		ObjectScroll:SetScrollChild(objectsContentFrame)
 
 	local function getStatusBar()
 		local statusBar = tremove(statusBars)
@@ -249,7 +225,7 @@ function OMGUI_RUN()
 	
 	local ST_Color = "|cfff28f0d"
 	
-	C_Timer.NewTicker(0.1, (function()
+	C_Timer.NewTicker(0.01, (function()
 		if NeP.Core.CurrentCR and NeP_OMLIST:IsShown() then
 			if NeP.Core.PeConfig.read('button_states', 'MasterToggle', false) then
 				
@@ -298,13 +274,13 @@ function OMGUI_RUN()
 						end
 					end
 				
-				if height > OPTIONS_HEIGHT then
-					scrollMax = height - (OPTIONS_HEIGHT-60)
+				if height > NeP_OMLIST:GetHeight() then
+					scrollMax = height - (NeP_OMLIST:GetHeight()-60)
 				else
 					scrollMax = 0
 				end
 				
-				objectsContentFrame:SetSize(OPTIONS_WIDTH-16, height)
+				objectsContentFrame:SetSize(NeP_OMLIST:GetWidth()-16, height)
 				ObjectScroll.scrollbar:SetMinMaxValues(0, scrollMax)
 
 			end

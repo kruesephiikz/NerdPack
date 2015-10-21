@@ -82,3 +82,15 @@ ProbablyEngine.condition.register("castwithin", function(target, spell)
 	end
 	return 20
 end)
+
+ProbablyEngine.condition.register("ShouldRess", function()
+	for i=1,#NeP.OM.unitFriendDead do
+		local Obj = NeP.OM.unitFriendDead[i]
+		if Obj.distance <= 40 then
+			if not UnitHasIncomingResurrection(Obj.key) then
+				ProbablyEngine.dsl.parsedTarget = Obj.key
+				return true
+			end
+		end
+	end
+end)
