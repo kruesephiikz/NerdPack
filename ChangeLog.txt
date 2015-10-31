@@ -1,0 +1,69 @@
+-> 6.2.1.1-Beta6
+@MrTheSoulz released this 11 days ago
+
+* Code CleanUps.
+* NePFrame Fixes/Tweaks.
+* Added initial GUIs for Mages/Rouges.
+* Generic OM fixes.
+
+
+-------------------------------------------------
+-> 6.2.1.1-Beta5.1
+@MrTheSoulz released this 17 days ago
+
+Nep Frame is now dragable & saves its location.
+
+
+-------------------------------------------------
+-> 6.2.1.1-Beta5
+@MrTheSoulz released this 17 days ago
+
+* NeP is now under MIT license
+* Code cleanups and optmizations.
+* Added/tweaked under the hood functions.
+* It's now possivel to change NeP frame size & color.
+* Rogue tweaks.
+
+
+-------------------------------------------------
+-> 6.2.1.1-Beta4
+@MrTheSoulz released this on 1 Sep
+
+* Monk Windwalker Tweaks.
+* Initial Monk Brewmaster (only ground work...)
+* Generic OM fixes.
+* Fix an error on Pala Ret (Will be updated & converted to IDs before stable release).
+* Fishing Bot improvements (by darkjacky @ Github).
+* Shaman-Ele fixes mentioned by darktanker12 @ OC.
+
+
+-------------------------------------------------
+-> 6.2.1.1-Beta3
+@MrTheSoulz released this on 31 Aug
+
+* ObjectManager improvements (Recommended for generic unlockers)
+
+
+-------------------------------------------------
+6.2.1.1-Beta2
+@MrTheSoulz released this on 30 Aug
+
+* Fix NePData.
+
+
+-------------------------------------------------
+-> 6.2.1.1-Beta1
+@MrTheSoulz released this on 29 Aug
+
+* Lots of GUI's improvements.
+* Random CR's updates.
+* Improved Fishing Bot.
+* ObjectManager Tweaks.
+* Random CleanUps & Tweaks.
+
+
+-------------------------------------------------
+-> 6.2.1.0 - Release
+@MrTheSoulz released this on 12 Aug
+
+* This is the 1st stable release for NeP.
