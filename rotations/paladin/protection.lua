@@ -34,10 +34,12 @@ NeP.Interface.classGUIs[66] = {
         },{
           text = "Righteousness",
           key = "Righteousness"
-        },{
-          text = "Truth",
-          key = "Truth"
-        }}, default = "Insight", desc = "Select What Seal to use..." },
+        },--[[ FIXME: Was this removed?!
+			{
+			  text = "Truth",
+			  key = "Truth"
+			}
+		]]}, default = "Insight", desc = "Select What Seal to use..." },
 
       -- Seal AoE
       { type = "dropdown",text = "Seal AoE:", key = "sealAoE", list = {
@@ -47,10 +49,12 @@ NeP.Interface.classGUIs[66] = {
         },{
           text = "Righteousness",
           key = "Righteousness"
-        },{
-          text = "Truth",
-          key = "Truth"
-        }}, default = "Righteousness", desc = "Select What Seal to use while in AoE..." },
+        },--[[ FIXME: Was this removed?!
+			{
+			  text = "Truth",
+			  key = "Truth"
+			}
+		]]}, default = "Righteousness", desc = "Select What Seal to use while in AoE..." },
 
     -- Def CD's
     { type = 'rule' },
@@ -118,18 +122,77 @@ local exeOnLoad = function()
 	NeP.Splash()
 end
 
-local InCombat = {
+local Seals = {
+	{{ -- Empowered Seals
+		{ "31801", { -- Seal of Truth
+			"player.seal != 3", 					-- Seal of Truth
+			"!player.buff(156990).duration > 3", 	-- Maraad's Truth
+			"player.spell(20271).cooldown <= 1" 	-- Judment  CD less then 1
+		}},
+		{ "20154", { -- Seal of Righteousness
+			"player.seal != 1", 					-- Seal of Righteousness
+			"!player.buff(156989).duration > 3", 	-- Liadrin's Righteousness
+			"player.buff(156990)", 					-- Maraad's Truth
+			"player.spell(20271).cooldown <= 1" 	-- Judment  CD less then 1
+		}},
+		{ "20165", { -- Seal of Insigh
+			"player.seal != 2", 					-- Seal of Insigh
+			"!player.buff(156988).duration > 3", 	-- Uther's Insight
+			"player.buff(156990)", 					-- Maraad's Truth
+			"player.buff(156989)", 					-- Liadrin's Righteousness
+			"player.spell(20271).cooldown <= 1" 	-- Judment  CD less then 1
+		}},
+		------------------------------------------------------------------------------ Judgment
+		{ "20271", {
+			"player.buff(156990).duration < 3", -- Maraad's Truth
+			"player.seal = 3"
+		}},
+		{ "20271", { 
+			"player.buff(156989).duration < 3", -- Liadrin's Righteousness
+			"player.seal = 1"
+		}},
+		{ "20271", {
+			"player.buff(156988).duration < 3", -- Uther's Insight
+			"player.seal = 2"
+		}},
+	}, "talent(7,1)" },
+	{{ -- Normal Seals
+		{{ -- AoE
+			{ "20165", { -- Seal of Insigh
+				"player.seal != 2",
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Insight' end),
+			}},
+			{ "20154", { -- Seal of Righteousness
+				"player.seal != 1",
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Righteousness' end),
+			}},
+			--[[ FIXME: Was this removed?!
+				{ "31801", { -- Seal of truth
+					"player.seal != 3",
+					(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Truth' end),
+				}},
+			]]
+		}, (function() return NeP.Lib.SAoE(3, 40) end) },
+		{{ -- Single Target
+			{ "20165", { -- Seal of Insigh
+				"player.seal != 2",
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Insight' end),
+			}},
+			{ "20154", { -- Seal of Righteousness
+				"player.seal != 1",
+				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Righteousness' end),
+			}},
+			--[[ FIXME: Was this removed?!
+				{ "31801", { -- Seal of truth
+					"player.seal != 1",
+					(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Truth' end),
+				}},
+			]]
+		}, "!modifier.multitarget" },
+	}, "!talent(7,1)" },
+}
 
-	-- Buff's
-	{ "20217", { -- Kings
-		"!player.buffs.stats",
-		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Kings' end)
-	}},
-	{ "19740", { -- Might
-		"!player.buffs.mastery",
-		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Might' end)
-	}},
-	
+local Survival = {
 	-- Defensive Cooldowns
 	{ "20925", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'SacredShield')) end), "player" }, 	-- Sacred Shield
 	{ "31850", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'ArdentDefender')) end) }, 			-- Ardent Defender
@@ -150,105 +213,51 @@ local InCombat = {
 		"player.holypower >= 3",
 		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'WordofGlory')) end)
 	}, "player" },
+}
 
-	-- Raid Heals
+local RaidHeal = {
 	{ "Flash of Light", { 
 		"player.buff(Selfless Healer).count = 3", 
 		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'FlashOfLightRaid')) end), 
 	}, "lowest" },		
 	{ "Lay on Hands", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayOnHandsRaid')) end), "lowest" },
 	--{ "Hand of Protection", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'HandOfProtectionRaid')) end), "lowest" },
+}
+
+local Cooldowns = {
+	{ "31884" }, 											-- Avenging Wrath
+	{ "105809" }, 											-- Holy Avenger
+	{ "114158", "target.range <= 30", "target.ground" }, 	-- Light´s Hammer
+	{ "#gloves" },											-- Gloves
+	{{ ------------------------------------------------------- Seraphim
+		{ "Seraphim" },   -- Seraphim
+		{ "Holy Avenger", { ------------------- Holy Avenger
+		"player.holypower < 3",  -- 3 Holy Power
+		"player.buff(Seraphim)", -- Buff Seraphin
+		}},
+	}, "talent(7, 2)" },
+}
+
+local All = {
+	-- Buff's
+	{ "20217", { -- Kings
+		"!player.buffs.stats",
+		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Kings' end)
+	}},
+	{ "19740", { -- Might
+		"!player.buffs.mastery",
+		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Might' end)
+	}},
 
 	-- Keybinds
-	
 	{ "105593", "modifier.control", "target" }, 				-- Fist of Justice
 	{ "853", "modifier.control", "target" }, 					-- Hammer of Justice
 	{ "114158", "modifier.shift", "target.ground" }, 			-- Light´s Hammer
+}
 
-	{{-- Interrumpts
-		{ "96231" }, 				-- Rebuke
-	}, "target.NePinterrupt" },
-
-	{{ -- Empowered Seals
-		{ "31801", { -- Seal of Truth
-			"player.seal != 1", 					-- Seal of Truth
-			"!player.buff(156990).duration > 3", 	-- Maraad's Truth
-			"player.spell(20271).cooldown <= 1" 	-- Judment  CD less then 1
-		}},
-		{ "20154", { -- Seal of Righteousness
-			"player.seal != 2", 					-- Seal of Righteousness
-			"!player.buff(156989).duration > 3", 	-- Liadrin's Righteousness
-			"player.buff(156990)", 					-- Maraad's Truth
-			"player.spell(20271).cooldown <= 1" 	-- Judment  CD less then 1
-		}},
-		{ "20165", { -- Seal of Insigh
-			"player.seal != 3", 					-- Seal of Insigh
-			"!player.buff(156988).duration > 3", 	-- Uther's Insight
-			"player.buff(156990)", 					-- Maraad's Truth
-			"player.buff(156989)", 					-- Liadrin's Righteousness
-			"player.spell(20271).cooldown <= 1" 	-- Judment  CD less then 1
-		}},
-			
-		------------------------------------------------------------------------------ Judgment
-		{ "20271", {
-			"player.buff(156990).duration < 3", -- Maraad's Truth
-			"player.seal = 1"
-		}},
-		{ "20271", { 
-			"player.buff(156989).duration < 3", -- Liadrin's Righteousness
-			"player.seal = 2"
-		}},
-		{ "20271", {
-			"player.buff(156988).duration < 3", -- Uther's Insight
-			"player.seal = 3"
-		}},
-	}, "talent(7,1)" },
-
-	{{ -- Normal Seals
-		{{ -- AoE
-			{ "20165", { -- Seal of Insigh
-				"player.seal != 3",
-				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Insight' end),
-			}},
-			{ "20154", { -- Seal of Righteousness
-				"player.seal != 2",
-				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Righteousness' end),
-			}},
-			{ "31801", { -- Seal of truth
-				"player.seal != 1",
-				(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Truth' end),
-			}},
-		}, (function() return NeP.Lib.SAoE(3, 40) end) },
-		{{ -- Single Target
-			{ "20165", { -- Seal of Insigh
-				"player.seal != 3",
-				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Insight' end),
-			}},
-			{ "20154", { -- Seal of Righteousness
-				"player.seal != 2",
-				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Righteousness' end),
-			}},
-			{ "31801", { -- Seal of truth
-				"player.seal != 1",
-				(function() return NeP.Core.PeFetch("NePConfPalaProt", "seal") == 'Truth' end),
-			}},
-		}, "!modifier.multitarget" },
-	}, "!talent(7,1)" },
-
-	{{ -- Cooldowns
-		{ "31884" }, 											-- Avenging Wrath
-		{ "105809" }, 											-- Holy Avenger
-		{ "114158", "target.range <= 30", "target.ground" }, 	-- Light´s Hammer
-		{ "#gloves" },											-- Gloves
-		{{ ------------------------------------------------------- Seraphim
-			{ "Seraphim" },   -- Seraphim
-			{ "Holy Avenger", { ------------------- Holy Avenger
-				"player.holypower < 3",  -- 3 Holy Power
-				"player.buff(Seraphim)", -- Buff Seraphin
-			}},
-		}, "talent(7, 2)" },
-	}, "modifier.cooldowns" },
-
+local InCombat = {
+	-- Interrumpts
+	{ "96231", "target.NePinterrupt" },-- Rebuke
 	{ "62124", (function() return NeP.Lib.canTaunt() end) }, -- Reckoning
 	
 	-- Proc's
@@ -280,42 +289,14 @@ local InCombat = {
 		"talent(5, 1)" 					-- Got Talent
 	}, "target"},
 	{ "114157", "target.spell(114157).range", "target" }, 	-- Execution Sentence
-
-}
-
-local outCombat = {
-
-	-- Buff's
-	{ "20217", { -- Kings
-		"!player.buffs.stats",
-		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Kings' end)
-	}},
-	{ "19740", { -- Might
-		"!player.buffs.mastery",
-		(function() return NeP.Core.PeFetch("NePConfPalaProt", "Buff") == 'Might' end)
-	}},
-
-	-- Keybinds
-	{ "105593", "modifier.control", "target" }, 				-- Fist of Justice
-	{ "853", "modifier.control", "target" }, 					-- Hammer of Justice
-	{ "114158", "modifier.shift", "target.ground" }, 			-- Light´s Hammer
-	
-	-- Heals
-	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'Healthstone')) end) }, 		-- Healthstone
-	{ "633", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayonHands')) end), "player"}, -- Lay on Hands
-	{ "114163", { ---------------------------------------------------------------------------------------------------------------- Eternal Flame
-		"!player.buff(114163)", 
-		"player.buff(114637).count = 5", 
-		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'EternalFlame')) end)
-	}, "player"},
-	{ "85673", { ---------------------------------------------------------------------------------------------------------------- Word of Glory
-		"player.buff(114637).count = 5", 
-		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'WordofGlory')) end)
-	}, "player" },
-
 }
 
 ProbablyEngine.rotation.register_custom(66, NeP.Core.GetCrInfo('Paladin - Protection'), 
-	InCombat, outCombat, exeOnLoad)
+	{ -- In-Combat
+		{All},
+		{Survival, "player.health < 100"},
+		{RaidHeal},
+		{Cooldowns, "modifier.cooldowns"},
+		{Seals},
+		{InCombat}
+	}, All, exeOnLoad)
