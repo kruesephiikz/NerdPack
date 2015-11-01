@@ -303,115 +303,85 @@ local exeOnLoad = function()
 	
 end
 
-local inCombat = {
+local All = {
+	--[[ Chakra ]]
+  	{ "81208", { -- Serenity
+  		"player.chakra != 3",
+  		(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Serenity' end),
+  	}},
+	{ "81206", { -- Sanctuary
+		"player.chakra != 2",
+		(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Sanctuary' end),
+	}},
+	{ "81209", { -- Serenity
+		"player.chakra != 1",
+		(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Chastise' end),
+	}},
 	
-  	--[[ Chakra ]]
-  		{ "81208", {--Serenity
-  			"player.chakra != 3",
-  			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Serenity' end),
-  			}, nil },
-
-		{ "81206", {--Sanctuary
-			"player.chakra != 2",
-			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Sanctuary' end),
-			}, nil },
-		
-		{ "81209", {--Serenity
-			"player.chakra != 1",
-			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Chastise' end),
-		}, nil },
-
-  	-- buffs
-		{ "21562", { -- Fortitude
-			(function() return NeP.Core.PeFetch('NePConfPriestHoly','Buff') end),
-			"!player.buffs.stamina"
-		}},
+	-- Buffs
+	{ "21562", { -- Fortitude
+		(function() return NeP.Core.PeFetch('NePConfPriestHoly','Buff') end),
+		"!player.buffs.stamina"
+	}},
 
   	--[[ keybinds ]]
-		{ "32375", "modifier.rcontrol", "player.ground" }, --Mass Dispel
-	 	{ "48045", "modifier.ralt", "tank" }, -- Mind Sear
-		{ "120517", "modifier.lcontrol", "player" }, --Halo
-		{ "110744", "modifier.lcontrol", "player" }, --Divine Star
-	
+	{ "32375", "modifier.rcontrol", "player.ground" }, --Mass Dispel
+	{ "48045", "modifier.ralt", "tank" }, -- Mind Sear
+	{ "120517", "modifier.lcontrol", "player" }, --Halo
+	{ "110744", "modifier.lcontrol", "player" }, --Divine Star
+}
+
+local MoveFast = {
+	{ "121536", { 
+		"player.movingfor > 2", 
+		"!player.buff(121557)", 
+		"player.spell(121536).charges >= 1" 
+	}, "player.ground" },
+	{ "17", {
+		"talent(2, 1)", 
+		"player.movingfor > 2", 
+		"!player.buff(6788)",
+	}, "player" },
+}
+
+local Cooldowns = {
+	{ "10060" }, --Power Infusion
+	{ "123040", { --Mindbender
+		"player.mana < 75", 
+		"target.spell(123040).range"
+	}, "target" },
+}
+
+local RaidCombat = {
+
 	-- PW:S
-		{ "129250" },
-	
-	{{-- LoOk aT It GOoZ!!!
-		{ "121536", { 
-			"player.movingfor > 2", 
-			"!player.buff(121557)", 
-			"player.spell(121536).charges >= 1" 
-		}, "player.ground" },
-		{ "17", {
-			"talent(2, 1)", 
-			"player.movingfor > 2", 
-			"!player.buff(6788)",
-		}, "player" },
-	}, -- We only want to run these on unlockers that can cast on unit.ground
-		(function()
-			if FireHack or oexecute then
-				return NeP.Core.PeFetch('NePConfPriestHoly', 'Feathers') 
-			end
-		end)  
-	},
+	{ "129250" },
 
-  	-- HEALTHSTONE 
-		{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'Healthstone')) end) },
-
-  	-- Aggro
-		{ "586", "target.threat >= 80" }, -- Fade
- 
-  	-- Dispel's
-	 	{{ -- Dispell all?
-			{ "527", (function() return NeP.Lib.Dispell(
-				function() return dispelType == 'Magic' or dispelType == 'Disease' end
-			) end) },
-		}},
-
-  	-- CD's
-		{ "10060", "modifier.cooldowns" }, --Power Infusion
+  	{{ -- CD's
+		{ "10060" }, --Power Infusion
 		{ "123040", { --Mindbender
 			"player.mana < 75", 
 			"target.spell(123040).range",
-			 "modifier.cooldowns"
-			 }, "target" },
+		}, "target" },
+	}, "modifier.cooldowns" },
+	
 	-- Proc's
-		{ "596", { -- Prayer of healing // Divine Insigt
-			"@coreHealing.needsHealing(95, 3)",
-			"player.buff(123267)",
-			"!player.moving",
-			"modifier.party", 
-			"!modifier.raid"
-			}, "lowest" },
-		{ "2061", { -- Flash heal // Surge of light
-			"lowest.health < 100",
-			"player.buff(114255)",
-			"!player.moving"
-			}, "lowest" },
+	{ "596", { -- Prayer of healing // Divine Insigt
+		"player.buff(123267)",
+		(function() return _PoH() end)
+	}, "lowest" },
+	{ "2061", { -- Flash heal // Surge of light
+		"lowest.health < 100",
+		"player.buff(114255)",
+	}, "lowest" },
 
-	-- Player dead (Spirit)
-		{ "88684", { -- Holy Word Serenity
-			"lowest.health <= 80", 
-			"player.buff(27827)" -- Player Dead
-			}, "lowest" },
-		{ "2061", { --Flash Heal
-			"lowest.health < 100", 
-			"player.buff(27827)" -- Player Dead
-			}, "lowest" },
-		{ "34861", { -- Circle of Healing
-			"@coreHealing.needsHealing(95, 3)", 
-			"player.buff(27827)" -- Player Dead
-			}, "lowest"},
-		{ "121135", { -- cascade
-			"@coreHealing.needsHealing(95, 3)", 
-			"player.buff(27827)"
-			}},
-		{ "596", { --Prayer of Healing
-			"@coreHealing.needsHealing(95, 3)", 
-			"player.buff(27827)", -- Player Dead
-			"modifier.party",  -- Player is in Party
-			"!modifier.raid"  -- Player os not in raid
-			}, "lowest" },
+	{{-- Player dead (Spirit)
+		{ "88684", "lowest.health <= 80", "lowest" }, -- Holy Word Serenity
+		{ "2061", "lowest.health < 100", "lowest" }, -- Flash Heal
+		{ "34861", "@coreHealing.needsHealing(95, 3)", "lowest"}, -- Circle of Healing
+		{ "121135", "@coreHealing.needsHealing(95, 3)" }, -- Cascade
+		{ "596", (function() return _PoH() end), "lowest" }, -- Prayer of Healing
+	}, "player.buff(27827)" },
 
 	{{-- AOE
    		{ "34861", "@coreHealing.needsHealing(90, 3)", "lowest"}, -- Circle of Healing
@@ -440,247 +410,186 @@ local inCombat = {
 
 	{{-- Heal Fast Bitch!!
 		-- Desperate Prayer
-			{ "!19236",  --Desperate Prayer
-				(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'DesperatePrayer')) end),
-				"player" },
+		{ "!19236",  --Desperate Prayer
+			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'DesperatePrayer')) end),
+			"player" },
 
 		-- Holy Word Serenity
-			{ "!88684", { -- Holy Word Serenity
-				(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityTank')) end),
-				"focus.spell(88684).range"
-				}, "focus" },
-			{ "!88684", { -- Holy Word Serenity
-				(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityTank')) end),
-				"tank.spell(88684).range"
-				}, "tank" },
-			{ "!88684", -- Holy Word Serenity
-				(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityPlayer')) end), 
-				"player" }, 
-			{ "!88684", -- Holy Word Serenity
-				(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityRaid')) end),
-				"lowest" }, 
+		{ "!88684", { -- Holy Word Serenity
+			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityTank')) end),
+			"focus.spell(88684).range"
+			}, "focus" },
+		{ "!88684", { -- Holy Word Serenity
+			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityTank')) end),
+			"tank.spell(88684).range"
+			}, "tank" },
+		{ "!88684", -- Holy Word Serenity
+			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityPlayer')) end), 
+			"player" }, 
+		{ "!88684", -- Holy Word Serenity
+			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityRaid')) end),
+			"lowest" }, 
 
 		-- Flash Heal
-			{ "!2061", { --Flash Heal
-				(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealTank')) end),
-				"focus.spell(2061).range",
-				"!player.moving"
-				}, "focus" },
-			{ "!2061", { --Flash Heal
-				(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealTank')) end),
-				"tank.spell(2061).range",
-				"!player.moving"
-				}, "tank" },
-			{ "!2061", { --Flash Heal
-				(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealPlayer')) end),
-				"!player.moving"
-				}, "player" },
-			{ "!2061", { --Flash Heal
-				(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealRaid')) end),
-				"!player.moving"
-				}, "lowest" },
+		{ "!2061", { --Flash Heal
+			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealTank')) end),
+			"focus.spell(2061).range",
+			"!player.moving"
+		}, "focus" },
+		{ "!2061", { --Flash Heal
+			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealTank')) end),
+			"tank.spell(2061).range",
+			"!player.moving"
+		}, "tank" },
+		{ "!2061", { --Flash Heal
+			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealPlayer')) end),
+			"!player.moving"
+		}, "player" },
+		{ "!2061", { --Flash Heal
+			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealRaid')) end),
+			"!player.moving"
+		}, "lowest" },
 	}, "!player.casting.percent >= 50" },
 
 	-- shields
-		{ "17", {  --Power Word: Shield
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
-			"!focus.debuff(6788).any", 
-			"focus.spell(17).range"
-			}, "focus" },
-		{ "17", {  --Power Word: Shield
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
-			"!tank.debuff(6788).any",
-			"tank.spell(17).range"
-			}, "tank" },
-		{ "17", { --Power Word: Shield
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldPlayer')) end),
-			"!player.debuff(6788).any", 
-			"!player.buff(17).any"
-			}, "player" }, 
-		{ "17", { --Power Word: Shield
-			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldRaid')) end),
-		 	"!lowest.debuff(6788).any", 
-		 	"!lowest.buff(17).any",  
-		 	}, "lowest" },
+	{ "17", {  --Power Word: Shield
+		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
+		"!focus.debuff(6788).any", 
+		"focus.spell(17).range"
+	}, "focus" },
+	{ "17", {  --Power Word: Shield
+		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
+		"!tank.debuff(6788).any",
+		"tank.spell(17).range"
+	}, "tank" },
+	{ "17", { --Power Word: Shield
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldPlayer')) end),
+		"!player.debuff(6788).any", 
+		"!player.buff(17).any"
+	}, "player" }, 
+	{ "17", { --Power Word: Shield
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldRaid')) end),
+	 	"!lowest.debuff(6788).any", 
+		"!lowest.buff(17).any",  
+	}, "lowest" },
 
 	-- renew
-		{ "139", { --renew
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewTank')) end),
-			"!focus.buff(139)", 
-			"focus.spell(139).range"
-			}, "focus" },
-		{ "139", { --renew
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewTank')) end),
-			"!tank.buff(139)", 
-			"tank.spell(139).range"
-			}, "tank" },
-		{ "139", { --renew
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewPlayer')) end), 
-			"!player.buff(139)"
-			}, "player" },
-		{ "139", { --renew
-			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewRaid')) end),
-			"!lowest.buff(139)"
-			}, "lowest" },
+	{ "139", { --renew
+		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewTank')) end),
+		"!focus.buff(139)", 
+		"focus.spell(139).range"
+	}, "focus" },
+	{ "139", { --renew
+		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewTank')) end),
+		"!tank.buff(139)", 
+		"tank.spell(139).range"
+	}, "tank" },
+	{ "139", { --renew
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewPlayer')) end), 
+		"!player.buff(139)"
+	}, "player" },
+	{ "139", { --renew
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewRaid')) end),
+		"!lowest.buff(139)"
+	}, "lowest" },
 
 	-- Prayer of Mending
-		{ "33076", { --Prayer of Mending
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'PrayerofMendingTank')) end),
-			"focus.spell(33076).range",
-			"!player.moving"
-			}, "focus" },
-		{ "33076", { --Prayer of Mending
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'PrayerofMendingTank')) end),
-			"tank.spell(33076).range",
-			"!player.moving"
-			}, "tank" },
+	{ "33076", { --Prayer of Mending
+		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'PrayerofMendingTank')) end),
+		"focus.spell(33076).range",
+		"!player.moving"
+	}, "focus" },
+	{ "33076", { --Prayer of Mending
+		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'PrayerofMendingTank')) end),
+		"tank.spell(33076).range",
+		"!player.moving"
+	}, "tank" },
 
 	-- binding heal
-		{ "32546", {
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'BindingHealTank')) end),
-			"player.health < 60",
-			"focus.spell(32546).range",
-			"!player.moving"
-			}, "focus" },
-		{ "32546", {
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'BindingHealTank')) end),
-			"player.health <= 60", 
-			"tank.spell(32546).range",
-			"!player.moving"
-			}, "tank" },
-		{ "32546", {
-			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'BindingHealRaid')) end),
-			"player.health < 60",
-			"!player.moving"
-			}, "lowest" },
+	{ "32546", {
+		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'BindingHealTank')) end),
+		"player.health < 60",
+		"focus.spell(32546).range",
+		"!player.moving"
+	}, "focus" },
+	{ "32546", {
+		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'BindingHealTank')) end),
+		"player.health <= 60", 
+		"tank.spell(32546).range",
+		"!player.moving"
+	}, "tank" },
+	{ "32546", {
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'BindingHealRaid')) end),
+		"player.health < 60",
+		"!player.moving"
+	}, "lowest" },
 
-	-- heal
-		{ "2060", { -- Heal
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HealTank')) end), 
-			"focus.spell(2060).range",
-			"!player.moving"
-			}, "focus" },
-		{ "2060", { -- Heal
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HealTank')) end), 
-			"tank.spell(2060).range",
-			"!player.moving"
-			}, "tank" },
-		{ "2060", { -- Heal	
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'Heal')) end),
-			"!player.moving"
-			}, "player" },
-		{ "2060", { -- Heal	
-			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HealRaid')) end),
-			"!player.moving"
-			}, "lowest" },
-
+	-- Heal
+	{ "2060", { -- Heal
+		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HealTank')) end), 
+		"focus.spell(2060).range",
+		"!player.moving"
+	}, "focus" },
+	{ "2060", { -- Heal
+		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HealTank')) end), 
+		"tank.spell(2060).range",
+		"!player.moving"
+	}, "tank" },
+	{ "2060", { -- Heal	
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'Heal')) end),
+		"!player.moving"
+	}, "player" },
+	{ "2060", { -- Heal	
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HealRaid')) end),
+		"!player.moving"
+	}, "lowest" },
 }
 
-local solo = {
-	
-  	--[[ Chakra ]]
-  		{ "81208", {--Serenity
-  			"player.chakra != 3",
-  			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Serenity' end),
-  			}, nil },
-
-		{ "81206", {--Sanctuary
-			"player.chakra != 2",
-			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Sanctuary' end),
-			}, nil },
-		
-		{ "81209", {--Serenity
-			"player.chakra != 1",
-			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Chastise' end),
-			}, nil },
-
-  	-- buffs
-		{ "21562", { -- Fortitude
-			(function() return NeP.Core.PeFetch('NePConfPriestHoly','Buff') end),
-			"!player.buffs.stamina"
-			}},
-	
-	{{-- LoOk aT It GOoZ!!!
-		{ "121536", { 
-			"player.movingfor > 2", 
-			"!player.buff(121557)", 
-			"player.spell(121536).charges >= 1" 
-		}, "player.ground" },
-		{ "17", {
-			"talent(2, 1)", 
-			"player.movingfor > 2", 
-			"!player.buff(6788)",
-		}, "player" },
-	}, -- We only want to run these on unlockers that can cast on unit.ground
-		(function()
-			if FireHack or oexecute then
-				return NeP.Core.PeFetch('NePConfPriestHoly', 'Feathers') 
-			end
-		end)  
-	},
-
-  	-- HEALTHSTONE 
-		{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'Healthstone')) end) },
- 
-  	-- Dispel's
-	 	{{ -- Dispell all?
-			{ "527", (function() return NeP.Lib.Dispell(
-				function() return dispelType == 'Magic' or dispelType == 'Disease' end
-			) end) },
-		}},
-
-  	-- CD's
-		{ "10060", "modifier.cooldowns" }, --Power Infusion
-		
-		{ "123040", { --Mindbender
-			"player.mana < 75", 
-			"target.spell(123040).range",
-			 "modifier.cooldowns"
-			 }, "target" },
+local SoloCombat = {
 
 	-- Proc's
-		{ "596", { -- Prayer of healing // Divine Insigt
-			"@coreHealing.needsHealing(95, 3)",
-			"player.buff(123267)",
-			"!player.moving",
-			"modifier.party", 
-			"!modifier.raid"
-			}, "lowest" },
-		{ "2061", { -- Flash heal // Surge of light
-			"lowest.health < 100",
-			"player.buff(114255)",
-			"!player.moving"
-			}, "lowest" },
+	{ "596", { -- Prayer of healing // Divine Insigt
+		"@coreHealing.needsHealing(95, 3)",
+		"player.buff(123267)",
+		"!player.moving",
+		"modifier.party", 
+		"!modifier.raid"
+	}, "lowest" },
+	{ "2061", { -- Flash heal // Surge of light
+		"lowest.health < 100",
+		"player.buff(114255)",
+		"!player.moving"
+	}, "lowest" },
 
 	-- Heal Fast Bitch!!
 		-- Desperate Prayer
 			{ "19236",  --Desperate Prayer
 				(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'DesperatePrayer')) end),
-				"player" },
+			"player" },
 
 		-- Holy Word Serenity
 			{ "88684", -- Holy Word Serenity
 				(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HolyWordSerenityPlayer')) end), 
-				"player" },
+			"player" },
 
 		-- Flash Heal
 			{ "2061", { --Flash Heal
 				(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealPlayer')) end),
 				"!player.moving"
-				}, "player" },
+			}, "player" },
 
 	-- shields
-		{ "17", { --Power Word: Shield
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldPlayer')) end),
-			"!player.debuff(6788).any", 
-			"!player.buff(17).any"
-			}, "player" },
+	{ "17", { --Power Word: Shield
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldPlayer')) end),
+		"!player.debuff(6788).any", 
+		"!player.buff(17).any"
+	}, "player" },
 
 	-- renew
-		{ "139", { --renew
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewPlayer')) end), 
-			"!player.buff(139)"
-			}, "player" },
+	{ "139", { --renew
+		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewPlayer')) end), 
+		"!player.buff(139)"
+	}, "player" },
 	
 	{{-- Auto Dotting
 		{ "32379", (function() return NeP.Lib.AutoDots('32379', 20) end) }, -- SW:D
@@ -698,28 +607,10 @@ local solo = {
 		{ "585", {  --Smite
 			"!player.moving", 
 			"target.spell(585).range" 
-			}, "target" },
-
+		}, "target" },
 }
 
 local outCombat = {
-		
-	--[[ Chakra ]]
-  		{ "81208", {--Serenity
-  			"player.chakra != 3",
-  			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Serenity' end),
-  			}, nil },
-
-		{ "81206", {--Sanctuary
-			"player.chakra != 2",
-			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Sanctuary' end),
-			}, nil },
-		
-		{ "81209", {--Serenity
-			"player.chakra != 1",
-			(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Chastise' end),
-			}, nil },
-
 	{{-- AOE
    		{ "34861", "@coreHealing.needsHealing(90, 3)", "lowest"}, -- Circle of Healing
 		{ "121135", { -- cascade
@@ -746,67 +637,59 @@ local outCombat = {
 	}, "modifier.multitarget" },
 		
 	-- shields 
-		{ "17", { --Power Word: Shield
-			(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
-			"!focus.debuff(6788).any", 
-			"focus.spell(17).range", 
-			"focus.spell(17).range" 
-			}, "focus" },
+	{ "17", { --Power Word: Shield
+		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
+		"!focus.debuff(6788).any", 
+		"focus.spell(17).range", 
+		"focus.spell(17).range" 
+	}, "focus" },
 			
-		{ "17", {  --Power Word: Shield
-			(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
-			"!tank.debuff(6788).any", 
-			"tank.spell(17).range", 
-			"modifier.party" 
-			}, "tank" },
+	{ "17", {  --Power Word: Shield
+		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
+		"!tank.debuff(6788).any", 
+		"tank.spell(17).range", 
+		"modifier.party" 
+	}, "tank" },
 	   	
 	-- heals
-		{ "139", {  --renew
-			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewRaid')) end),
-			"!lowest.buff(139)"
-		}, "lowest" },	
+	{ "139", {  --renew
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewRaid')) end),
+		"!lowest.buff(139)"
+	}, "lowest" },	
 			
-		{ "2061", {  --Flash Heal
-			"!player.moving", 
-			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealRaid')) end),
-		}, "lowest" },
+	{ "2061", {  --Flash Heal
+		"!player.moving", 
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'FlashHealRaid')) end),
+	}, "lowest" },
 			
-		{ "2060", { -- Heal
-			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HealRaid')) end),
-			"!player.moving"
-		}, "lowest" },
-		
-	-- buffs
-		{ "21562", { -- Fortitude
-			(function() return NeP.Core.PeFetch('NePConfPriestHoly','Buff') end),
-			"!player.buffs.stamina"
-		}},
-	
-	{{-- LoOk aT It GOoZ!!!
-		{ "121536", { 
-			"player.movingfor > 2", 
-			"!player.buff(121557)", 
-			"player.spell(121536).charges >= 1" 
-		}, "player.ground" },
-		{ "17", {
-			"talent(2, 1)", 
-			"player.movingfor > 2", 
-			"!player.buff(6788)",
-		}, "player" },
-	}, -- We only want to run these on unlockers that can cast on unit.ground
-		(function()
-			if FireHack or oexecute then
-				return NeP.Core.PeFetch('NePConfPriestHoly', 'Feathers') 
-			end
-		end)  
-	},
-
+	{ "2060", { -- Heal
+		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'HealRaid')) end),
+		"!player.moving"
+	}, "lowest" },
 }
 
 	
 ProbablyEngine.rotation.register_custom(257, NeP.Core.GetCrInfo('Priest - Holy'), 
-	{-- Dyn Change CR
-		{ inCombat, "modifier.party" },
-		{ solo, "!modifier.party" },
-	}, 
- 	outCombat, exeOnLoad)
+	{-- In-Combat
+		{ "586", "target.threat >= 80" }, -- Fade
+		{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'Healthstone')) end) }, -- HEALTHSTONE 
+		{ All },
+		{{ -- Dispell all
+			{ "527", (function() return NeP.Lib.Dispell(
+				function() return dispelType == 'Magic' or dispelType == 'Disease' end
+			) end) },
+		}},
+		{ MoveFast, -- We only want to run these on unlockers that can cast on unit.ground
+			(function()
+				if FireHack or oexecute then
+					return NeP.Core.PeFetch('NePConfPriestHoly', 'Feathers') 
+				end
+			end)  
+		},
+		{ Cooldowns, "modifier.cooldowns" },
+		{ RaidCombat, "modifier.party" },
+		{ SoloCombat, "!modifier.party" },
+	},{ -- Out-Combat
+		{ All },
+		{ outCombat },
+	}, exeOnLoad)
