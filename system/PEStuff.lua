@@ -15,11 +15,11 @@ ProbablyEngine.condition.register("petinmelee", function(target)
 end)
 
 ProbablyEngine.condition.register("inMelee", function(target)
-   return NeP.Lib.getUnitRange(target, 'melee')
+   return NeP.Lib.UnitAttackRange('player', target, 'melee')
 end)
 
 ProbablyEngine.condition.register("inRanged", function(target)
-   return NeP.Lib.getUnitRange(target, 'ranged')
+   return NeP.Lib.UnitAttackRange('player', target, 'ranged')
 end)
 
 ProbablyEngine.condition.register("power.regen", function(target)

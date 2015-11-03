@@ -117,11 +117,11 @@ local inCombat = {
 		{ "#5512", "player.health < 70"}, --healthstone
 
 	-- Def cooldowns // heals
-		{ "48792", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'IceboundFortitude')) end) }, -- Icebound Fortitude
-		{ "55233", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'VampiricBlood')) end) }, -- Vampiric Blood
-		{ "48743", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'DeathPact')) end) }, -- Death Pact
-		{ "48982", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'RuneTap')) end) }, -- rune tap
-		{ "108196", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'DeathSiphon')) end) },-- Death Siphon
+		{ "48792", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'IceboundFortitude')) end) }, -- Icebound Fortitude
+		{ "55233", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'VampiricBlood')) end) }, -- Vampiric Blood
+		{ "48743", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'DeathPact')) end) }, -- Death Pact
+		{ "48982", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'RuneTap')) end) }, -- rune tap
+		{ "108196", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkBlood', 'DeathSiphon')) end) },-- Death Siphon
 		{ "49039", {  -- Lichborne //fear
 			"player.state.fear", 
 			"player.runicpower >= 40", 

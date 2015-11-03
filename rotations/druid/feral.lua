@@ -138,13 +138,13 @@ local CatForm = {
 	  	}, "target" },
 
   	-- Survival
-	{ "Renewal", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'Renewal')) end) }, -- Renewal
-	{ "Cenarion Ward", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'CenarionWard')) end) }, -- Cenarion Ward
-	{ "61336",(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'SurvivalInstincts')) end) }, -- Survival Instincts
+	{ "Renewal", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'Renewal')) end) }, -- Renewal
+	{ "Cenarion Ward", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'CenarionWard')) end) }, -- Cenarion Ward
+	{ "61336",(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'SurvivalInstincts')) end) }, -- Survival Instincts
 	  	
 	-- Predatory Swiftness (Passive Proc)
 	{ "5185", {  -- Healing Touch Player
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'HealingTouch')) end),
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'HealingTouch')) end),
 		"player.buff(Predatory Swiftness)",
 		"!talent(7,2)"
 	}, "player" },
@@ -175,7 +175,7 @@ local CatForm = {
 	}, "modifier.cooldowns" },
   	
 	-- Buffs
-	{ "5217", (function() return NeP.Core.dynamicEval("player.energy <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'TigersFury')) end) }, -- Tiger's Fury
+	{ "5217", (function() return NeP.Core.dynEval("player.energy <= " .. NeP.Core.PeFetch('NePConfDruidFeral', 'TigersFury')) end) }, -- Tiger's Fury
 
 	-- Proc's
 	{ "106830", "player.buff(Omen of Clarity)", "target" }, -- Free Thrash
@@ -255,12 +255,12 @@ local _All = {
 local inCombat = {
 	-- Form Hadling Logic
 	{ "/run CancelShapeshiftForm();", (function() 
-	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('NePConfDruidFeral', 'Form') == 'MANUAL' then
+	  	if NeP.Core.dynEval("player.form = 0") or NeP.Core.PeFetch('NePConfDruidFeral', 'Form') == 'MANUAL' then
 	  		return false
-	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('NePConfDruidFeral', 'Form') == '0' then
+	  	elseif NeP.Core.dynEval("player.form != 0") and NeP.Core.PeFetch('NePConfDruidFeral', 'Form') == '0' then
 	  		return true
 	  	else
-	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('NePConfDruidFeral', 'Form'))
+	  		return NeP.Core.dynEval("player.form != " .. NeP.Core.PeFetch('NePConfDruidFeral', 'Form'))
 	  	end
 	end) },
 	{ "768", { -- catform
@@ -286,12 +286,12 @@ local inCombat = {
 local outCombat = {
 	-- Form Handling Logic
 	{ "/run CancelShapeshiftForm();", (function() 
-		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC') == 'MANUAL' then
+		if NeP.Core.dynEval("player.form = 0") or NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC') == 'MANUAL' then
 	  		return false
-	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC') == '0' then
+	  	elseif NeP.Core.dynEval("player.form != 0") and NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC') == '0' then
 	  		return true
 	  	else
-	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC'))
+	  		return NeP.Core.dynEval("player.form != " .. NeP.Core.PeFetch('NePConfDruidFeral', 'FormOCC'))
 	  	end
 	end) },
 	{ "768", { -- catform

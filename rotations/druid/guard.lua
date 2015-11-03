@@ -163,9 +163,9 @@ local inCombat = {
 	}, "target.NePinterrupt" },
 	
 	-- Items
-		{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Healthstone')) end) }, -- Healthstone
-		{ "#109223", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'HealingTonic')) end) }, --  Healing Tonic
-		{ "#117415", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SmuggledTonic')) end) }, --  Smuggled Tonic
+		{ "#5512", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Healthstone')) end) }, -- Healthstone
+		{ "#109223", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'HealingTonic')) end) }, --  Healing Tonic
+		{ "#117415", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SmuggledTonic')) end) }, --  Smuggled Tonic
 	
 	-- Cooldowns
 		{ "50334", "modifier.cooldowns" }, -- Berserk
@@ -175,17 +175,17 @@ local inCombat = {
 	--Defensive
 		{ "62606", { -- Savage Defense
 			"!player.buff", 
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SavageDefense')) end) 
+			(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SavageDefense')) end) 
 		}},
 		{ "22842", { -- Frenzied Regeneration
 			"!player.buff",
-			(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'FrenziedRegeneration')) end),
+			(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'FrenziedRegeneration')) end),
 			"player.rage >= 20"
 		}},
-		{ "22812",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Barkskin')) end) }, -- Barkskin
-		{ "102351",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'CenarionWard')) end), "player" }, -- Cenarion Ward
-		{ "61336",  (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SurvivalInstincts')) end) }, -- Survival Instincts
-		{ "108238", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Renewal')) end) }, -- Renewal		
+		{ "22812",  (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Barkskin')) end) }, -- Barkskin
+		{ "102351",  (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'CenarionWard')) end), "player" }, -- Cenarion Ward
+		{ "61336",  (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SurvivalInstincts')) end) }, -- Survival Instincts
+		{ "108238", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Renewal')) end) }, -- Renewal		
 
 	-- Dream of Cenarious
 		-- Needs a Rebirth here

@@ -365,7 +365,7 @@ local _InfusionOfLight = {
 		}, "lowest" }, 
 	}, "modifier.multitarget" }, 
 	{ "82326", { -- Holy Light
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLightIL')) end),
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLightIL')) end),
 		"!player.moving" 
 	}, "lowest" },
 }
@@ -380,7 +380,7 @@ local _Fast = {
 
 local _Tank = {
 	{ "633", { -- Lay on Hands
-		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'LayonHandsTank')) end),
+		(function() return NeP.Core.dynEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'LayonHandsTank')) end),
 		"tank.spell(633).range"
 	}, "tank" },
 	{ "53563", { -- Beacon of light
@@ -390,20 +390,20 @@ local _Tank = {
 	}, "tank" },
 	{ "6940", { -- Hand of Sacrifice
 		"tank.spell(6940).range",
-		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HandofSacrifice')) end)
+		(function() return NeP.Core.dynEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HandofSacrifice')) end)
 	}, "tank" }, 
 	{ "19750", { -- Flash of Light
-		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'FlashofLightTank')) end), 
+		(function() return NeP.Core.dynEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'FlashofLightTank')) end), 
 		"!player.moving",
 		"tank.spell(19750).range"
 	}, "tank" },
 	{ "114157", { -- Execution Sentence // Talent
-		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'ExecutionSentenceTank')) end),
+		(function() return NeP.Core.dynEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'ExecutionSentenceTank')) end),
 		"tank.spell(114157).range"
 	}, "tank" },
 	{ "148039", { -- Sacred Shield // Talent
 		"player.spell(148039).charges >= 1", 
-		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'SacredShieldTank')) end), 
+		(function() return NeP.Core.dynEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'SacredShieldTank')) end), 
 		"!tank.buff(148039)", -- SS
 		"tank.range < 40" 
 	}, "tank" },
@@ -411,20 +411,20 @@ local _Tank = {
 			"player.holypower >= 3", 
 		"!tank.buff(114163)",
 		"focus.spell(114163).range",
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'EternalFlameTank')) end)
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'EternalFlameTank')) end)
 	}, "tank" },
 	{ "85673", { -- Word of Glory
 		"player.holypower >= 3",
 		"focus.spell(85673).range",
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'WordofGloryTank')) end)
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'WordofGloryTank')) end)
 	}, "tank"  },
 	{ "114165", { -- Holy Prism // Talent
-		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyPrismTank')) end), 
+		(function() return NeP.Core.dynEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyPrismTank')) end), 
 		"!player.moving",
 		"tank.spell(114165).range" 
 	}, "tank"},
 	{ "82326", { -- Holy Light
-		(function() return NeP.Core.dynamicEval("tank.health < " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLightTank')) end),
+		(function() return NeP.Core.dynEval("tank.health < " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLightTank')) end),
 		"!player.moving",
 		"focus.spell(82326).range" 
 	}, "tank" },
@@ -432,25 +432,25 @@ local _Tank = {
 
 local _Focus = {
 	{ "633", { -- Lay on Hands
-		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'LayonHandsTank')) end),
+		(function() return NeP.Core.dynEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'LayonHandsTank')) end),
 		"focus.spell(633).range"
 	}, "focus" }, 
 	{ "6940", { -- Hand of Sacrifice
 		"focus.spell(6940).range",
-		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HandofSacrifice')) end)
+		(function() return NeP.Core.dynEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HandofSacrifice')) end)
 	}, "focus" },
 	{ "19750", { -- Flash of Light
-		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'FlashofLightTank')) end), 
+		(function() return NeP.Core.dynEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'FlashofLightTank')) end), 
 		"!player.moving",
 		"focus.spell(19750).range"
 	}, "focus" },
 	{ "114157", { -- Execution Sentence // Talent
-		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'ExecutionSentenceTank')) end),
+		(function() return NeP.Core.dynEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'ExecutionSentenceTank')) end),
 		"focus.spell(114157).range"
 	}, "focus" },
 	{ "148039", { -- Sacred Shield // Talent
 		"player.spell(148039).charges >= 1", 
-		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'SacredShieldTank')) end), 
+		(function() return NeP.Core.dynEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'SacredShieldTank')) end), 
 		"!focus.buff(148039)", 
 		"focus.range < 40" 
 	}, "focus" },
@@ -458,21 +458,21 @@ local _Focus = {
 		"player.holypower >= 3", 
 		"!focus.buff(114163)",
 		"focus.spell(114163).range",
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'EternalFlameTank')) end)
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'EternalFlameTank')) end)
 	}, "focus" },
 	{ "85673", { -- Word of Glory
 		"player.holypower >= 3",
 		"focus.spell(85673).range",
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'WordofGloryTank')) end) 
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'WordofGloryTank')) end) 
 	}, "focus" },
 	{ "114165", { -- Holy Prism // Talent
 		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyPrismTank')) end), 
+		(function() return NeP.Core.dynEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyPrismTank')) end), 
 		"!player.moving",
 		"focus.spell(114165).range" 
 	}, "focus"},
 	{ "82326", { -- Holy Light
-		(function() return NeP.Core.dynamicEval("focus.health < " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLightTank')) end),
+		(function() return NeP.Core.dynEval("focus.health < " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLightTank')) end),
 		"!player.moving",
 		"focus.spell(82326).range" 
 	}, "focus" },
@@ -480,20 +480,20 @@ local _Focus = {
 
 local _Player = {
 	-- Items
-	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'Healthstone')) end), nil }, -- Healthstone
-	{ "#trinket1", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'Trinket1')) end), nil }, -- Trinket 1
-	{ "#trinket2", (function() return NeP.Core.dynamicEval("player.mana <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'Trinket2')) end), nil }, -- Trinket 2
+	{ "#5512", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'Healthstone')) end), nil }, -- Healthstone
+	{ "#trinket1", (function() return NeP.Core.dynEval("player.mana <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'Trinket1')) end), nil }, -- Trinket 1
+	{ "#trinket2", (function() return NeP.Core.dynEval("player.mana <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'Trinket2')) end), nil }, -- Trinket 2
 	{{-- Beacon of Faith
 		{ "156910", {
 			"!player.buff(53563)", -- Beacon of light
 			"!player.buff(156910)" -- Beacon of Faith
 		}, "player" },
 	}, "talent(7,1)" },
-	{ "498", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'DivineProtection')) end), nil }, -- Divine Protection
-	{ "642", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'DivineShield')) end), nil }, -- Divine Shield
+	{ "498", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'DivineProtection')) end), nil }, -- Divine Protection
+	{ "642", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'DivineShield')) end), nil }, -- Divine Shield
 	{ "148039", { -- Sacred Shield // Talent
 		"player.spell(148039).charges >= 2", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'SacredShield')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'SacredShield')) end), 
 		"!player.buff(148039)" 
 	}, "player" },
 }
@@ -536,10 +536,10 @@ local _DivinePurpose = {
 		"player.holypower >= 1",
 		"modifier.party" 
 	}},
-	{ "85673", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'WordofGloryDP')) end), "lowest"  }, -- Word of Glory
+	{ "85673", (function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'WordofGloryDP')) end), "lowest"  }, -- Word of Glory
 	{ "114163", { -- Eternal Flame
 		"!lowest.buff(114163)", 
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'EternalFlameDP')) end) 
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'EternalFlameDP')) end) 
 	}, "lowest" },
 }
 
@@ -547,7 +547,7 @@ local _SelflessHealer = {
 	{ "20271", "target.spell(20271).range", "target" }, -- Judgment
 	{{ -- If got buff
 		{ "19750", { -- Flash of light
-			(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'FlashofLightSH')) end),  
+			(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'FlashofLightSH')) end),  
 			"!player.moving" 
 		}, "lowest" }, 
 	}, "player.buff(114250).count = 3" }
@@ -555,33 +555,33 @@ local _SelflessHealer = {
 
 local _Raid = {
 	-- Lay on Hands
-	{ "633", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'LayonHands')) end), "lowest" }, 
+	{ "633", (function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'LayonHands')) end), "lowest" }, 
 	{ "19750", { -- Flash of Light
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'FlashofLight')) end), 
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'FlashofLight')) end), 
 		"!player.moving" 
 	}, "lowest" },
 	-- Execution Sentence // Talent
-	{ "114157", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'ExecutionSentence')) end), "lowest" },
+	{ "114157", (function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'ExecutionSentence')) end), "lowest" },
 	{ "148039", { -- Sacred Shield // Talent
 		"player.spell(148039).charges >= 2", 
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'SacredShield')) end), 
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'SacredShield')) end), 
 		"!lowest.buff(148039)" 
 	}, "lowest" },
 	{ "114163", { -- Eternal Flame // talent
 		"player.holypower >= 1", 
 		"!lowest.buff(114163)", 
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'EternalFlame')) end)
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'EternalFlame')) end)
 	}, "lowest" },
 	{ "85673", { -- Word of Glory
 		"player.holypower >= 3", 
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'WordofGlory')) end)
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'WordofGlory')) end)
 	}, "lowest"  },
 	{ "114165", { -- Holy Prism // Talent
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyPrism')) end), 
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyPrism')) end), 
 		"!player.moving" 
 	}, "lowest"},
 	{ "82326", { -- Holy Light
-		(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLight')) end),
+		(function() return NeP.Core.dynEval("lowest.health < " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLight')) end),
 		"!player.moving" 
 	}, "lowest" },
 }
@@ -616,7 +616,7 @@ local outCombat = {
 	}, "modifier.multitarget" },
 	-- Holy Light
 	{ "82326", { 
-		(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLightOCC')) end),
+		(function() return NeP.Core.dynEval("lowest.health < " .. NeP.Core.PeFetch('NePConfPalaHoly', 'HolyLightOCC')) end),
 		"!player.moving" 
 	}, "lowest" },
 }

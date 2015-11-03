@@ -215,16 +215,16 @@ local _ALL = {
 
 local _Survival = {
 	{ "Healing Surge", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingsurge_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingsurge_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healingsurge_check') end) 
 	}},
 	{ "Healing Stream Totem", { 
 		"!player.totem(Healing Stream Totem)", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingstreamtotem_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingstreamtotem_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healingstreamtotem_check') end) 
 	}},
 	{ "#5512", {-- Healthstone (5512)
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healthstone_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healthstone_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healthstone_check') end)
 	}}, 
 }
@@ -303,7 +303,7 @@ local inCombat = {
 
 local outCombat = {
 	{ "Healing Surge", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingsurgeOCC_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfShamanEle', 'healingsurgeOCC_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfShamanEle', 'healingsurgeOCC_check') end) 
 	}},
 }

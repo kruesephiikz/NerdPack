@@ -194,34 +194,34 @@ local Seals = {
 
 local Survival = {
 	-- Defensive Cooldowns
-	{ "20925", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'SacredShield')) end), "player" }, 	-- Sacred Shield
-	{ "31850", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'ArdentDefender')) end) }, 			-- Ardent Defender
-	{ "498", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'DivineProtection')) end) }, 			-- Divine Protection
-	{ "86659", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'GuardianofAncientKings')) end) }, 	-- Guardian of Ancient Kings
+	{ "20925", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'SacredShield')) end), "player" }, 	-- Sacred Shield
+	{ "31850", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'ArdentDefender')) end) }, 			-- Ardent Defender
+	{ "498", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'DivineProtection')) end) }, 			-- Divine Protection
+	{ "86659", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'GuardianofAncientKings')) end) }, 	-- Guardian of Ancient Kings
 
 	-- Heals
-	{ "#5512", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'Healthstone')) end) }, 		-- Healthstone
-	{ "633", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayonHands')) end), "player"}, -- Lay on Hands
+	{ "#5512", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'Healthstone')) end) }, 		-- Healthstone
+	{ "633", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayonHands')) end), "player"}, -- Lay on Hands
 	{ "114163", { ---------------------------------------------------------------------------------------------------------------- Eternal Flame
 		"!player.buff(114163)", 
 		"player.buff(114637).count = 5", 
 		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'EternalFlame')) end)
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'EternalFlame')) end)
 	}, "player"},
 	{ "85673", { ---------------------------------------------------------------------------------------------------------------- Word of Glory
 		"player.buff(114637).count = 5", 
 		"player.holypower >= 3",
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'WordofGlory')) end)
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'WordofGlory')) end)
 	}, "player" },
 }
 
 local RaidHeal = {
 	{ "Flash of Light", { 
 		"player.buff(Selfless Healer).count = 3", 
-		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'FlashOfLightRaid')) end), 
+		(function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'FlashOfLightRaid')) end), 
 	}, "lowest" },		
-	{ "Lay on Hands", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayOnHandsRaid')) end), "lowest" },
-	--{ "Hand of Protection", (function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'HandOfProtectionRaid')) end), "lowest" },
+	{ "Lay on Hands", (function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'LayOnHandsRaid')) end), "lowest" },
+	--{ "Hand of Protection", (function() return NeP.Core.dynEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPalaProt', 'HandOfProtectionRaid')) end), "lowest" },
 }
 
 local Cooldowns = {

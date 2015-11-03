@@ -37,7 +37,7 @@ on PE's conditions
 
 Build By: MTS
 ---------------------------------------------------]]
-NeP.Core.dynamicEval = function(condition, spell)
+function NeP.Core.dynEval(condition, spell)
 	return _parse(condition, spell or '')
 end
 
@@ -52,7 +52,7 @@ Build By: MTS
 local _SAoE_Time = nil
 local UnitsTotal = 0
 
-NeP.Lib.SAoE = function(Units, Distance)
+function NeP.Lib.SAoE(Units, Distance)
 	if _SAoE_Time == nil or _SAoE_Time + 0.5 <= GetTime() then
 		_SAoE_Time = nil
 		UnitsTotal = 0
@@ -91,12 +91,12 @@ local _rangeTable = {
 	["ranged"] = 40,
 }
 
-NeP.Lib.getUnitRange = function(Reach, Range)
+function NeP.Lib.UnitAttackRange(unitA, unitB, _type)
 	if FireHack then 
-		return _rangeTable[Range] + UnitCombatReach('player') + UnitCombatReach(Reach)
+		return _rangeTable[_type] + UnitCombatReach(unitA) + UnitCombatReach(unitB)
 	-- Unlockers wich dont have UnitCombatReach like functions...
 	else
-		return _rangeTable[Range] + 3.5
+		return _rangeTable[_type] + 3.5
 	end
 end
 
@@ -111,7 +111,7 @@ Classifications:
 
 Build By: MTS
 ---------------------------------------------------]]
-NeP.Lib.canTaunt = function()
+function NeP.Lib.canTaunt()
 	if NeP.Core.PeFetch('NePConf', 'Taunts') ~= "Disabled" then
 		for i=1,#enemieCache do
 			local Obj = enemieCache[i]
@@ -146,7 +146,7 @@ local blacklistedDebuffs = {
 	'Displaced Energy'
 }
 
-NeP.Lib.Dispell = function(dispelTypes)
+function NeP.Lib.Dispell(dispelTypes)
 	if NeP.Core.PeFetch('NePConf', 'Dispell') then
 		for i=1,#friendlyCache do
 			local object = friendlyCache[i]
@@ -184,7 +184,7 @@ Classifications:
 	all - All Units
 ]]
 
-NeP.Lib.AutoDots = function(Spell, Health, Duration, Distance, Classification)
+function NeP.Lib.AutoDots(Spell, Health, Duration, Distance, Classification)
 	
 	-- Check if we have the spell before anything else...
 	if not IsUsableSpell(Spell) then return false end

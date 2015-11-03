@@ -177,9 +177,9 @@ local _All = {
 local _Survival = {
 	-- Def cooldowns & Heals // Add a toggle/tick
 	{ "#5512", "player.health < 85" },--Healthstone
-	{ "48792", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'IceboundFortitude')) end) }, -- Icebound Fortitude
-	{ "48743", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathPact')) end) }, -- Death Pact
-	{ "108196", (function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathSiphon')) end) },-- Death Siphon
+	{ "48792", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'IceboundFortitude')) end) }, -- Icebound Fortitude
+	{ "48743", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathPact')) end) }, -- Death Pact
+	{ "108196", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathSiphon')) end) },-- Death Siphon
 	{ "49039", { -- Lichborne //fear 
 		"player.state.fear", 
 		"player.runicpower >= 40", 
@@ -197,7 +197,7 @@ local _Survival = {
 	}},
 	{ "49998", { -- Death Strike With Dark Succor
 		"player.buff(10156)", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathStrikeDS')) end)
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDkUnholy', 'DeathStrikeDS')) end)
 	}}, 
 }
 

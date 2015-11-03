@@ -400,13 +400,11 @@ C_Timer.NewTicker(1, (function()
 				NeP_GenericOM()
 			end
 		end
+		-- Sort by distance
+		table.sort(NeP.OM.unitEnemie, function(a,b) return a.distance < b.distance end)
+		table.sort(NeP.OM.unitEnemieDead, function(a,b) return a.distance < b.distance end)
+		table.sort(NeP.OM.unitFriend, function(a,b) return a.distance < b.distance end)
+		table.sort(NeP.OM.unitFriendDead, function(a,b) return a.distance < b.distance end)
+		table.sort(NeP.OM.GameObjects, function(a,b) return a.distance < b.distance end)
 	end
-	
-	-- Sort by distance
-	table.sort(NeP.OM.unitEnemie, function(a,b) return a.distance < b.distance end)
-	table.sort(NeP.OM.unitEnemieDead, function(a,b) return a.distance < b.distance end)
-	table.sort(NeP.OM.unitFriend, function(a,b) return a.distance < b.distance end)
-	table.sort(NeP.OM.unitFriendDead, function(a,b) return a.distance < b.distance end)
-	table.sort(NeP.OM.GameObjects, function(a,b) return a.distance < b.distance end)
-	
 end), nil)

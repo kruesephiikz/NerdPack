@@ -13,7 +13,7 @@ local UnitAffectingCombat = UnitAffectingCombat
 local UnitIsVisible = UnitIsVisible
 local UnitExists = UnitExists
 local objectDistance = NeP.Core.Distance
-local getUnitRange = NeP.Lib.getUnitRange
+local UnitAttackRange = NeP.Lib.UnitAttackRange
 
 --[[-----------------------------------------------
 ** Automated Movements **
@@ -53,9 +53,9 @@ end
 function NeP.Extras.MoveTo()
 	if NeP.Core.PeFetch('NePConf', 'AutoMove') then
 		if UnitIsVisible('target') and not UnitChannelInfo("player") then
-			if inLoS('player', 'target') then
-				if not _manualMoving() then
-					local _Range = getUnitRange('target', NeP_rangeTable[select(2, UnitClass('player'))])
+			if not _manualMoving() then
+				if inLoS('player', 'target') then
+					local _Range = UnitAttackRange('player', 'target', NeP_rangeTable[select(2, UnitClass('player'))])
 					local unitSpeed = GetUnitSpeed('player')
 					if FireHack then
 						-- Stop Moving

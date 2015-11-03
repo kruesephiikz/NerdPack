@@ -151,7 +151,7 @@ local inCombatSerpente = {
 		-- Cancel SoothingMistHealing (Max Health)
 		{ "/stopcasting", (function() return not _SoothingMist_Health(NeP.Core.PeFetch('NePconfigMonkMm', 'SMSTOP')) end) }, 	
 		-- Cancel SoothingMistHealing (Someone else needs more) (MIN HEALTH 60%)
-		{ "/stopcasting", (function() if not _SoothingMist_Health(60) then return NeP.Core.dynamicEval("lowest.health < "..math.floor((UnitHealth(_SoothingMist_Target) / UnitHealthMax(_SoothingMist_Target)) * 100)) end end)},
+		{ "/stopcasting", (function() if not _SoothingMist_Health(60) then return NeP.Core.dynEval("lowest.health < "..math.floor((UnitHealth(_SoothingMist_Target) / UnitHealthMax(_SoothingMist_Target)) * 100)) end end)},
 		{ "124682", { -- Enveloping Mist (Dump Chi)
 			"player.chi >= 5",
 			(function() return _SoothingMist_Health(95) end)
@@ -161,7 +161,7 @@ local inCombatSerpente = {
 			(function() return _SoothingMist_Health(70) end)
 		}, "lowest" },
 		{ "115151", { -- Renewing Mist
-			(function() return NeP.Core.dynamicEval(_SoothingMist_Target..".buff(119611).duration <= 2") end),
+			(function() return NeP.Core.dynEval(_SoothingMist_Target..".buff(119611).duration <= 2") end),
 			(function() return _SoothingMist_Health(95) end),
 		}}, 
 		{ "116694", { -- Surging Mist
@@ -212,7 +212,7 @@ local inCombatSerpente = {
 		
 		{{ -- Not Moving
 			-- Soothing Mist
-			{ "115175", (function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfigMonkMm', 'SM')) end), "lowest" },
+			{ "115175", (function() return NeP.Core.dynEval("lowest.health < " .. NeP.Core.PeFetch('NePconfigMonkMm', 'SM')) end), "lowest" },
 			{ "124682", { -- Enveloping Mist(Dump CHI)
 				"player.chi >= 5",
 				"lowest.health < 95"
@@ -257,7 +257,7 @@ local outCombat = {
 		"lowest.health < 100"
 	}, "lowest"}, 
 	  { "115175", {-- Soothing Mist
-	  	(function() return NeP.Core.dynamicEval("lowest.health < " .. NeP.Core.PeFetch('NePconfigMonkMm', 'SM')) end), 
+	  	(function() return NeP.Core.dynEval("lowest.health < " .. NeP.Core.PeFetch('NePconfigMonkMm', 'SM')) end), 
 	  	"!player.moving"
 	}, "lowest" },
 	{"Transcendence", (function() return Trans() end) },

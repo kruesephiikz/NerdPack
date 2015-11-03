@@ -197,25 +197,25 @@ local Survival = {
 		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'emancipate') end) 
 	}, "player" },
 	{ "Divine Shield", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'DivineShield_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'DivineShield_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'DivineShield_check') end) 
 	}},
 	{ "Flash of Light", { 
 		"player.buff(Selfless Healer).count = 3", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'flashoflight_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'flashoflight_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'flashoflight_check') end) 
 	}},
 	{ "Word of Glory", { 
 		"player.holypower >= 3", 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'wordofglory_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'wordofglory_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'wordofglory_check') end) 
 	}},
 	{ "Lay on Hands", { 
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'layonhands_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'layonhands_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'layonhands_check') end) 
 	}},
 	{ "#5512", { -- Healthstone (5512)
-		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'healthstone_spin')) end), 
+		(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfPalaRet', 'healthstone_spin')) end), 
 		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'healthstone_check') end) 
 	}},
 }

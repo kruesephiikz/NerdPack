@@ -184,12 +184,12 @@ local BoomkinForm = {
 local inCombat = {
 	-- Form Handling Logic
 	{ "/run CancelShapeshiftForm()", (function()
-	  	if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "MANUAL" then
+	  	if NeP.Core.dynEval("player.form = 0") or NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "MANUAL" then
 	  		return false
-	  	elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "0" then
+	  	elseif NeP.Core.dynEval("player.form != 0") and NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4") == "0" then
 	  		return true
 	  	else
-	  		return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4"))
+	  		return NeP.Core.dynEval("player.form != " .. NeP.Core.PeFetch("NePConfDruidBalance", "Form", "4"))
 	  	end
 	end) },
 	{ "768", { -- catform
@@ -221,12 +221,12 @@ local inCombat = {
 local outCombat = {
 	-- Form Handling Logic
 	{ "/run CancelShapeshiftForm()", (function()
-		if NeP.Core.dynamicEval("player.form = 0") or NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "MANUAL" then
+		if NeP.Core.dynEval("player.form = 0") or NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "MANUAL" then
 			return false
-		elseif NeP.Core.dynamicEval("player.form != 0") and NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "0" then
+		elseif NeP.Core.dynEval("player.form != 0") and NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4") == "0" then
 			return true
 		else
-			return NeP.Core.dynamicEval("player.form != " .. NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4"))
+			return NeP.Core.dynEval("player.form != " .. NeP.Core.PeFetch("NePConfDruidBalance", "FormOCC", "4"))
 		end
 	end) },
 	{ "768", { -- catform

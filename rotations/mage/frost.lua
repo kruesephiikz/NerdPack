@@ -1,4 +1,4 @@
-local dynEval = NeP.Core.dynamicEval
+local dynEval = NeP.Core.dynEval
 local PeFetch = NeP.Core.PeFetch
 
 NeP.Interface.classGUIs[64] = {
