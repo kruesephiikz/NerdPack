@@ -11,121 +11,43 @@ local basicMarker = {
 	{ 0, 0, -0.1, 0, 0, 0.1}
 }
 
-local lumbermill = {
-	texture = _mediaDir.."mill.blp",
-	width = 64, height = 64
-}
-local lumbermill_big = {
-	texture = _mediaDir.."mill.blp",
-	width = 58, height = 58, scale = 1
-}
-local lumbermill_small = {
-	texture = _mediaDir.."mill.blp",
-	width = 18, height = 18, scale = 1
-}
-
-local ore = {
-	texture = _mediaDir.."ore.blp",
-	width = 64, height = 64
-}
-local ore_big = {
-	texture = _mediaDir.."ore.blp",
-	width = 58, height = 58, scale = 1
-}
-local ore_small = {
-	texture = _mediaDir.."ore.blp",
-	width = 18, height = 18, scale = 1
-}
-
-local herb = {
-	texture = _mediaDir.."herb.blp",
-	width = 64, height = 64
-}
-local herb_big = {
-	texture = _mediaDir.."herb.blp",
-	width = 58, height = 58, scale = 1
-}
-local herb_small = {
-	texture = _mediaDir.."herb.blp",
-	width = 18, height = 18, scale = 1
-}
-
-local fish = {
-	texture = _mediaDir.."fish.blp",
-	width = 64, height = 64
-}
-local fish_big = {
-	texture = _mediaDir.."fish.blp",
-	width = 58, height = 58, scale = 1
-}
-local fish_small = {
-	texture = _mediaDir.."fish.blp",
-	width = 18, height = 18, scale = 1
-}
-
-local rare = {
-	texture = _mediaDir.."elite.blp",
-	width = 64, height = 64
-}
-local rare_big = {
-	texture = _mediaDir.."elite.blp",
-	width = 58, height = 58, scale = 1
-}
-local rare_small = {
-	texture = _mediaDir.."elite.blp",
-	width = 18, height = 18, scale = 1
-}
-
-local mob = {
-	texture = _mediaDir.."mob.blp",
-	width = 64, height = 64
-}
-local mob_big = {
-	texture = _mediaDir.."mob.blp",
-	width = 58, height = 58, scale = 1
-}
-local mob_small = {
-	texture = _mediaDir.."mob.blp",
-	width = 18, height = 18, scale = 1
-}
-
-local unit = {
-	texture = _mediaDir.."player.blp",
-	width = 64, height = 64
-}
-local unit_big = {
-	texture = _mediaDir.."player.blp",
-	width = 58, height = 58, scale = 1
-}
-local unit_small = {
-	texture = _mediaDir.."player.blp",
-	width = 18, height = 18, scale = 1
-}
-
-local horde = {
-	texture = _mediaDir.."horde.blp",
-	width = 64, height = 64
-}
-local horde_big = {
-	texture = _mediaDir.."horde.blp",
-	width = 58, height = 58, scale = 1
-}
-local horde_small = {
-	texture = _mediaDir.."horde.blp",
-	width = 18, height = 18, scale = 1
-}
-
-local ally = {
-	texture = _mediaDir.."alliance.blp",
-	width = 64, height = 64
-}
-local ally_big = {
-	texture = _mediaDir.."alliance.blp",
-	width = 58, height = 58, scale = 1
-}
-local ally_small = {
-	texture = _mediaDir.."alliance.blp",
-	width = 18, height = 18, scale = 1
+local Textures = {
+	-- LM
+	["lumbermill"] = { texture = _mediaDir.."mill.blp", width = 64, height = 64 },
+	["lumbermill_big"] = { texture = _mediaDir.."mill.blp", width = 58, height = 58, scale = 1 },
+	["lumbermill_small"] = { texture = _mediaDir.."mill.blp", width = 18, height = 18, scale = 1 },
+	-- Ore
+	["ore"] = { texture = _mediaDir.."mill.blp", width = 64, height = 64 },
+	["ore_big"] = { texture = _mediaDir.."mill.blp", width = 58, height = 58, scale = 1 },
+	["ore_small"] = { texture = _mediaDir.."mill.blp", width = 18, height = 18, scale = 1 },
+	-- Herb
+	["herb"] = { texture = _mediaDir.."herb.blp", width = 64, height = 64 },
+	["herb_big"] = { texture = _mediaDir.."herb.blp", width = 58, height = 58, scale = 1 },
+	["herb_small"] = { texture = _mediaDir.."herb.blp", width = 18, height = 18, scale = 1 },
+	-- Fish
+	["fish"] = { texture = _mediaDir.."fish.blp", width = 64, height = 64 },
+	["fish_big"] = { texture = _mediaDir.."fish.blp", width = 58, height = 58, scale = 1 },
+	["fish_small"] = { texture = _mediaDir.."fish.blp", width = 18, height = 18, scale = 1 },
+	-- Rares
+	["rare"] = { texture = _mediaDir.."elite.blp", width = 64, height = 64 },
+	["rare_big"] = { texture = _mediaDir.."elite.blp", width = 58, height = 58, scale = 1 },
+	["rare_small"] = { texture = _mediaDir.."elite.blp", width = 18, height = 18, scale = 1 },
+	-- Mobs
+	["mob"] = { texture = _mediaDir.."mob.blp", width = 64, height = 64 },
+	["mob_big"] = { texture = _mediaDir.."mob.blp", width = 58, height = 58, scale = 1 },
+	["mob_small"] = { texture = _mediaDir.."mob.blp", width = 18, height = 18, scale = 1 },
+	-- Units (Not bring used...)
+	["unit"] = { texture = _mediaDir.."player.blp", width = 64, height = 64 },
+	["unit_big"] = { texture = _mediaDir.."player.blp", width = 58, height = 58, scale = 1 },
+	["unit_small"] = { texture = _mediaDir.."player.blp", width = 18, height = 18, scale = 1 },
+	-- Horde
+	["horde"] = { texture = _mediaDir.."horde.blp", width = 64, height = 64 },
+	["horde_big"] = { texture = _mediaDir.."horde.blp", width = 58, height = 58, scale = 1 },
+	["horde_small"] = { texture = _mediaDir.."horde.blp", width = 18, height = 18, scale = 1 },
+	-- Aliance
+	["ally"] = { texture = _mediaDir.."alliance.blp", width = 64, height = 64 },
+	["ally_big"] = { texture = _mediaDir.."alliance.blp", width = 58, height = 58, scale = 1 },
+	["ally_small"] = { texture = _mediaDir.."alliance.blp", width = 18, height = 18, scale = 1 },
 }
 
 LibDraw.Sync(function()
@@ -214,11 +136,11 @@ LibDraw.Sync(function()
 					if id == 'LM' then
 						if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
 							if distance < 50 then
-								LibDraw.Texture(lumbermill_big, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["lumbermill_big"], ox, oy, oz + zOffset, alpha)
 							elseif distance > 200 then
-								LibDraw.Texture(lumbermill_small, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["lumbermill_small"], ox, oy, oz + zOffset, alpha)
 							else
-								LibDraw.Texture(lumbermill, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["lumbermill"], ox, oy, oz + zOffset, alpha)
 							end
 							LibDraw.SetColorRaw(1, 1, 1, alpha)
 							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
@@ -227,11 +149,11 @@ LibDraw.Sync(function()
 					elseif id == 'Ore' then
 						if NeP.Core.PeFetch("NePconf_Overlays", "objectsOres") then
 							if distance < 50 then
-								LibDraw.Texture(ore_big, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["ore_big"], ox, oy, oz + zOffset, alpha)
 							elseif distance > 200 then
-								LibDraw.Texture(ore_small, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["ore_small"], ox, oy, oz + zOffset, alpha)
 							else
-								LibDraw.Texture(ore, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["ore"], ox, oy, oz + zOffset, alpha)
 							end
 							LibDraw.SetColorRaw(1, 1, 1, alpha)
 							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
@@ -240,11 +162,11 @@ LibDraw.Sync(function()
 					elseif id == 'Herb' then
 						if NeP.Core.PeFetch("NePconf_Overlays", "objectsHerbs") then
 							if distance < 50 then
-								LibDraw.Texture(herb_big, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["herb_big"], ox, oy, oz + zOffset, alpha)
 							elseif distance > 200 then
-								LibDraw.Texture(herb_small, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["herb_small"], ox, oy, oz + zOffset, alpha)
 							else
-								LibDraw.Texture(herb, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["herb"], ox, oy, oz + zOffset, alpha)
 							end
 							LibDraw.SetColorRaw(1, 1, 1, alpha)
 							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
@@ -254,11 +176,11 @@ LibDraw.Sync(function()
 						if NeP.Core.PeFetch("NePconf_Overlays", "objectsFishs") then
 							local ox, oy, oz = ObjectPosition(object)
 							if distance < 50 then
-								LibDraw.Texture(fish_big, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["fish_big"], ox, oy, oz + zOffset, alpha)
 							elseif distance > 200 then
-								LibDraw.Texture(fish_small, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["fish_small"], ox, oy, oz + zOffset, alpha)
 							else
-								LibDraw.Texture(fish, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["fish"], ox, oy, oz + zOffset, alpha)
 							end
 							LibDraw.SetColorRaw(1, 1, 1, alpha)
 							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
@@ -279,11 +201,11 @@ LibDraw.Sync(function()
 					if _class == 'elite' then
 						if NeP.Core.PeFetch("NePconf_Overlays", "objectsElite") then
 							if distance < 50 then
-								LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob_big"], ox, oy, oz + zOffset, alpha)
 							elseif distance > 200 then
-								LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob_small"], ox, oy, oz + zOffset, alpha)
 							else
-								LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob"], ox, oy, oz + zOffset, alpha)
 							end
 							LibDraw.SetColorRaw(1, 1, 1, alpha)
 							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
@@ -292,11 +214,11 @@ LibDraw.Sync(function()
 					elseif _class == 'worldboss' then
 						if NeP.Core.PeFetch("NePconf_Overlays", "objectsWorldBoss") then
 							if distance < 50 then
-								LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob_big"], ox, oy, oz + zOffset, alpha)
 							elseif distance > 200 then
-								LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob_small"], ox, oy, oz + zOffset, alpha)
 							else
-								LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob"], ox, oy, oz + zOffset, alpha)
 							end
 							LibDraw.SetColorRaw(1, 1, 1, alpha)
 							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
@@ -305,11 +227,11 @@ LibDraw.Sync(function()
 					elseif _class == 'rareelite' then
 						if NeP.Core.PeFetch("NePconf_Overlays", "objectsRares") then
 							if distance < 50 then
-								LibDraw.Texture(mob_big, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob_big"], ox, oy, oz + zOffset, alpha)
 							elseif distance > 200 then
-								LibDraw.Texture(mob_small, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob_small"], ox, oy, oz + zOffset, alpha)
 							else
-								LibDraw.Texture(mob, ox, oy, oz + zOffset, alpha)
+								LibDraw.Texture(Textures["mob"], ox, oy, oz + zOffset, alpha)
 							end
 							LibDraw.SetColorRaw(1, 1, 1, alpha)
 							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
@@ -319,21 +241,21 @@ LibDraw.Sync(function()
 							local factionGroup, factionName = UnitFactionGroup(object.key)
 							if factionGroup == 'Alliance' then
 								if distance < 50 then
-									LibDraw.Texture(ally_big, ox, oy, oz + zOffset, alpha)
+									LibDraw.Texture(Textures["ally_big"], ox, oy, oz + zOffset, alpha)
 								elseif distance > 200 then
-									LibDraw.Texture(ally_small, ox, oy, oz + zOffset, alpha)
+									LibDraw.Texture(Textures["ally_small"], ox, oy, oz + zOffset, alpha)
 								else
-									LibDraw.Texture(ally, ox, oy, oz + zOffset, alpha)
+									LibDraw.Texture(Textures["ally"], ox, oy, oz + zOffset, alpha)
 								end
 								LibDraw.SetColorRaw(1, 1, 1, alpha)
 								LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 							elseif factionGroup == 'Horde' then
 								if distance < 50 then
-									LibDraw.Texture(horde_big, ox, oy, oz + zOffset, alpha)
+									LibDraw.Texture(Textures["horde_big"], ox, oy, oz + zOffset, alpha)
 								elseif distance > 200 then
-									LibDraw.Texture(horde_small, ox, oy, oz + zOffset, alpha)
+									LibDraw.Texture(Textures["horde_small"], ox, oy, oz + zOffset, alpha)
 								else
-									LibDraw.Texture(horde, ox, oy, oz + zOffset, alpha)
+									LibDraw.Texture(Textures["horde"], ox, oy, oz + zOffset, alpha)
 								end
 								LibDraw.SetColorRaw(1, 1, 1, alpha)
 								LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
@@ -358,21 +280,21 @@ LibDraw.Sync(function()
 								local factionGroup, factionName = UnitFactionGroup(object.key)
 								if factionGroup == 'Alliance' then
 									if distance < 50 then
-										LibDraw.Texture(ally_big, ox, oy, oz + zOffset, alpha)
+										LibDraw.Texture(Textures["ally_big"], ox, oy, oz + zOffset, alpha)
 									elseif distance > 200 then
-										LibDraw.Texture(ally_small, ox, oy, oz + zOffset, alpha)
+										LibDraw.Texture(Textures["ally_small"], ox, oy, oz + zOffset, alpha)
 									else
-										LibDraw.Texture(ally, ox, oy, oz + zOffset, alpha)
+										LibDraw.Texture(Textures["ally"], ox, oy, oz + zOffset, alpha)
 									end
 									LibDraw.SetColorRaw(1, 1, 1, alpha)
 									LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
 								elseif factionGroup == 'Horde' then
 									if distance < 50 then
-										LibDraw.Texture(horde_big, ox, oy, oz + zOffset, alpha)
+										LibDraw.Texture(Textures["horde_big"], ox, oy, oz + zOffset, alpha)
 									elseif distance > 200 then
-										LibDraw.Texture(horde_small, ox, oy, oz + zOffset, alpha)
+										LibDraw.Texture(Textures["horde_small"], ox, oy, oz + zOffset, alpha)
 									else
-										LibDraw.Texture(horde, ox, oy, oz + zOffset, alpha)
+										LibDraw.Texture(Textures["horde"], ox, oy, oz + zOffset, alpha)
 									end
 									LibDraw.SetColorRaw(1, 1, 1, alpha)
 									LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
