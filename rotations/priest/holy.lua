@@ -262,7 +262,7 @@ local _PoH = function()
 				subgroups[subgroup] = 0
 				member[subgroup] = ProbablyEngine.raid.roster[i].unit
 			end
-				subgroups[subgroup] = subgroups[subgroup] + min(minHeal, ProbablyEngine.raid.roster[i].healthMissing)
+			subgroups[subgroup] = subgroups[subgroup] + (min(minHeal, ProbablyEngine.raid.roster[i].healthMissing) or 0)
 		end
 			for i = 1, #subgroups do
 				if subgroups[i] > minHeal * 4 and subgroups[i] > lowestHP then
@@ -451,7 +451,7 @@ local RaidCombat = {
 		}, "lowest" },
 	}, "!player.casting.percent >= 50" },
 
-	-- shields
+	-- Shields
 	{ "17", {  --Power Word: Shield
 		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
 		"!focus.debuff(6788).any", 
@@ -473,22 +473,22 @@ local RaidCombat = {
 		"!lowest.buff(17).any",  
 	}, "lowest" },
 
-	-- renew
-	{ "139", { --renew
+	-- Renew
+	{ "139", { -- Renew
 		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewTank')) end),
 		"!focus.buff(139)", 
 		"focus.spell(139).range"
 	}, "focus" },
-	{ "139", { --renew
+	{ "139", { -- Renew
 		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewTank')) end),
 		"!tank.buff(139)", 
 		"tank.spell(139).range"
 	}, "tank" },
-	{ "139", { --renew
+	{ "139", { -- Renew
 		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewPlayer')) end), 
 		"!player.buff(139)"
 	}, "player" },
-	{ "139", { --renew
+	{ "139", { -- Renew
 		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewRaid')) end),
 		"!lowest.buff(139)"
 	}, "lowest" },
@@ -578,15 +578,15 @@ local SoloCombat = {
 				"!player.moving"
 			}, "player" },
 
-	-- shields
+	-- Shields
 	{ "17", { --Power Word: Shield
 		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldPlayer')) end),
 		"!player.debuff(6788).any", 
 		"!player.buff(17).any"
 	}, "player" },
 
-	-- renew
-	{ "139", { --renew
+	-- Renew
+	{ "139", { -- Renew
 		(function() return NeP.Core.dynamicEval("player.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewPlayer')) end), 
 		"!player.buff(139)"
 	}, "player" },
@@ -636,7 +636,7 @@ local outCombat = {
    		{ "155245", (function() return _ClarityOfPurpose() end), "lowest" },-- Clarity Of Purpose
 	}, "modifier.multitarget" },
 		
-	-- shields 
+	-- Shields 
 	{ "17", { --Power Word: Shield
 		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
 		"!focus.debuff(6788).any", 
@@ -651,8 +651,8 @@ local outCombat = {
 		"modifier.party" 
 	}, "tank" },
 	   	
-	-- heals
-	{ "139", {  --renew
+	-- Heals
+	{ "139", {  -- Renew
 		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewRaid')) end),
 		"!lowest.buff(139)"
 	}, "lowest" },	
@@ -668,7 +668,6 @@ local outCombat = {
 	}, "lowest" },
 }
 
-	
 ProbablyEngine.rotation.register_custom(257, NeP.Core.GetCrInfo('Priest - Holy'), 
 	{-- In-Combat
 		{ "586", "target.threat >= 80" }, -- Fade

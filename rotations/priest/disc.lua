@@ -15,6 +15,13 @@ NeP.Interface.classGUIs[256] = {
 			align = "center" 
 		},
 			{ 
+				type = "checkbox", 
+				text = "Move Faster", 
+				key = "Feathers", 
+				default = true, 
+				desc = "This checkbox enables or disables the automatic use of feathers & others to move faster."
+			},
+			{ 
 				type = "spinner", 
 				text = "Power Word: Barrier - Party", 
 				key = "PWBParty", 
@@ -45,13 +52,6 @@ NeP.Interface.classGUIs[256] = {
 				default = 5,
 				min = 1,
 				max = 20
-			},
-			{ 
-				type = "checkbox", 
-				text = "Move Faster", 
-				key = "Feathers", 
-				default = true, 
-				desc = "This checkbox enables or disables the automatic use of feathers & others to move faster."
 			},
 			{ 
 				type = "dropdown",
@@ -320,7 +320,7 @@ local _PoH = function()
 				subgroups[subgroup] = 0
 				member[subgroup] = ProbablyEngine.raid.roster[i].unit
 			end
-				subgroups[subgroup] = subgroups[subgroup] + min(minHeal, ProbablyEngine.raid.roster[i].healthMissing)
+			subgroups[subgroup] = subgroups[subgroup] + (min(minHeal, ProbablyEngine.raid.roster[i].healthMissing) or 0)
 		end
 			for i = 1, #subgroups do
 				if subgroups[i] > minHeal * 4 and subgroups[i] > lowestHP then

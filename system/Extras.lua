@@ -154,7 +154,7 @@ function NeP.Extras.autoTarget(unit, name)
 			-- Forced Target
 			for i=1,#enemieCache do
 				local Obj = enemieCache[i]
-				local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(Obj.key)) or 0
+				local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(Obj.key) or "0")
 				for k,v in pairs(NeP_forceTarget) do
 					if tonumber(ObjID) == v then 
 						NeP.Alert('Targeting (S): '..Obj.name) 
