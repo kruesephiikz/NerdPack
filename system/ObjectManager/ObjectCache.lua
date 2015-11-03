@@ -270,7 +270,7 @@ local function addToOM(Obj, Dist)
 					is = 'friendly'
 				}
 			-- Enemie
-			elseif UnitIsEnemie('player', Obj) then
+			elseif UnitCanAttack('player', Obj) then
 				NeP.OM.unitEnemie[#NeP.OM.unitEnemieDead+1] = {
 					key = Obj, 
 					distance = Dist, 
