@@ -85,7 +85,7 @@ local BlacklistedObjects = {
 }
 
 local function BlacklistedObject(Obj)
-	local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj))
+	local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(Obj) or "0")
 	if BlacklistedObjects[ObjID] ~= nil then return true end
 end
 
@@ -199,7 +199,7 @@ local TrackGameObjects = {
 }
 
 local function isGameObject(Obj)
-	local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj))
+	local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(Obj) or "0")
 	if TrackGameObjects[ObjID] ~= nil then
 		return TrackGameObjects[ObjID], true
 	end

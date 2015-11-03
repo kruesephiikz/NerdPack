@@ -9,7 +9,6 @@ NeP.Interface.classGUIs[257] = {
 	config = {
 
 		-- General
-		{ type = 'rule' },
 		{ 
 			type = 'header', 
 			text = "General settings:", 
@@ -237,7 +236,7 @@ NeP.Interface.classGUIs[257] = {
 			-- Healthstone
 			{ 
 				type = "spinner", 
-				text = "Heal", 
+				text = "Healthstone", 
 				key = "Healthstone", 
 				default = 35
 			},
@@ -306,15 +305,15 @@ end
 local All = {
 	--[[ Chakra ]]
   	{ "81208", { -- Serenity
-  		"player.chakra != 3",
+  		"player.stance != 3",
   		(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Serenity' end),
   	}},
 	{ "81206", { -- Sanctuary
-		"player.chakra != 2",
+		"player.stance != 2",
 		(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Sanctuary' end),
 	}},
 	{ "81209", { -- Serenity
-		"player.chakra != 1",
+		"player.stance != 1",
 		(function() return NeP.Core.PeFetch("NePConfPriestHoly", "Chakra") == 'Chastise' end),
 	}},
 	
@@ -355,7 +354,7 @@ local Cooldowns = {
 local RaidCombat = {
 
 	-- PW:S
-	{ "129250" },
+	{ "129250", {"target.range <= 30", "target.enemie"}, "target" },
 
   	{{ -- CD's
 		{ "10060" }, --Power Infusion
@@ -470,7 +469,7 @@ local RaidCombat = {
 	{ "17", { --Power Word: Shield
 		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldRaid')) end),
 	 	"!lowest.debuff(6788).any", 
-		"!lowest.buff(17).any",  
+		"!lowest.buff(17).any",
 	}, "lowest" },
 
 	-- Renew
@@ -490,7 +489,7 @@ local RaidCombat = {
 	}, "player" },
 	{ "139", { -- Renew
 		(function() return NeP.Core.dynamicEval("lowest.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'RenewRaid')) end),
-		"!lowest.buff(139)"
+		"!lowest.buff(139)",
 	}, "lowest" },
 
 	-- Prayer of Mending
@@ -602,7 +601,7 @@ local SoloCombat = {
 		{ "48045", (function() return NeP.Lib.SAoE(3, 10) end), "target" }, -- mind sear
 			
 		-- Single
-		{ "129250" }, -- PW:S
+		{ "129250", {"target.range <= 30", "target.enemie"}, "target" }, -- PW:S
 		{ "589", "!target.debuff(589)", "target" }, -- SW:P
 		{ "585", {  --Smite
 			"!player.moving", 
@@ -635,21 +634,6 @@ local outCombat = {
 		{ "596", (function() return _PoH() end) },-- Prayer of Healing
    		{ "155245", (function() return _ClarityOfPurpose() end), "lowest" },-- Clarity Of Purpose
 	}, "modifier.multitarget" },
-		
-	-- Shields 
-	{ "17", { --Power Word: Shield
-		(function() return NeP.Core.dynamicEval("focus.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
-		"!focus.debuff(6788).any", 
-		"focus.spell(17).range", 
-		"focus.spell(17).range" 
-	}, "focus" },
-			
-	{ "17", {  --Power Word: Shield
-		(function() return NeP.Core.dynamicEval("tank.health <= " .. NeP.Core.PeFetch('NePConfPriestHoly', 'ShieldTank')) end),
-		"!tank.debuff(6788).any", 
-		"tank.spell(17).range", 
-		"modifier.party" 
-	}, "tank" },
 	   	
 	-- Heals
 	{ "139", {  -- Renew
