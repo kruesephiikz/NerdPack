@@ -50,7 +50,7 @@ function NeP.Splash()
 	-- Displays a fancy splash.
 	if NeP.Core.PeFetch('NePConf', 'Splash') then
 		local _playerInfo = "|r[|cff"..NeP.Core.classColor('player')..UnitClass('player').." - "..select(2, GetSpecializationInfo(GetSpecialization())).."|r]"
-		NeP.Alert(_playerInfo .. "|r - [" .. _addonColor .. "Loaded|r]")
+		NeP.Core.Alert(_playerInfo .. "|r - [" .. _addonColor .. "Loaded|r]")
 		NeP_Splash:SetAlpha(1)
 		_time = GetTime()
 		NeP_Splash:Show()

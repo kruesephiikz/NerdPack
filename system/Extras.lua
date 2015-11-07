@@ -63,7 +63,7 @@ function NeP.Extras.MoveTo()
 							MoveTo(ObjectPosition('player'))
 						-- Start Moving
 						elseif _Range < objectDistance("player", 'target') then
-							NeP.Alert('Moving to: '..GetUnitName('target', false)) 
+							NeP.Core.Alert('Moving to: '..GetUnitName('target', false)) 
 							MoveTo(ObjectPosition('target'))
 						end
 					end
@@ -87,7 +87,7 @@ function NeP.Extras.FaceTo()
 				if not NeP.Core.Infront('player', 'target') then
 					if inLoS('player', 'target') then
 						if FireHack then
-							NeP.Alert('Facing: '..GetUnitName('target', false)) 
+							NeP.Core.Alert('Facing: '..GetUnitName('target', false)) 
 							FaceUnit('target')
 						end
 					end
@@ -157,7 +157,7 @@ function NeP.Extras.autoTarget(unit, name)
 				local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(Obj.key) or "0")
 				for k,v in pairs(NeP_forceTarget) do
 					if tonumber(ObjID) == v then 
-						NeP.Alert('Targeting (S): '..Obj.name) 
+						NeP.Core.Alert('Targeting (S): '..Obj.name) 
 						Macro("/target "..Obj.key)
 						NeP_ForcedTarget = true
 						break
@@ -172,7 +172,7 @@ function NeP.Extras.autoTarget(unit, name)
 					if UnitExists(Obj.key) then
 						if (UnitAffectingCombat(Obj.key) or Obj.is == "dummy") then
 							if Obj.distance <= 40 then
-								NeP.Alert('Targeting: '..Obj.name) 
+								NeP.Core.Alert('Targeting: '..Obj.name) 
 								Macro("/target "..Obj.key)
 								break
 							end

@@ -26,35 +26,19 @@ NeP.Interface.classGUIs[256] = {
 			},
 			{ 
 				type = "spinner", 
-				text = "Power Word: Barrier - Party", 
-				key = "PWBParty", 
+				text = "Power Word: Barrier", 
+				key = "PWB", 
 				default = 3,
 				min = 1,
 				max = 5
 			},
 			{ 
 				type = "spinner", 
-				text = "MassDispell - Party", 
-				key = "MDispellParty", 
+				text = "MassDispell", 
+				key = "MDispell", 
 				default = 3,
 				min = 1,
 				max = 5
-			},
-			{ 
-				type = "spinner", 
-				text = "Power Word: Barrier - Raid", 
-				key = "PWBRaid", 
-				default = 5,
-				min = 1,
-				max = 20
-			},
-			{ 
-				type = "spinner", 
-				text = "MassDispell - Raid", 
-				key = "MDispellRaid", 
-				default = 5,
-				min = 1,
-				max = 20
 			},
 			{ 
 				type = "dropdown",
@@ -236,29 +220,24 @@ NeP.Interface.classGUIs[256] = {
 }
 
 local _MassDispell = function()
-	local start, duration, enabled = GetSpellCooldown('32375')
-    if duration == 0 then
-		local _Count = 0
-		if IsInGroup() or IsInRaid() then
-			_Count = PeFetch("NePconfPriestDisc", "MDispellRaid")
-		else 
-			_Count = PeFetch("NePconfPriestDisc", "MDispellParty") 
-		end
-		local total = 0        
-		for i=1,#NeP.OM.unitFriend do
-			local object = NeP.OM.unitFriend[i]
-			if object.distance <= 40 then
-				for j = 1, 40 do
-					local debuffName, _,_,_, dispelType, duration, expires,_,_,_,_,_,_, _,_,_ = UnitDebuff(object.key, j)
-					if dispelType and dispelType == 'Magic' or dispelType == 'Disease' then
-						total = total + 1
+    if IsUsableSpell('32375') then
+		if select(2, GetSpellCooldown("62618")) == 0 then
+			local total = 0        
+			for i=1,#NeP.OM.unitFriend do
+				local object = NeP.OM.unitFriend[i]
+				if object.distance <= 40 then
+					for j = 1, 40 do
+						local debuffName, _,_,_, dispelType, duration, expires,_,_,_,_,_,_, _,_,_ = UnitDebuff(object.key, j)
+						if dispelType and dispelType == 'Magic' or dispelType == 'Disease' then
+							total = total + 1
+						end
 					end
 				end
-			end
-			if total >= _Count then
-				NeP.Core.Print("Mass Dispelled on: "..object.name.." total units:"..total)
-				CastGround('32375', object.key)
-				return true
+				if total >= PeFetch("NePconfPriestDisc", "MDispell")  then
+					NeP.Core.Alert("Mass Dispelled on: "..object.name.." total units:"..total)
+					CastGround('32375', object.key)
+					return true
+				end
 			end
 		end
 	end
@@ -266,27 +245,22 @@ local _MassDispell = function()
 end
 
 local _PWBarrier = function()
-	local start, duration, enabled = GetSpellCooldown('62618')
-    if duration == 0 then
-		local _Count = 0
-		if IsInGroup() or IsInRaid() then
-			_Count = PeFetch("NePconfPriestDisc", "PWBRaid")
-		else 
-			_Count = PeFetch("NePconfPriestDisc", "PWBParty") 
-		end
-		local minHeal = GetSpellBonusDamage(2) * 1.125
-		local total = 0
-		for i=1,#NeP.OM.unitFriend do
-			local object = NeP.OM.unitFriend[i]
-			if object.distance <= 40 then
-				if max(0, object.maxHealth - object.actualHealth) > minHeal then
-					total = total + 1
+	if IsUsableSpell('62618') then
+		if select(2, GetSpellCooldown("62618")) == 0 then
+			local minHeal = GetSpellBonusDamage(2) * 1.125
+			local total = 0
+			for i=1,#NeP.OM.unitFriend do
+				local object = NeP.OM.unitFriend[i]
+				if object.distance <= 40 then
+					if max(0, object.maxHealth - object.actualHealth) > minHeal then
+						total = total + 1
+					end
 				end
-			end
-			if total >= _Count then
-				NeP.Core.Print("Power Word: Barrier on: "..object.name.." total units:"..total)
-				CastGround('62618', object.key)
-				return true
+				if total >= PeFetch("NePconfPriestDisc", "PWB")  then
+					NeP.Core.Alert("Power Word: Barrier on: "..object.name.." total units:"..total)
+					CastGround('62618', object.key)
+					return true
+				end
 			end
 		end
 	end
@@ -467,22 +441,22 @@ local _SpiritShell = {
 local _ClarityOfWill = {
 	-- tank
 	{ "152118", { -- Clarity of Will
-		(function() return dynEval("tank.health < " .. PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
+		(function() return dynEval("tank.health <= " .. PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
 		"!tank.buff(152118).any"	
 	}, "tank" },
 	-- focus
 	{ "152118", { -- Clarity of Will
-		(function() return dynEval("focus.health < " .. PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
+		(function() return dynEval("focus.health <= " .. PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
 		"!focus.buff(152118).any"	
 	}, "focus" },
 	-- player
 	{ "152118", { -- Clarity of Will
-		(function() return dynEval("player.health < " .. PeFetch('NePconfPriestDisc', 'ClarityofWillPlayer')) end),
+		(function() return dynEval("player.health <= " .. PeFetch('NePconfPriestDisc', 'ClarityofWillPlayer')) end),
 		"!player.buff(152118).any"	
 	}, "player" },
 	-- raid
 	{ "152118", { -- Clarity of Will
-		(function() return dynEval("lowest.health < " .. PeFetch('NePconfPriestDisc', 'ClarityofWillRaid')) end),
+		(function() return dynEval("lowest.health <= " .. PeFetch('NePconfPriestDisc', 'ClarityofWillRaid')) end),
 		"!lowest.buff(152118).any"		
 	}, "lowest" },
 }

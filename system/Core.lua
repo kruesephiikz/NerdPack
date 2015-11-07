@@ -24,6 +24,7 @@ NeP = {
 	Info = {
 		Name = 'NerdPack',
 		Nick = 'NeP',
+		Author = 'MrTheSoulz',
 		Version = '6.2.1.1',
 		Branch = 'Beta7.2',
 		WoW_Version = '6.2.2',
@@ -252,10 +253,31 @@ prefix and checks if it should print.
 
 Build By: MTS
 ---------------------------------------------------]]
+local lastPrint = ""
 function NeP.Core.Print(txt)
-	if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Prints') then
-		local _name = _addonColor..NeP.Info.Nick
-		print('|r['.._name..'|r]: '..NeP.Interface.printColor..txt)
+	if txt ~= lastPrint then
+		if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Prints') then
+			local _name = _addonColor..NeP.Info.Nick
+			lastPrint = txt
+			print('|r['.._name..'|r]: '..NeP.Interface.printColor..txt)
+		end
+	end
+end
+
+--[[-----------------------------------------------
+	** Alert **
+DESC: Display a alert on the main frame.
+
+Build By: MTS
+---------------------------------------------------]]
+NeP.Interface.Alerts = {}
+local lastAlert = ""
+function NeP.Core.Alert(txt)
+	if txt ~= lastPrint then
+		if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Alerts') then
+			lastAlert = txt
+			table.insert(NeP.Interface.Alerts, txt)
+		end
 	end
 end
 

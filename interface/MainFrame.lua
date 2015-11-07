@@ -4,15 +4,6 @@ NeP.Config.Defaults['NePFrame'] = {
 	['POS_3'] = 0
 }
 
--- Store and delay Alerts until ready.
-NeP.Interface.Alerts = {}
-function NeP.Alert(txt)
-	if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Alerts') then
-		local _txt = tostring(txt)
-		table.insert(NeP.Interface.Alerts, _txt)
-	end
-end
-
 function StatusGUI_RUN()
 	
 	local _addonColor = '|cff'..NeP.Interface.addonColor
