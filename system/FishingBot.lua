@@ -182,13 +182,16 @@ local function IsObjectCreatedBy(owner, object)
 end
 
 local BobberName = "Fishing Bobber"
+local BobberCache
 local function getBobber()
+	if BobberCache and ObjectExists(BobberCache) then return BobberCache end
 	for i = 1, ObjectCount(TYPE_GAMEOBJECT) do
 		local Object = ObjectWithIndex(i)
 		local ObjectName = ObjectName(ObjectPointer(Object))
 
 		if IsObjectCreatedBy("player", Object) then
 			if ObjectName == BobberName then
+				BobberCache = Object
 				return Object
 			end
 		end
@@ -213,7 +216,7 @@ local function _startFish()
 		end
 	else
 		if (not InCombatLockdown()) and GetNumLootItems() == 0 and FishCD < GetTime() then -- not in combat, not looting, and not soon after trying to cast fishing.
-			FishCD = GetTime() + 1
+			FishCD = GetTime() + 2
 			Cast(131474)
 		end
 	end
