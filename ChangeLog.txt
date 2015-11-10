@@ -1,5 +1,17 @@
+-> 6.2.1.1-Beta7.3
+@MrTheSoulz released this on 10/11/2015
+
+* Overwrite PE's LoS.
+* Fishing performance improvement (by: darkjacky@Github).
+* Fix client crash when using FireHack 2.1.4 (by: darkjacky@Github).
+* CleanUps & Lua error fixes.
+* Redesigned ObjectManager.
+* Priest-Holy Redesign.
+
+
+-------------------------------------------------
 -> 6.2.1.1-Beta6
-@MrTheSoulz released this 11 days ago
+@MrTheSoulz released this ...
 
 * Code CleanUps.
 * NePFrame Fixes/Tweaks.
@@ -9,14 +21,14 @@
 
 -------------------------------------------------
 -> 6.2.1.1-Beta5.1
-@MrTheSoulz released this 17 days ago
+@MrTheSoulz released this ...
 
 Nep Frame is now dragable & saves its location.
 
 
 -------------------------------------------------
 -> 6.2.1.1-Beta5
-@MrTheSoulz released this 17 days ago
+@MrTheSoulz released this ...
 
 * NeP is now under MIT license
 * Code cleanups and optmizations.

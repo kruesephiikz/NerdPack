@@ -26,7 +26,7 @@ NeP = {
 		Nick = 'NeP',
 		Author = 'MrTheSoulz',
 		Version = '6.2.1.1',
-		Branch = 'Beta7.2',
+		Branch = 'Beta7.3',
 		WoW_Version = '6.2.2',
 		Logo = 'Interface\\AddOns\\NerdPack\\media\\logo.blp',
 		Splash = 'Interface\\AddOns\\NerdPack\\media\\splash.blp',
@@ -41,6 +41,103 @@ NeP = {
 local _addonColor = '|cff'..NeP.Interface.addonColor
 
 --[[-----------------------------------------------
+	** Round **
+DESC: Round a number.
+Example: [ if < 4.5 then return 4, else if >= 4.5 return 5 ].
+
+Build By: MTS
+---------------------------------------------------]]
+function NeP.Core.Round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
+--[[-----------------------------------------------
+	** Distance **
+DESC: returns the distance betwen 2 units/objetcs.
+
+Build By: MTS
+---------------------------------------------------]]
+function NeP.Core.Distance(a, b)
+	if UnitExists(a) and UnitExists(b) then
+		-- FireHack
+		if FireHack then
+			local ax, ay, az = ObjectPosition(b)
+			local bx, by, bz = ObjectPosition(a)
+			return NeP.Core.Round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
+		else
+			return ProbablyEngine.condition['distance'](b)
+		end
+	end
+	return 0
+end
+
+--[[-----------------------------------------------
+	** LineOfSight **
+DESC: returns the LineOfSight betwen 2 units/objetcs.
+
+Build By: MTS
+---------------------------------------------------]]
+local ignoreLOS = {
+	[76585] = "",	-- Ragewing the Untamed (UBRS)
+	[77063] = "",	-- Ragewing the Untamed (UBRS)
+	[77182] = "",	-- Oregorger (BRF)
+	[77891] = "",	-- Grasping Earth (BRF)
+	[77893] = "",	-- Grasping Earth (BRF)
+	[78981] = "",	-- Iron Gunnery Sergeant (BRF)
+	[81318] = "",	-- Iron Gunnery Sergeant (BRF)
+	[83745] = "",	-- Ragewing Whelp (UBRS)
+	[86252] = "",	-- Ragewing the Untamed (UBRS)
+	[56173] = "",	-- Deathwing (DragonSoul)
+	[55294] = "",	-- Ultraxion (DragonSoul)
+	[56161] = "",	-- Corruption (DragonSoul)
+	[52409] = "",	-- Ragnaros (FireLands)
+}
+
+local losFlags =  bit.bor(0x10, 0x100)
+function NeP.Core.LineOfSight(a, b)
+	if UnitExists(a) and UnitExists(b) then
+		-- Workaround LoS issues.
+		local aCheck = select(6,strsplit('-',UnitGUID(a)))
+		local bCheck = select(6,strsplit('-',UnitGUID(b)))
+		if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
+		if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
+		
+		if FireHack then
+			local ax, ay, az = ObjectPosition(a)
+			local bx, by, bz = ObjectPosition(b)
+			return not TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags)
+		else
+			-- Since other unlockers dont have LoS, return true
+			return true
+		end
+	end
+	return false
+end
+
+--[[-----------------------------------------------
+	** Infront **
+DESC: returns if a unit is infront of other or not.
+
+Build By: MTS
+---------------------------------------------------]]
+function NeP.Core.Infront(a, b)
+	if (UnitExists(a) and UnitExists(b)) then
+		-- FireHack
+		if FireHack then
+			local aX, aY, aZ = ObjectPosition(b)
+			local bX, bY, bZ = ObjectPosition(a)
+			local playerFacing = GetPlayerFacing()
+			local facing = math.atan2(bY - aY, bX - aX) % 6.2831853071796
+			return math.abs(math.deg(math.abs(playerFacing - (facing)))-180) < 90
+		-- Fallback to PE's
+		else
+			return ProbablyEngine.condition['infront'](b)
+		end
+	end
+end
+
+--[[-----------------------------------------------
 	** Class GUI **
 DESC: Decide wich class/spec we're then build ONLY the GUI for
 That class.
@@ -48,79 +145,15 @@ That class.
 Build By: MTS
 ---------------------------------------------------]]
 function NeP.Interface.ClassGUI()
-	local _Spec = GetSpecializationInfo(GetSpecialization())
-	if _Spec ~= nil then
+	if GetSpecialization() then
+		local _Spec = GetSpecializationInfo(GetSpecialization())
 		if NeP.Interface.classGUIs[_Spec] ~= nil then
 			NeP.Core.BuildGUI(_Spec, NeP.Interface.classGUIs[_Spec])	
-		
-		else
-			NeP.Core.Print('Sorry This Spec does not have a GUI yet.')
 		end
 	else
-		NeP.Core.Print('Sorry this character does not have a Spec yet.')
+		NeP.Core.Print('Sorry This Spec does not have a GUI yet.')
 	end
 end
-
---[[-----------------------------------------------
-	** NePData **
-DESC: Saved variables.
-
-Build By: MTS
----------------------------------------------------]]
-NeP.Config = {
-	Defaults = {}
-}
-
-local LoadNePData = CreateFrame('Frame')
-LoadNePData:RegisterEvent('VARIABLES_LOADED')
-LoadNePData:SetScript('OnEvent', function(self, event, addon)
-	
-	-- IF NePData does not exist, then create it with defaults
-	if not NePData or NePData == nil then 
-	 	NePData = NeP.Config.Defaults
-	end
-
-	-- Reset
-	function NeP.Config.resetConfig(config)
-		NePData[config] = NeP.Config.Defaults[config]
-	end
-	
-	-- Read
-	function NeP.Config.readKey(config, key)
-		if NePData[config] ~= nil then
-			if NePData[config][key] ~= nil then
-				return NePData[config][key]
-			else
-				NePData[config][key] = NeP.Config.Defaults[config][key] 
-			end
-		else
-			NePData[config] = NeP.Config.Defaults[config]
-		end
-	end
-
-	-- Write
-	function NeP.Config.writeKey(config, key, value)
-		NePData[config][key] = value
-	end
-
-	-- Toggle
-	function NeP.Config.toggleKey(config, key)
-		if NePData[config][key] ~= nil then
-			NePData[config][key] = not NePData[config][key]
-		else
-			NePData[config][key] = NeP.Config.Defaults[config][key] 
-		end
-	end
-	
-	--[[
-		Run GUI's wich depend on NePData.
-		This is the best way i could think of to make sure nothing
-		wich depends on NePData gets loaded too early.
-	]]
-	StatusGUI_RUN();
-	OMGUI_RUN()
-
-end)
 
 --[[-----------------------------------------------
 	** Commands **
@@ -282,92 +315,69 @@ function NeP.Core.Alert(txt)
 end
 
 --[[-----------------------------------------------
-	** Round **
-DESC: Round a number.
-Example: [ if < 4.5 then return 4, else if >= 4.5 return 5 ].
+	** NePData **
+DESC: Saved variables.
 
 Build By: MTS
 ---------------------------------------------------]]
-function NeP.Core.Round(num, idp)
-  local mult = 10^(idp or 0)
-  return math.floor(num * mult + 0.5) / mult
-end
+NeP.Config = {
+	Defaults = {}
+}
 
---[[-----------------------------------------------
-	** Distance **
-DESC: returns the distance betwen 2 units/objetcs.
+local LoadNePData = CreateFrame('Frame')
+LoadNePData:RegisterEvent('VARIABLES_LOADED')
+LoadNePData:SetScript('OnEvent', function(self, event, addon)
+	
+	-- IF NePData does not exist, then create it with defaults
+	if not NePData or NePData == nil then 
+	 	NePData = NeP.Config.Defaults
+	end
 
-Build By: MTS
----------------------------------------------------]]
-function NeP.Core.Distance(a, b)
-	if UnitExists(a) and UnitExists(b) then
-		-- FireHack
-		if FireHack then
-			local ax, ay, az = ObjectPosition(b)
-			local bx, by, bz = ObjectPosition(a)
-			return NeP.Core.Round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
+	-- Reset
+	function NeP.Config.resetConfig(config)
+		NePData[config] = NeP.Config.Defaults[config]
+	end
+	
+	-- Read
+	function NeP.Config.readKey(config, key)
+		if NePData[config] ~= nil then
+			if NePData[config][key] ~= nil then
+				return NePData[config][key]
+			else
+				NePData[config][key] = NeP.Config.Defaults[config][key] 
+			end
 		else
-			return ProbablyEngine.condition['distance'](b)
+			NePData[config] = NeP.Config.Defaults[config]
 		end
 	end
-	return 0
-end
 
---[[-----------------------------------------------
-	** LineOfSight **
-DESC: returns the LineOfSight betwen 2 units/objetcs.
-
-Build By: MTS
----------------------------------------------------]]
-function NeP.Core.LineOfSight(a, b)
-	
-	-- Workaround LoS issues.
-	local aCheck = select(6,strsplit('-',UnitGUID(a)))
-	local bCheck = select(6,strsplit('-',UnitGUID(b)))
-	local ignoreLOS = {
-		[76585] = true,     -- Ragewing the Untamed (UBRS)
-		[77063] = true,     -- Ragewing the Untamed (UBRS)
-		[77182] = true,     -- Oregorger (BRF)
-		[77891] = true,     -- Grasping Earth (BRF)
-		[77893] = true,     -- Grasping Earth (BRF)
-		[78981] = true,     -- Iron Gunnery Sergeant (BRF)
-		[81318] = true,     -- Iron Gunnery Sergeant (BRF)
-		[83745] = true,     -- Ragewing Whelp (UBRS)
-		[86252] = true,     -- Ragewing the Untamed (UBRS)
-	}
-	if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
-	if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
-	
-	if FireHack then
-		if UnitExists(a) and UnitExists(b) then
-			local ax, ay, az = ObjectPosition(a)
-			local bx, by, bz = ObjectPosition(b)
-			local losFlags =  bit.bor(0x10, 0x100)
-			return not TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags)
-		end
+	-- Write
+	function NeP.Config.writeKey(config, key, value)
+		NePData[config][key] = value
 	end
-	
-	return false
-end
 
---[[-----------------------------------------------
-	** Infront **
-DESC: returns if a unit is infront of other or not.
-
-Build By: MTS
----------------------------------------------------]]
-function NeP.Core.Infront(a, b)
-	if (UnitExists(a) and UnitExists(b)) then
-		-- FireHack
-		if FireHack then
-			local aX, aY, aZ = ObjectPosition(b)
-			local bX, bY, bZ = ObjectPosition(a)
-			local playerFacing = GetPlayerFacing()
-			local facing = math.atan2(bY - aY, bX - aX) % 6.2831853071796
-			return math.abs(math.deg(math.abs(playerFacing - (facing)))-180) < 90
-		-- Fallback to PE's
+	-- Toggle
+	function NeP.Config.toggleKey(config, key)
+		if NePData[config][key] ~= nil then
+			NePData[config][key] = not NePData[config][key]
 		else
-			return ProbablyEngine.condition['infront'](b)
+			NePData[config][key] = NeP.Config.Defaults[config][key] 
 		end
 	end
-end
+	
+	--[[
+		Run GUI's wich depend on NePData.
+		This is the best way i could think of to make sure nothing
+		wich depends on NePData gets loaded too early.
+	]]
+	StatusGUI_RUN();
+	OMGUI_RUN()
+
+	--[[
+		PE's Overwrites.
+		Somethings on PE have issues or could be better,
+		until they're fixed in PE itself we overwrite them.
+	]]
+	LineOfSight = NeP.Core.LineOfSight
+
+end)
