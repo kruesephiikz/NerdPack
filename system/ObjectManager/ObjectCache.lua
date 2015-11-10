@@ -289,7 +289,7 @@ local function NeP_FireHackOM()
 	local totalObjects = ObjectCount()
 	for i=1, totalObjects do
 		local Obj = ObjectWithIndex(i)
-		if ObjectExists(Obj) then
+		if UnitGUID( Obj ) ~= nil and ObjectExists(Obj) then
 			if ObjectIsType(Obj, ObjectTypes.Unit) or ObjectIsType(Obj, ObjectTypes.GameObject) then
 				local ObjDistance = objectDistance('player', Obj)
 				if ObjDistance <= (NeP.Core.PeFetch('ObjectCache', 'CD') or 100) then

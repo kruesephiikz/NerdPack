@@ -126,7 +126,7 @@ LibDraw.Sync(function()
 			-- Objects (Ores/Herbs/LM)
 			for i=1,#NeP.OM.GameObjects do
 				local object = NeP.OM.GameObjects[i]
-				if ObjectExists(object.key) then
+				if UnitGUID(object.key) ~= nil and ObjectExists(object.key) then --Calling ObjectExists in FireHack 2.1.4 with nil can crash the client. Fixed in FireHack 2.2.
 					local distance = object.distance
 					local ox, oy, oz = ObjectPosition(object.key)
 					local name = object.name
@@ -192,7 +192,7 @@ LibDraw.Sync(function()
 			-- Enemie Units
 			for i=1,#NeP.OM.unitEnemie do
 				local object = NeP.OM.unitEnemie[i]
-				if ObjectExists(object.key) then
+				if UnitGUID(object.key) ~= nil and ObjectExists(object.key) then --Calling ObjectExists in FireHack 2.1.4 with nil can crash the client. Fixed in FireHack 2.2.
 					local distance = object.distance
 					local ox, oy, oz = ObjectPosition(object.key)
 					local name = object.name
@@ -268,7 +268,7 @@ LibDraw.Sync(function()
 			-- Friendly Units
 			for i=1,#NeP.OM.unitFriend do
 				local object = NeP.OM.unitFriend[i]
-					if ObjectExists(object.key) then
+				if UnitGUID(object.key) ~= nil and ObjectExists(object.key) then --Calling ObjectExists in FireHack 2.1.4 with nil can crash the client. Fixed in FireHack 2.2.
 					local distance = object.distance
 					local ox, oy, oz = ObjectPosition(object.key)
 					local name = object.name
