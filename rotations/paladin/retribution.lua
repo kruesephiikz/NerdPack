@@ -34,7 +34,7 @@ NeP.Interface.classGUIs[70] = {
         	{ type = "checkbox", text = "Self Dispel", key = "SelfDispel", default = true},
 
 	    -- [[ Survival ]]
-		{type = 'rule'},
+		{ type = 'spacer' },{ type = 'rule' },
 	    {type = 'text', text = 'Survival', align = 'center'},
 			-- Healthstone
 			{ type = 'spinner', text = 'Healthstone', key = 'HealthStone', default = 90},
