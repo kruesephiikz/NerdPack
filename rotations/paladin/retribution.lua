@@ -30,6 +30,8 @@ NeP.Interface.classGUIs[70] = {
 				{text = 'Justice', key = 'Justice'},
 				{text = 'Insight', key = 'Insight'},
         	}, default = 'Righteousness' },
+			-- Self Dispel
+        	{ type = "checkbox", text = "Self Dispel", key = "SelfDispel", default = true},
 
 	    -- [[ Survival ]]
 		{type = 'rule'},
@@ -92,8 +94,8 @@ local Survival = {
 	}, 'player'},
 	-- Cleanse (Dispell)
 	{ '4987', {
-		'player.dispellable(Cleanse)',
-		(function() return NeP.Core.PeFetch('NePConfPalaRet', '4987') end)
+		'player.dispellable(4987)',
+		(function() return NeP.Core.PeFetch('NePConfPalaRet', 'SelfDispel') end)
 	}, 'player' },
 }
 
