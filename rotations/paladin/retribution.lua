@@ -16,20 +16,37 @@ NeP.Interface.classGUIs[70] = {
 			{ type = "dropdown",text = "Buff:", key = "Buff", list = {
 				{text = "Kings", key = "Kings"},
 				{text = "Might", key = "Might"}
-        	}, default = "Kings", desc = "Select What buff to use The moust..." },
-       
-        -- [[ DPS ]]
-		{type = "rule"},
-		{type = "text", text = "DPS", align = "center"},
+        	}, default = "Kings" },
+        	-- Seals
+			{ type = "dropdown",text = "Seal (ST):", key = "SealST", list = {
+				{text = "Truth", key = "Truth"},
+				{text = "Righteousness", key = "Righteousness"},
+				{text = "Justice", key = "Justice"},
+				{text = "Insight", key = "Insight"},
+        	}, default = "Truth" },
+        	{ type = "dropdown",text = "Seal (MT):", key = "SealMT", list = {
+				{text = "Truth", key = "Truth"},
+				{text = "Righteousness", key = "Righteousness"},
+				{text = "Justice", key = "Justice"},
+				{text = "Insight", key = "Insight"},
+        	}, default = "Righteousness" },
 
-
-	    -- [[ Healing ]]
+	    -- [[ Survival ]]
 		{type = "rule"},
-	    {type = "text", text = "Healing", align = "center"},
+	    {type = "text", text = "Survival", align = "center"},
 			-- Healthstone
-			{ type = "spinner", text = "Healthstone", key = "Healthstone", default = 60},
+			{ type = "spinner", text = "Healthstone", key = "HealthStone", default = 90},
 			-- Lay on Hands
-			{ type = "spinner", text = "Lay on Hands", key = "LayonHands", default = 20},
+			{ type = "spinner", text = "Lay on Hands", key = "LayOnHands", default = 20},
+			-- Divine Shield
+			{ type = "spinner", text = "Divine Shield", key = "DivineShield", default = 10},
+			-- Divine Protection
+			{ type = "spinner", text = "Divine Protection", key = "DivineProtection", default = 85},
+			-- Selfless Healer
+			{ type = "spinner", text = "Selfless Healer (PLAYER)", key = "FOLSH", default = 85},
+			{ type = "spinner", text = "Selfless Healer (RAID)", key = "FOLSHR", default = 85},
+			-- Flash of Heal
+			{ type = "spinner", text = "Flash of Heal", key = "FOL", default = 20},
 	}
 }
 
@@ -37,24 +54,42 @@ local exeOnLoad = function()
 	NeP.Splash()
 end
 
-local All = {
+local Buffs = {
 	-- Kings
 	{ "20217", {
 		"!player.buffs.stats",
-		(function() return NeP.Core.PeFetch("NePConfPalaRet", "Buff") == 'Kings' end)
+		(function() return PeFetch("NePConfPalaRet", "Buff") == 'Kings' end)
 	}},
 	-- Might
 	{ "19740", {
 		"!player.buffs.mastery",
-		(function() return NeP.Core.PeFetch("NePConfPalaRet", "Buff") == 'Might' end)
+		(function() return PeFetch("NePConfPalaRet", "Buff") == 'Might' end)
 	}},
 }
 
 local Survival = {
+	-- Flash of Light with Selfless Healer // Talent
+	{"19750", {
+		"player.buff(114250).count = 3",
+		(function() return dynEval("player.health <= "..PeFetch('NePConfPalaRet', 'FOLSH')) end)
+	}, "player"},
+	{"19750", {
+		"player.buff(114250).count = 3",
+		(function() return dynEval("lowest.health <= "..PeFetch('NePConfPalaRet', 'FOLSHR')) end)
+	}, "lowest"},
 	-- Healthstone
-	{ "#5512", (function() return dynEval("player.health <= "..PeFetch('NePConfPalaRet', 'Healthstone')) end) },
+	{"#5512", (function() return dynEval("player.health <= "..PeFetch('NePConfPalaRet', 'HealthStone')) end)},
 	-- Lay on Hands
-	{ "633", (function() return dynEval("player.health <= "..PeFetch('NePConfPalaRet', 'LayonHands')) end), "player"},
+	{"633", (function() return dynEval("player.health <= "..PeFetch('NePConfPalaRet', 'LayOnHands')) end), "player"},
+	-- Divine Shield
+	{"642", (function() return dynEval("player.health <= "..PeFetch('NePConfPalaRet', 'DivineShield')) end), "player"},
+	-- Divine Protection
+	{"498", (function() return dynEval("player.health <= "..PeFetch('NePConfPalaRet', 'DivineProtection')) end)},
+	-- Flash of Light
+	{"19750", {
+		"player.buff(114250)",
+		(function() return dynEval("player.health <= "..PeFetch('NePConfPalaRet', 'FOL')) end)
+	}, "player"}
 }
 
 local Cooldowns = {
@@ -65,16 +100,55 @@ local Cooldowns = {
 }
 
 local Seals = {
-	-- Seal of Righteousness
-	{"20154", {
-		"player.seal != 2",
-		(function() return NeP.Lib.SAoE(3, 8) end)
-	}},
-	-- Seal of Truth
-	{"31801", {
-		"player.seal != 1",
-		(function() return not NeP.Lib.SAoE(3, 8) end)
-	}},
+	{{ -- AoE
+		-- Seal of Truth
+		{"31801", {
+			"player.seal != 1",
+			(function() return PeFetch("NePConfPalaRet", "SealMT") == 'Truth' end)
+		}},
+		-- Seal of Righteousness
+		{"20154", {
+			"player.seal != 2",
+			(function() return PeFetch("NePConfPalaRet", "SealMT") == 'Righteousness' end)
+			
+		}},
+		-- Seal of Justice
+		{"20164", {
+			"player.seal != 3",
+			(function() return PeFetch("NePConfPalaRet", "SealMT") == 'Justice' end)
+		}},
+		-- Seal of Insight
+		{"20165", {
+			"player.seal != 4",
+			(function() return PeFetch("NePConfPalaRet", "SealMT") == 'Insight' end)
+			
+		}},
+	}, (function() return NeP.Lib.SAoE(3, 8) end) },
+
+	{{ -- ST
+		-- Seal of Truth
+		{"31801", {
+			"player.seal != 1",
+			(function() return PeFetch("NePConfPalaRet", "SealST") == 'Truth' end)
+		}},
+		-- Seal of Righteousness
+		{"20154", {
+			"player.seal != 2",
+			(function() return PeFetch("NePConfPalaRet", "SealST") == 'Righteousness' end)
+			
+		}},
+		-- Seal of Justice
+		{"20164", {
+			"player.seal != 3",
+			(function() return PeFetch("NePConfPalaRet", "SealST") == 'Justice' end)
+		}},
+		-- Seal of Insight
+		{"20165", {
+			"player.seal != 4",
+			(function() return PeFetch("NePConfPalaRet", "SealST") == 'Insight' end)
+			
+		}},
+	}, (function() return not NeP.Lib.SAoE(3, 8) end) },
 }
 
 local AoE = {
@@ -102,11 +176,8 @@ local ST = {
 }
 
 local outCombat = {
-	-- Shared things
-	{All},
-
-	-- Things to do only outside of combat
-		-- Nothing yet...
+	{Buffs},
+	{Seals},
 }
 
 ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retribution'), 
