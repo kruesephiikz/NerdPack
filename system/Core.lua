@@ -25,8 +25,8 @@ NeP = {
 		Name = 'NerdPack',
 		Nick = 'NeP',
 		Author = 'MrTheSoulz',
-		Version = '6.2.1.1',
-		Branch = 'Beta7.3',
+		Version = '6.2.2.1',
+		Branch = 'Stable',
 		WoW_Version = '6.2.2',
 		Logo = 'Interface\\AddOns\\NerdPack\\media\\logo.blp',
 		Splash = 'Interface\\AddOns\\NerdPack\\media\\splash.blp',
@@ -79,19 +79,21 @@ DESC: returns the LineOfSight betwen 2 units/objetcs.
 Build By: MTS
 ---------------------------------------------------]]
 local ignoreLOS = {
-	[76585] = "",	-- Ragewing the Untamed (UBRS)
-	[77063] = "",	-- Ragewing the Untamed (UBRS)
-	[77182] = "",	-- Oregorger (BRF)
-	[77891] = "",	-- Grasping Earth (BRF)
-	[77893] = "",	-- Grasping Earth (BRF)
-	[78981] = "",	-- Iron Gunnery Sergeant (BRF)
-	[81318] = "",	-- Iron Gunnery Sergeant (BRF)
-	[83745] = "",	-- Ragewing Whelp (UBRS)
-	[86252] = "",	-- Ragewing the Untamed (UBRS)
-	[56173] = "",	-- Deathwing (DragonSoul)
-	[55294] = "",	-- Ultraxion (DragonSoul)
-	[56161] = "",	-- Corruption (DragonSoul)
-	[52409] = "",	-- Ragnaros (FireLands)
+	['76585'] = "",	-- Ragewing the Untamed (UBRS)
+	['77063'] = "",	-- Ragewing the Untamed (UBRS)
+	['77182'] = "",	-- Oregorger (BRF)
+	['77891'] = "",	-- Grasping Earth (BRF)
+	['77893'] = "",	-- Grasping Earth (BRF)
+	['78981'] = "",	-- Iron Gunnery Sergeant (BRF)
+	['81318'] = "",	-- Iron Gunnery Sergeant (BRF)
+	['83745'] = "",	-- Ragewing Whelp (UBRS)
+	['86252'] = "",	-- Ragewing the Untamed (UBRS)
+	['56173'] = "",	-- Deathwing (DragonSoul)
+	['56471'] = "",	-- Mutated Corruption (Dragon Soul: The Maelstrom)
+	['57962'] = "",	-- Deathwing (Dragon Soul: The Maelstrom)
+	['55294'] = "",	-- Ultraxion (DragonSoul)
+	['56161'] = "",	-- Corruption (DragonSoul)
+	['52409'] = "",	-- Ragnaros (FireLands)
 }
 
 local losFlags =  bit.bor(0x10, 0x100)
