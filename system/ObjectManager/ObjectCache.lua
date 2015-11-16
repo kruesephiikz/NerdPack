@@ -1,8 +1,6 @@
 NeP.OM = {
 	unitEnemie = {},
-	unitEnemieDead = {},
 	unitFriend = {},
-	unitFriendDead = {},
 	GameObjects = {},
 }
 
@@ -262,31 +260,6 @@ local function addToOM(Obj, Dist)
 					end
 				end
 			end
-		-- Dead Units (For Ressing and Skills (Example: skining))
-		elseif UnitIsDeadOrGhost(Obj) then
-			-- Friendly
-			if UnitIsFriend('player', Obj) then
-				NeP.OM.unitFriend[#NeP.OM.unitFriendDead+1] = {
-					key = Obj, 
-					distance = Dist, 
-					health = 0, 
-					maxHealth = UnitHealthMax(Obj), 
-					actualHealth = 0, 
-					name = UnitName(Obj),
-					is = 'friendly'
-				}
-			-- Enemie
-			elseif UnitCanAttack('player', Obj) then
-				NeP.OM.unitEnemie[#NeP.OM.unitEnemieDead+1] = {
-					key = Obj, 
-					distance = Dist, 
-					health = 0, 
-					maxHealth = UnitHealthMax(Obj), 
-					actualHealth = 0, 
-					name = UnitName(Obj),
-					is = 'enemie'
-				}
-			end
 		end
 	end
 end
@@ -390,9 +363,7 @@ C_Timer.NewTicker(1, (function()
 
 	-- Wipe Cache
 	wipe(NeP.OM.unitEnemie)
-	wipe(NeP.OM.unitEnemieDead)
 	wipe(NeP.OM.unitFriend)
-	wipe(NeP.OM.unitFriendDead)
 	wipe(NeP.OM.GameObjects)
 
 	if NeP.Core.CurrentCR and peConfig.read('button_states', 'MasterToggle', false) then
@@ -408,9 +379,7 @@ C_Timer.NewTicker(1, (function()
 		end
 		-- Sort by distance
 		table.sort(NeP.OM.unitEnemie, function(a,b) return a.distance < b.distance end)
-		table.sort(NeP.OM.unitEnemieDead, function(a,b) return a.distance < b.distance end)
 		table.sort(NeP.OM.unitFriend, function(a,b) return a.distance < b.distance end)
-		table.sort(NeP.OM.unitFriendDead, function(a,b) return a.distance < b.distance end)
 		table.sort(NeP.OM.GameObjects, function(a,b) return a.distance < b.distance end)
 	end
 end), nil)
