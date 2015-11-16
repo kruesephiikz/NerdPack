@@ -76,6 +76,8 @@ local Buffs = {
 }
 
 local Survival = {
+	-- Sacred Shield
+	{'20925'},
 	-- Flash of Light with Selfless Healer // Talent
 	{'19750', {
 		'player.buff(114250).count = 3',
@@ -120,6 +122,8 @@ local Cooldowns = {
 		'!player.buff(31884)',
 		'!talent(7, 2)', -- Seraphim
 	}},
+	-- Holy Avenger
+	{'105809', 'player.buff(31884)'},
 	-- Execution Sentence should be used on cooldown against targets that will live long enough to withstand the full duration of the ability.
 	{'114157'}, 
 }
@@ -269,6 +273,8 @@ ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retrib
 		-- Hammer of Wrath when target is below or equal 35% Health or with Avenging Wrath.
 		{'158392', 'target.health <= 35', 'target'},
 		{'158392', 'player.buff(31884)', 'target'},
+		-- Holy Prism
+		{'114165', nil, 'target'},
 		{AoE, (function() return NeP.Lib.SAoE(3, 8) end)},
 		{ST}
 	}, outCombat, exeOnLoad)
