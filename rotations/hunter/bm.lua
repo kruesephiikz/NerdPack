@@ -16,10 +16,9 @@ NeP.Interface.classGUIs[253] = {
 		{type = 'header', text = 'General:', align = 'center'},
 			--To be added
 		
+		-- Survival
 		{type = 'spacer'},{ type = 'rule'},
 		{type = 'header', text = 'Survival', align = 'center'},
-			
-			-- Survival Settings:
 			{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', default = 75},
 	}
 }

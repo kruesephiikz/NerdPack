@@ -17,53 +17,53 @@ local objectDistance = NeP.Core.Distance
 ---------------------------------------------------]]
 local NeP_ImmuneAuras = {
 		-- CROWD CONTROL
-	[118] = "",        -- Polymorph
-	[1513] = "",       -- Scare Beast
-	[1776] = "",       -- Gouge
-	[2637] = "",       -- Hibernate
-	[3355] = "",       -- Freezing Trap
-	[6770] = "",       -- Sap
-	[9484] = "",       -- Shackle Undead
-	[19386] = "",      -- Wyvern Sting
-	[20066] = "",      -- Repentance
-	[28271] = "",      -- Polymorph (turtle)
-	[28272] = "",      -- Polymorph (pig)
-	[49203] = "",      -- Hungering Cold
-	[51514] = "",      -- Hex
-	[61025] = "",      -- Polymorph (serpent) -- FIXME: gone ?
-	[61305] = "",      -- Polymorph (black cat)
-	[61721] = "",      -- Polymorph (rabbit)
-	[61780] = "",      -- Polymorph (turkey)
-	[76780] = "",      -- Bind Elemental
-	[82676] = "",      -- Ring of Frost
-	[90337] = "",      -- Bad Manner (Monkey) -- FIXME: to check
-	[115078] = "",     -- Paralysis
-	[115268] = "",     -- Mesmerize
+	['118'] = "",        -- Polymorph
+	['1513'] = "",       -- Scare Beast
+	['1776'] = "",       -- Gouge
+	['2637'] = "",       -- Hibernate
+	['3355'] = "",       -- Freezing Trap
+	['6770'] = "",       -- Sap
+	['9484'] = "",       -- Shackle Undead
+	['19386'] = "",      -- Wyvern Sting
+	['20066'] = "",      -- Repentance
+	['28271'] = "",      -- Polymorph (turtle)
+	['28272'] = "",      -- Polymorph (pig)
+	['49203'] = "",      -- Hungering Cold
+	['51514'] = "",      -- Hex
+	['61025'] = "",      -- Polymorph (serpent) -- FIXME: gone ?
+	['61305'] = "",      -- Polymorph (black cat)
+	['61721'] = "",      -- Polymorph (rabbit)
+	['61780'] = "",      -- Polymorph (turkey)
+	['76780'] = "",      -- Bind Elemental
+	['82676'] = "",      -- Ring of Frost
+	['90337'] = "",      -- Bad Manner (Monkey) -- FIXME: to check
+	['115078'] = "",     -- Paralysis
+	['115268'] = "",     -- Mesmerize
 		-- MOP DUNGEONS/RAIDS/ELITES
-	[106062] = "",     -- Water Bubble (Wise Mari)
-	[110945] = "",     -- Charging Soul (Gu Cloudstrike)
-	[116994] = "",     -- Unstable Energy (Elegon)
-	[122540] = "",     -- Amber Carapace (Amber Monstrosity - Heat of Fear)
-	[123250] = "",     -- Protect (Lei Shi)
-	[143574] = "",     -- Swelling Corruption (Immerseus)
-	[143593] = "",     -- Defensive Stance (General Nazgrim)
+	['106062'] = "",     -- Water Bubble (Wise Mari)
+	['110945'] = "",     -- Charging Soul (Gu Cloudstrike)
+	['116994'] = "",     -- Unstable Energy (Elegon)
+	['122540'] = "",     -- Amber Carapace (Amber Monstrosity - Heat of Fear)
+	['123250'] = "",     -- Protect (Lei Shi)
+	['143574'] = "",     -- Swelling Corruption (Immerseus)
+	['143593'] = "",     -- Defensive Stance (General Nazgrim)
 		-- WOD DUNGEONS/RAIDS/ELITES
-	[155176] = "",     -- Damage Shield (Primal Elementalists - Blast Furnace)
-	[155185] = "",     -- Cotainment (Primal Elementalists - BRF)
-	[155233] = "",     -- Dormant (Blast Furnace)
-	[155265] = "",     -- Cotainment (Primal Elementalists - BRF)
-	[155266] = "",     -- Cotainment (Primal Elementalists - BRF)
-	[155267] = "",     -- Cotainment (Primal Elementalists - BRF)
-	[157289] = "",     -- Arcane Protection (Imperator Mar'Gok)
-	[174057] = "",     -- Arcane Protection (Imperator Mar'Gok)
-	[182055] = "",     -- Full Charge (Iron Reaver)
-	[184053] = "",     -- Fel Barrier (Socrethar)
+	['155176'] = "",     -- Damage Shield (Primal Elementalists - Blast Furnace)
+	['155185'] = "",     -- Cotainment (Primal Elementalists - BRF)
+	['155233'] = "",     -- Dormant (Blast Furnace)
+	['155265'] = "",     -- Cotainment (Primal Elementalists - BRF)
+	['155266'] = "",     -- Cotainment (Primal Elementalists - BRF)
+	['155267'] = "",     -- Cotainment (Primal Elementalists - BRF)
+	['157289'] = "",     -- Arcane Protection (Imperator Mar'Gok)
+	['174057'] = "",     -- Arcane Protection (Imperator Mar'Gok)
+	['182055'] = "",     -- Full Charge (Iron Reaver)
+	['184053'] = "",     -- Fel Barrier (Socrethar)
 }
 
 local function BlacklistedDebuffs(Obj)
 	for i = 1, 40 do
 		local _,_,_,_,_,_,_,_,_,_, spellID = UnitDebuff(Obj, i)
-		if NeP_ImmuneAuras[spellID] ~= nil then return true end
+		return NeP_ImmuneAuras[spellID] ~= nil
 	end
 end
 
@@ -72,130 +72,104 @@ end
 	This will remove the Object from the OM cache.
 ---------------------------------------------------]]
 local BlacklistedObjects = {
-	[76829] = "",		-- Slag Elemental (BrF - Blast Furnace)
-	[78463] = "",		-- Slag Elemental (BrF - Blast Furnace)
-	[60197] = "",		-- Scarlet Monastery Dummy
-	[64446] = "",		-- Scarlet Monastery Dummy
-	[93391] = "",		-- Captured Prisoner (HFC)
-	[93392] = "",		-- Captured Prisoner (HFC)
-	[93828] = "",		-- Training Dummy (HFC)
-	[234021] = "",
-	[234022] = "",
-	[234023] = "",
+	['76829'] = "",		-- Slag Elemental (BrF - Blast Furnace)
+	['78463'] = "",		-- Slag Elemental (BrF - Blast Furnace)
+	['60197'] = "",		-- Scarlet Monastery Dummy
+	['64446'] = "",		-- Scarlet Monastery Dummy
+	['93391'] = "",		-- Captured Prisoner (HFC)
+	['93392'] = "",		-- Captured Prisoner (HFC)
+	['93828'] = "",		-- Training Dummy (HFC)
+	['234021'] = "",
+	['234022'] = "",
+	['234023'] = "",
 }
 
 local function BlacklistedObject(Obj)
 	local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(Obj) or "0")
-	if BlacklistedObjects[ObjID] ~= nil then return true end
+	return BlacklistedObjects[ObjID] ~= nil
 end
 
 local TrackGameObjects = {
 	--[[ //// lumbermillIDs //// ]]
 			--[[ //// WOD //// ]]
-		[234127] = 'LM',
-		[234193] = 'LM',
-		[234023] = 'LM',
-		[234099] = 'LM',
-		[233634] = 'LM',
-		[237727] = 'LM',
-		[234126] = 'LM',
-		[234111] = 'LM',
-		[233922] = 'LM',
-		[234128] = 'LM',
-		[234000] = 'LM',
-		[234195] = 'LM',
-		[234196] = 'LM',
-		[234097] = 'LM',
-		[234198] = 'LM',
-		[234197] = 'LM',
-		[234123] = 'LM',
-		[234098] = 'LM',
-		[234022] = 'LM',
-		[233604] = 'LM',
-		[234120] = 'LM',
-		[234194] = 'LM',
-		[234021] = 'LM',
-		[234080] = 'LM',
-		[234110] = 'LM',
-		[230964] = 'LM',
-		[233635] = 'LM',
-		[234119] = 'LM',
-		[234122] = 'LM',
-		[234007] = 'LM',
-		[234199] = 'LM',
-		[234124] = 'LM',
+		['234127'] = 'LM',
+		['234193'] = 'LM',
+		['234023'] = 'LM',
+		['234099'] = 'LM',
+		['233634'] = 'LM',
+		['237727'] = 'LM',
+		['234126'] = 'LM',
+		['234111'] = 'LM',
+		['233922'] = 'LM',
+		['234128'] = 'LM',
+		['234000'] = 'LM',
+		['234195'] = 'LM',
+		['234196'] = 'LM',
+		['234097'] = 'LM',
+		['234198'] = 'LM',
+		['234197'] = 'LM',
+		['234123'] = 'LM',
+		['234098'] = 'LM',
+		['234022'] = 'LM',
+		['233604'] = 'LM',
+		['234120'] = 'LM',
+		['234194'] = 'LM',
+		['234021'] = 'LM',
+		['234080'] = 'LM',
+		['234110'] = 'LM',
+		['230964'] = 'LM',
+		['233635'] = 'LM',
+		['234119'] = 'LM',
+		['234122'] = 'LM',
+		['234007'] = 'LM',
+		['234199'] = 'LM',
+		['234124'] = 'LM',
 	--[[ //// oresIDs //// ]]
 			--[[ //// WOD //// ]]
-		[228510] = 'Ore', 		--[[ Rich True Iron Deposit ]]
-		[228493] = 'Ore', 		--[[ True Iron Deposit ]]
-		[228564] = 'Ore', 		--[[ Rich Blackrock Deposit ]]
-		[228563] = 'Ore', 		--[[ Blackrock Deposit ]]
-		[232544] = 'Ore', 		--[[ True Iron Deposit ]]
-		[232545] = 'Ore', 		--[[ Rich True Iron Deposit ]]
-		[232542] = 'Ore',		--[[ Blackrock Deposit ]]
-		[232543] = 'Ore',		--[[ Rich Blackrock Deposit ]]
-		[232541] = 'Ore',		--[[ Mine Cart ]]
+		['228510'] = 'Ore', 		--[[ Rich True Iron Deposit ]]
+		['228493'] = 'Ore', 		--[[ True Iron Deposit ]]
+		['228564'] = 'Ore', 		--[[ Rich Blackrock Deposit ]]
+		['228563'] = 'Ore', 		--[[ Blackrock Deposit ]]
+		['232544'] = 'Ore', 		--[[ True Iron Deposit ]]
+		['232545'] = 'Ore', 		--[[ Rich True Iron Deposit ]]
+		['232542'] = 'Ore',		--[[ Blackrock Deposit ]]
+		['232543'] = 'Ore',		--[[ Rich Blackrock Deposit ]]
+		['232541'] = 'Ore',		--[[ Mine Cart ]]
 	--[[ //// herbsIDs //// ]]
 			--[[ //// WOD //// ]]
-		[237400] = 'Herb',
-		[228576] = 'Herb',
-		[235391] = 'Herb',
-		[237404] = 'Herb',
-		[228574] = 'Herb',
-		[235389] = 'Herb',
-		[228575] = 'Herb',
-		[237406] = 'Herb',
-		[235390] = 'Herb',
-		[235388] = 'Herb',
-		[228573] = 'Herb',
-		[237402] = 'Herb',
-		[228571] = 'Herb',
-		[237398] = 'Herb',
-		[233117] = 'Herb',
-		[235376] = 'Herb',
-		[228991] = 'Herb',
-		[235387] = 'Herb',
-		[237396] = 'Herb',
-		[228572] = "Herb",
+		['237400'] = 'Herb',
+		['228576'] = 'Herb',
+		['235391'] = 'Herb',
+		['237404'] = 'Herb',
+		['228574'] = 'Herb',
+		['235389'] = 'Herb',
+		['228575'] = 'Herb',
+		['237406'] = 'Herb',
+		['235390'] = 'Herb',
+		['235388'] = 'Herb',
+		['228573'] = 'Herb',
+		['237402'] = 'Herb',
+		['228571'] = 'Herb',
+		['237398'] = 'Herb',
+		['233117'] = 'Herb',
+		['235376'] = 'Herb',
+		['228991'] = 'Herb',
+		['235387'] = 'Herb',
+		['237396'] = 'Herb',
+		['228572'] = "Herb",
 	--[[ //// fishIDs //// ]]
 			--[[ //// WOD //// ]]
-		[229072] = 'Fish',
-		[229073] = 'Fish',
-		[229069] = 'Fish',
-		[229068] = 'Fish',
-		[243325] = 'Fish',
-		[243354] = 'Fish',
-		[229070] = 'Fish',
-		[229067] = 'Fish',
-		[236756] = 'Fish',
-		[237295] = 'Fish',
-		[229071] = 'Fish',
-	--[[ //// dummyIDs //// ]]
-		[31144] = "dummy",		-- Training Dummy - Lvl 80
-		[31146] = "dummy",		-- Raider's Training Dummy - Lvl ??
-		[32541] = "dummy", 		-- Initiate's Training Dummy - Lvl 55 (Scarlet Enclave)
-		[32542] = "dummy",		-- Disciple's Training Dummy - Lvl 65
-		[32545] = "dummy",		-- Initiate's Training Dummy - Lvl 55
-		[32546] = "dummy",		-- Ebon Knight's Training Dummy - Lvl 80
-		[32666] = "dummy",		-- Training Dummy - Lvl 60
-		[32667] = "dummy",		-- Training Dummy - Lvl 70
-		[46647] = "dummy",		-- Training Dummy - Lvl 85
-		[67127] = "dummy",		-- Training Dummy - Lvl 90
-		[87318] = "dummy",		-- Dungeoneer's Training Dummy <Damage> ALLIANCE GARRISON
-		[87761] = "dummy",		-- Dungeoneer's Training Dummy <Damage> HORDE GARRISON
-		[87322] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> ALLIANCE ASHRAN BASE
-		[88314] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> ALLIANCE GARRISON
-		[88836] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> HORDE ASHRAN BASE
-		[88288] = "dummy",		-- Dunteoneer's Training Dummy <Tanking> HORDE GARRISON
-		[87317] = "dummy",		-- Dungeoneer's Training Dummy - Lvl 102 (Lunarfall - Damage)
-		[87320] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Stormshield - Damage)
-		[87321] = "dummy",		-- Training Dummy - Lvl 100 (Stormshield, Warspear - Healing)
-		[87329] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Stormshield - Tank)
-		[87762] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Warspear - Damage)
-		[88837] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Warspear - Tank)
-		[88906] = "dummy",		-- Combat Dummy - Lvl 100 (Nagrand)
-		[88967] = "dummy",		-- Training Dummy - Lvl 100 (Lunarfall, Frostwall)
-		[89078] = "dummy",		-- Training Dummy - Lvl 100 (Lunarfall, Frostwall)
+		['229072'] = 'Fish',
+		['229073'] = 'Fish',
+		['229069'] = 'Fish',
+		['229068'] = 'Fish',
+		['243325'] = 'Fish',
+		['243354'] = 'Fish',
+		['229070'] = 'Fish',
+		['229067'] = 'Fish',
+		['236756'] = 'Fish',
+		['237295'] = 'Fish',
+		['229071'] = 'Fish',
 }
 
 local function isGameObject(Obj)
@@ -204,6 +178,38 @@ local function isGameObject(Obj)
 		return TrackGameObjects[ObjID], true
 	end
 	return 'nothing', false
+end
+
+local TrackedDummys = {
+	['31144'] = "dummy",		-- Training Dummy - Lvl 80
+	['31146'] = "dummy",		-- Raider's Training Dummy - Lvl ??
+	['32541'] = "dummy", 		-- Initiate's Training Dummy - Lvl 55 (Scarlet Enclave)
+	['32542'] = "dummy",		-- Disciple's Training Dummy - Lvl 65
+	['32545'] = "dummy",		-- Initiate's Training Dummy - Lvl 55
+	['32546'] = "dummy",		-- Ebon Knight's Training Dummy - Lvl 80
+	['32666'] = "dummy",		-- Training Dummy - Lvl 60
+	['32667'] = "dummy",		-- Training Dummy - Lvl 70
+	['46647'] = "dummy",		-- Training Dummy - Lvl 85
+	['67127'] = "dummy",		-- Training Dummy - Lvl 90
+	['87318'] = "dummy",		-- Dungeoneer's Training Dummy <Damage> ALLIANCE GARRISON
+	['87761'] = "dummy",		-- Dungeoneer's Training Dummy <Damage> HORDE GARRISON
+	['87322'] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> ALLIANCE ASHRAN BASE
+	['88314'] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> ALLIANCE GARRISON
+	['88836'] = "dummy",		-- Dungeoneer's Training Dummy <Tanking> HORDE ASHRAN BASE
+	['88288'] = "dummy",		-- Dunteoneer's Training Dummy <Tanking> HORDE GARRISON
+	['87317'] = "dummy",		-- Dungeoneer's Training Dummy - Lvl 102 (Lunarfall - Damage)
+	['87320'] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Stormshield - Damage)
+	['87329'] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Stormshield - Tank)
+	['87762'] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Warspear - Damage)
+	['88837'] = "dummy",		-- Raider's Training Dummy - Lvl ?? (Warspear - Tank)
+	['88906'] = "dummy",		-- Combat Dummy - Lvl 100 (Nagrand)
+	['88967'] = "dummy",		-- Training Dummy - Lvl 100 (Lunarfall, Frostwall)
+	['89078'] = "dummy",		-- Training Dummy - Lvl 100 (Lunarfall, Frostwall)
+}
+
+local function isDummy(Obj)
+	local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(Obj) or "0")
+	return TrackedDummys[ObjID] ~= nil
 end
 
 --[[
@@ -251,7 +257,7 @@ local function addToOM(Obj, Dist)
 							maxHealth = UnitHealthMax(Obj), 
 							actualHealth = UnitHealth(Obj), 
 							name = UnitName(Obj),
-							is = 'enemie'
+							is = isDummy(Obj) and 'dummy' or 'enemie'
 						}
 					end
 				end
