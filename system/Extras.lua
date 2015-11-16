@@ -22,17 +22,17 @@ DESC: Moves to a unit.
 Build By: MTS
 ---------------------------------------------------]]
 local NeP_rangeTable = {
-	["HUNTER"] = "ranged",
-	["WARLOCK"] = "ranged",
-	["PRIEST"] = "ranged",
-	["PALADIN"] = "melee",
-	["MAGE"] = "ranged", 
-	["ROGUE"] = "melee",
-	["DRUID"] = "melee",
-	["SHAMAN"] = "ranged",
-	["WARRIOR"] = "melee",
-	["DEATHKNIGHT"] = "melee",
-	["MONK"] = "melee"
+	['HUNTER'] = 'ranged',
+	['WARLOCK'] = 'ranged',
+	['PRIEST'] = 'ranged',
+	['PALADIN'] = 'melee',
+	['MAGE'] = 'ranged', 
+	['ROGUE'] = 'melee',
+	['DRUID'] = 'melee',
+	['SHAMAN'] = 'ranged',
+	['WARRIOR'] = 'melee',
+	['DEATHKNIGHT'] = 'melee',
+	['MONK'] = 'melee'
 }
 
 local function _manualMoving()
@@ -52,17 +52,17 @@ end
 
 function NeP.Extras.MoveTo()
 	if NeP.Core.PeFetch('NePConf', 'AutoMove') then
-		if UnitIsVisible('target') and not UnitChannelInfo("player") then
+		if UnitIsVisible('target') and not UnitChannelInfo('player') then
 			if not _manualMoving() then
 				if inLoS('player', 'target') then
 					local _Range = UnitAttackRange('player', 'target', NeP_rangeTable[select(2, UnitClass('player'))])
 					local unitSpeed = GetUnitSpeed('player')
 					if FireHack then
 						-- Stop Moving
-						if _Range > objectDistance("player", 'target') and unitSpeed ~= 0 then 
+						if _Range > objectDistance('player', 'target') and unitSpeed ~= 0 then 
 							MoveTo(ObjectPosition('player'))
 						-- Start Moving
-						elseif _Range < objectDistance("player", 'target') then
+						elseif _Range < objectDistance('player', 'target') then
 							NeP.Core.Alert('Moving to: '..GetUnitName('target', false)) 
 							MoveTo(ObjectPosition('target'))
 						end
@@ -83,7 +83,7 @@ function NeP.Extras.FaceTo()
 	if NeP.Core.PeFetch('NePConf', 'AutoFace') then
 		local unitSpeed, _ = GetUnitSpeed('player')
 		if not _manualMoving() and unitSpeed == 0 then
-			if UnitIsVisible('target') and not UnitChannelInfo("player")then
+			if UnitIsVisible('target') and not UnitChannelInfo('player')then
 				if not NeP.Core.Infront('player', 'target') then
 					if inLoS('player', 'target') then
 						if FireHack then
@@ -105,82 +105,77 @@ Build By: MTS & StinkyTwitch
 ---------------------------------------------------]]
 local NeP_forceTarget = {
 		-- WOD DUNGEONS/RAIDS
-	75966,      -- Defiled Spirit (Shadowmoon Burial Grounds)
-	76220,      -- Blazing Trickster (Auchindoun Normal)
-	76222,      -- Rallying Banner (UBRS Black Iron Grunt)
-	76267,      -- Solar Zealot (Skyreach)
-	76518,      -- Ritual of Bones (Shadowmoon Burial Grounds)
-	77252,      -- Ore Crate (BRF Oregorger)
-	77665,      -- Iron Bomber (BRF Blackhand)
-	77891,      -- Grasping Earth (BRF Kromog)
-	77893,      -- Grasping Earth (BRF Kromog)
-	86752,      -- Stone Pillars (BRF Mythic Kromog)
-	78583,      -- Dominator Turret (BRF Iron Maidens)
-	78584,      -- Dominator Turret (BRF Iron Maidens)
-	79504,      -- Ore Crate (BRF Oregorger)
-	79511,      -- Blazing Trickster (Auchindoun Heroic)
-	81638,      -- Aqueous Globule (The Everbloom)
-	86644,      -- Ore Crate (BRF Oregorger)
-	94873,      -- Felfire Flamebelcher (HFC)
-	90432,      -- Felfire Flamebelcher (HFC)
-	95586,      -- Felfire Demolisher (HFC)
-	93851,      -- Felfire Crusher (HFC)
-	90410,      -- Felfire Crusher (HFC)
-	94840,      -- Felfire Artillery (HFC)
-	90485,      -- Felfire Artillery (HFC)
-	93435,      -- Felfire Transporter (HFC)
-	93717,      -- Volatile Firebomb (HFC)
-	188293,     -- Reinforced Firebomb (HFC)
-	94865,      -- Grasping Hand (HFC)
-	93838,      -- Grasping Hand (HFC)
-	93839,      -- Dragging Hand (HFC)
-	91368,      -- Crushing Hand (HFC)
-	94455,      -- Blademaster Jubei'thos (HFC)
-	90387,      -- Shadowy Construct (HFC)
-	90508,      -- Gorebound Construct (HFC)
-	90568,      -- Gorebound Essence (HFC)
-	94996,      -- Fragment of the Crone (HFC)
-	95656,      -- Carrion Swarm (HFC)
-	91540,      -- Illusionary Outcast (HFC)
+	['75966'] = '',      -- Defiled Spirit (Shadowmoon Burial Grounds)
+	['76220'] = '',      -- Blazing Trickster (Auchindoun Normal)
+	['76222'] = '',      -- Rallying Banner (UBRS Black Iron Grunt)
+	['76267'] = '',      -- Solar Zealot (Skyreach)
+	['76518'] = '',      -- Ritual of Bones (Shadowmoon Burial Grounds)
+	['77252'] = '',      -- Ore Crate (BRF Oregorger)
+	['77665'] = '',      -- Iron Bomber (BRF Blackhand)
+	['77891'] = '',      -- Grasping Earth (BRF Kromog)
+	['77893'] = '',      -- Grasping Earth (BRF Kromog)
+	['86752'] = '',      -- Stone Pillars (BRF Mythic Kromog)
+	['78583'] = '',      -- Dominator Turret (BRF Iron Maidens)
+	['78584'] = '',      -- Dominator Turret (BRF Iron Maidens)
+	['79504'] = '',      -- Ore Crate (BRF Oregorger)
+	['79511'] = '',      -- Blazing Trickster (Auchindoun Heroic)
+	['81638'] = '',      -- Aqueous Globule (The Everbloom)
+	['86644'] = '',      -- Ore Crate (BRF Oregorger)
+	['94873'] = '',      -- Felfire Flamebelcher (HFC)
+	['90432'] = '',      -- Felfire Flamebelcher (HFC)
+	['95586'] = '',      -- Felfire Demolisher (HFC)
+	['93851'] = '',      -- Felfire Crusher (HFC)
+	['90410'] = '',      -- Felfire Crusher (HFC)
+	['94840'] = '',      -- Felfire Artillery (HFC)
+	['90485'] = '',      -- Felfire Artillery (HFC)
+	['93435'] = '',      -- Felfire Transporter (HFC)
+	['93717'] = '',      -- Volatile Firebomb (HFC)
+	['188293'] = '',     -- Reinforced Firebomb (HFC)
+	['94865'] = '',      -- Grasping Hand (HFC)
+	['93838'] = '',      -- Grasping Hand (HFC)
+	['93839'] = '',      -- Dragging Hand (HFC)
+	['91368'] = '',      -- Crushing Hand (HFC)
+	['94455'] = '',      -- Blademaster Jubei'thos (HFC)
+	['90387'] = '',      -- Shadowy Construct (HFC)
+	['90508'] = '',      -- Gorebound Construct (HFC)
+	['90568'] = '',      -- Gorebound Essence (HFC)
+	['94996'] = '',      -- Fragment of the Crone (HFC)
+	['95656'] = '',      -- Carrion Swarm (HFC)
+	['91540'] = '',      -- Illusionary Outcast (HFC)
 }
 
 function NeP.Extras.autoTarget(unit, name)
 	if NeP.Core.PeFetch('NePConf', 'AutoTarget') then
 		local NeP_ForcedTarget = false
-
 		-- If dont have a target, or target is friendly or dead then
-		if not UnitExists("target") or UnitIsFriend("player", "target") or UnitIsDeadOrGhost("target") then
-	
+		if not UnitExists('target') or UnitIsFriend('player', 'target') or UnitIsDeadOrGhost('target') then
 			-- Forced Target
 			for i=1,#enemieCache do
 				local Obj = enemieCache[i]
-				local _,_,_,_,_,ObjID = strsplit("-", UnitGUID(Obj.key) or "0")
-				for k,v in pairs(NeP_forceTarget) do
-					if tonumber(ObjID) == v then 
-						NeP.Core.Alert('Targeting (S): '..Obj.name) 
-						Macro("/target "..Obj.key)
-						NeP_ForcedTarget = true
-						break
-					end
+				local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj.key) or '0')
+				if NeP_forceTarget[tostring(ObjID)] ~= nil then 
+					NeP.Core.Alert('Targeting (S): '..Obj.name) 
+					Macro('/target '..Obj.key)
+					NeP_ForcedTarget = true
+					break
 				end
+
 			end
-			
 			-- Auto Target
-			if not NeP_ForcedTarget then
+			if not NeP_ForcedTarget then 
 				for i=1,#enemieCache do
 					local Obj = enemieCache[i]
 					if UnitExists(Obj.key) then
-						if (UnitAffectingCombat(Obj.key) or Obj.is == "dummy") then
+						if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
 							if Obj.distance <= 40 then
 								NeP.Core.Alert('Targeting: '..Obj.name) 
-								Macro("/target "..Obj.key)
+								Macro('/target '..Obj.key)
 								break
 							end
 						end
 					end
 				end
-			end
-			
+			end	
 		end
 	end
 end
@@ -244,12 +239,12 @@ function NeP.Extras.dummyTest(key)
 	-- If not Calling for refresh, then start it.
 	if key ~= 'Refresh' then
 		NeP.Extras.dummyStartedTime = minutes
-		message('|r[|cff9482C9MTS|r] Dummy test started! \n[|cffC41F3BWill end in: '..NeP.Core.PeFetch('NePConf', 'testDummy').."m|r]")
+		message('|r[|cff9482C9MTS|r] Dummy test started! \n[|cffC41F3BWill end in: '..NeP.Core.PeFetch('NePConf', 'testDummy')..'m|r]')
 		-- If PE not enabled, then enable it.
 		if not ProbablyEngine.config.read('button_states', 'MasterToggle', false) then
 			ProbablyEngine.buttons.toggle('MasterToggle')
 		end
-		StartAttack("target")
+		StartAttack('target')
 	end
 	-- Check If time is up.
 	if NeP.Extras.dummyStartedTime ~= 0 and key == 'Refresh' then

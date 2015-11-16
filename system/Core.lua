@@ -79,21 +79,22 @@ DESC: returns the LineOfSight betwen 2 units/objetcs.
 Build By: MTS
 ---------------------------------------------------]]
 local ignoreLOS = {
-	['76585'] = "",	-- Ragewing the Untamed (UBRS)
-	['77063'] = "",	-- Ragewing the Untamed (UBRS)
-	['77182'] = "",	-- Oregorger (BRF)
-	['77891'] = "",	-- Grasping Earth (BRF)
-	['77893'] = "",	-- Grasping Earth (BRF)
-	['78981'] = "",	-- Iron Gunnery Sergeant (BRF)
-	['81318'] = "",	-- Iron Gunnery Sergeant (BRF)
-	['83745'] = "",	-- Ragewing Whelp (UBRS)
-	['86252'] = "",	-- Ragewing the Untamed (UBRS)
-	['56173'] = "",	-- Deathwing (DragonSoul)
-	['56471'] = "",	-- Mutated Corruption (Dragon Soul: The Maelstrom)
-	['57962'] = "",	-- Deathwing (Dragon Soul: The Maelstrom)
-	['55294'] = "",	-- Ultraxion (DragonSoul)
-	['56161'] = "",	-- Corruption (DragonSoul)
-	['52409'] = "",	-- Ragnaros (FireLands)
+	['76585'] = '',	-- Ragewing the Untamed (UBRS)
+	['77063'] = '',	-- Ragewing the Untamed (UBRS)
+	['77182'] = '',	-- Oregorger (BRF)
+	['77891'] = '',	-- Grasping Earth (BRF)
+	['77893'] = '',	-- Grasping Earth (BRF)
+	['78981'] = '',	-- Iron Gunnery Sergeant (BRF)
+	['81318'] = '',	-- Iron Gunnery Sergeant (BRF)
+	['83745'] = '',	-- Ragewing Whelp (UBRS)
+	['86252'] = '',	-- Ragewing the Untamed (UBRS)
+	['56173'] = '',	-- Deathwing (DragonSoul)
+	['56471'] = '',	-- Mutated Corruption (Dragon Soul: The Maelstrom)
+	['57962'] = '',	-- Deathwing (Dragon Soul: The Maelstrom)
+	['55294'] = '',	-- Ultraxion (DragonSoul)
+	['56161'] = '',	-- Corruption (DragonSoul)
+	['52409'] = '',	-- Ragnaros (FireLands)
+	['87761'] = '',
 }
 
 local losFlags =  bit.bor(0x10, 0x100)
@@ -102,8 +103,8 @@ function NeP.Core.LineOfSight(a, b)
 		-- Workaround LoS issues.
 		local aCheck = select(6,strsplit('-',UnitGUID(a)))
 		local bCheck = select(6,strsplit('-',UnitGUID(b)))
-		if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
-		if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
+		if ignoreLOS[tostring(aCheck)] ~= nil then return true end
+		if ignoreLOS[tostring(bCheck)] ~= nil then return true end
 		
 		if FireHack then
 			local ax, ay, az = ObjectPosition(a)
@@ -288,7 +289,7 @@ prefix and checks if it should print.
 
 Build By: MTS
 ---------------------------------------------------]]
-local lastPrint = ""
+local lastPrint = ''
 function NeP.Core.Print(txt)
 	if txt ~= lastPrint then
 		if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Prints') then
@@ -306,7 +307,7 @@ DESC: Display a alert on the main frame.
 Build By: MTS
 ---------------------------------------------------]]
 NeP.Interface.Alerts = {}
-local lastAlert = ""
+local lastAlert = ''
 function NeP.Core.Alert(txt)
 	if txt ~= lastPrint then
 		if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Alerts') then

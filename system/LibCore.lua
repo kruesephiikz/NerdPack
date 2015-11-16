@@ -17,12 +17,12 @@ local UnitClassification = UnitClassification
 local UnitIsTappedByPlayer = UnitIsTappedByPlayer
 
 local function NeP_isElite(unit)
-	local boss = LibStub("LibBossIDs")
+	local boss = LibStub('LibBossIDs')
 	local classification = UnitClassification(unit)
-	if classification == "elite" 
-		or classification == "rareelite" 
-		or classification == "rare" 
-		or classification == "worldboss" 
+	if classification == 'elite' 
+		or classification == 'rareelite' 
+		or classification == 'rare' 
+		or classification == 'worldboss' 
 		or UnitLevel(unit) == -1 
 		or boss.BossIDs[UnitID(unit)] then 
 			return true 
@@ -87,8 +87,8 @@ DESC: Returns the units's combat range.
 Build By: MTS
 ---------------------------------------------------]]
 local _rangeTable = {
-	["melee"] = 1.5,
-	["ranged"] = 40,
+	['melee'] = 1.5,
+	['ranged'] = 40,
 }
 
 function NeP.Lib.UnitAttackRange(unitA, unitB, _type)
@@ -112,14 +112,14 @@ Classifications:
 Build By: MTS
 ---------------------------------------------------]]
 function NeP.Lib.canTaunt()
-	if NeP.Core.PeFetch('NePConf', 'Taunts') ~= "Disabled" then
+	if NeP.Core.PeFetch('NePConf', 'Taunts') ~= 'Disabled' then
 		for i=1,#enemieCache do
 			local Obj = enemieCache[i]
-			if (NeP.Core.PeFetch('NePConf', 'Taunts') == "elite" and NeP_isElite(Obj.key)) 
-			or NeP.Core.PeFetch('NePConf', 'Taunts') == "all" then
+			if (NeP.Core.PeFetch('NePConf', 'Taunts') == 'elite' and NeP_isElite(Obj.key)) 
+			or NeP.Core.PeFetch('NePConf', 'Taunts') == 'all' then
 				if UnitIsTappedByPlayer(Obj.key) and Obj.distance <= 40 then
 					if UnitAffectingCombat(Obj.key) then
-						if UnitThreatSituation("player", Obj.key) and UnitThreatSituation("player", Obj.key) <= 2 then
+						if UnitThreatSituation('player', Obj.key) and UnitThreatSituation('player', Obj.key) <= 2 then
 							if NeP.Core.Infront('player', Obj.key) then
 								ProbablyEngine.dsl.parsedTarget = Obj.key
 								return true 
@@ -142,8 +142,8 @@ be dispelled.
 Build By: MTS
 ---------------------------------------------------]]
 local blacklistedDebuffs = {
-	'Mark of Arrogance',
-	'Displaced Energy'
+	['Mark of Arrogance'] = '',
+	['Displaced Energy'] = ''
 }
 
 function NeP.Lib.Dispell(dispelTypes)
@@ -154,12 +154,9 @@ function NeP.Lib.Dispell(dispelTypes)
 				for j = 1, 40 do
 					local debuffName, _,_,_, dispelType, duration, expires,_,_,_,_,_,_,_,_,_ = UnitDebuff(object.key, j)
 					if dispelType and dispelTypes then
-						local ignore = false
-						for k = 1, #blacklistedDebuffs do
-							if debuffName ~= blacklistedDebuffs[k] then
-								ProbablyEngine.dsl.parsedTarget = object.key
-								return true
-							end
+						if blacklistedDebuffs[tostring(debuffName)] == nil then
+							ProbablyEngine.dsl.parsedTarget = object.key
+							return true
 						end
 					end
 				end
@@ -205,9 +202,9 @@ function NeP.Lib.AutoDots(Spell, Health, Duration, Distance, Classification)
 			
 			if UnitClassification(Obj.key) == Classification or passThruClassification then
 				if Obj.health <= Health then
-					local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, "PLAYER")
+					local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
 					if not debuff or debuff - GetTime() < Duration then
-						if UnitCanAttack("player", Obj.key)
+						if UnitCanAttack('player', Obj.key)
 						and Obj.distance <= Distance then
 							if NeP.Core.Infront('player', Obj.key) then
 								ProbablyEngine.dsl.parsedTarget = Obj.key

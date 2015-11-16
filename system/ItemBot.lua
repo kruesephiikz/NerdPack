@@ -8,22 +8,22 @@ local _smelt_Run = false
 --local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice = GetItemInfo(_smeltingTable[i].ID)
 
 NeP.Interface.Items = {
-	key = "NePItemConf",
+	key = 'NePItemConf',
 	profiles = true,
-	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Nick,
-	subtitle = "ItemBot Settings",
+	title = '|T'..NeP.Info.Logo..':10:10|t'..' '..NeP.Info.Nick,
+	subtitle = 'ItemBot Settings',
 	color = NeP.Interface.addonColor,
 	width = 250,
 	height = 350,
 	config = {
-		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Item Bot:", size = 25,align = "Center" },
-		{ type = 'text', text = "Requires to have both "..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = "Center" },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor..'Item Bot:', size = 25,align = 'Center' },
+		{ type = 'text', text = 'Requires to have both '..NeP.Info.Nick..' selected on PE & Master Toggle enabled.', align = 'Center' },
 		{ type = 'rule' },{ type = 'spacer' },
 		-- Open Salvage
-		{  type = "checkbox",  text = "Auto Open Salvage",  key = "OpenSalvage",  default = false },
+		{  type = 'checkbox',  text = 'Auto Open Salvage',  key = 'OpenSalvage',  default = false },
 		{ type = 'rule' },{ type = 'spacer' },
 		-- Mill
-		{ type = "button", text = "Start Milling", width = 230, height = 20, callback = function(self, button)
+		{ type = 'button', text = 'Start Milling', width = 230, height = 20, callback = function(self, button)
 			local _herbsTable = {
 				-- WoD
 				{ ID = 109124, Name = 'Frostweed', Number = 5 },
@@ -37,7 +37,7 @@ NeP.Interface.Items = {
 			acCraft_Run = true
 		end},
 		-- Prospect
-		{ type = "button", text = "Start Prospecting", width = 230, height = 20, callback = function(self, button)
+		{ type = 'button', text = 'Start Prospecting', width = 230, height = 20, callback = function(self, button)
 				local _oresTable = {
 				{ ID = 72092, Name = 'Ghost Iron Ore', Number = 5 },
 				{ ID = 52183, Name = 'Pyrite', Number = 5 },
@@ -66,7 +66,7 @@ NeP.Interface.Items = {
 			acCraft_Run = true
 		end},
 		-- Smelting // REQUIRES TWEAKING ( SOME RECIPES REQUIRE 2 MATS )
-		{ type = "button", text = "Start Smelting", width = 230, height = 20, callback = function(self, button)
+		{ type = 'button', text = 'Start Smelting', width = 230, height = 20, callback = function(self, button)
 			if GetProfessionInfo(8) ~= nil then
 				local _allRows = GetNumTradeSkills()
 				Cast(2656)
@@ -77,7 +77,7 @@ NeP.Interface.Items = {
 							NeP.Core.Print('Smelting: '.._iteamName..' '.._itemRepeatTimes..' times.')
 							SelectTradeSkill(i)
 							DoTradeSkill(i, _itemRepeatTimes)
-							self:SetText("Stop Smelting: (".._iteamName..GetTradeskillRepeatCount()..')')
+							self:SetText('Stop Smelting: ('.._iteamName..GetTradeskillRepeatCount()..')')
 							break
 						elseif (i == _allRows) and (_itemRepeatTimes == 0) then
 							StopTradeSkillRepeat()
@@ -89,7 +89,7 @@ NeP.Interface.Items = {
 			end
 		end},
 		{ type = 'rule' },{ type = 'spacer' },
-		{ type = "button", text = "!Stop", width = 230, height = 20, callback = function(self, button) 
+		{ type = 'button', text = '!Stop', width = 230, height = 20, callback = function(self, button) 
 			acCraft_Run = false 
 			_smelt_Run = false
 		end},
@@ -182,7 +182,7 @@ end
 C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR then
 		if not ProbablyEngine.module.player.combat then
-			if not UnitChannelInfo("player") then
+			if not UnitChannelInfo('player') then
 				if NeP.Extras.BagSpace() > 2 then
 					_autoCraft(_acSpell, _acTable)
 					NeP.Extras.OpenSalvage()
