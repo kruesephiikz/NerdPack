@@ -10,7 +10,13 @@ NeP.Interface.classGUIs[70] = {
 	width = 250,
 	height = 500,
 	config = {
+		-- Keybinds
+		{type = 'text', text = 'Keybinds', align = 'center'},		
+			{type = 'text', text = 'Control: Fist of Justice OR Hammer of Justice', align = 'left'},
+			{type = 'text', text = 'Shift: Light\'s hammer', align = 'left'},
+			{type = 'text', text = 'Alt: Pause Rotation',align = 'left'},
 		-- [[ General ]]
+		{type = 'spacer'},{type = 'rule'},
 		{type = 'text', text = 'General', align = 'center' },
 			-- Buff
 			{ type = 'dropdown',text = 'Buff:', key = 'Buff', list = {
@@ -100,8 +106,20 @@ local Survival = {
 }
 
 local Cooldowns = {
+	-- Seraphim 
+	{'152262', {
+		'player.spell(31884).cooldown < 5',
+		'player.holypower >= 5'
+	}},
 	-- Avenging Wrath Use on cooldown for burst damage.
-	{'31884', '!player.buff(31884)'},
+	{'31884', {
+		'!player.buff(31884)',
+		'player.buff(152262)', -- Seraphim
+	}},
+	{'31884', {
+		'!player.buff(31884)',
+		'!talent(7, 2)', -- Seraphim
+	}},
 	-- Execution Sentence should be used on cooldown against targets that will live long enough to withstand the full duration of the ability.
 	{'114157'}, 
 }
@@ -220,13 +238,25 @@ local ST = {
 	{'879', nil, 'target'},
 }
 
+local Keybinds = {
+	{'pause', 'modifier.alt'},
+	-- Fist of Justice
+	{'105593', 'modifier.control'},
+	-- Hammer of Justice
+	{'105593', 'modifier.control'},
+	-- Light's Hammer
+	{'114158', 'modifier.shift', 'target.ground'},
+}
+
 local outCombat = {
+	{Keybinds},
 	{Buffs},
 	{Seals},
 }
 
 ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retribution'), 
 	{-- In-Combat
+		{Keybinds},
 		{All},
 		{Survival, 'player.health < 100'},
 		-- Rebuke // Interrupt
