@@ -81,19 +81,12 @@ local Dotting = {
 	}, {'!toggle.autoDots', 'toggle.dotEverything'}},
 }
 
-local AoE = {
+local inCombat = {
 	{'2944', 'player.shadoworbs >= 3'}, -- Devouring Plague
 	{'8092'}, -- Mind Blast
 	{'15407', 'player.buff(Insanity)'}, -- Mind Flay
 	{'73510', 'player.buff(Surge of Darkness)'}, -- Mind Spike
-	{'48045'}, -- Mind Sear
-}
-
-local ST = {
-	{'2944', 'player.shadoworbs >= 3'}, -- Devouring Plague
-	{'8092'}, -- Mind Blast
-	{'15407', 'player.buff(Insanity)'}, -- Mind Flay
-	{'73510', 'player.buff(Surge of Darkness)'}, -- Mind Spike
+	{'48045', (function() return NeP.Lib.SAoE(3, 40) end), 'target'}, -- Mind Sear
 	{'15407'},  -- Mind Flay
 } 
 
@@ -112,12 +105,12 @@ ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow
 		{keybinds},
 		{Buffs},
 		{Survival},
-		-- Silece
+		-- Silence
 		{'!15487', 'target.NePinterrupt'},
 		{Cooldowns, 'modifier.cooldowns'},
 		{Dotting},
-		{{-- Sanity Checks
-			{AoE, (function() return NeP.Lib.SAoE(3, 40) end)},
-			{ST, '!modifier.multitarget'}
-		}, {'target.range <= 40', '!player.moving'}}
+		{inCombat, {
+			'target.range <= 40',
+			'!player.moving'
+		}}
 	}, outCombat, lib)
