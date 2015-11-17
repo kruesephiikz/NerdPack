@@ -10,6 +10,11 @@ NeP.Interface.classGUIs[262] = {
 	width = 250,
 	height = 500,
 	config = {
+		{type = 'text', text = 'Keybinds', align = 'center'},		
+			{type = 'text', text = 'Left Control: Earthquake mouseover location', align = 'left'},
+			{type = 'text', text = 'Left Shift: Cleanse on mouseover target', align = 'left'},
+			{type = 'text', text = 'Left Alt: Pause Rotation',align = 'left'},
+		{type = 'spacer'},{type = 'rule'},
 		{type = 'text', text = 'Self Healing', align = 'center'},
 			{type = 'checkspin', text = 'Healthstone', key = 'healthstone', default_spin = 30, default_check = true},
 			{type = 'checkspin', text = 'Healing Stream Totem', key = 'healingstreamtotem', default_spin = 40, default_check = false},
@@ -26,11 +31,6 @@ NeP.Interface.classGUIs[262] = {
 			{type = 'checkbox', default = false, text = 'Earthbind / Earthgrab', key = 'earthbind'},	
 			{type = 'checkbox', default = false, text = 'Thunderstorm', key = 'thunderstorm'},
 			{type = 'checkbox', default = false, text = 'Frostshock', key = 'frostshock', desc = 'Requiers talent (Frozen Power).'},
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'text', text = 'Hotkeys', align = 'center'},		
-			{type = 'text', text = 'Left Control: Earthquake mouseover location', align = 'left'},
-			{type = 'text', text = 'Left Shift: Cleanse on mouseover target', align = 'left'},
-			{type = 'text', text = 'Left Alt: Pause Rotation',align = 'left'},
 	}
 }
 
