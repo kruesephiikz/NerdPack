@@ -64,9 +64,9 @@ function NeP.Lib.SAoE(Units, Distance)
 		-- SAoE
 		elseif peConfig.read('button_states', 'NeP_SAoE', false) then
 			for i=1,#enemieCache do
-				local object = enemieCache[i]
-				if UnitAffectingCombat(object.key) then
-					if object.distance <= Distance then
+				local Obj = enemieCache[i]
+				if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
+					if Obj.distance <= Distance then
 						UnitsTotal = UnitsTotal + 1
 					end
 				end
@@ -194,7 +194,7 @@ function NeP.Lib.AutoDots(Spell, Health, Duration, Distance, Classification)
 	
 	for i=1,#enemieCache do
 		local Obj = enemieCache[i]
-		if UnitAffectingCombat(Obj.key) then
+		if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
 			
 			-- Classification WorkArounds
 			local passThruClassification = false
