@@ -10,7 +10,7 @@ NeP.Interface.classGUIs[70] = {
 	width = 250,
 	height = 500,
 	config = {
-		-- Keybinds
+		-- [[ Keybinds ]]
 		{type = 'text', text = 'Keybinds', align = 'center'},		
 			{type = 'text', text = 'Control: Fist of Justice OR Hammer of Justice', align = 'left'},
 			{type = 'text', text = 'Shift: Light\'s hammer', align = 'left'},
@@ -243,6 +243,7 @@ local ST = {
 }
 
 local Keybinds = {
+	-- Pause
 	{'pause', 'modifier.alt'},
 	-- Fist of Justice
 	{'105593', 'modifier.control'},
