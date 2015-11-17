@@ -39,11 +39,8 @@ NeP.Interface.info = {
 
 			{ type = "text", text = "Automated Movement: ", size = 11, offset = -11 },
 			{ key = 'current_movementStatus', type = "text", text = "Loading...", size = 11, align = "right", offset = 0 },
-
 			{ type = "text", text = "Automated Facing: ", size = 11, offset = -11 },
 			{ key = 'current_facingStatus', type = "text", text = "Loading...", size = 11, align = "right", offset = 0 },
-			{ type = "text", text = "ObjectManager: ", size = 11, offset = -11 },
-			{ key = 'current_OM', type = "text", text = "Loading...", size = 11, align = "right", offset = 0 },
 			{ type = 'spacer' },{ type = 'spacer' },{ type = 'rule' },
 			{ type = "button", text = "Donate", width = 325, height = 20, callback = function()
 				if FireHack then
@@ -65,6 +62,8 @@ NeP.Interface.info = {
 	}
 }
 
+local peRecomemded = NeP.Core.peRecomemded
+local PE_Ver = ProbablyEngine.version
 local _infoCreated = false
 function NeP.Interface.InfoGUI()
 	NeP.Core.BuildGUI('Info', NeP.Interface.info)
@@ -72,15 +71,16 @@ function NeP.Interface.InfoGUI()
 		if not _infoCreated then
 			_infoCreated = true
 			C_Timer.NewTicker(1.00, (function()
+				local pmethod = ProbablyEngine.pmethod or ProbablyEngine.protected.method
+				local CurrentCR = NeP.Core.CurrentCR
 				if InfoWindow.parent:IsShown() then
 				-- General Status
-				InfoWindow.elements.current_Unlocker:SetText(ProbablyEngine.pmethod == nil and ProbablyEngine.protected.method == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. (ProbablyEngine.pmethod or ProbablyEngine.protected.method))
-				InfoWindow.elements.current_PEStatus:SetText(ProbablyEngine.version == NeP.Core.peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
-				InfoWindow.elements.current_PackProfiles:SetText(NeP.Core.CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
+				InfoWindow.elements.current_Unlocker:SetText(pmethod == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. pmethod)
+				InfoWindow.elements.current_PEStatus:SetText(PE_Ver == peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
+				InfoWindow.elements.current_PackProfiles:SetText(CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
 				-- Advanced Status
 				InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
 				InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
-				InfoWindow.elements.current_OM:SetText(ProbablyEngine.protected.method ~= nil and "Limited" or "Advanced")
 			end
 		end), nil)
 	end
