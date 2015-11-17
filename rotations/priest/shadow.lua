@@ -7,7 +7,13 @@ NeP.Interface.classGUIs[258] = {
 	width = 250,
 	height = 500,
 	config = {
+		-- [[ Keybinds ]]
+		{type = 'text', text = 'Keybinds', align = 'center'},		
+			{type = 'text', text = 'Control: ', align = 'left'},
+			{type = 'text', text = 'Shift: ', align = 'left'},
+			{type = 'text', text = 'Alt: Pause Rotation',align = 'left'},
 		-- [[ General Settings ]]
+		{type = 'spacer'},{type = 'rule'},
 		{type = 'header', text = 'General', align = 'center'},
 			{type = 'checkbox', default = true, text = 'Angelic Feather / Body and Soul', key = 'feather'},
 			{type = 'checkbox', default = true, text = 'Levitate', key = 'levitate'},
@@ -76,7 +82,6 @@ local Dotting = {
 }
 
 local AoE = {
-	{'32379', 'target.health <= 20'}, -- SW:D
 	{'2944', 'player.shadoworbs >= 3'}, -- Devouring Plague
 	{'8092'}, -- Mind Blast
 	{'15407', 'player.buff(Insanity)'}, -- Mind Flay
@@ -85,7 +90,6 @@ local AoE = {
 }
 
 local ST = {
-	{'32379', 'target.health <= 20'}, -- SW:D
 	{'2944', 'player.shadoworbs >= 3'}, -- Devouring Plague
 	{'8092'}, -- Mind Blast
 	{'15407', 'player.buff(Insanity)'}, -- Mind Flay
@@ -94,7 +98,8 @@ local ST = {
 } 
 
 local keybinds = {
-	
+	-- Pause
+	{'pause', 'modifier.alt'},
 }
 
 local outCombat = {
