@@ -18,7 +18,7 @@ NeP.Interface.classGUIs[258] = {
 			{type = 'checkbox', default = true, text = 'Angelic Feather / Body and Soul', key = 'feather'},
 			{type = 'checkbox', default = true, text = 'Levitate', key = 'levitate'},
 		-- [[ Survival settings ]]
-		{type = 'spacer'},type = 'rule'},
+		{type = 'spacer'},{type = 'rule'},
 		{type = 'header', text = 'Survival', align = 'center'},
 			{type = 'spinner', text = 'Healthstone HP', key = 'hstone', default = 75},
 			{type = 'spinner', text = 'PW:Shield HP', key = 'shield', default = 60},
