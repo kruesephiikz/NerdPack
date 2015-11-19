@@ -402,11 +402,8 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 	{ -- In-Combat
 		{General},
 		{{ -- Party/Raid
-			{{ -- Dispel
-				{ "77130", (function() return NeP.Lib.Dispell(
-					function() return dispelType == 'Magic' or dispelType == 'Curse' end
-				) end) },
-			}}, 
+			-- Dispel
+			{ "77130", (function() return NeP.Lib.Dispel("77130") end) },
 			{{-- Interrupt
 				{ "57994" }, -- Wind Shear
 			}, "target.NePinterrupt" },

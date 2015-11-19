@@ -558,7 +558,7 @@ local _BorrowedTime = {
 ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discipline'), 
 	{ -- In-Combat
 		{{ -- Party/Raid
-			{ "527", (function() return NeP.Lib.Dispell(function() return dispelType == 'Magic' or dispelType == 'Disease' end) end) },-- Dispell ALl
+			{ "527", (function() return NeP.Lib.Dispel("527") end) },-- Dispell ALl
 			{{ -- Auto Ground ON
 				{ "32375", (function() return _MassDispell() end) }, -- MassDispell
 				{ "62618", _PWBarrier },

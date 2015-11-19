@@ -80,11 +80,8 @@ local inCombat = {
 			"player.form = 0" 
 		}, nil },
 
-	{{-- Dispel
-		{ "88423", (function() return NeP.Lib.Dispell(
-			function() return dispelType == 'Magic' or dispelType == 'curse' end
-		) end) },
-	}},
+	-- Dispell
+	{ "88423", (function() return NeP.Lib.Dispel("88423") end) },
 
 	{{-- Cooldowns
 		{ "29166", "player.mana < 80", "player" }, -- Inervate

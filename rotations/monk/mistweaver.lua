@@ -136,11 +136,8 @@ local inCombatSerpente = {
 		(function() return castBetwenUnits("115313") end)
 	}},
 	
-	{{ -- Dispell all?
-		{ "115450", (function() return NeP.Lib.Dispell(
-			function() return dispelType == 'Magic' or dispelType == 'Posion' or dispelType == 'Disease' end
-		) end) },
-	}},
+	-- Dispell
+	{ "115450", (function() return NeP.Lib.Dispel("115450") end) },
 
 	{{-- Cooldowns
 		{ "116849", "lowest.health <= 25" },-- Life Coccon

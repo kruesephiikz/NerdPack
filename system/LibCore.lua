@@ -146,19 +146,16 @@ local blacklistedDebuffs = {
 	['Displaced Energy'] = ''
 }
 
-function NeP.Lib.Dispell(dispelTypes)
+local LibDispellable = LibStub("LibDispellable-1.0")
+
+function NeP.Lib.Dispel(Spell)
 	if NeP.Core.PeFetch('NePConf', 'Dispell') then
 		for i=1,#friendlyCache do
-			local object = friendlyCache[i]
-			if object.distance <= 40 then
-				for j = 1, 40 do
-					local debuffName, _,_,_, dispelType, duration, expires,_,_,_,_,_,_,_,_,_ = UnitDebuff(object.key, j)
-					if dispelType and dispelTypes then
-						if blacklistedDebuffs[tostring(debuffName)] == nil then
-							ProbablyEngine.dsl.parsedTarget = object.key
-							return true
-						end
-					end
+			local Obj = friendlyCache[i]
+			if Obj.distance <= 40 then
+				if LibDispellable:CanDispelWith(Obj.key, tonumber(GetSpellID(GetSpellName(Spell)))) then
+					ProbablyEngine.dsl.parsedTarget = Obj.key
+					return true
 				end
 			end
 		end

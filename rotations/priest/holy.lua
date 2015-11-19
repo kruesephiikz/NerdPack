@@ -660,11 +660,8 @@ ProbablyEngine.rotation.register_custom(257, NeP.Core.GetCrInfo('Priest - Holy')
 		{ "586", "target.threat >= 80" }, -- Fade
 		{ "#5512", (function() return dynEval("player.health <= " .. PeFetch('NePConfPriestHoly', 'Healthstone')) end) }, -- HEALTHSTONE 
 		{ All },
-		{{ -- Dispell all
-			{ "527", (function() return NeP.Lib.Dispell(
-				function() return dispelType == 'Magic' or dispelType == 'Disease' end
-			) end) },
-		}},
+		-- Dispell
+		{ "527", (function() return NeP.Lib.Dispel("527") end) },
 		{ MoveFast, -- We only want to run these on unlockers that can cast on unit.ground
 			(function()
 				if FireHack or oexecute then
