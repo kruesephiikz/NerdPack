@@ -1,6 +1,6 @@
 local _addonColor = '|cff'..NeP.Interface.addonColor
 
-NeP.Interface.info = {
+NeP.Core.BuildGUI('Info', {
 	key = "npinfo",
 	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
 	subtitle = "Information",
@@ -60,28 +60,23 @@ NeP.Interface.info = {
 				NeP.Interface.InfoGUI()
 			end },
 	}
-}
+})
 
 local peRecomemded = NeP.Core.peRecomemded
 local PE_Ver = ProbablyEngine.version
 local _infoCreated = false
-function NeP.Interface.InfoGUI()
-	NeP.Core.BuildGUI('Info', NeP.Interface.info)
-	local InfoWindow = NeP.Core.getGUI('Info')
-		if not _infoCreated then
-			_infoCreated = true
-			C_Timer.NewTicker(1.00, (function()
-				local pmethod = ProbablyEngine.pmethod or ProbablyEngine.protected.method
-				local CurrentCR = NeP.Core.CurrentCR
-				if InfoWindow.parent:IsShown() then
-				-- General Status
-				InfoWindow.elements.current_Unlocker:SetText(pmethod == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. pmethod)
-				InfoWindow.elements.current_PEStatus:SetText(PE_Ver == peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
-				InfoWindow.elements.current_PackProfiles:SetText(CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
-				-- Advanced Status
-				InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
-				InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
-			end
-		end), nil)
+local InfoWindow = NeP.Core.getGUI('Info')
+
+C_Timer.NewTicker(1.00, (function()
+	local pmethod = ProbablyEngine.pmethod or ProbablyEngine.protected.method
+	local CurrentCR = NeP.Core.CurrentCR
+	if InfoWindow.parent:IsShown() then
+		-- General Status
+		InfoWindow.elements.current_Unlocker:SetText(pmethod == nil and "|cffC41F3BYou're not Unlocked, please use an unlocker." or "|cff00FF96You're Unlocked, Using: ".. pmethod)
+		InfoWindow.elements.current_PEStatus:SetText(PE_Ver == peRecomemded and "|cff00FF96You're using the recommeded PE version." or "|cffC41F3BYou're not using the recommeded PE version.")
+		InfoWindow.elements.current_PackProfiles:SetText(CurrentCR and "|cff00FF96Currently using MTS Profiles" or "|cffC41F3BNot using MTS Profiles")
+		-- Advanced Status
+		InfoWindow.elements.current_movementStatus:SetText((FireHack or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoMove') and "|cff00FF96Able" or "|cffC41F3BUnable")
+		InfoWindow.elements.current_facingStatus:SetText((FireHack or oexecute or WOWSX_ISLOADED) and NeP.Core.PeFetch('NePConf', 'AutoFace') and "|cff00FF96Able" or "|cffC41F3BUnable")
 	end
-end
+end), nil)

@@ -4,7 +4,84 @@ local DiesalGUI = LibStub("DiesalGUI-1.0")
 local DiesalMenu = LibStub("DiesalMenu-1.0")
 local SharedMedia = LibStub("LibSharedMedia-3.0")
 
--- Get RGB colors
+--[[-----------------------------------------------
+** GUIs handler **
+DESC: Handles if a GUI Should be Created.
+
+Build By: MTS
+---------------------------------------------------]]
+local _openPEGUIs = {}
+function NeP.Core.BuildGUI(name, _table)
+	local name = tostring(name)
+	if _openPEGUIs[name] == nil then
+		_openPEGUIs[name] = ProbablyEngine.interface.buildGUI(_table)
+		_openPEGUIs[name].parent:Hide()
+	end
+end
+
+--[[-----------------------------------------------
+** GUIs handler **
+DESC: Handles if a GUI Should be Shown/Hidden.
+
+Build By: MTS
+---------------------------------------------------]]
+function NeP.Core.displayGUI(name)
+	local name = tostring(name)
+	if _openPEGUIs[name] ~= nil then
+		-- If is showing then hide it
+		if _openPEGUIs[name].parent:IsShown() then
+			_openPEGUIs[name].parent:Hide()
+		else -- Show it
+			_openPEGUIs[name].parent:Show()
+		end
+	end
+end
+
+--[[-----------------------------------------------
+** GUIs handler **
+DESC: Returns the GUIs table.
+
+Build By: MTS
+---------------------------------------------------]]
+function NeP.Core.getGUI(name)
+	local name = tostring(name)
+	return _openPEGUIs[name]
+end
+
+--[[-----------------------------------------------
+	** Class GUI **
+DESC: Decide wich class/spec we're then build ONLY the GUI for
+That class.
+
+Build By: MTS
+---------------------------------------------------]]
+function NeP.Interface.ClassGUI()
+	if GetSpecialization() then
+		local _Spec = GetSpecializationInfo(GetSpecialization())
+		if NeP.Interface.classGUIs[_Spec] ~= nil then
+			if _openPEGUIs[tostring(_Spec)] == nil then
+				NeP.Core.BuildGUI(tostring(_Spec), NeP.Interface.classGUIs[_Spec])
+			else
+				NeP.Core.displayGUI(tostring(_Spec))
+			end
+		end
+	end
+end
+
+-- Creare class config to avoid nil keys
+ProbablyEngine.listener.register("PLAYER_ENTERING_WORLD", function(...)
+	NeP.Interface.ClassGUI()
+end)
+ProbablyEngine.listener.register("ACTIVE_TALENT_GROUP_CHANGED", function(...)
+	NeP.Interface.ClassGUI()
+end)
+
+--[[-----------------------------------------------
+** RBG Colors **
+DESC: Takes a color name and returns its RGB.
+
+Build By: MTS
+---------------------------------------------------]]
 local _RBGColors = {
 	['black'] = { r = 0.00, g = 0.00, b = 0.00 },
 	['white'] = { r = 1.00, g = 1.00, b = 1.00 },
@@ -18,41 +95,31 @@ local function _getRGB(color)
 	return _RBGColors[color].r, _RBGColors[color].g, _RBGColors[color].b
 end
 
+--[[-----------------------------------------------
+** text Color **
+DESC: Decides wich color to use for text.
+
+Build By: MTS
+---------------------------------------------------]]
 local bC_R, bC_G, bC_B = _getRGB(NeP.Core.PeFetch('NePConf', 'NePFrameColor'))
-local textColor = function() 
+local function textColor() 
 	if NeP.Core.PeFetch('NePConf', 'NePFrameColor') ~= "black" then
 		return _getRGB('black')
-	else
-		return _getRGB('white')
-	end
+	else return _getRGB('white') end
 end
 
-local _openPEGUIs = {}
-NeP.Core.BuildGUI = function(gui, _table)
-	local gui = tostring(gui)
-	if _openPEGUIs[gui] ~= nil then
-		if _openPEGUIs[gui].parent:IsShown() then
-			_openPEGUIs[gui].parent:Hide()
-		else
-			_openPEGUIs[gui].parent:Show()
-		end
-	else
-		_openPEGUIs[gui] = ProbablyEngine.interface.buildGUI(_table)
-	end
-end
-
-NeP.Core.getGUI = function(gui)
-	return _openPEGUIs[gui]
-end
-
-NeP.Interface.addText = function(parent)
+ function NeP.Interface.addText(parent)
 	local text = parent:CreateFontString(nil, "OVERLAY")
 	text:SetFont("Fonts\\FRIZQT__.TTF", 15)
 	text:SetTextColor(textColor())
 	return text
 end
+--[[-----------------------------------------------
+** DiesalGUI Object Constructor **
+DESC: Creates an object for DiesalGUI.
 
--- Work Around outdated PE's
+Build By: MTS
+---------------------------------------------------]]
 local statusBarStylesheet = {
 	['frame-texture'] = {
 		type		= 'texture',
@@ -64,7 +131,6 @@ local statusBarStylesheet = {
 		offset		= 0,
 	}
 }
-
 
 DiesalGUI:RegisterObjectConstructor("NePStatusBar", function()
 	local self  = DiesalGUI:CreateObjectBase(Type)
@@ -110,7 +176,7 @@ DiesalGUI:RegisterObjectConstructor("NePStatusBar", function()
 	return self
 end, 1)
 
-NeP.Interface.addButton = function(parent)
+function NeP.Interface.addButton(parent)
 	local Button = CreateFrame("Button", nil, parent)
 	Button:SetWidth(100)
 	Button:SetHeight(30)
@@ -137,7 +203,7 @@ NeP.Interface.addButton = function(parent)
 	return Button
 end
 
-NeP.Interface.addScrollFrame = function(parent)
+function NeP.Interface.addScrollFrame(parent)
 	local scrollframe = CreateFrame("ScrollFrame", nil, parent) 
 	scrollframe.texture = scrollframe:CreateTexture() 
 	scrollframe.texture:SetAllPoints() 
@@ -166,7 +232,7 @@ NeP.Interface.addScrollFrame = function(parent)
 	return scrollframe
 end
 
-NeP.Interface.addFrame = function(parent)
+function NeP.Interface.addFrame(parent)
 	local Frame = CreateFrame("Frame", nil, parent)
 	Frame.texture = Frame:CreateTexture() 
 	Frame.texture:SetAllPoints() 
@@ -174,7 +240,7 @@ NeP.Interface.addFrame = function(parent)
 	return Frame
 end
 
-NeP.Interface.addCheckButton = function(parent)
+function NeP.Interface.addCheckButton(parent)
 	local createCheckBox = CreateFrame("CheckButton", "UICheckButtonTemplateTest", parent, "UICheckButtonTemplate")
 	createCheckBox:ClearAllPoints();
 	createCheckBox:SetSize(15, 15)

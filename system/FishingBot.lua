@@ -31,24 +31,20 @@ DESC: Gets returned to PEs build GUI to create it.
 
 Build By: MTS
 ---------------------------------------------------]]
-NeP.Interface.Fishing = {
+NeP.Core.BuildGUI('fishingBot', {
 	key = "NePFishingConf",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
-	subtitle = "Fishing Settings",
+	subtitle = "Fishing Bot Settings",
 	color = NeP.Interface.addonColor,
 	width = 250,
 	height = 300,
 	config = {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Fishing Bot:", size = 25, align = "Center"},
-		{ type = 'text', text = "Requires FireHack", align = "Center" },
+		{ type = 'text', text = "|cfffd1c15[Warning]|r Requires FireHack", align = "Center" },
+		-- [[ Settings ]]
 		{ type = 'rule' },{ type = 'spacer' },
-		{ 
-			type = "dropdown",
-			text = "Bait:", 
-			key = "bait",
-			width = 170,
-			list = {
+			{ type = "dropdown", text = "Bait:", key = "bait", width = 170, list = {
 				{text = "None", key = "none"},	
 				{text = "Jawless Skulker", key = "jsb"},
 				{text = "Fat Sleeper", key = "fsb"},
@@ -57,69 +53,40 @@ NeP.Interface.Fishing = {
 				{text = "Sea Scorpion", key = "ssb"},
 				{text = "Abyssal Gulper Eel", key = "ageb"},
 				{text = "Blackwater Whiptail", key = "bwb"},
-			}, 
-			default = "none" 
-		},
-		{
-			type = "checkbox", 
-			text = "Use Fishing Hat", 
-			key = "FshHat", 
-			default = true, 
-		},
-		{
-			type = "checkbox", 
-			text = "Use Fishing Poles", 
-			key = "FshPole", 
-			default = true, 
-		},
-		{
-			type = "checkbox",
-			text = "Use Fish Hooks",
-			key = "ApplyFishHooks",
-			default = true,
-		},
-		{
-			type = "checkbox",
-			text = "Use Bladebone Hooks",
-			key = "BladeBoneHook",
-			default = false,
-		},
-		{  
-			type = "checkbox",  
-			text = "Destroy Lunarfall Carp",  
-			key = "LunarfallCarp",  
-			default = false,  
-		},
-		
-		{ type = 'rule' },{ type = 'spacer' },
-		-- Timer
-		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Running For: ", size = 11, offset = -11 },
-		{ key = 'current_Time', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-		-- Looted Items Counter
-		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Looted Items: ", size = 11, offset = -11 },
-		{ key = 'current_Loot', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-		-- Predicted Average Items Per Hour
-		{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Average Items Per Hour: ", size = 11, offset = -11 },
-		{ key = 'current_average', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-		
-		-- Start Button
+			}, default = "none" },
+			{ type = "checkbox", text = "Use Fishing Hat", key = "FshHat", default = true },
+			{ type = "checkbox", text = "Use Fishing Poles", key = "FshPole", default = true },
+			{ type = "checkbox", text = "Use Fish Hooks", key = "ApplyFishHooks", default = true },
+			{ type = "checkbox", text = "Use Bladebone Hooks", key = "BladeBoneHook", default = false },
+			{  type = "checkbox",  text = "Destroy Lunarfall Carp", key = "LunarfallCarp", default = false },
+		-- [[ Timer ]]
+			{ type = 'rule' },{ type = 'spacer' },
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Running For: ", size = 11, offset = -11 },
+			{ key = 'current_Time', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			-- Looted Items Counter
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Looted Items: ", size = 11, offset = -11 },
+			{ key = 'current_Loot', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			-- Predicted Average Items Per Hour
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Average Items Per Hour: ", size = 11, offset = -11 },
+			{ key = 'current_average', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		-- [[ Start Button ]]
 		{ type = "spacer" },
-		{ type = "button", text = "Start Fishing", width = 230, height = 20, callback = function(self, button)
-			_fishRun = not _fishRun
-			if _fishRun then
-				self:SetText("Stop Fishing")
-				local currentTime = GetTime()
-				_timeStarted = currentTime
-				_Lootedcounter = 0
-			else
-				self:SetText("Start Fishing")
-				JumpOrAscendStart() -- Jump to stop channeling.
-				equipNormalGear()
-				_timeStarted = nil
-			end
-		end},
+			{ type = "button", text = "Start Fishing", width = 230, height = 20, callback = function(self, button)
+				_fishRun = not _fishRun
+				if _fishRun then
+					self:SetText("Stop Fishing")
+					local currentTime = GetTime()
+					_timeStarted = currentTime
+					_Lootedcounter = 0
+				else
+					self:SetText("Start Fishing")
+					JumpOrAscendStart() -- Jump to stop channeling.
+					equipNormalGear()
+					_timeStarted = nil
+				end
+			end},
 	}	
-}
+})
 
 --[[-----------------------------------------------
 ** ItemInBag **
@@ -458,42 +425,32 @@ local function FormatTime( seconds )
 	return firstrow .. secondrow .. thirdrow
 end
 
-local _fshCreated = false
-function NeP.Interface.FishingGUI()
-	NeP.Core.BuildGUI('fishing', NeP.Interface.Fishing)
-	local fshGUI = NeP.Core.getGUI('fishing')
-	
-	if not _fshCreated then
-		_fshCreated = true
+local fshGUI = NeP.Core.getGUI('fishing')
+C_Timer.NewTicker(0.5, (function()
+	if NeP.Core.CurrentCR then
 		
-		C_Timer.NewTicker(0.5, (function()
-			if NeP.Core.CurrentCR then
-				
-				-- Update GUI Elements
-				if _timeStarted ~= nil then
-					fshGUI.elements.current_Time:SetText(FormatTime(NeP.Core.Round(GetTime() - _timeStarted)))
-					fshGUI.elements.current_Loot:SetText(_Lootedcounter)
+		-- Update GUI Elements
+		if _timeStarted ~= nil then
+			fshGUI.elements.current_Time:SetText(FormatTime(NeP.Core.Round(GetTime() - _timeStarted)))
+			fshGUI.elements.current_Loot:SetText(_Lootedcounter)
+		end
+					
+		-- Run Functions
+		if NeP.Extras.BagSpace() > 2 then
+			_CarpDestruction()
+			if _fishRun then
+				_equitHat()
+				_equitPole()
+				_AutoBait()
+				if _FishHook() then return end -- If it is true we stop because we have to wait.
+				if _BladeBone() then return end -- Same here
+				if FireHack then
+					-- Only Works with FH atm, due to object handling...
+					-- (if someday more unlockers alow this then abstract FH only stuff)
+					_startFish()
 				end
-				
-				-- Run Functions
-				if NeP.Extras.BagSpace() > 2 then
-					_CarpDestruction()
-					if _fishRun then
-						_equitHat()
-						_equitPole()
-						_AutoBait()
-						if _FishHook() then return end -- If it is true we stop because we have to wait.
-						if _BladeBone() then return end -- Same here
-						if FireHack then
-							-- Only Works with FH atm, due to object handling...
-							-- (if someday more unlockers alow this then abstract FH only stuff)
-							_startFish()
-						end
-					end
-				end
-				
 			end
-		end), nil)
-		
+		end
+
 	end
-end
+end), nil)

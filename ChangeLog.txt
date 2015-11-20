@@ -1,3 +1,23 @@
+-> 6.2.2.1-Stable
+@MrTheSoulz released this on 15/11/2015
+
+* Rewrite Paladin Retribution CR.
+* Overwrite PE's LoS.
+* Redesigned ObjectManager.
+* Priest-Holy Redesign.
+* NeP is now under MIT license
+* NeP_frame improvements.
+* Rogue (All) tweaks.
+* Monk Windwalker Tweaks.
+* Initial Monk Brewmaster (Only ground work...)
+* Shaman-Ele fixes.
+* GUI's improvements.
+* Improved Fishing Bot.
+* Code cleanups and optmizations.
+
+
+-------------------------------------------------
+
 -> 6.2.1.1-Beta7.3
 @MrTheSoulz released this on 10/11/2015
 
@@ -23,7 +43,7 @@
 -> 6.2.1.1-Beta5.1
 @MrTheSoulz released this ...
 
-Nep Frame is now dragable & saves its location.
+* Nep Frame is now dragable & saves its location.
 
 
 -------------------------------------------------

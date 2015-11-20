@@ -7,7 +7,7 @@ local _tsText, _tsID, _tsNumber = nil, nil, nil
 local _smelt_Run = false
 --local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice = GetItemInfo(_smeltingTable[i].ID)
 
-NeP.Interface.Items = {
+NeP.Core.BuildGUI('itemBot', {
 	key = 'NePItemConf',
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..' '..NeP.Info.Nick,
@@ -95,32 +95,7 @@ NeP.Interface.Items = {
 		end},
 		
 	},
-}
-
-function NeP.Interface.itemsBotGUI()
-	-- If a frame has not been created, create one...
-	if not NeP_OpenConfigWindow then
-		ConfigWindow = NeP.Core.PeBuildGUI(NeP.Interface.Items)
-		-- This is so the window isn't opened twice :D
-		NeP_OpenConfigWindow = true
-		NeP_ShowingConfigWindow = true
-		ConfigWindow.parent:SetEventListener('OnClose', function()
-			NeP_OpenConfigWindow = false
-			NeP_ShowingConfigWindow = false
-		end)
-	
-	-- If a frame has been created and its showing, hide it.
-	elseif NeP_OpenConfigWindow == true and NeP_ShowingConfigWindow == true then
-		ConfigWindow.parent:Hide()
-		NeP_ShowingConfigWindow = false
-	
-	-- If a frame has been created and its hiding, show it.
-	elseif NeP_OpenConfigWindow == true and NeP_ShowingConfigWindow == false then
-		ConfigWindow.parent:Show()
-		NeP_ShowingConfigWindow = true
-	
-	end
-end
+})
 
 local function _autoCraft(spell, _table)
 	if acCraft_Run then

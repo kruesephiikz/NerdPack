@@ -309,7 +309,7 @@ LibDraw.Sync(function()
 
 end)
 
-NeP.Interface.Overlays = {
+NeP.Core.BuildGUI('Overlays', {
 	key = "NePconf_Overlays",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
@@ -349,8 +349,4 @@ NeP.Interface.Overlays = {
 			{ type = "checkbox", text = "Display WorldBoss Units", key = "objectsWorldBoss", default = false },
 			{ type = "checkbox", text = "Display Elite Units", key = "objectsElite", default = false },
 	}
-}
-
-function NeP.Interface.OverlaysGUI()
-	NeP.Core.BuildGUI('Overlays', NeP.Interface.Overlays)
-end
+})

@@ -78,7 +78,7 @@ function StatusGUI_RUN()
 			fishingButton:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			fishingButton:SetScript('OnClick', function(self)
 				_handleFrames()
-				NeP.Interface.FishingGUI()
+				NeP.Core.displayGUI('fishingBot')
 			end)
 			
 			-- ObjectManager
@@ -100,7 +100,7 @@ function StatusGUI_RUN()
 			ITButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			ITButtom:SetScript('OnClick', function(self)
 				_handleFrames()
-				NeP.Interface.FishingGUI()
+				NeP.Core.displayGUI('itemBot')
 			end)
 			
 			-- Information
@@ -111,7 +111,7 @@ function StatusGUI_RUN()
 			InfoButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			InfoButtom:SetScript('OnClick', function(self)
 				_handleFrames()
-				NeP.Interface.InfoGUI()
+				NeP.Core.displayGUI('Info')
 			end)
 			
 			-- Class Settings
@@ -133,7 +133,7 @@ function StatusGUI_RUN()
 			SettingsButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			SettingsButtom:SetScript('OnClick', function(self)
 				_handleFrames()
-				NeP.Interface.ConfigGUI()
+				NeP.Core.displayGUI('Settings')
 			end)
 			
 			-- Overlays
@@ -144,7 +144,7 @@ function StatusGUI_RUN()
 			OverlaysButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			OverlaysButtom:SetScript('OnClick', function(self)
 				_handleFrames()
-				NeP.Interface.OverlaysGUI()
+				NeP.Core.displayGUI('Overlays')
 			end)
 			
 			-- Dummy Testing

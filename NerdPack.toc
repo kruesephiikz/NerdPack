@@ -27,6 +27,7 @@ system\Extras.lua
 system\Overlays.lua
 system\FishingBot.lua
 system\ItemBot.lua
+system\petBot.lua
 interface\splash.lua
 interface\info.lua
 interface\config.lua
