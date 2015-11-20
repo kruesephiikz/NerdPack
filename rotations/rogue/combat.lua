@@ -129,7 +129,7 @@ local ST = {
 	{{-- Auto Dotting
 		{'Rupture', {
 			'player.combopoints >= 5',
-			(function() return NeP.Lib.AutoDots('Rupture', 100, 7, 5) end)
+			(function() return NeP.Core.AutoDots('Rupture', 100, 7, 5) end)
 		}, 'target' },
 	}, 'toggle.dotEverything' },
 	{ 'Ambush' },
@@ -185,7 +185,7 @@ ProbablyEngine.rotation.register_custom(260, NeP.Core.GetCrInfo('Rogue - Combat'
 			}},
 			{'Evasion', 'player.health < 30'},
 			{Cooldowns, 'modifier.cooldowns' },
-			{AoE, (function() return NeP.Lib.SAoE(6, 10) end) },
+			{AoE, (function() return NeP.Core.SAoE(6, 10) end) },
 			{ST},
 		}, {'!player.buff(Vanish)', 'target.range < 7'} },
 	}, outCombat, exeOnLoad)

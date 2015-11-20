@@ -75,8 +75,8 @@ local Moving = {
 
 local inCombat = {
 	-- AoE
-    { '1449', (function() return NeP.Lib.SAoE(5, 10) end)},-- Arcane Explosion
-    { '120', (function() return NeP.Lib.SAoE(5, 10) end)},-- Cone of Cold
+    { '1449', (function() return NeP.Core.SAoE(5, 10) end)},-- Arcane Explosion
+    { '120', (function() return NeP.Core.SAoE(5, 10) end)},-- Cone of Cold
 	
 	-- Rotation
     { '114923', {'player.debuff(36032).count >= 4', 'target.debuff(114923).duration <= 3.6'}},-- Nether Tempest

@@ -127,7 +127,7 @@ local _totems = {
 			(function() return PeFetch('NePConfShamanEle', 'frostshock') end) 
 		}},  
 		{'Thunderstorm', (function() return PeFetch('NePConfShamanEle', 'thunderstorm') end)}
-	}, (function() return NeP.Lib.SAoE(2, 8) end)},
+	}, (function() return NeP.Core.SAoE(2, 8) end)},
 }
 
 local _Moving = {
@@ -147,7 +147,7 @@ local _Moving = {
 		'target.ttd >= 10'
 	}},
 	{{ -- Ancestral Swiftness
-		{'Chain Lightning', (function() return NeP.Lib.SAoE(4, 8) end)},
+		{'Chain Lightning', (function() return NeP.Core.SAoE(4, 8) end)},
 		{'Lava Burst'},
 		{'Elemental Blast'},
 	}, 'player.buff(Ancestral Swiftness)'},
@@ -211,10 +211,10 @@ ProbablyEngine.rotation.register_custom(262, NeP.Core.GetCrInfo('Shamman - Eleme
 			{_Survival, 'player.health < 100'},
 			{_totems, 'toggle.totems'},
 			{'Earth Shock', { 
-				(function() return NeP.Lib.AutoDots('Earth Shock', 100, 0, 40, 'elite') end),
+				(function() return NeP.Core.AutoDots('Earth Shock', 100, 0, 40, 'elite') end),
 				'toggle.autoDots'
 			}},
-			{_AoE, (function() return NeP.Lib.SAoE(8, 5) end)},
+			{_AoE, (function() return NeP.Core.SAoE(8, 5) end)},
 			{_Cleave, 'toggle.cleavemode'},
 			{ST},
 		}, {'!player.moving', --[[INSERT BUFF CHECK FOR WOLF]] } },

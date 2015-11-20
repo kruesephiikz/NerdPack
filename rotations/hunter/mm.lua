@@ -128,12 +128,12 @@ local inCombat = {
 	{{ -- Steady Focus // TALENT
 		{'Steady Shot', 'player.buff(177667).duration < 3', 'target'}, -- Cobra Shot
 	}, {'talent(4,1)', 'lastcast(77767)'} },
-	{'157708', (function() return NeP.Lib.AutoDots('157708', 35) end)},-- Kill Shot
+	{'157708', (function() return NeP.Core.AutoDots('157708', 35) end)},-- Kill Shot
 	{'53209'}, -- Chimaera Shot
 	{'117050'}, -- Glaive Toss // TALENT
 	{{ -- AoE
 		{'2643', 'player.focus > 60', 'target'}, -- Multi-Shot
-	}, (function() return NeP.Lib.SAoE(3, 40) end)},
+	}, (function() return NeP.Core.SAoE(3, 40) end)},
 	{'19434', 'player.focus > 60', 'target'}, -- Aimed Shot
 	{'163485', '!player.moving', 'target'}, -- Focusing Shot // TALENT
 	{'Steady Shot'}

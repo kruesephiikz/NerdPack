@@ -75,7 +75,7 @@ ProbablyEngine.rotation.register_custom(71, NeP.Core.GetCrInfo('Warrior - Arms')
 		
   		{ Survival },
   		{ Cooldowns, "modifier.cooldowns" },
-  		{ AoE, (function() return NeP.Lib.SAoE(3, 40) end) },
+  		{ AoE, (function() return NeP.Core.SAoE(3, 40) end) },
 		
 		{ inCombat_Battle, "player.stance = 1" },
 		{ inCombat_Defensive, "player.stance = 2" },

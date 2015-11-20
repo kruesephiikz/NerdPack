@@ -82,21 +82,21 @@ LibDraw.Sync(function()
 				end
 				-- Player Melee Range
 				if NeP.Core.PeFetch("NePconf_Overlays", "PlayerMRange") then
-					if NeP.Core.Distance('player', 'target') <= NeP.Lib.UnitAttackRange('player', 'target', 'melee') then
+					if NeP.Core.Distance('player', 'target') <= NeP.Core.UnitAttackRange('player', 'target', 'melee') then
 						LibDraw.SetColor(101, 255, 87, 70)
 					else
 						LibDraw.SetColor(255, 87, 87, 70)
 					end
-					LibDraw.Circle(playerX, playerY, playerZ, NeP.Lib.UnitAttackRange('player', 'target', 'melee'))
+					LibDraw.Circle(playerX, playerY, playerZ, NeP.Core.UnitAttackRange('player', 'target', 'melee'))
 				end
 				-- Player Caster Range
 				if NeP.Core.PeFetch("NePconf_Overlays", "PlayerCRange") then
-					if NeP.Core.Distance('player', 'target') <= NeP.Lib.UnitAttackRange('player', 'target', 'ranged') then
+					if NeP.Core.Distance('player', 'target') <= NeP.Core.UnitAttackRange('player', 'target', 'ranged') then
 						LibDraw.SetColor(101, 255, 87, 50)
 					else
 						LibDraw.SetColor(255, 87, 87, 50)
 					end
-					LibDraw.Circle(playerX, playerY, playerZ, NeP.Lib.UnitAttackRange('player', 'target', 'ranged'))
+					LibDraw.Circle(playerX, playerY, playerZ, NeP.Core.UnitAttackRange('player', 'target', 'ranged'))
 				end
 				-- Target Infront Cone
 				if NeP.Core.PeFetch("NePconf_Overlays", "TargetCone") then
@@ -105,21 +105,21 @@ LibDraw.Sync(function()
 				end
 				-- Target Melee Range
 				if NeP.Core.PeFetch("NePconf_Overlays", "TargetMRange") then
-					if NeP.Core.Distance('player', 'target') <= NeP.Lib.UnitAttackRange('player', 'target', 'melee') then
+					if NeP.Core.Distance('player', 'target') <= NeP.Core.UnitAttackRange('player', 'target', 'melee') then
 						LibDraw.SetColor(101, 255, 87, 70)
 					else
 						LibDraw.SetColor(255, 87, 87, 70)
 					end
-					LibDraw.Circle(targetX, targetY, targetZ, NeP.Lib.UnitAttackRange('player', 'target', 'melee'))
+					LibDraw.Circle(targetX, targetY, targetZ, NeP.Core.UnitAttackRange('player', 'target', 'melee'))
 				end
 				-- Target Caster Range
 				if NeP.Core.PeFetch("NePconf_Overlays", "TargetCRange") then
-					if NeP.Core.Distance('player', 'target') <= NeP.Lib.UnitAttackRange('player', 'target', 'ranged') then
+					if NeP.Core.Distance('player', 'target') <= NeP.Core.UnitAttackRange('player', 'target', 'ranged') then
 						LibDraw.SetColor(101, 255, 87, 50)
 					else
 						LibDraw.SetColor(255, 87, 87, 50)
 					end
-					LibDraw.Circle(targetX, targetY, targetZ, NeP.Lib.UnitAttackRange('player', 'target', 'ranged'))
+					LibDraw.Circle(targetX, targetY, targetZ, NeP.Core.UnitAttackRange('player', 'target', 'ranged'))
 				end
 			end
 			

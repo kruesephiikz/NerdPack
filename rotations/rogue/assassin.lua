@@ -125,7 +125,7 @@ local inCombat = {
 	{{-- Auto Dotting
 		{'1943', { -- Rupture
 			'player.combopoints >= 5',
-			(function() return NeP.Lib.AutoDots('1943', 100, 7, 5) end)
+			(function() return NeP.Core.AutoDots('1943', 100, 7, 5) end)
 		}, 'target' },
 	}, 'toggle.dotEverything' },
 	{{ -- Toggle off
@@ -138,7 +138,7 @@ local inCombat = {
 	{ '111240', 'target.health <= 35', 'target' }, -- Dispatch
 	{ '111240', 'player.buff(121153)', 'target' }, -- Dispatch w/ Proc Blindside
 	-- AoE
-		{ '51723', (function() return NeP.Lib.SAoE(3, 10) end)}, -- Fan of Knives
+		{ '51723', (function() return NeP.Core.SAoE(3, 10) end)}, -- Fan of Knives
 	{ '1329', 'target.health >= 35', 'target' }, -- Mutilate
 }
 

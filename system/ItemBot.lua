@@ -136,7 +136,7 @@ local function _autoCraft(spell, _table)
 	end
 end
 
-function NeP.Extras.OpenSalvage()
+function NeP.Core.OpenSalvage()
 	local _salvageTable = {
 		{ ID = 114116, Name = 'Bag of Salvaged Goods' },
 		{ ID = 114119, Name = 'Crate of Salvage' },
@@ -158,9 +158,9 @@ C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR then
 		if not ProbablyEngine.module.player.combat then
 			if not UnitChannelInfo('player') then
-				if NeP.Extras.BagSpace() > 2 then
+				if NeP.Core.BagSpace() > 2 then
 					_autoCraft(_acSpell, _acTable)
-					NeP.Extras.OpenSalvage()
+					NeP.Core.OpenSalvage()
 				end
 			end
 		end

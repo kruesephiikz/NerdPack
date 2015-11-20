@@ -195,7 +195,7 @@ ProbablyEngine.rotation.register_custom(73, NeP.Core.GetCrInfo('Warrior - Protec
   		{ "Shield Slam", "player.buff(Sword and Board)", "target" },
   		{ Survival },
   		{ Cooldowns, "modifier.cooldowns" },
-  		{ AoE, (function() return NeP.Lib.SAoE(3, 40) end) },
+  		{ AoE, (function() return NeP.Core.SAoE(3, 40) end) },
 		{{ -- Stance 1
 			{ inCombat_Gladiator, "talent(7,3)" },
 			{ inCombat_Battle, "!talent(7,3)" },

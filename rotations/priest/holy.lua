@@ -594,14 +594,14 @@ local SoloCombat = {
 	}, "player" },
 	
 	{{-- Auto Dotting
-		{ "32379", (function() return NeP.Lib.AutoDots('32379', 20) end) }, -- SW:D
-		{ "589", (function() return NeP.Lib.AutoDots('589', 100) end) }, -- SW:P 
+		{ "32379", (function() return NeP.Core.AutoDots('32379', 20) end) }, -- SW:D
+		{ "589", (function() return NeP.Core.AutoDots('589', 100) end) }, -- SW:P 
 	}, "toggle.dotEverything" },
 	
 	-- DPS
 		
 		-- AoE
-		{ "48045", (function() return NeP.Lib.SAoE(3, 10) end), "target" }, -- mind sear
+		{ "48045", (function() return NeP.Core.SAoE(3, 10) end), "target" }, -- mind sear
 			
 		-- Single
 		{ "129250", {"target.range <= 30", "target.enemie"}, "target" }, -- PW:S
@@ -661,7 +661,7 @@ ProbablyEngine.rotation.register_custom(257, NeP.Core.GetCrInfo('Priest - Holy')
 		{ "#5512", (function() return dynEval("player.health <= " .. PeFetch('NePConfPriestHoly', 'Healthstone')) end) }, -- HEALTHSTONE 
 		{ All },
 		-- Dispell
-		{ "527", (function() return NeP.Lib.Dispel("527") end) },
+		{ "527", (function() return NeP.Core.Dispel("527") end) },
 		{ MoveFast, -- We only want to run these on unlockers that can cast on unit.ground
 			(function()
 				if FireHack or oexecute then

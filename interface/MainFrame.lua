@@ -155,7 +155,7 @@ function StatusGUI_RUN()
 			DummyButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			DummyButtom:SetScript('OnClick', function(self)
 				_handleFrames()
-				NeP.Extras.dummyTest()
+				NeP.Core.dummyTest()
 			end)
 			
 			-- Hide everything

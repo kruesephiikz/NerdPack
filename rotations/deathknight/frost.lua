@@ -181,11 +181,11 @@ ProbablyEngine.rotation.register_custom(251, NeP.Core.GetCrInfo('Deathknight - F
 		{ "Soul Reaper", "target.health < 35", "target" },
 		{ _plagueLeech },
 		{{ -- 1 Hand
-			{_oneHand_AoE, (function() return NeP.Lib.SAoE(3, 10) end)},
+			{_oneHand_AoE, (function() return NeP.Core.SAoE(3, 10) end)},
 			{_oneHand_ST}
 		}, "player.onehand" },
 		{{ -- 2 Hand
-			{_twoHand_AoE, (function() return NeP.Lib.SAoE(3, 10) end)},
+			{_twoHand_AoE, (function() return NeP.Core.SAoE(3, 10) end)},
 			{_twoHand_ST}
 		}, "player.twohand" },
 		{{ -- Blood Tap

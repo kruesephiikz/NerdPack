@@ -137,7 +137,7 @@ local inCombatSerpente = {
 	}},
 	
 	-- Dispell
-	{ "115450", (function() return NeP.Lib.Dispel("115450") end) },
+	{ "115450", (function() return NeP.Core.Dispel("115450") end) },
 
 	{{-- Cooldowns
 		{ "116849", "lowest.health <= 25" },-- Life Coccon

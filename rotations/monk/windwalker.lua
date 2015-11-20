@@ -23,7 +23,7 @@ local SEF_Spell = GetSpellInfo('137639') -- SEF Debuff
 
 
 local _SEF = function()
-	if NeP.Lib.SAoE(3, 40) then
+	if NeP.Core.SAoE(3, 40) then
 		for i=1,#NeP.OM.unitEnemie do
 			local object = NeP.OM.unitEnemie[i]
 			if ProbablyEngine.condition['deathin'](object.key) >= 10 then
@@ -149,7 +149,7 @@ ProbablyEngine.rotation.register_custom(269, NeP.Core.GetCrInfo('Monk - Windwalk
 		{_Cooldowns, 'modifier.cooldowns'},
 		{_SEF, (function() return NeP.Core.PeFetch('NePConfigMonkWw', 'SEF') end)},
 		{{ -- Conditions
-			{_AoE, (function() return NeP.Lib.SAoE(3, 8) end)},
+			{_AoE, (function() return NeP.Core.SAoE(3, 8) end)},
 			{_Melle, 'target.inMelee'},
 			{_Ranged, { '!target.inMelee', 'target.inRanged' }}
 		}, {'target.range <= 40', 'target.exists'} }

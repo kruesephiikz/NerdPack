@@ -172,7 +172,7 @@ local Seals = {
 					(function() return NeP.Core.PeFetch("NePConfPalaProt", "sealAoE") == 'Truth' end),
 				}},
 			]]
-		}, (function() return NeP.Lib.SAoE(3, 40) end) },
+		}, (function() return NeP.Core.SAoE(3, 40) end) },
 		{{ -- Single Target
 			{ "20165", { -- Seal of Insigh
 				"player.seal != 2",
@@ -258,7 +258,7 @@ local All = {
 local InCombat = {
 	-- Interrumpts
 	{ "96231", "target.NePinterrupt" },-- Rebuke
-	{ "62124", (function() return NeP.Lib.canTaunt() end) }, -- Reckoning
+	{ "62124", (function() return NeP.Core.canTaunt() end) }, -- Reckoning
 	
 	-- Proc's
 	{ "31935", "player.buff(Grand Crusader)", "target" }, 		-- Avenger's Shield // Proc
@@ -271,7 +271,7 @@ local InCombat = {
 			"!player.moving" 		-- Not Moving
 		}},
 		{ "119072", "target.range <= 10" }, 
-	}, (function() return NeP.Lib.SAoE(3, 40) end) },
+	}, (function() return NeP.Core.SAoE(3, 40) end) },
 
 	-- Normal
 	{ "53600", { 				------------------------------ Shield of Righteous

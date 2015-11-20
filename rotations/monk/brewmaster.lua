@@ -96,7 +96,7 @@ ProbablyEngine.rotation.register_custom(268, NeP.Core.GetCrInfo('Monk - Brewmast
 			(function() return castBetwenUnits('115313') end)
 		}},
 		{{-- Conditions
-			{_AoE, (function() return NeP.Lib.SAoE(3, 8) end)},
+			{_AoE, (function() return NeP.Core.SAoE(3, 8) end)},
 			{_Melle, {'target.inMelee', 'target.NePinfront'}},
 			{_Ranged, {'!target.inMelee', 'target.inRanged'}}
 		}, {'target.range <= 40', 'target.exists'}}

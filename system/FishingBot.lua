@@ -18,7 +18,7 @@ local function equipNormalGear()
 	if #_currentGear > 0 then
 		for k=1, #_currentGear do
 			NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Reseting Gear): "..GetItemInfo(_currentGear[k]).." (remaning): "..#_currentGear)
-			NeP.Extras.pickupItem(_currentGear[k])
+			NeP.Core.pickupItem(_currentGear[k])
 			AutoEquipCursorItem()
 		end
 	end
@@ -300,7 +300,7 @@ local function _equitHat()
 			if headItemID ~= bestHat.ID then
 				NeP.Core.Print("[|cff"..NeP.Interface.addonColor.."Fishing Bot|r]: (Equiped): "..bestHat.Name)
 				_currentGear[#_currentGear+1] = headItemID
-				NeP.Extras.pickupItem(bestHat.ID)
+				NeP.Core.pickupItem(bestHat.ID)
 				AutoEquipCursorItem()
 			end
 		end
@@ -362,7 +362,7 @@ local function _equitPole()
 				_currentGear[#_currentGear+1] = weaponItemID
 				-- Also equip OffHand if user had one.
 				if GetInventoryItemID("player", 17) ~= nil then _currentGear[#_currentGear+1] = GetInventoryItemID("player", 17) end
-				NeP.Extras.pickupItem(bestPole.ID)
+				NeP.Core.pickupItem(bestPole.ID)
 				AutoEquipCursorItem()
 			end
 		end
@@ -402,7 +402,7 @@ end
 
 local function _CarpDestruction()
 	if NeP.Core.PeFetch('NePFishingConf', 'LunarfallCarp') then
-		NeP.Extras.deleteItem(116158, 0)
+		NeP.Core.deleteItem(116158, 0)
 	end
 end
 
@@ -436,7 +436,7 @@ C_Timer.NewTicker(0.5, (function()
 		end
 					
 		-- Run Functions
-		if NeP.Extras.BagSpace() > 2 then
+		if NeP.Core.BagSpace() > 2 then
 			_CarpDestruction()
 			if _fishRun then
 				_equitHat()

@@ -514,8 +514,8 @@ local _PainSuppression = {
 
 local _Solo = {
 	{{-- Auto Dotting
-		{ "32379", (function() return NeP.Lib.AutoDots('32379', 20) end) }, -- SW:D
-		{ "589", (function() return NeP.Lib.AutoDots('589', 100) end) }, -- SW:P 
+		{ "32379", (function() return NeP.Core.AutoDots('32379', 20) end) }, -- SW:D
+		{ "589", (function() return NeP.Core.AutoDots('589', 100) end) }, -- SW:P 
 	}, "toggle.dotEverything" },
 
   	-- CD's
@@ -558,7 +558,7 @@ local _BorrowedTime = {
 ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discipline'), 
 	{ -- In-Combat
 		{{ -- Party/Raid
-			{ "527", (function() return NeP.Lib.Dispel("527") end) },-- Dispell ALl
+			{ "527", (function() return NeP.Core.Dispel("527") end) },-- Dispell ALl
 			{{ -- Auto Ground ON
 				{ "32375", (function() return _MassDispell() end) }, -- MassDispell
 				{ "62618", _PWBarrier },

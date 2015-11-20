@@ -151,13 +151,13 @@ local inCombat = {
 	{{ -- Steady Focus // TALENT
 		{'77767', 'player.buff(177668).duration < 3', 'target'}, -- Cobra Shot
 	}, {'talent(4,1)', 'lastcast(77767)'} },
-	{'157708', (function() return NeP.Lib.AutoDots('157708', 35) end)},-- Kill Shot
+	{'157708', (function() return NeP.Core.AutoDots('157708', 35) end)},-- Kill Shot
 	{'117050'}, -- Glaive Toss // TALENT
 	{'Barrage'}, -- Barrage // TALENT
 	{'Powershot', 'player.timetomax > 2.5', 'target'}, -- Powershot // TALENT
 	{{ -- AoE
 		{'2643', 'player.focus > 60', 'target'}, -- Multi-Shot
-	}, (function() return NeP.Lib.SAoE(3, 40) end)},	
+	}, (function() return NeP.Core.SAoE(3, 40) end)},	
 	{'3044', 'player.focus > 60', 'target'},-- Arcane Shot
 	{'Focusing Shot'}, -- Focusing Shot // TALENT
 	{'77767'}, -- Cobra Shot

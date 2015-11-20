@@ -30,7 +30,7 @@ local _Moving = {
 
 local inCombat = {
 	-- AoE
-	{"Fire and Brimstone", (function() return NeP.Lib.SAoE(3, 40) end), "target"},
+	{"Fire and Brimstone", (function() return NeP.Core.SAoE(3, 40) end), "target"},
 
   	-- Rotation
 	{"Shadowburn", "target.health <=20", "target"},

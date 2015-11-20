@@ -152,7 +152,7 @@ local Seals = {
 			(function() return PeFetch('NePConfPalaRet', 'SealMT') == 'Insight' end)
 			
 		}},
-	}, (function() return NeP.Lib.SAoE(3, 8) end) },
+	}, (function() return NeP.Core.SAoE(3, 8) end) },
 
 	{{ -- ST
 		-- Seal of Truth
@@ -177,7 +177,7 @@ local Seals = {
 			(function() return PeFetch('NePConfPalaRet', 'SealST') == 'Insight' end)
 			
 		}},
-	}, (function() return not NeP.Lib.SAoE(3, 8) end) },
+	}, (function() return not NeP.Core.SAoE(3, 8) end) },
 }
 
 local EmpoweredSeals = {
@@ -276,6 +276,6 @@ ProbablyEngine.rotation.register_custom(70, NeP.Core.GetCrInfo('Paladin - Retrib
 		{'158392', 'player.buff(31884)', 'target'},
 		-- Holy Prism
 		{'114165', nil, 'target'},
-		{AoE, (function() return NeP.Lib.SAoE(3, 8) end)},
+		{AoE, (function() return NeP.Core.SAoE(3, 8) end)},
 		{ST}
 	}, outCombat, exeOnLoad)

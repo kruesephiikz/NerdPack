@@ -17,13 +17,9 @@ external\LibDispellable\LibDispellable-1.0.lua
 system\Core.lua
 interface\tools.lua
 interface\MainFrame.lua
-system\PEStuff.lua
 system\ObjectManager\ObjectCache.lua
 system\ObjectManager\SettingsGUI.lua
 system\ObjectManager\ListGUI.lua
-system\Tracker.lua
-system\LibCore.lua
-system\Extras.lua
 system\Overlays.lua
 system\FishingBot.lua
 system\ItemBot.lua

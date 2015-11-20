@@ -81,7 +81,7 @@ local inCombat = {
 		}, nil },
 
 	-- Dispell
-	{ "88423", (function() return NeP.Lib.Dispel("88423") end) },
+	{ "88423", (function() return NeP.Core.Dispel("88423") end) },
 
 	{{-- Cooldowns
 		{ "29166", "player.mana < 80", "player" }, -- Inervate

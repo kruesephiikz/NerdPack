@@ -625,7 +625,7 @@ ProbablyEngine.rotation.register_custom(65, NeP.Core.GetCrInfo('Paladin - Holy')
 	{ -- In-Combat
 		{_All},
 		-- Dispell
-		{ "4987", (function() return NeP.Lib.Dispel("4987") end) },
+		{ "4987", (function() return NeP.Core.Dispel("4987") end) },
 		-- Holy Shock
 		{ "20473", "lowest.health < 100", "lowest" }, 
 		{_Fast},

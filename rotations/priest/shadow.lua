@@ -65,14 +65,14 @@ local Survival = {
 
 local Dotting = {
 	{{-- Toggle ALL
-		{'32379', (function() return NeP.Lib.AutoDots('32379', 20) end)}, -- SW:D
-		{'589', (function() return NeP.Lib.AutoDots('589', 100, 5) end)}, -- SW:P
-		{'34914', (function() return NeP.Lib.AutoDots('34914', 100, 4) end)}, -- Vampiric Touch
+		{'32379', (function() return NeP.Core.AutoDots('32379', 20) end)}, -- SW:D
+		{'589', (function() return NeP.Core.AutoDots('589', 100, 5) end)}, -- SW:P
+		{'34914', (function() return NeP.Core.AutoDots('34914', 100, 4) end)}, -- Vampiric Touch
 	}, 'toggle.dotEverything'},
 	{{-- Toggle Elites
-		{'32379', (function() return NeP.Lib.AutoDots('32379', 20, nil, nil, 'elite') end)}, -- SW:D
-		{'589', (function() return NeP.Lib.AutoDots('589', 100, 5, nil, 'elite') end)}, -- SW:P
-		{'34914', (function() return NeP.Lib.AutoDots('34914', 100, 4, nil, 'elite') end)} -- Vampiric Touch
+		{'32379', (function() return NeP.Core.AutoDots('32379', 20, nil, nil, 'elite') end)}, -- SW:D
+		{'589', (function() return NeP.Core.AutoDots('589', 100, 5, nil, 'elite') end)}, -- SW:P
+		{'34914', (function() return NeP.Core.AutoDots('34914', 100, 4, nil, 'elite') end)} -- Vampiric Touch
 	}, 'toggle.autoDots'},
 	{{-- Toggle off
 		{'32379', 'target.health < 20', 'target'}, -- SW:D
@@ -86,7 +86,7 @@ local inCombat = {
 	{'8092'}, -- Mind Blast
 	{'15407', 'player.buff(Insanity)'}, -- Mind Flay
 	{'73510', 'player.buff(Surge of Darkness)'}, -- Mind Spike
-	{'48045', (function() return NeP.Lib.SAoE(3, 40) end), 'target'}, -- Mind Sear
+	{'48045', (function() return NeP.Core.SAoE(3, 40) end), 'target'}, -- Mind Sear
 	{'15407'},  -- Mind Flay
 } 
 

@@ -394,7 +394,7 @@ local DPS= {
 	{ "117014", "talent(6, 3)" },
 	{ "8050", "!target.debuff(8050)" },
 	{ "51505" },
-	{ "421", (function() return NeP.Lib.SAoE(3, 10) end)},
+	{ "421", (function() return NeP.Core.SAoE(3, 10) end)},
 	{ "403" }, -- Lightning Bolt	
 }
 
@@ -403,7 +403,7 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 		{General},
 		{{ -- Party/Raid
 			-- Dispel
-			{ "77130", (function() return NeP.Lib.Dispel("77130") end) },
+			{ "77130", (function() return NeP.Core.Dispel("77130") end) },
 			{{-- Interrupt
 				{ "57994" }, -- Wind Shear
 			}, "target.NePinterrupt" },
