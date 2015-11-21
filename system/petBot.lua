@@ -22,6 +22,7 @@ NeP.Core.BuildGUI('petBot', {
 		{ type = 'spacer' },
 			{ type = "spinner", text = "Change Pet at Health %:", key = "swapHealth", width = 70, min = 10, max = 100, default = 15, step = 1 },
 			{ type = "checkbox", text = "Auto Trap", key = "trap", default = false },
+			{ type = "checkbox", text = "Only use favorite pets", key = "favorites", default = false },
 			{ type = "dropdown", text = "Team type:", key = "teamtype", list = {
 				{ text = "Battle Team", key = "BattleTeam" },
 				{ text = "Leveling Team", key = "LvlngTeam" },
@@ -100,15 +101,17 @@ local function scanLoadOut()
 	local maxAmount, petAmount = C_PJ.GetNumPets()
 	for i=1,petAmount do
 		local guid, id, _, _, lvl, _ , _, name, icon = C_PJ.GetPetInfoByIndex(i)
-		local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(guid)
-		petTable[#petTable+1]={
-			guid = guid,
-			id = id,
-			lvl = lvl,
-			name = name,
-			attack = attack,
-			icon = icon,
-		}
+			if C_PJ.PetIsFavorite(guid) and PeFetch('NePpetBot', 'favorites') or not PeFetch('NePpetBot', 'favorites') then
+			local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(guid)
+			petTable[#petTable+1]={
+				guid = guid,
+				id = id,
+				lvl = lvl,
+				name = name,
+				attack = attack,
+				icon = icon,
+			}
+		end
 	end
 	if PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' then
 		table.sort(petTable, function(a,b) return a.attack > b.attack end)
