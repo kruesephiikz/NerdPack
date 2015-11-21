@@ -5,7 +5,7 @@ DESC: Gets returned to PEs build GUI to create it.
 Build By: MTS
 ---------------------------------------------------]]
 NeP.Core.BuildGUI('petBot', {
-	key = "NePpetBotConf",
+	key = "NePpetBot",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
 	subtitle = "PetBot Settings",

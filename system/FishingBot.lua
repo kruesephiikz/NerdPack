@@ -32,7 +32,7 @@ DESC: Gets returned to PEs build GUI to create it.
 Build By: MTS
 ---------------------------------------------------]]
 NeP.Core.BuildGUI('fishingBot', {
-	key = "NePFishingConf",
+	key = "NePfishingBot",
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
 	subtitle = "Fishing Bot Settings",
@@ -216,7 +216,7 @@ local HookCD = 0
 local function _FishHook()
 	if getBobber() then return end -- if we are fishing we don't want to interrupt it.
 	if UnitCastingInfo("player") then return true end -- we are casting stop here.
-	if NeP.Core.PeFetch('NePFishingConf', "ApplyFishHooks") and GetTime() > HookCD then
+	if NeP.Core.PeFetch('NePfishingBot', "ApplyFishHooks") and GetTime() > HookCD then
 		if select(7, GetItemInfo(GetInventoryItemLink("player", 16))) == "Fishing Poles" then
 			local hasEnchant, timeleft, _, enchantID = GetWeaponEnchantInfo()
 			if hasEnchant and timeleft / 1000 > 15 then
@@ -249,7 +249,7 @@ local BladeBoneCD = 0
 local function _BladeBone()
 	if getBobber() then return end -- if we are fishing we don't want to interrupt it.
 	if UnitCastingInfo("player") then return true end -- we are casting stop here.
-	if NeP.Core.PeFetch('NePFishingConf', "BladeBoneHook") and GetTime() > BladeBoneCD then
+	if NeP.Core.PeFetch('NePfishingBot', "BladeBoneHook") and GetTime() > BladeBoneCD then
 		local expires = select(7, UnitBuff("player", GetSpellInfo(182226)))
 		if expires and expires - GetTime() > 15 then return end
 		local HasItem, Count = ItemInBag(122742)
@@ -292,7 +292,7 @@ local function _findHats()
 end
 
 local function _equitHat()
-	if NeP.Core.PeFetch('NePFishingConf', 'FshHat') then
+	if NeP.Core.PeFetch('NePfishingBot', 'FshHat') then
 		local hatsFound = _findHats()
 		if #hatsFound > 0 then
 			local headItemID = GetInventoryItemID("player", 1)
@@ -352,7 +352,7 @@ local function _findPoles()
 end
 
 local function _equitPole()
-	if NeP.Core.PeFetch('NePFishingConf', 'FshPole') then
+	if NeP.Core.PeFetch('NePfishingBot', 'FshPole') then
 		local polesFound = _findPoles()
 		if #polesFound > 0 then
 			local weaponItemID = GetInventoryItemID("player", 16)
@@ -386,9 +386,9 @@ local _baitsTable = {
 }
 local function _AutoBait()
 	if getBobber() then return end
-	if NeP.Core.PeFetch('NePFishingConf', 'bait') ~= "none" or NeP.Core.PeFetch('NePFishingConf', 'bait') ~= nil then
-		if _baitsTable[NeP.Core.PeFetch('NePFishingConf', 'bait')] ~= nil then
-			local _Bait = _baitsTable[NeP.Core.PeFetch('NePFishingConf', 'bait')]
+	if NeP.Core.PeFetch('NePfishingBot', 'bait') ~= "none" or NeP.Core.PeFetch('NePfishingBot', 'bait') ~= nil then
+		if _baitsTable[NeP.Core.PeFetch('NePfishingBot', 'bait')] ~= nil then
+			local _Bait = _baitsTable[NeP.Core.PeFetch('NePfishingBot', 'bait')]
 			if GetItemCount(_Bait.ID, false, false) > 0 then
 				local endtime = select(7, UnitBuff("player", GetSpellInfo(_Bait.Debuff)))
 				if (not endtime) or endtime < GetTime() + 14 then
@@ -401,7 +401,7 @@ local function _AutoBait()
 end
 
 local function _CarpDestruction()
-	if NeP.Core.PeFetch('NePFishingConf', 'LunarfallCarp') then
+	if NeP.Core.PeFetch('NePfishingBot', 'LunarfallCarp') then
 		NeP.Core.deleteItem(116158, 0)
 	end
 end
@@ -425,7 +425,7 @@ local function FormatTime( seconds )
 	return firstrow .. secondrow .. thirdrow
 end
 
-local fshGUI = NeP.Core.getGUI('fishing')
+local fshGUI = NeP.Core.getGUI('fishingBot')
 C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR then
 		
