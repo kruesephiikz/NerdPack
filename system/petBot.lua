@@ -75,8 +75,6 @@ local function buildTeam()
 				local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(petID)
 				local healthPercentage = math.floor((health / maxHealth) * 100)
 				if (level >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam' or level < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam') or healthPercentage <= 25 then
-					NeP.Core.Print('Changing pet: '..k..' to: |T'..petTable[i].icon..':10:10|t'..petTable[i].name)
-					print(attack)
 					C_PJ.SetPetLoadOutInfo(k, petTable[i].guid)
 					break
 				end
@@ -100,29 +98,61 @@ NeP.Core.BuildGUI('petBot', {
 	width = 250,
 	height = 300,
 	config = {
-		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Pet Bot:", size = 25, align = "Center"},
-		{ type = "spinner", text = "Change Pet at Health %:", key = "swapHealth", width = 70, min = 10, max = 100, default = 15, step = 1 },
-		{ type = "checkbox", text = "Auto Trap", key = "trap", default = false },
-		{ type = "dropdown", text = "Team type:", key = "teamtype", list = {
-			{ text = "Battle Team", key = "BattleTeam" },
-			{ text = "Leveling Team", key = "LvlngTeam" },
-		}, default = "BattleTeam" },
-		{ type = "button", text = "Start", width = 225, height = 20,callback = function(self, button)
-				isRunning = not isRunning
-				if isRunning then
-					self:SetText("Stop")
-				else
-					self:SetText("Start")
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Settings:", size = 25, align = "Center"},
+		{ type = 'spacer' },
+			{ type = "spinner", text = "Change Pet at Health %:", key = "swapHealth", width = 70, min = 10, max = 100, default = 15, step = 1 },
+			{ type = "checkbox", text = "Auto Trap", key = "trap", default = false },
+			{ type = "dropdown", text = "Team type:", key = "teamtype", list = {
+				{ text = "Battle Team", key = "BattleTeam" },
+				{ text = "Leveling Team", key = "LvlngTeam" },
+			}, default = "BattleTeam" },
+		{ type = 'rule' },{ type = 'spacer' },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Status:", size = 25, align = "Center"},
+		{ type = 'spacer' },
+			-- Pet Slot 1
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 1: ", size = 11, offset = -11 },
+			{ key = 'petslot1', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			-- Pet Slot 2
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 2: ", size = 11, offset = -11 },
+			{ key = 'petslot2', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			-- Pet Slot 3
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 3: ", size = 11, offset = -11 },
+			{ key = 'petslot3', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		{ type = 'spacer' },{ type = 'rule' },{ type = 'spacer' },
+			{ type = "button", text = "Start", width = 225, height = 20,callback = function(self, button)
+					isRunning = not isRunning
+					if isRunning then
+						self:SetText("Stop")
+					else
+						self:SetText("Start")
+					end
 				end
-			end
-		},
+			},
 	}	
 })
+
+local petBotGUI = NeP.Core.getGUI('petBot')
 
 C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR and isRunning then
 		local activePet = C_PB.GetActivePet(1)
 		local enemieActivePet = C_PB.GetActivePet(2)
+		
+		-- Pet 1
+		local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(1)
+		local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
+		petBotGUI.elements.petslot1:SetText('|T'..petIcon..':10:10|t'..petName)
+
+		-- Pet 2
+		local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(2)
+		local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
+		petBotGUI.elements.petslot2:SetText('|T'..petIcon..':10:10|t'..petName)
+
+		-- Pet 3
+		local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(3)
+		local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
+		petBotGUI.elements.petslot3:SetText('|T'..petIcon..':10:10|t'..petName)
+
 		if not C_PB.IsInBattle() then
 			buildTeam()
 		else
