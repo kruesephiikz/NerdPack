@@ -115,10 +115,15 @@ local function scanGroup()
 	local petAmount = C_PB.GetNumPets(1)
 	local goodPets = {}
 	for k=1,petAmount do
-		if getPetHealth(1, k) > tonumber(PeFetch('NePpetBot', 'swapHealth')) then
-			goodPets[#goodPets+1] = k
+		local health = getPetHealth(1, k)
+		if health > tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+			goodPets[#goodPets+1] = {
+				id = k,
+				health = health
+			}
 		end
 	end
+	table.sort(goodPets, function(a,b) return a.health > b.health end)
 	return goodPets
 end
 
@@ -129,8 +134,8 @@ local function PetSwap()
 		C_PB.ForfeitGame()
 	else
 		for i=1,#goodPets do
-			if i ~= activePet and getPetHealth(1, activePet) <= tonumber(PeFetch('NePpetBot', 'swapHealth')) then
-				C_PB.ChangePet(goodPets[i])
+			if getPetHealth(1, activePet) <= tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+				C_PB.ChangePet(goodPets[i].id)
 				break
 			end
 		end

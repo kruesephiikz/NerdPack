@@ -287,7 +287,7 @@ local function _findHats()
 			}
 		end
 	end
-	table.sort(hatsFound, function(a,b) return a.Bonus < b.Bonus end)
+	table.sort(hatsFound, function(a,b) return a.Bonus > b.Bonus end)
 	return hatsFound
 end
 
@@ -347,7 +347,7 @@ local function _findPoles()
 			}
 		end
 	end
-	table.sort(polesFound, function(a,b) return a.Bonus < b.Bonus end)
+	table.sort(polesFound, function(a,b) return a.Bonus > b.Bonus end)
 	return polesFound
 end
 
