@@ -3,6 +3,60 @@ local C_PB = C_PetBattles
 local C_PJ = C_PetJournal
 local isRunning = false
 
+--[[-----------------------------------------------
+** GUI table **
+DESC: Gets returned to PEs build GUI to create it.
+
+Build By: MTS
+---------------------------------------------------]]
+NeP.Core.BuildGUI('petBot', {
+	key = "NePpetBot",
+	profiles = true,
+	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
+	subtitle = "PetBot Settings",
+	color = NeP.Interface.addonColor,
+	width = 250,
+	height = 300,
+	config = {
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Settings:", size = 25, align = "Center"},
+		{ type = 'spacer' },
+			{ type = "spinner", text = "Change Pet at Health %:", key = "swapHealth", width = 70, min = 10, max = 100, default = 15, step = 1 },
+			{ type = "checkbox", text = "Auto Trap", key = "trap", default = false },
+			{ type = "dropdown", text = "Team type:", key = "teamtype", list = {
+				{ text = "Battle Team", key = "BattleTeam" },
+				{ text = "Leveling Team", key = "LvlngTeam" },
+			}, default = "BattleTeam" },
+		{ type = 'rule' },{ type = 'spacer' },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Status:", size = 25, align = "Center"},
+		{ type = 'spacer' },
+			-- Pet Slot 1
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 1: ", size = 11, offset = -11 },
+			{ key = 'petslot1', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			-- Pet Slot 2
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 2: ", size = 11, offset = -11 },
+			{ key = 'petslot2', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			-- Pet Slot 3
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 3: ", size = 11, offset = -11 },
+			{ key = 'petslot3', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			{ type = 'spacer' },
+			-- Last attack
+			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Last Used Attack: ", size = 11, offset = -11 },
+			{ key = 'lastAttack', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+		{ type = 'spacer' },{ type = 'rule' },{ type = 'spacer' },
+			{ type = "button", text = "Start", width = 225, height = 20,callback = function(self, button)
+					isRunning = not isRunning
+					if isRunning then
+						self:SetText("Stop")
+					else
+						self:SetText("Start")
+					end
+				end
+			},
+	}	
+})
+
+local petBotGUI = NeP.Core.getGUI('petBot')
+
 local function getPetHealth(owner, index)
 	return math.floor((C_PB.GetHealth(owner, index) / C_PB.GetMaxHealth(owner, index)) * 100)
 end
@@ -15,7 +69,7 @@ local function PetAttack()
 			local isUsable, currentCooldown = C_PB.GetAbilityState(1, activePet, i)
 			local id, name, icon, maxcooldown, desc, numTurns, abilityPetType, nostrongweak = C_PB.GetAbilityInfo(1, activePet, i)
 			if isUsable and not nostrongweak then
-				NeP.Core.Print('Casting: |T'..icon..':10:10|t'..name)
+				petBotGUI.elements.lastAttack:SetText('|T'..icon..':10:10|t'..name)
 				C_PB.UseAbility(i)
 				break
 			end
@@ -82,56 +136,6 @@ local function buildTeam()
 		end
 	end
 end
-
---[[-----------------------------------------------
-** GUI table **
-DESC: Gets returned to PEs build GUI to create it.
-
-Build By: MTS
----------------------------------------------------]]
-NeP.Core.BuildGUI('petBot', {
-	key = "NePpetBot",
-	profiles = true,
-	title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
-	subtitle = "PetBot Settings",
-	color = NeP.Interface.addonColor,
-	width = 250,
-	height = 300,
-	config = {
-		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Settings:", size = 25, align = "Center"},
-		{ type = 'spacer' },
-			{ type = "spinner", text = "Change Pet at Health %:", key = "swapHealth", width = 70, min = 10, max = 100, default = 15, step = 1 },
-			{ type = "checkbox", text = "Auto Trap", key = "trap", default = false },
-			{ type = "dropdown", text = "Team type:", key = "teamtype", list = {
-				{ text = "Battle Team", key = "BattleTeam" },
-				{ text = "Leveling Team", key = "LvlngTeam" },
-			}, default = "BattleTeam" },
-		{ type = 'rule' },{ type = 'spacer' },
-		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Status:", size = 25, align = "Center"},
-		{ type = 'spacer' },
-			-- Pet Slot 1
-			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 1: ", size = 11, offset = -11 },
-			{ key = 'petslot1', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-			-- Pet Slot 2
-			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 2: ", size = 11, offset = -11 },
-			{ key = 'petslot2', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-			-- Pet Slot 3
-			{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Pet in slot 3: ", size = 11, offset = -11 },
-			{ key = 'petslot3', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-		{ type = 'spacer' },{ type = 'rule' },{ type = 'spacer' },
-			{ type = "button", text = "Start", width = 225, height = 20,callback = function(self, button)
-					isRunning = not isRunning
-					if isRunning then
-						self:SetText("Stop")
-					else
-						self:SetText("Start")
-					end
-				end
-			},
-	}	
-})
-
-local petBotGUI = NeP.Core.getGUI('petBot')
 
 C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR and petBotGUI.parent:IsShown() then
