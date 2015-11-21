@@ -70,14 +70,18 @@ local function scanLoadOut()
 		local guid, id, _, _, lvl, _ , _, name, icon = C_PJ.GetPetInfoByIndex(i)
 		if C_PJ.PetIsFavorite(guid) and PeFetch('NePpetBot', 'favorites') or not PeFetch('NePpetBot', 'favorites') then
 			local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(guid)
-			petTable[#petTable+1]={
-				guid = guid,
-				id = id,
-				lvl = lvl,
-				name = name,
-				attack = attack,
-				icon = icon,
-			}
+			local healthPercentage = math.floor((health / maxHealth) * 100)
+			if healthPercentage > tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+				petTable[#petTable+1]={
+					guid = guid,
+					id = id,
+					lvl = lvl,
+					name = name,
+					attack = attack,
+					icon = icon,
+					health = healthPercentage
+				}
+			end
 		end
 	end
 	if PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' then
@@ -92,13 +96,13 @@ end
 local function buildTeam()
 	local petTable = scanLoadOut()
 	for i=1,#petTable do
-		if not C_PJ.PetIsSlotted(petTable[i].guid) and (petTable[i].lvl >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' or petTable[i].lvl < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam') then
+		if not C_PJ.PetIsSlotted(petTable[i].guid) then
 			for k=1,3 do
 				local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(k)
 				local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
 				local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(petID)
 				local healthPercentage = math.floor((health / maxHealth) * 100)
-				if (level >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam' or level < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam') or healthPercentage <= 25 then
+				if (level >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam' or level < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam') or healthPercentage < tonumber(PeFetch('NePpetBot', 'swapHealth')) then
 					C_PJ.SetPetLoadOutInfo(k, petTable[i].guid)
 					break
 				end
@@ -111,7 +115,7 @@ local function scanGroup()
 	local petAmount = C_PB.GetNumPets(1)
 	local goodPets = {}
 	for k=1,petAmount do
-		if getPetHealth(1, k) >= tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+		if getPetHealth(1, k) > tonumber(PeFetch('NePpetBot', 'swapHealth')) then
 			goodPets[#goodPets+1] = k
 		end
 	end
@@ -125,7 +129,7 @@ local function PetSwap()
 		C_PB.ForfeitGame()
 	else
 		for i=1,#goodPets do
-			if i ~= activePet and getPetHealth(1, i) < tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+			if i ~= activePet and getPetHealth(1, activePet) <= tonumber(PeFetch('NePpetBot', 'swapHealth')) then
 				C_PB.ChangePet(goodPets[i])
 				break
 			end
