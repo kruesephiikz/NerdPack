@@ -1,5 +1,9 @@
 local isRunning = false
 
+local function getPetHealth(owner, index)
+	return math.floor((C_PetBattles.GetHealth(owner, index) / C_PetBattles.GetMaxHealth(owner, index)) * 100)
+end
+
 local function PetAttack()
 	if C_PetBattles.GetBattleState() == 3 then
 		local activePet = C_PetBattles.GetActivePet(1)
@@ -19,16 +23,17 @@ end
 
 local function PetSwap()
 	local petAmount = C_PetBattles.GetNumPets(1)
+	local activePet = C_PetBattles.GetActivePet(1)
 	for i=1,petAmount do
-		local canSwap = C_PetBattles.CanPetSwapIn(i)
-		if canSwap then
-			C_PetBattles.ChangePet(i)
+		if i ~= activePet then
+			local canSwap = C_PetBattles.CanPetSwapIn(i)
+			if canSwap and getPetHealth(1, activePet) <= NeP.Core.PeFetch('NePpetBot', 'swapHealth') then
+				C_PetBattles.ChangePet(i)
+				break
+			end
 		end
 	end
-end
-
-local function getPetHealth(owner, index)
-	return math.floor((C_PetBattles.GetHealth(owner, index) / C_PetBattles.GetMaxHealth(owner, index)) * 100)
+	return false
 end
 
 --[[-----------------------------------------------
@@ -70,12 +75,11 @@ C_Timer.NewTicker(0.5, (function()
 		if getPetHealth(2, enemieActivePet) <= 35 and NeP.Core.PeFetch('NePpetBot', 'trap') and C_PetBattles.IsWildBattle() and C_PetBattles.IsTrapAvailable() then
 			C_PetBattles.UseTrap()
 		-- Swap
-		elseif getPetHealth(1, activePet) <= NeP.Core.PeFetch('NePpetBot', 'swapHealth') then
-			PetSwap()
-		else -- Attack
+		elseif not PetSwap() then
 			PetAttack()
 		end
 	end
 end), nil)
 
 --local modifier = C_PetBattles.GetAttackModifier(select(7, C_PetBattles.GetAbilityInfo(1, 1, 2)), select(7, C_PetBattles.GetAbilityInfo(2, 1, 1)))
+-- C_PetBattles.ForfeitGame
