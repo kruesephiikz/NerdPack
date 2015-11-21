@@ -20,7 +20,7 @@ NeP.Core.BuildGUI('petBot', {
 	config = {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Settings:", size = 25, align = "Center"},
 		{ type = 'spacer' },
-			{ type = "spinner", text = "Change Pet at Health %:", key = "swapHealth", width = 70, min = 10, max = 100, default = 15, step = 1 },
+			{ type = "spinner", text = "Change Pet at Health %:", key = "swapHealth", width = 70, min = 10, max = 100, default = 25, step = 1 },
 			{ type = "checkbox", text = "Auto Trap", key = "trap", default = false },
 			{ type = "checkbox", text = "Only use favorite pets", key = "favorites", default = false },
 			{ type = "dropdown", text = "Team type:", key = "teamtype", list = {
@@ -59,12 +59,16 @@ NeP.Core.BuildGUI('petBot', {
 local petBotGUI = NeP.Core.getGUI('petBot')
 local maxPetLvl = 0
 
+local function getPetHealth(owner, index)
+	return math.floor((C_PB.GetHealth(owner, index) / C_PB.GetMaxHealth(owner, index)) * 100)
+end
+
 local function scanLoadOut()
 	local petTable = {}
 	local maxAmount, petAmount = C_PJ.GetNumPets()
 	for i=1,petAmount do
 		local guid, id, _, _, lvl, _ , _, name, icon = C_PJ.GetPetInfoByIndex(i)
-			if C_PJ.PetIsFavorite(guid) and PeFetch('NePpetBot', 'favorites') or not PeFetch('NePpetBot', 'favorites') then
+		if C_PJ.PetIsFavorite(guid) and PeFetch('NePpetBot', 'favorites') or not PeFetch('NePpetBot', 'favorites') then
 			local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(guid)
 			petTable[#petTable+1]={
 				guid = guid,
@@ -103,57 +107,71 @@ local function buildTeam()
 	end
 end
 
-local function getPetHealth(owner, index)
-	return math.floor((C_PB.GetHealth(owner, index) / C_PB.GetMaxHealth(owner, index)) * 100)
+local function scanGroup()
+	local petAmount = C_PB.GetNumPets(1)
+	local goodPets = {}
+	for k=1,petAmount do
+		if getPetHealth(1, k) >= tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+			goodPets[#goodPets+1] = k
+		end
+	end
+	return goodPets
+end
+
+local function PetSwap()
+	local activePet = C_PB.GetActivePet(1)
+	local goodPets = scanGroup()
+	if #goodPets < 1 then
+		C_PB.ForfeitGame()
+	else
+		for i=1,#goodPets do
+			if i ~= activePet and getPetHealth(1, i) < tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+				C_PB.ChangePet(goodPets[i])
+				break
+			end
+		end
+	end
+	return false
 end
 
 local function scanPetAbilitys()
 	local Abilitys = {}
 	local activePet = C_PB.GetActivePet(1)
 	local enemieActivePet = C_PB.GetActivePet(2)
-	for i=1,3 do
+	for i=3,1,-1 do
 		local isUsable, currentCooldown = C_PB.GetAbilityState(1, activePet, i)
-		local id, name, icon, maxcooldown, desc, numTurns, abilityPetType, nostrongweak = C_PB.GetAbilityInfo(1, activePet, i)
-		local enemieType = C_PetBattles.GetPetType(2, enemieActivePet)
-		local attackModifer = C_PetBattles.GetAttackModifier(abilityPetType, enemieType)
 		if isUsable then
-			--local total = (attackModifer + figure out a way to get spell base damage) / numTurns
+			local id, name, icon, maxcooldown, desc, numTurns, abilityPetType, nostrongweak = C_PB.GetAbilityInfo(1, activePet, i)
+			local enemieType = C_PetBattles.GetPetType(2, enemieActivePet)
+			local attackModifer = C_PetBattles.GetAttackModifier(abilityPetType, enemieType)
+			local power = C_PetBattles.GetPower(1, activePet)
+			local totalDmg = power*attackModifer
 			Abilitys[#Abilitys+1]={
-				dmg = attackModifer,
+				dmg = totalDmg,
 				name = name,
 				icon = icon,
 				id = i
 			}
+			--print(i..' '..totalDmg..'( '..power..' \ '..attackModifer..' \ '..numTurns..' )'..maxcooldown)
 		end
 	end
 	table.sort(Abilitys, function(a,b) return a.dmg > b.dmg end)
 	return Abilitys
 end
 
+local _lastAttack = '...'
 local function PetAttack()
-	if C_PB.GetBattleState() == 3 then
-		local Abilitys = scanPetAbilitys()
-		if Abilitys[1] ~= nil then
-			petBotGUI.elements.lastAttack:SetText('|T'..Abilitys[1].icon..':10:10|t'..Abilitys[1].name)
-			C_PB.UseAbility(Abilitys[1].id)
-		end
-		C_PB.SkipTurn()
-	end
-end
-
-local function PetSwap()
-	local petAmount = C_PB.GetNumPets(1)
-	local activePet = C_PB.GetActivePet(1)
-	for i=1,petAmount do
-		if i ~= activePet then
-			local canSwap = C_PB.CanPetSwapIn(i)
-			if canSwap and getPetHealth(1, activePet) <= PeFetch('NePpetBot', 'swapHealth') then
-				C_PB.ChangePet(i)
-				break
+	local Abilitys = scanPetAbilitys()
+	for i=1,#Abilitys do
+		if #Abilitys > 1 and _lastAttack ~= Abilitys[i].name or #Abilitys <=1 then
+			if Abilitys[i] ~= nil then
+				_lastAttack = Abilitys[i].name
+				petBotGUI.elements.lastAttack:SetText('|T'..Abilitys[i].icon..':10:10|t'..Abilitys[i].name)
+				C_PB.UseAbility(Abilitys[i].id)
 			end
 		end
 	end
-	return false
+	C_PB.SkipTurn()
 end
 
 C_Timer.NewTicker(0.5, (function()
@@ -176,7 +194,7 @@ C_Timer.NewTicker(0.5, (function()
 		local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
 		petBotGUI.elements.petslot3:SetText('|T'..petIcon..':10:10|t'..petName)
 
-		if isRunning then
+		if isRunning and not C_PetBattles.IsWaitingOnOpponent() then
 			if not C_PB.IsInBattle() then
 				buildTeam()
 			else
@@ -185,12 +203,11 @@ C_Timer.NewTicker(0.5, (function()
 					C_PB.UseTrap()
 				-- Swap
 				elseif not PetSwap() then
-					PetAttack()
+					if C_PB.GetBattleState() == 3 then
+						PetAttack()
+					end
 				end
 			end
 		end
 	end
 end), nil)
-
---local modifier = C_PB.GetAttackModifier(select(7, C_PB.GetAbilityInfo(1, 1, 2)), select(7, C_PB.GetAbilityInfo(2, 1, 1)))
--- C_PB.ForfeitGame

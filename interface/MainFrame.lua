@@ -106,7 +106,7 @@ function StatusGUI_RUN()
 			-- PetBot
 			buttonsTH = buttonsTH + buttonH
 			local PTBButtom = NeP.Interface.addButton(MenuGUI)
-			PTBButtom.text:SetText('Pet Bot')
+			PTBButtom.text:SetText('Battle Pets Bot')
 			PTBButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
 			PTBButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			PTBButtom:SetScript('OnClick', function(self)
