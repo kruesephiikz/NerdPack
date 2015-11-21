@@ -134,7 +134,7 @@ NeP.Core.BuildGUI('petBot', {
 local petBotGUI = NeP.Core.getGUI('petBot')
 
 C_Timer.NewTicker(0.5, (function()
-	if NeP.Core.CurrentCR and isRunning then
+	if NeP.Core.CurrentCR and petBotGUI.parent:IsShown() then
 		local activePet = C_PB.GetActivePet(1)
 		local enemieActivePet = C_PB.GetActivePet(2)
 		
@@ -153,15 +153,17 @@ C_Timer.NewTicker(0.5, (function()
 		local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
 		petBotGUI.elements.petslot3:SetText('|T'..petIcon..':10:10|t'..petName)
 
-		if not C_PB.IsInBattle() then
-			buildTeam()
-		else
-			-- Trap
-			if getPetHealth(2, enemieActivePet) <= 35 and PeFetch('NePpetBot', 'trap') and C_PB.IsWildBattle() and C_PB.IsTrapAvailable() then
-				C_PB.UseTrap()
-			-- Swap
-			elseif not PetSwap() then
-				PetAttack()
+		if isRunning then
+			if not C_PB.IsInBattle() then
+				buildTeam()
+			else
+				-- Trap
+				if getPetHealth(2, enemieActivePet) <= 35 and PeFetch('NePpetBot', 'trap') and C_PB.IsWildBattle() and C_PB.IsTrapAvailable() then
+					C_PB.UseTrap()
+				-- Swap
+				elseif not PetSwap() then
+					PetAttack()
+				end
 			end
 		end
 	end
