@@ -55,14 +55,16 @@ That class.
 
 Build By: MTS
 ---------------------------------------------------]]
-function NeP.Interface.ClassGUI()
+function NeP.Interface.ClassGUI(txt)
 	if GetSpecialization() then
 		local _Spec = GetSpecializationInfo(GetSpecialization())
 		if NeP.Interface.classGUIs[_Spec] ~= nil then
 			if _openPEGUIs[tostring(_Spec)] == nil then
 				NeP.Core.BuildGUI(tostring(_Spec), NeP.Interface.classGUIs[_Spec])
 			else
-				NeP.Core.displayGUI(tostring(_Spec))
+				if txt ~= nil then
+					NeP.Core.displayGUI(tostring(_Spec))
+				end
 			end
 		end
 	end

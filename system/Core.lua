@@ -811,7 +811,7 @@ ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)
 	if command == 'config' or command == 'c' then
 		NeP.Core.displayGUI('Settings')
 	elseif command == 'class' or command == 'cl' then
-		NeP.Interface.ClassGUI()
+		NeP.Interface.ClassGUI('Show')
 	elseif command == 'info' or command == 'i' then
 		NeP.Core.displayGUI('Info')
 	elseif command == 'fish' or command == 'fishingbot' then		

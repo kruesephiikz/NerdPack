@@ -133,7 +133,7 @@ function StatusGUI_RUN()
 			ClassButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			ClassButtom:SetScript('OnClick', function(self)
 				_handleFrames()
-				NeP.Interface.ClassGUI()
+				NeP.Interface.ClassGUI('Show')
 			end)
 			
 			-- General Settings
