@@ -45,15 +45,22 @@ local function scanLoadOut()
 	local petTable = {}
 	local maxAmount, petAmount = C_PJ.GetNumPets()
 	for i=1,petAmount do
-		local guid, id, _, _, lvl, _ , _, name = C_PJ.GetPetInfoByIndex(i)
+		local guid, id, _, _, lvl, _ , _, name, icon = C_PJ.GetPetInfoByIndex(i)
+		local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(guid)
 		petTable[#petTable+1]={
 			guid = guid,
 			id = id,
 			lvl = lvl,
-			name = name
+			name = name,
+			attack = attack,
+			icon = icon,
 		}
 	end
-	table.sort(petTable, function(a,b) return a.lvl > b.lvl end)
+	if PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' then
+		table.sort(petTable, function(a,b) return a.attack > b.attack end)
+	else
+		table.sort(petTable, function(a,b) return a.lvl > b.lvl end)
+	end
 	maxPetLvl = petTable[1].lvl
 	return petTable
 end
@@ -64,11 +71,12 @@ local function buildTeam()
 		if not C_PJ.PetIsSlotted(petTable[i].guid) and (petTable[i].lvl >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' or petTable[i].lvl < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam') then
 			for k=1,3 do
 				local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(k)
-				local speciesID, customName, level, xp, maxXp, displayID, isFavorite, petName, petIcon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique = C_PJ.GetPetInfoByPetID(petID)
+				local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
 				local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(petID)
 				local healthPercentage = math.floor((health / maxHealth) * 100)
 				if (level >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam' or level < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam') or healthPercentage <= 25 then
-					NeP.Core.Print('Changing pet: '..k..' to: |T'..petIcon..':10:10|t'..petName)
+					NeP.Core.Print('Changing pet: '..k..' to: |T'..petTable[i].icon..':10:10|t'..petTable[i].name)
+					print(attack)
 					C_PJ.SetPetLoadOutInfo(k, petTable[i].guid)
 					break
 				end
