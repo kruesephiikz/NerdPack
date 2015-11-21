@@ -57,43 +57,6 @@ NeP.Core.BuildGUI('petBot', {
 })
 
 local petBotGUI = NeP.Core.getGUI('petBot')
-
-local function getPetHealth(owner, index)
-	return math.floor((C_PB.GetHealth(owner, index) / C_PB.GetMaxHealth(owner, index)) * 100)
-end
-
-local function PetAttack()
-	if C_PB.GetBattleState() == 3 then
-		local activePet = C_PB.GetActivePet(1)
-		local petAmount = C_PB.GetNumPets(1)
-		for i=petAmount,1,-1 do
-			local isUsable, currentCooldown = C_PB.GetAbilityState(1, activePet, i)
-			local id, name, icon, maxcooldown, desc, numTurns, abilityPetType, nostrongweak = C_PB.GetAbilityInfo(1, activePet, i)
-			if isUsable and not nostrongweak then
-				petBotGUI.elements.lastAttack:SetText('|T'..icon..':10:10|t'..name)
-				C_PB.UseAbility(i)
-				break
-			end
-		end
-		C_PB.SkipTurn()
-	end
-end
-
-local function PetSwap()
-	local petAmount = C_PB.GetNumPets(1)
-	local activePet = C_PB.GetActivePet(1)
-	for i=1,petAmount do
-		if i ~= activePet then
-			local canSwap = C_PB.CanPetSwapIn(i)
-			if canSwap and getPetHealth(1, activePet) <= PeFetch('NePpetBot', 'swapHealth') then
-				C_PB.ChangePet(i)
-				break
-			end
-		end
-	end
-	return false
-end
-
 local maxPetLvl = 0
 
 local function scanLoadOut()
@@ -123,7 +86,7 @@ local function scanLoadOut()
 end
 
 local function buildTeam()
-	petTable = scanLoadOut()
+	local petTable = scanLoadOut()
 	for i=1,#petTable do
 		if not C_PJ.PetIsSlotted(petTable[i].guid) and (petTable[i].lvl >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' or petTable[i].lvl < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam') then
 			for k=1,3 do
@@ -138,6 +101,59 @@ local function buildTeam()
 			end
 		end
 	end
+end
+
+local function getPetHealth(owner, index)
+	return math.floor((C_PB.GetHealth(owner, index) / C_PB.GetMaxHealth(owner, index)) * 100)
+end
+
+local function scanPetAbilitys()
+	local Abilitys = {}
+	local activePet = C_PB.GetActivePet(1)
+	local enemieActivePet = C_PB.GetActivePet(2)
+	for i=1,3 do
+		local isUsable, currentCooldown = C_PB.GetAbilityState(1, activePet, i)
+		local id, name, icon, maxcooldown, desc, numTurns, abilityPetType, nostrongweak = C_PB.GetAbilityInfo(1, activePet, i)
+		local enemieType = C_PetBattles.GetPetType(2, enemieActivePet)
+		local attackModifer = C_PetBattles.GetAttackModifier(abilityPetType, enemieType)
+		if isUsable then
+			--local total = (attackModifer + figure out a way to get spell base damage) / numTurns
+			Abilitys[#Abilitys+1]={
+				dmg = attackModifer,
+				name = name,
+				icon = icon,
+				id = i
+			}
+		end
+	end
+	table.sort(Abilitys, function(a,b) return a.dmg > b.dmg end)
+	return Abilitys
+end
+
+local function PetAttack()
+	if C_PB.GetBattleState() == 3 then
+		local Abilitys = scanPetAbilitys()
+		if Abilitys[1] ~= nil then
+			petBotGUI.elements.lastAttack:SetText('|T'..Abilitys[1].icon..':10:10|t'..Abilitys[1].name)
+			C_PB.UseAbility(Abilitys[1].id)
+		end
+		C_PB.SkipTurn()
+	end
+end
+
+local function PetSwap()
+	local petAmount = C_PB.GetNumPets(1)
+	local activePet = C_PB.GetActivePet(1)
+	for i=1,petAmount do
+		if i ~= activePet then
+			local canSwap = C_PB.CanPetSwapIn(i)
+			if canSwap and getPetHealth(1, activePet) <= PeFetch('NePpetBot', 'swapHealth') then
+				C_PB.ChangePet(i)
+				break
+			end
+		end
+	end
+	return false
 end
 
 C_Timer.NewTicker(0.5, (function()
