@@ -63,25 +63,19 @@ local function getPetHealth(owner, index)
 	return math.floor((C_PB.GetHealth(owner, index) / C_PB.GetMaxHealth(owner, index)) * 100)
 end
 
-local function scanLoadOut()
+local function scanJournal()
 	local petTable = {}
 	local maxAmount, petAmount = C_PJ.GetNumPets()
 	for i=1,petAmount do
 		local guid, id, _, _, lvl, _ , _, name, icon = C_PJ.GetPetInfoByIndex(i)
-		if C_PJ.PetIsFavorite(guid) and PeFetch('NePpetBot', 'favorites') or not PeFetch('NePpetBot', 'favorites') then
-			local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(guid)
-			local healthPercentage = math.floor((health / maxHealth) * 100)
-			if healthPercentage > tonumber(PeFetch('NePpetBot', 'swapHealth')) then
-				petTable[#petTable+1]={
-					guid = guid,
-					id = id,
-					lvl = lvl,
-					name = name,
-					attack = attack,
-					icon = icon,
-					health = healthPercentage
-				}
-			end
+		local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(guid)
+		local healthPercentage = math.floor((health / maxHealth) * 100)
+		if healthPercentage > tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+			petTable[#petTable+1]={
+				guid = guid,
+				lvl = lvl,
+				attack = attack,
+			}
 		end
 	end
 	if petTable[1] ~= nil then
@@ -95,19 +89,57 @@ local function scanLoadOut()
 	return petTable
 end
 
-local function buildTeam()
-	local petTable = scanLoadOut()
-	for i=1,#petTable do
-		if #petTable > 0 then
-			if not C_PJ.PetIsSlotted(petTable[i].guid) then
-				for k=1,3 do
-					local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(k)
-					local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
-					local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(petID)
-					local healthPercentage = math.floor((health / maxHealth) * 100)
-					if (level >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam' or level < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam') or healthPercentage < tonumber(PeFetch('NePpetBot', 'swapHealth')) then
-						C_PJ.SetPetLoadOutInfo(k, petTable[i].guid)
-						break
+local function scanLoadOut()
+	local loadOut = {}
+	for k=1,3 do
+		local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(k)
+		local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
+		local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(petID)
+		local healthPercentage = math.floor((health / maxHealth) * 100)
+		loadOut[#loadOut+1] = {
+			health = healthPercentage,
+			level = level,
+			id = petID,
+			attack = attack
+		}
+	end
+	return loadOut
+end
+
+local function buildBattleTeam()
+	if PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' then
+		local petTable = scanJournal()
+		for i=1,#petTable do
+			if #petTable > 0 and not C_PJ.PetIsSlotted(petTable[i].guid) then
+				local loadOut = scanLoadOut()
+				for k=1,#loadOut do
+					if loadOut[k].level < maxPetLvl then
+						if loadOut[k].level < maxPetLvl or loadOut[k].health < tonumber(PeFetch('NePpetBot', 'swapHealth')) 
+						or not C_PJ.PetIsFavorite(loadOut[k].id) and PeFetch('NePpetBot', 'favorites')
+						or loadOut[k].attack < petTable[i].attack then
+							C_PJ.SetPetLoadOutInfo(k, petTable[i].guid)
+							break
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+local function buildLevelingTeam()
+	if PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam' then
+		local petTable = scanJournal()
+		for i=1,#petTable do
+			if #petTable > 0 and not C_PJ.PetIsSlotted(petTable[i].guid) then
+				local loadOut = scanLoadOut()
+				for k=1,#loadOut do
+					if loadOut[k].level >= maxPetLvl then
+						if loadOut[k].level >= maxPetLvl or loadOut[k].health < tonumber(PeFetch('NePpetBot', 'swapHealth')) 
+						or not C_PJ.PetIsFavorite(loadOut[k].id) and PeFetch('NePpetBot', 'favorites') then
+							C_PJ.SetPetLoadOutInfo(k, petTable[i].guid)
+							break
+						end
 					end
 				end
 			end
@@ -209,7 +241,8 @@ C_Timer.NewTicker(0.5, (function()
 
 		if isRunning and not C_PB.IsWaitingOnOpponent() then
 			if not C_PB.IsInBattle() then
-				buildTeam()
+				buildBattleTeam()
+				buildLevelingTeam()
 			else
 				-- Trap
 				if getPetHealth(2, enemieActivePet) <= 35 and PeFetch('NePpetBot', 'trap') and C_PB.IsWildBattle() and C_PB.IsTrapAvailable() then
