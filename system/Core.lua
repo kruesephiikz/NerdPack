@@ -800,6 +800,49 @@ LoadNePData:SetScript('OnEvent', function(self, event, addon)
 
 end)
 
+--[[-----------------------------------------------		
+	** Commands **		
+DESC: Slash commands in-game.		
+		
+Build By: MTS		
+--------------------------------------------------]]		
+ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)		
+	local command, text = msg:match('^(%S*)%s*(.-)$')
+	if command == 'config' or command == 'c' then
+		NeP.Core.displayGUI('Settings')
+	elseif command == 'class' or command == 'cl' then
+		NeP.Interface.ClassGUI()
+	elseif command == 'info' or command == 'i' then
+		NeP.Core.displayGUI('Info')
+	elseif command == 'fish' or command == 'fishingbot' then		
+		NeP.Core.displayGUI('fishingBot')
+	elseif command == 'pet' or command == 'petbot' then		
+		NeP.Core.displayGUI('petBot')
+	elseif command == 'hide' then
+		NeP.Core.HideAll()
+	elseif command == 'show' then
+		if NeP.Core.hiding then
+			NeP.Core.hiding = false
+			ProbablyEngine.buttons.buttonFrame:Show()
+			NeP_Frame:Show()
+			NeP.Core.Print('Now Showing everything again.')
+		end
+	elseif command == 'overlay' or command == 'ov' or command == 'overlays' then
+		NeP.Core.displayGUI('Overlays')
+	else
+		-- Print all available commands.
+		NeP.Core.Print('/config - (Opens General Settings GUI)')
+		NeP.Core.Print('/status - (Opens Status GUI)')
+		NeP.Core.Print('/class - (Opens Class Settings GUI)')
+		NeP.Core.Print('/Info - (Opens Info GUI)')
+		NeP.Core.Print('/pet - (Opens Petbot GUI)')
+		NeP.Core.Print('/fish - (Opens FishBot GUI)')
+		NeP.Core.Print('/hide - (Hides Everything)')
+		NeP.Core.Print('/show - (Shows Everything)')
+		NeP.Core.Print('/overlays - (Opens Overlays Settings GUI)')
+	end
+end)
+
 ProbablyEngine.listener.register("LFG_PROPOSAL_SHOW", function()
 	if NeP.Core.PeFetch('NePConf', 'AutoLFG') then
 		AcceptProposal()
