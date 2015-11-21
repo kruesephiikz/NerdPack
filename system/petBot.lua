@@ -84,27 +84,31 @@ local function scanLoadOut()
 			end
 		end
 	end
-	if PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' then
-		table.sort(petTable, function(a,b) return a.attack > b.attack end)
-	else
-		table.sort(petTable, function(a,b) return a.lvl > b.lvl end)
+	if petTable[1] ~= nil then
+		if PeFetch('NePpetBot', 'teamtype') == 'BattleTeam' then
+			table.sort(petTable, function(a,b) return a.attack > b.attack end)
+		else
+			table.sort(petTable, function(a,b) return a.lvl > b.lvl end)
+		end
+		maxPetLvl = petTable[1].lvl
 	end
-	maxPetLvl = petTable[1].lvl
 	return petTable
 end
 
 local function buildTeam()
 	local petTable = scanLoadOut()
 	for i=1,#petTable do
-		if not C_PJ.PetIsSlotted(petTable[i].guid) then
-			for k=1,3 do
-				local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(k)
-				local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
-				local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(petID)
-				local healthPercentage = math.floor((health / maxHealth) * 100)
-				if (level >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam' or level < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam') or healthPercentage < tonumber(PeFetch('NePpetBot', 'swapHealth')) then
-					C_PJ.SetPetLoadOutInfo(k, petTable[i].guid)
-					break
+		if #petTable > 0 then
+			if not C_PJ.PetIsSlotted(petTable[i].guid) then
+				for k=1,3 do
+					local petID, petSpellID_slot1, petSpellID_slot2, petSpellID_slot3, locked = C_PJ.GetPetLoadOutInfo(k)
+					local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
+					local health, maxHealth, attack, speed, rarity = C_PJ.GetPetStats(petID)
+					local healthPercentage = math.floor((health / maxHealth) * 100)
+					if (level >= maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'LvlngTeam' or level < maxPetLvl and PeFetch('NePpetBot', 'teamtype') == 'BattleTeam') or healthPercentage < tonumber(PeFetch('NePpetBot', 'swapHealth')) then
+						C_PJ.SetPetLoadOutInfo(k, petTable[i].guid)
+						break
+					end
 				end
 			end
 		end
@@ -151,9 +155,9 @@ local function scanPetAbilitys()
 		local isUsable, currentCooldown = C_PB.GetAbilityState(1, activePet, i)
 		if isUsable then
 			local id, name, icon, maxcooldown, desc, numTurns, abilityPetType, nostrongweak = C_PB.GetAbilityInfo(1, activePet, i)
-			local enemieType = C_PetBattles.GetPetType(2, enemieActivePet)
-			local attackModifer = C_PetBattles.GetAttackModifier(abilityPetType, enemieType)
-			local power = C_PetBattles.GetPower(1, activePet)
+			local enemieType = C_PB.GetPetType(2, enemieActivePet)
+			local attackModifer = C_PB.GetAttackModifier(abilityPetType, enemieType)
+			local power = C_PB.GetPower(1, activePet)
 			local totalDmg = power*attackModifer
 			Abilitys[#Abilitys+1]={
 				dmg = totalDmg,
@@ -203,7 +207,7 @@ C_Timer.NewTicker(0.5, (function()
 		local _,_, level, _,_,_,_, petName, petIcon, petType, _,_,_,_, canBattle = C_PJ.GetPetInfoByPetID(petID)
 		petBotGUI.elements.petslot3:SetText('|T'..petIcon..':10:10|t'..petName)
 
-		if isRunning and not C_PetBattles.IsWaitingOnOpponent() then
+		if isRunning and not C_PB.IsWaitingOnOpponent() then
 			if not C_PB.IsInBattle() then
 				buildTeam()
 			else
