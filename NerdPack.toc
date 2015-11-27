@@ -46,6 +46,8 @@ rotations\priest\disc.lua
 rotations\priest\shadow.lua
 rotations\priest\holy.lua
 rotations\warlock\destro.lua
+rotations\warlock\affliction.lua
+rotations\warlock\demonology.lua
 rotations\hunter\bm.lua
 rotations\hunter\mm.lua
 rotations\mage\arcane.lua

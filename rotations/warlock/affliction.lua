@@ -1,8 +1,8 @@
-NeP.Interface.classGUIs[267] = {
-	key = 'NePConfWarlockDestro',
+NeP.Interface.classGUIs[265] = {
+	key = 'NePConfWarlockAff',
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Warlock Destruction Settings',
+	subtitle = 'Warlock Affliction Settings',
 	color = NeP.Core.classColor('player'),
 	width = 250,
 	height = 500,
@@ -43,7 +43,7 @@ local outCombat = {
 	{Shared},
 }
 
-ProbablyEngine.rotation.register_custom(267, NeP.Core.GetCrInfo('Warlock - Destruction'),
+ProbablyEngine.rotation.register_custom(265, NeP.Core.GetCrInfo('Warlock - Affliction'),
 	{ -- In-Combat
 		{Shared},
 		{Moving, "player.moving"},

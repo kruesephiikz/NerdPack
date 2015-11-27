@@ -1,8 +1,8 @@
-NeP.Interface.classGUIs[267] = {
-	key = 'NePConfWarlockDestro',
+NeP.Interface.classGUIs[266] = {
+	key = 'NePConfWarlockDemo',
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Warlock Destruction Settings',
+	subtitle = 'Warlock Demonology Settings',
 	color = NeP.Core.classColor('player'),
 	width = 250,
 	height = 500,
@@ -43,7 +43,7 @@ local outCombat = {
 	{Shared},
 }
 
-ProbablyEngine.rotation.register_custom(267, NeP.Core.GetCrInfo('Warlock - Destruction'),
+ProbablyEngine.rotation.register_custom(266, NeP.Core.GetCrInfo('Warlock - Demonology'),
 	{ -- In-Combat
 		{Shared},
 		{Moving, "player.moving"},
