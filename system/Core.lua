@@ -849,6 +849,26 @@ ProbablyEngine.listener.register("LFG_PROPOSAL_SHOW", function()
 	end
 end)
 
+ProbablyEngine.listener.register("LFG_ROLE_CHECK_SHOW", function()
+	if NeP.Core.PeFetch('NePConf', 'AutoRole') then
+		if NeP.Core.PeFetch('NePConf', 'RoleSet') == 'DPS' then
+			RolePollPopupRoleButtonDPS:Click()
+		elseif NeP.Core.PeFetch('NePConf', 'RoleSet') == 'TANK' then
+			RolePollPopupRoleButtonTank:Click()
+		elseif NeP.Core.PeFetch('NePConf', 'RoleSet') == 'HEALER' then
+			RolePollPopupRoleButtonHealer:Click()
+		end
+		RolePollPopupAcceptButton:Click()
+		--AcceptProposal()
+	end
+end)
+
+ProbablyEngine.listener.register("RESURRECT_REQUEST", function()
+	if NeP.Core.PeFetch('NePConf', 'AutoARess') then
+		StaticPopup1Button1:Click()
+	end
+end)
+
 ProbablyEngine.condition.register('twohand', function(target)
   return IsEquippedItemType("Two-Hand")
 end)

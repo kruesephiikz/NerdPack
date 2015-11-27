@@ -54,7 +54,14 @@ NeP.Core.BuildGUI('Settings', {
 		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Extras:", size = 25, align = "Center" },
 			{ type = 'spacer' },
-			{ type = "checkbox", text = "Auto Accept LFG Queue", key = "AutoLFG", default = false, desc = "Automatic accept LFG proposal." },
+			{ type = "checkbox", text = "Auto Accept Ressurect", key = "AutoARess", default = false, desc = "Auto accept Ressurect request." },
+			{ type = "checkbox", text = "Auto Accept LFG Queue", key = "AutoLFG", default = false, desc = "Auto accept LFG proposal." },
+			{ type = "checkbox", text = "Auto Accept Role Check", key = "AutoRole", default = false, desc = "Auto accept Role Check." },
+			{ type = "dropdown", text = "Role", key = "RoleSet", list = {
+				{ text = "DPS", key = "DPS" },
+				{ text = "TANK", key = "TANK" },
+				{ text = "HEALER", key = "HEALER" },
+			}, default = "DPS" },
 			{ type = "spinner", text = "Dummy Testing Time:", key = "testDummy", width = 100, min = 1, max = 30, default = 5, step = 1, desc = "Set how long to run dumy testing for in mintes."},
 	}
 })
