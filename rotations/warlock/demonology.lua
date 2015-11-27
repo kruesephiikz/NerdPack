@@ -15,7 +15,6 @@ NeP.Interface.classGUIs[266] = {
 		{type = 'spacer'},{type = 'rule'},
 		{type = 'text', text = 'Survival', align = 'center'},
 			--stuff
-		{
 	}
 }
 
