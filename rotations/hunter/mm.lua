@@ -35,37 +35,31 @@ local lib = function()
 		'Automatically ress your pet when it dies.')
 end
 
-local _ALL = {
-	-- Pause
-	{'pause', 'player.buff(5384)'}, -- Pause for Feign Death
-	-- Keybinds
+local Keybinds = {
 	{'82939', 'modifier.alt', 'target.ground'}, -- Explosive Trap
 	{'60192', 'modifier.shift', 'target.ground'}, -- Freezing Trap
 	{'82941', 'modifier.shift', 'target.ground'}, -- Ice Trap
-	-- Buffs
-	{'77769', '!player.buff(77769)'}, -- Trap Launcher
-		-- Aspect of the Cheetah
-		{  '/cancelaura '..n, { 
-			'player.buff(5118)',
-			'!player.glyph(692)', 
-			'!player.moving'
-		}},
-		{  '/cancelaura '..n, { 
-			'player.buff(5118)',
-			'!player.glyph(692)', 
-			'player.aggro >= 100'
-		}},
-		{'5118', {
-			'!player.buff(5118)', 
-			'player.movingfor >= 3',
-			'!player.aggro >= 100'
-		}},
-	-- Missdirect // Focus
-	{'34477', { 
-		'focus.exists', 
-		'!player.buff(35079)', 
-		'target.threat > 60' 
-	}, 'focus'},
+}
+
+local Buffs = {
+	-- Trap Launcher
+	{'77769', '!player.buff(77769)'}, 
+	-- Aspect of the Cheetah
+	{  '/cancelaura '..n, { 
+		'player.buff(5118)',
+		'!player.glyph(692)', 
+		'!player.moving'
+	}},
+	{ '/cancelaura '..n, { 
+		'player.buff(5118)',
+		'!player.glyph(692)', 
+		'player.aggro >= 100'
+	}},
+	{'5118', {
+		'!player.buff(5118)', 
+		'player.movingfor >= 3',
+		'!player.aggro >= 100'
+	}},
 }
 
 local Pet = {
@@ -86,13 +80,19 @@ local Pet_inCombat = {
 	{'53271', 'player.state.disorient'}, -- Master's Call
 	{'136', { -- Mend Pet
 		'pet.health <= 75', 
-		'!pet.buff(136)' 
+		'!pet.buff(136)'
 	}}, 
 	{'34477', { -- Missdirect // PET 
 		'!player.buff(35079)', 
 		'!focus.exists', 
 		'target.threat > 85' 
 	}, 'pet'},
+	-- Missdirect // Focus
+	{'34477', { 
+		'focus.exists', 
+		'!player.buff(35079)', 
+		'target.threat > 60' 
+	}, 'focus'},
 }
 
 local Cooldowns = {
@@ -124,6 +124,11 @@ local focusFire = {
 	{'82692', 'player.spell(121818).cooldown >= 260'}, -- Stampede
 }
 
+local Loneworlf = {
+	-- Dismiss pet if it exists...
+	-- Use selected buff from GUI
+}
+
 local inCombat = {
 	{{ -- Steady Focus // TALENT
 		{'Steady Shot', 'player.buff(177667).duration < 3', 'target'}, -- Cobra Shot
@@ -140,13 +145,17 @@ local inCombat = {
 }
 
 local outCombat = {
-	{_All},
-	{Pet}
+	{Keybinds},
+	{Buffs},
+	{Pet, '!talent(7, 3)'}
 }
 
-ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksmanship'),
+ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksmanship tytry'),
 	{ -- In-Combat
-		{_ALL},
+		-- Pause for Feign Death
+		{'pause', 'player.buff(5384)'},
+		{Keybinds},
+		{Buffs},
 		{{-- Interrupts
 			{'!147362'}, -- Counter Shot
 			{'!19577'}, -- Intimidation
@@ -155,8 +164,11 @@ ProbablyEngine.rotation.register_custom(254, NeP.Core.GetCrInfo('Hunter - Marksm
 		{{ -- General Conditions
 			{Survival, 'player.health < 100'},
 			{Cooldowns, 'modifier.cooldowns'},
-			{Pet},
-			{Pet_inCombat, {'player.alive', 'pet.exists'} },
+			{Loneworlf, 'talent(7, 3)'},
+			{{ -- Stop if Loneworlf
+				--{Pet},
+				--{Pet_inCombat, {'player.alive', 'pet.exists'} },
+			}, '!talent(7, 3)' },
 			{focusFire, { 
 				'pet.exists', 
 				'!player.buff(Focus Fire)', 
