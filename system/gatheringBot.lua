@@ -62,29 +62,15 @@ NeP.Core.BuildGUI('GatherBot', {
 				-- Draw waypoint checkbox
 				{ type = "checkbox", text = "Draw Waypoint", key = "drawWay", default = false },
 				-- Start Button
-				{ type = "button", text = "Start", width = 190, height = 20, callback = function(self) 
-				if not _Recording then
+				{ type = "button", text = "Start", width = 190, height = 20, 
+				callback = function(self) 
+					wipe(afTable)
+					self:SetText("Start")
+					_Playing = not _Playing
 					if _Playing then
-						self:SetText("Start")
-					else
-						-- Create a visual route
-						if PeFetch('GatherBot', 'drawWay') then
-							LibDraw.Sync(function()
-								if _Playing then
-									local obj = readProfile()
-									for i=2,#obj-1 do
-										LibDraw.Line(obj[i].x, obj[i].y, obj[i].z, obj[i+1].x, obj[i+1].y, obj[i+1].z)
-									end		 
-								end
-							end)
-						end
-						LibDraw.clearCanvas()
 						self:SetText("Stop")
 					end
-					wipe(afTable)
-					_Playing = not _Playing
-				end 
-			end },
+				end },
 		-- Build Profile tools
 		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Create a profile:", size = 25, align = "Center"},
@@ -92,39 +78,50 @@ NeP.Core.BuildGUI('GatherBot', {
 			{ type = "input", text = 'Profile Name:', key = 'nameInput', default = '???' },
 			{ type = "input", text = 'Profile Author:', key = 'authorInput', default = '???' },
 			{ type = 'spacer' },
-			{ type = "button", text = "Record Path", width = 190, height = 20, callback = function(self)
-				if not _Playing then
-					if _Recording then
-						self:SetText("Start Recording")
-						local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
-						local str = json.encode (currentPath, { indent = true })
-						WriteFile(fileLoc, str)
-					else
-						-- Add profile Info
-						local weekday, month, day, year = CalendarGetDate()
-						currentPath[1] = {
-							Name = PeFetch('GatherBot', 'nameInput'),
-							Author = PeFetch('GatherBot', 'authorInput'),
-							Date = 'D:'..day..' /M:'..month..' /Y:'..year,
-							Zone = GetZoneText()
-						}
-						-- Draw a end point
-						local x, y, z = ObjectPosition('player')
-						LibDraw.Sync(function()
-							if _Recording then
-								LibDraw.Text('END HERE!', "SystemFont_Tiny", x, y, z + 6)
-								LibDraw.Circle(x, y, z, 2)				 
-							end
-						end)
-						LibDraw.clearCanvas()
-						self:SetText("Stop Recording")
-					end
-					wipe(currentPath)
-					_Recording = not _Recording
+			{ type = "button", text = "Record Path", width = 190, height = 20, 
+			callback = function(self)
+				self:SetText("Start Recording")
+				wipe(currentPath)
+				_Recording = not _Recording
+				if _Recording then
+					self:SetText("Stop Recording")
+					-- Save the profile to file
+					local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
+					local str = json.encode (currentPath, { indent = true })
+					WriteFile(fileLoc, str)
+				else
+					-- Add profile Info
+					local weekday, month, day, year = CalendarGetDate()
+					currentPath[1] = {
+						Name = PeFetch('GatherBot', 'nameInput'),
+						Author = PeFetch('GatherBot', 'authorInput'),
+						Date = 'D:'..day..' /M:'..month..' /Y:'..year,
+						Zone = GetZoneText()
+					}	
 				end
 			end },
     }
 })
+
+LibDraw.Sync(function()
+	local x, y, z = ObjectPosition('player')
+	-- Draw a end point
+	if _Recording then
+		LibDraw.Text('END HERE!', "SystemFont_Tiny", x, y, z + 6)
+		LibDraw.Circle(x, y, z, 2)				 
+	end
+	-- Create a visual route
+	if PeFetch('GatherBot', 'drawWay') then
+		local obj = afTable
+		for i=2,#obj-1 do
+			local aX, aY, aZ = obj[i].x, obj[i].y, obj[i].z
+			local bX, bY, bZ = obj[i+1].x, obj[i+1].y, obj[i+1].z
+			LibDraw.Line(aX, aY, aZ, bX, bY, bZ)	 
+		end
+	end
+end)
+
+
 
 local function recordPath()
 	if _Recording and not _Playing then
