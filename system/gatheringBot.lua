@@ -21,33 +21,6 @@ local function readProfile()
 	return obj
 end
 
--- Re-table it to add distance, this has to be done after the fact beacuse we're not in the same position.
--- Think of a better way for this...
-local function getRoute()
-	local obj = readProfile()
-	local _table = {}
-	_table[1] = {
-		Name = obj[1].Name,
-		Author = obj[1].Author,
-		Date = obj[1].Date,
-		Zone = obj[1].Zone,
-		dis = 0 -- Make sure this remains 1st in table
-	}
-	for i=2,#obj do
-		local aX, aY, aZ = ObjectPosition('player')
-		local bX, bY, bZ = obj[i].x, obj[i].y, obj[i].z
-		local distance = math.sqrt(((bX-aX)^2) + ((bY-aY)^2) + ((bZ-aZ)^2))
-		_table[#_table+1] = {
-			x = bX,
-			y = bY,
-			z = bZ,
-			dis = distance
-		}
-	end
-	table.sort(_table, function(a,b) return a.dis < b.dis end)
-	return _table
-end
-
 NeP.Core.BuildGUI('GatherBot', {
     key = "GatherBot",
     title = '|T'..NeP.Info.Logo..':10:10|t'.." "..NeP.Info.Name,
@@ -83,24 +56,28 @@ NeP.Core.BuildGUI('GatherBot', {
 				-- Zone
 				{ type = "text", text = "|cff"..NeP.Interface.addonColor.."Profile Zone: ", size = 11, offset = -11 },
 				{ key = 'profileZone', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			-- controls
+			{ type = 'spacer' },
+				-- Draw waypoint checkbox
+				{ type = "checkbox", text = "Draw Waypoint", key = "drawWay", default = false },
 				-- Start Button
-				{ type = 'spacer' },
 				{ type = "button", text = "Start", width = 190, height = 20, callback = function(self) 
 				if not _Recording then
 					if _Playing then
 						self:SetText("Start")
 					else
 						-- Create a visual route
-						LibDraw.Sync(function()
-							if _Playing then
-								local obj = readProfile()
-								for i=2,#obj-1 do
-									LibDraw.Line(obj[i].x, obj[i].y, obj[i].z, obj[i+1].x, obj[i+1].y, obj[i+1].z)
+						if PeFetch('GatherBot', 'drawWay') then
+							LibDraw.Sync(function()
+								if _Playing then
+									local obj = readProfile()
+									for i=2,#obj-1 do
+										LibDraw.Line(obj[i].x, obj[i].y, obj[i].z, obj[i+1].x, obj[i+1].y, obj[i+1].z)
+									end		 
 								end
-							else
-								 LibDraw.clearCanvas()
-							end
-						end)
+							end)
+						end
+						LibDraw.clearCanvas()
 						self:SetText("Stop")
 					end
 					_Playing = not _Playing
@@ -135,11 +112,10 @@ NeP.Core.BuildGUI('GatherBot', {
 						LibDraw.Sync(function()
 							if _Recording then
 								LibDraw.Text('END HERE!', "SystemFont_Tiny", x, y, z + 6)
-								LibDraw.Circle(x, y, z, 2)
-							else
-								 LibDraw.clearCanvas()
+								LibDraw.Circle(x, y, z, 2)				 
 							end
 						end)
+						LibDraw.clearCanvas()
 						self:SetText("Stop Recording")
 					end
 					_Recording = not _Recording
@@ -168,18 +144,38 @@ end
 local afTable = {}
 local function playPath()
 	if _Playing and not _Recording then
-		-- This takes the router and creates a infinite loop out of it.
-		if #afTable <= 1 then afTable = getRoute() end
-		local unitSpeed = GetUnitSpeed('player')
 		-- If we're in combat, stop and go kill it.
 		if not InCombatLockdown() then
 			if not ObjectIsNear() then
-				-- Make sure we have positions to move to.
-				-- Need some tweaks...
-				if unitSpeed == 0 and #afTable >= 2 then
-					x, y, z = afTable[2].x + math.random(-0.5, 0.5), afTable[2].y + math.random(-0.5, 0.5), afTable[2].z
-					MoveTo(x, y, z)
-					table.remove(afTable, 2)
+				-- Make sure we have positions to move to. (Needs some tweaks...)
+				local unitSpeed = GetUnitSpeed('player')
+				if unitSpeed == 0 then
+					-- This takes the route and creates a infinite loop out of it.
+					if #afTable >= 2 then
+						-- Figure out the nearest waypoint
+						local aX, aY, aZ = ObjectPosition('player')
+						local _rtable = {}
+						for i=2,#afTable do
+							local bX, bY, bZ = afTable[i].x, afTable[i].y, afTable[i].z
+							local distance = math.sqrt(((bX-aX)^2) + ((bY-aY)^2) + ((bZ-aZ)^2))
+							_rtable[#_rtable+1] = {
+								x = bX,
+								y = bY,
+								z = bZ,
+								dis = distance,
+								id = i
+							}
+						end
+						table.sort(_rtable, function(a,b) return a.dis < b.dis end)
+						-- Move to nearest waypoint
+						local _bX, _bY, _bZ = _rtable[1].x + math.random(-0.5, 0.5), _rtable[1].y + math.random(-0.5, 0.5), _rtable[1].z
+						MoveTo(_bX, _bY, _bZ)
+						-- Remove the used waypoint from our temp route
+						table.remove(afTable, _rtable[1].id)
+					else
+						-- We have to create a temp table so we can remove once we've move there
+						afTable = readProfile()
+					end
 				end
 			else
 				MoveTo(ObjectPosition(FIXME))
