@@ -150,7 +150,8 @@ local function playPath()
 				-- Make sure we have positions to move to.
 				-- Need some tweaks...
 				if unitSpeed == 0 and #afTable >= 2 then
-					MoveTo(afTable[2].x, afTable[2].y, afTable[2].z)
+					x, y, z = afTable[2].x + math.random(-0.5, 0.5), afTable[2].y + math.random(-0.5, 0.5), afTable[2].z
+					MoveTo(x, y, z)
 					table.remove(afTable, 2)
 				end
 			else
