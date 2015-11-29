@@ -90,6 +90,7 @@ NeP.Core.BuildGUI('GatherBot', {
 					local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
 					local str = json.encode (currentPath, { indent = true })
 					WriteFile(fileLoc, str)
+					wipe(currentPath)
 				else
 					-- Add profile Info
 					local weekday, month, day, year = CalendarGetDate()
@@ -101,7 +102,6 @@ NeP.Core.BuildGUI('GatherBot', {
 					}
 					pX, pY, pZ = ObjectPosition('player')
 				end
-				wipe(currentPath)
 				_Recording = not _Recording
 			end },
     }
