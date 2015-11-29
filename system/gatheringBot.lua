@@ -11,7 +11,8 @@ local LibDraw = LibStub("LibDraw-1.0")
 
 local _Recording = false
 local _Playing = false
-local currentPath = {}
+local currentPath = {} -- Temp for recording ( gets saved into a file and wiped )
+local afTable = {} -- Temp for looping the selected route
 
 local function readProfile()
 	-- Requires a check if file exists
@@ -80,6 +81,7 @@ NeP.Core.BuildGUI('GatherBot', {
 						LibDraw.clearCanvas()
 						self:SetText("Stop")
 					end
+					wipe(afTable)
 					_Playing = not _Playing
 				end 
 			end },
@@ -97,7 +99,6 @@ NeP.Core.BuildGUI('GatherBot', {
 						local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
 						local str = json.encode (currentPath, { indent = true })
 						WriteFile(fileLoc, str)
-						wipe(currentPath)
 					else
 						-- Add profile Info
 						local weekday, month, day, year = CalendarGetDate()
@@ -118,6 +119,7 @@ NeP.Core.BuildGUI('GatherBot', {
 						LibDraw.clearCanvas()
 						self:SetText("Stop Recording")
 					end
+					wipe(currentPath)
 					_Recording = not _Recording
 				end
 			end },
@@ -141,7 +143,6 @@ local function ObjectIsNear()
 	return false
 end
 
-local afTable = {}
 local function playPath()
 	if _Playing and not _Recording then
 		-- If we're in combat, stop and go kill it.
