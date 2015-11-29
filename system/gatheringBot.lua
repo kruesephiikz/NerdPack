@@ -13,12 +13,39 @@ local _Recording = false
 local _Playing = false
 local currentPath = {}
 
-local function getRoute()
-	local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
+local function readProfile()
 	-- Requires a check if file exists
+	local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
 	local str = ReadFile(fileLoc)
 	local obj, pos, err = json.decode(str, 1, nil)
 	return obj
+end
+
+-- Re-table it to add distance, this has to be done after the fact beacuse we're not in the same position.
+-- Think of a better way for this...
+local function getRoute()
+	local obj = readProfile()
+	local _table = {}
+	_table[1] = {
+		Name = obj[1].Name,
+		Author = obj[1].Author,
+		Date = obj[1].Date,
+		Zone = obj[1].Zone,
+		dis = 0 -- Make sure this remains 1st in table
+	}
+	for i=2,#obj do
+		local aX, aY, aZ = ObjectPosition('player')
+		local bX, bY, bZ = obj[i].x, obj[i].y, obj[i].z
+		local distance = math.sqrt(((bX-aX)^2) + ((bY-aY)^2) + ((bZ-aZ)^2))
+		_table[#_table+1] = {
+			x = bX,
+			y = bY,
+			z = bZ,
+			dis = distance
+		}
+	end
+	table.sort(_table, function(a,b) return a.dis < b.dis end)
+	return _table
 end
 
 NeP.Core.BuildGUI('GatherBot', {
@@ -66,7 +93,7 @@ NeP.Core.BuildGUI('GatherBot', {
 						-- Create a visual route
 						LibDraw.Sync(function()
 							if _Playing then
-								local obj = getRoute()
+								local obj = readProfile()
 								for i=2,#obj-1 do
 									LibDraw.Line(obj[i].x, obj[i].y, obj[i].z, obj[i+1].x, obj[i+1].y, obj[i+1].z)
 								end
@@ -172,7 +199,7 @@ C_Timer.NewTicker(0.5, (function() recordPath() end), nil)
 -- Update GUI
 local gthGUI = NeP.Core.getGUI('GatherBot')
 C_Timer.NewTicker(1, (function()
-	local obj = getRoute()
+	local obj = readProfile()
 	if obj[1] ~= nil then
 		gthGUI.elements.profileName:SetText(obj[1].Name)
 		gthGUI.elements.profileAuthor:SetText(obj[1].Author)
