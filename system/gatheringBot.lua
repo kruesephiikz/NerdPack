@@ -13,13 +13,16 @@ local _Recording = false
 local _Playing = false
 local currentPath = {} -- Temp for recording ( gets saved into a file and wiped )
 local afTable = {} -- Temp for looping the selected route
+local pX, pY, pZ = 0,0,0,0
 
 local function readProfile()
-	-- Requires a check if file exists
-	local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
-	local str = ReadFile(fileLoc)
-	local obj, pos, err = json.decode(str, 1, nil)
-	return obj
+	if FireHack then
+		-- Requires a check if file exists
+		local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
+		local str = ReadFile(fileLoc)
+		local obj, pos, err = json.decode(str, 1, nil)
+		return obj
+	end
 end
 
 NeP.Core.BuildGUI('GatherBot', {
@@ -81,8 +84,6 @@ NeP.Core.BuildGUI('GatherBot', {
 			{ type = "button", text = "Record Path", width = 190, height = 20, 
 			callback = function(self)
 				self:SetText("Start Recording")
-				wipe(currentPath)
-				_Recording = not _Recording
 				if _Recording then
 					self:SetText("Stop Recording")
 					-- Save the profile to file
@@ -97,26 +98,29 @@ NeP.Core.BuildGUI('GatherBot', {
 						Author = PeFetch('GatherBot', 'authorInput'),
 						Date = 'D:'..day..' /M:'..month..' /Y:'..year,
 						Zone = GetZoneText()
-					}	
+					}
+					pX, pY, pZ = ObjectPosition('player')
 				end
+				wipe(currentPath)
+				_Recording = not _Recording
 			end },
     }
 })
 
 LibDraw.Sync(function()
-	local x, y, z = ObjectPosition('player')
-	-- Draw a end point
-	if _Recording then
-		LibDraw.Text('END HERE!', "SystemFont_Tiny", x, y, z + 6)
-		LibDraw.Circle(x, y, z, 2)				 
-	end
-	-- Create a visual route
-	if PeFetch('GatherBot', 'drawWay') then
-		local obj = afTable
-		for i=2,#obj-1 do
-			local aX, aY, aZ = obj[i].x, obj[i].y, obj[i].z
-			local bX, bY, bZ = obj[i+1].x, obj[i+1].y, obj[i+1].z
-			LibDraw.Line(aX, aY, aZ, bX, bY, bZ)	 
+	if FireHack then
+		-- Draw a end point
+		if _Recording then
+			LibDraw.Text('END HERE!', "SystemFont_Tiny", pX, pY, pZ + 6)
+			LibDraw.Circle(pX, pY, pZ, 2)				 
+		end
+		-- Create a visual route
+		if PeFetch('GatherBot', 'drawWay') then
+			for i=2,#afTable-1 do
+				local aX, aY, aZ = afTable[i].x, afTable[i].y, afTable[i].z
+				local bX, bY, bZ = afTable[i+1].x, afTable[i+1].y, afTable[i+1].z
+				LibDraw.Line(aX, aY, aZ, bX, bY, bZ)	 
+			end
 		end
 	end
 end)
@@ -125,13 +129,16 @@ end)
 
 local function recordPath()
 	if _Recording and not _Playing then
-		local x, y, z = ObjectPosition('player')
-		print('saved '..x..', '..y..', '..z)
-		currentPath[#currentPath+1] = {
-			x = x,
-			y = y,
-			z = z
-		}
+		local unitSpeed = GetUnitSpeed('player')
+		if unitSpeed ~= 0 then
+			local x, y, z = ObjectPosition('player')
+			print('saved '..x..', '..y..', '..z)
+			currentPath[#currentPath+1] = {
+				x = x,
+				y = y,
+				z = z
+			}
+		end
 	end
 end
 
@@ -171,8 +178,10 @@ local function playPath()
 						-- Remove the used waypoint from our temp route
 						table.remove(afTable, _rtable[1].id)
 					else
-						-- We have to create a temp table so we can remove once we've move there
-						afTable = readProfile()
+						if FireHack then
+							-- We have to create a temp table so we can remove once we've move there
+							afTable = readProfile()
+						end
 					end
 				end
 			else
@@ -193,11 +202,13 @@ C_Timer.NewTicker(0.5, (function() recordPath() end), nil)
 -- Update GUI
 local gthGUI = NeP.Core.getGUI('GatherBot')
 C_Timer.NewTicker(1, (function()
-	local obj = readProfile()
-	if obj[1] ~= nil then
-		gthGUI.elements.profileName:SetText(obj[1].Name)
-		gthGUI.elements.profileAuthor:SetText(obj[1].Author)
-		gthGUI.elements.profileZone:SetText(obj[1].Zone)
-		gthGUI.elements.profileDate:SetText(obj[1].Date)
+	if gthGUI.parent:IsShown() and FireHack then
+		local obj = readProfile()
+		if obj[1] ~= nil then
+			gthGUI.elements.profileName:SetText(obj[1].Name)
+			gthGUI.elements.profileAuthor:SetText(obj[1].Author)
+			gthGUI.elements.profileZone:SetText(obj[1].Zone)
+			gthGUI.elements.profileDate:SetText(obj[1].Date)
+		end
 	end
 end), nil)
