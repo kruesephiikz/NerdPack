@@ -113,6 +113,17 @@ function StatusGUI_RUN()
 				_handleFrames()
 				NeP.Core.displayGUI('petBot')
 			end)
+
+			-- GatheringBot
+			buttonsTH = buttonsTH + buttonH
+			local GTHButtom = NeP.Interface.addButton(MenuGUI)
+			GTHButtom.text:SetText('Gathering Bot')
+			GTHButtom:SetPoint('TOP', MenuGUI, 0, -buttonsTH)
+			GTHButtom:SetSize(statusText2:GetStringWidth()-10, buttonH)
+			GTHButtom:SetScript('OnClick', function(self)
+				_handleFrames()
+				NeP.Core.displayGUI('GatherBot')
+			end)
 			
 			-- Information
 			buttonsTH = buttonsTH + buttonH
