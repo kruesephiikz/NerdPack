@@ -19,7 +19,7 @@ local function readProfile()
 	if FireHack then
 		-- Requires a check if file exists
 		local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
-		local str = ReadFile(fileLoc)
+		local str = ReadFile(fileLoc) or ''
 		local obj, pos, err = json.decode(str, 1, nil)
 		return obj
 	end
@@ -125,8 +125,6 @@ LibDraw.Sync(function()
 	end
 end)
 
-
-
 local function recordPath()
 	if _Recording and not _Playing then
 		local unitSpeed = GetUnitSpeed('player')
@@ -199,16 +197,16 @@ end
 C_Timer.NewTicker(0.01, (function() playPath() end), nil)
 C_Timer.NewTicker(0.5, (function() recordPath() end), nil)
 
+local fallbackGUI = {[1] = {Name = '...', Author = '...', Zone = '...', Date = '...'}}
+
 -- Update GUI
 local gthGUI = NeP.Core.getGUI('GatherBot')
 C_Timer.NewTicker(1, (function()
 	if gthGUI.parent:IsShown() and FireHack then
-		local obj = readProfile()
-		if obj[1] ~= nil then
-			gthGUI.elements.profileName:SetText(obj[1].Name)
-			gthGUI.elements.profileAuthor:SetText(obj[1].Author)
-			gthGUI.elements.profileZone:SetText(obj[1].Zone)
-			gthGUI.elements.profileDate:SetText(obj[1].Date)
-		end
+		local obj = readProfile() or fallbackGUI
+		gthGUI.elements.profileName:SetText(obj[1].Name)
+		gthGUI.elements.profileAuthor:SetText(obj[1].Author)
+		gthGUI.elements.profileZone:SetText(obj[1].Zone)
+		gthGUI.elements.profileDate:SetText(obj[1].Date)
 	end
 end), nil)
