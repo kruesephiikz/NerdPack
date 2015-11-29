@@ -197,13 +197,11 @@ end
 C_Timer.NewTicker(0.01, (function() playPath() end), nil)
 C_Timer.NewTicker(0.5, (function() recordPath() end), nil)
 
-local fallbackGUI = {[1] = {Name = '...', Author = '...', Zone = '...', Date = '...'}}
-
 -- Update GUI
 local gthGUI = NeP.Core.getGUI('GatherBot')
 C_Timer.NewTicker(1, (function()
 	if gthGUI.parent:IsShown() and FireHack then
-		local obj = readProfile() or fallbackGUI
+		local obj = readProfile() or {[1] = {Name = '...', Author = '...', Zone = '...', Date = '...'}}
 		gthGUI.elements.profileName:SetText(obj[1].Name)
 		gthGUI.elements.profileAuthor:SetText(obj[1].Author)
 		gthGUI.elements.profileZone:SetText(obj[1].Zone)
