@@ -118,6 +118,7 @@ DESC: Counts the loot from fishing.
 
 Build By: darkjacky @ github
 ---------------------------------------------------]]
+local fshGUI = NeP.Core.getGUI('fishingBot')
 local DoCountLoot = false
 local CounterFrame = CreateFrame("frame")
 CounterFrame:RegisterEvent("LOOT_READY")
@@ -127,7 +128,6 @@ CounterFrame:SetScript("OnEvent", function()
 		for i=1,GetNumLootItems() do
 			local lootIcon, lootName, lootQuantity, rarity, locked = GetLootSlotInfo(i)
 			_Lootedcounter = _Lootedcounter + lootQuantity
-			local fshGUI = NeP.Core.getGUI('fishing')
 			fshGUI.elements.current_average:SetText(math.floor(3600 / (GetTime() - _timeStarted) * _Lootedcounter))
 		end
 	end
@@ -425,7 +425,6 @@ local function FormatTime( seconds )
 	return firstrow .. secondrow .. thirdrow
 end
 
-local fshGUI = NeP.Core.getGUI('fishingBot')
 C_Timer.NewTicker(0.5, (function()
 	if NeP.Core.CurrentCR then
 		
