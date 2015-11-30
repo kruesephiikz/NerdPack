@@ -1,3 +1,6 @@
+local SAoE = NeP.Core.SAoE
+local AutoDots = NeP.Core.AutoDots
+
 NeP.Interface.classGUIs[258] = {
 	key = 'NePConfPriestShadow',
 	profiles = true,
@@ -15,16 +18,11 @@ NeP.Interface.classGUIs[258] = {
 		-- [[ General Settings ]]
 		{type = 'spacer'},{type = 'rule'},
 		{type = 'header', text = 'General', align = 'center'},
-			{type = 'checkbox', default = true, text = 'Angelic Feather / Body and Soul', key = 'feather'},
-			{type = 'checkbox', default = true, text = 'Levitate', key = 'levitate'},
+			-- TODO
 		-- [[ Survival settings ]]
 		{type = 'spacer'},{type = 'rule'},
 		{type = 'header', text = 'Survival', align = 'center'},
-			{type = 'spinner', text = 'Healthstone HP', key = 'hstone', default = 75},
-			{type = 'spinner', text = 'PW:Shield HP', key = 'shield', default = 60},
-			{type = 'spinner', text = 'Desperate Prayer HP', key = 'instaprayer', default = 20},
-			{type = 'spinner', text = 'Spectral Guise / Dispersion at HP', key = 'guise', default = 20},
-			{type = 'spinner', text = 'Fade at Threat', key = 'fade', default = 90},
+			-- TODO
 	}
 }
 
@@ -33,67 +31,75 @@ local lib = function()
 	ProbablyEngine.toggle.create(
 		'autoDots', 
 		'Interface\\Icons\\Ability_creature_cursed_05.png', 
-		'Dot All The Things! (Elites)', 
+		'Dot Elites', 
 		'Click here to dot all the things!')
 	ProbablyEngine.toggle.create(
 		'dotEverything', 
-		'Interface\\Icons\\Ability_creature_cursed_05.png', 
-		'Dot All The Things! (All)', 
+		'Interface\\Icons\\Ability_creature_cursed_06.png', 
+		'Dot all (no VT))', 
 		'Click here to dot all the things!')
 end
 
+local keybinds = {
+	{'pause', 'modifier.alt'}, -- Pause
+	{'127632', 'modifier.lshift'}, -- Cascade (any # of targets)
+}
+
 local Buffs = {
-	{'215262', '!player.buffs.stamina'}, -- Power Word: Fortitude
-	{'15473', 'player.stance = 0'}, -- Shadowform
+	{'215262', '!player.buff(21562)'}, -- Power Word: Fortitude
+	{'15473', {'player.stance = 0', 'player.health >=40'}}, -- Shadowform
 	--{'1706', 'player.falling'} -- Levitate
 }
 
 local Cooldowns = {
 	{'123040'}, -- Mindbender
-	{'Halo'},
-	{'Shadowfiend '},
+	{'34433'}, --Shadowfiend
 	{'15286', '@coreHealing.needsHealing(65, 3)'} -- Vampiric Embrace
 }
 
 local Survival = {
-	{'17', {-- Power Word: Shield
-		'player.health < 100',
-		'!player.buff(17)'
-	}, 'player'},
-	{'2061', 'player.health < 60', 'player'}, -- Flash Heal
+	{'2061', 'player.health < 20', 'player'}, -- Flash Heal
 }
 
-local Dotting = {
+local Dots = {
 	{{-- Toggle ALL
-		{'32379', (function() return NeP.Core.AutoDots('32379', 20) end)}, -- SW:D
-		{'589', (function() return NeP.Core.AutoDots('589', 100, 5) end)}, -- SW:P
-		{'34914', (function() return NeP.Core.AutoDots('34914', 100, 4) end)}, -- Vampiric Touch
+		{'!32379', (function() return AutoDots('32379', 20) end)}, -- SW:D
+		{'589', (function() return AutoDots('589', 100, 2) end)}, -- SW:P
+		--{'34914', (function() return AutoDots('34914', 100, 3) end)}, -- Vampiric Touch
 	}, 'toggle.dotEverything'},
+	
 	{{-- Toggle Elites
-		{'32379', (function() return NeP.Core.AutoDots('32379', 20, nil, nil, 'elite') end)}, -- SW:D
-		{'589', (function() return NeP.Core.AutoDots('589', 100, 5, nil, 'elite') end)}, -- SW:P
-		{'34914', (function() return NeP.Core.AutoDots('34914', 100, 4, nil, 'elite') end)} -- Vampiric Touch
+		{'!32379', (function() return AutoDots('32379', 20, nil, nil, 'elite') end)}, -- SW:D
+		{'589', (function() return AutoDots('589', 100, 2, nil, 'elite') end)}, -- SW:P
+		{'34914', (function() return AutoDots('34914', 100, 3, nil, 'elite') end)} -- Vampiric Touch
 	}, 'toggle.autoDots'},
+	
 	{{-- Toggle off
-		{'32379', 'target.health < 20', 'target'}, -- SW:D
+		{'!32379', 'target.health < 20', 'target'}, -- SW:D
 		{'589', '!target.debuff(589)', 'target'}, -- SW:P
 		{'34914', '!target.debuff(34914)', 'target'} -- Vampiric Touch
-	}, {'!toggle.autoDots', 'toggle.dotEverything'}},
+	}, {'!toggle.autoDots', '!toggle.dotEverything'}},
+}
+
+local AoE = {
+	{'127632'}, -- Cascade (best target 4+)
+	{'2944', { 'player.shadoworbs >= 3', (function() return AutoDots('2944', 100) end)}}, -- Devouring Plague
+	{'48045',}, -- Mind Sear
 }
 
 local inCombat = {
-	{'2944', 'player.shadoworbs >= 3'}, -- Devouring Plague
+	{'2944', {'player.shadoworbs = 5', (function() return AutoDots('2944', 100) end)}}, -- Devouring Plague
+	{'73510', 'player.buff(Surge of Darkness).count = 3'}, -- Mind Spike
+
+	--Dots	
+	{Dots},
+	
 	{'8092'}, -- Mind Blast
-	{'15407', 'player.buff(Insanity)'}, -- Mind Flay
 	{'73510', 'player.buff(Surge of Darkness)'}, -- Mind Spike
-	{'48045', (function() return NeP.Core.SAoE(3, 40) end), 'target'}, -- Mind Sear
+	{'2944', {'player.shadoworbs >= 3', (function() return AutoDots('2944', 100) end)}}, -- Devouring Plague
+	{'129197', 'player.buff(Insanity)'}, -- Mind Flay
 	{'15407'},  -- Mind Flay
 } 
-
-local keybinds = {
-	-- Pause
-	{'pause', 'modifier.alt'},
-}
 
 local outCombat = {
 	{Buffs},
@@ -103,14 +109,10 @@ local outCombat = {
 ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow'), 
 	{-- In-Combat
 		{keybinds},
+		{'17', '!player.buff(17)', 'player'}, -- PW:Shield
 		{Buffs},
-		{Survival},
-		-- Silence
-		{'!15487', 'target.NePinterrupt'},
-		{Cooldowns, 'modifier.cooldowns'},
-		{Dotting},
-		{inCombat, {
-			'target.range <= 40',
-			'!player.moving'
-		}}
+		{Survival, "player.health < 100"},
+		{Cooldowns, , 'modifier.cooldowns'},
+		{AoE, (function() return SAoE(3, 40) end)},
+		{inCombat}
 	}, outCombat, lib)
