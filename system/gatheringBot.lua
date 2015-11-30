@@ -141,9 +141,24 @@ local function recordPath()
 	end
 end
 
+
+
+local function LoS(bX, bY, bZ)
+	local losFlags =  bit.bor(HitFlags['M2Collision'], HitFlags['WMOCollision'])
+	local aX, aY, aZ = ObjectPosition('player')
+	return TraceLine(aX, aY, aZ+2.25, bX, bY, bZ+2.25, losFlags)
+end
+
 local function ObjectIsNear()
 	-- not build yet...
 	return false
+end
+
+local function moveToLoc(x, y, z)
+	if not LoS(x, y, z) then
+		MoveTo(x, y, z)
+	-- else -- (FIXME: TODO) Generate a path around the object hitting LoS
+	end
 end
 
 local function playPath()
@@ -178,7 +193,7 @@ local function playPath()
 						table.sort(_rtable, function(a,b) return a.dis < b.dis end)
 						-- Move to nearest waypoint
 						local _bX, _bY, _bZ = _rtable[1].x + math.random(-0.5, 0.5), _rtable[1].y + math.random(-0.5, 0.5), _rtable[1].z
-						MoveTo(_bX, _bY, _bZ)
+						moveToLoc(_bX, _bY, _bZ)
 						-- Remove the used waypoint from our temp route
 						table.remove(afTable, _rtable[1].id)
 					else
@@ -191,7 +206,7 @@ local function playPath()
 					print('BUGGED')
 					-- Wipe our current path and generate another one
 					wipe(afTable)
-					--MoveTo(ObjectPosition(FIXME))
+					--moveToLoc(ObjectPosition(FIXME))
 				end
 			end
 		else
@@ -200,7 +215,7 @@ local function playPath()
 				if IsMounted() then Dismount() end
 				-- Wipe our current path and generate another one
 				wipe(afTable)
-				MoveTo(ObjectPosition('target'))
+				moveToLoc(ObjectPosition('target'))
 			end
 		end
 	end
