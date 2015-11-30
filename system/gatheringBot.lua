@@ -64,6 +64,7 @@ NeP.Core.BuildGUI('GatherBot', {
 			{ type = 'spacer' },
 				-- Draw waypoint checkbox
 				{ type = "checkbox", text = "Draw Waypoint", key = "drawWay", default = false },
+				{ type = "checkbox", text = "Use random favorite mount", key = "favMount", default = true },
 				-- Start Button
 				{ type = "button", text = "Start", width = 190, height = 20, 
 				callback = function(self) 
@@ -146,13 +147,18 @@ local function ObjectIsNear()
 end
 
 local function playPath()
-	if _Playing and not _Recording then
+	-- Make sure we're not recording
+	if _Recording then print('Cant while recording.') return end
+	if _Playing  then
 		-- If we're in combat, stop and go kill it.
 		if not InCombatLockdown() then
-			if not ObjectIsNear() then
-				-- Make sure we have positions to move to. (Needs some tweaks...)
-				local unitSpeed = GetUnitSpeed('player')
-				if unitSpeed == 0 then
+			-- Dont run if moving or casting.
+			local unitSpeed = GetUnitSpeed('player')
+			local casting = UnitCastingInfo("player")
+			if unitSpeed == 0 and casting == nil then
+				-- Get a random favorite mount.
+				if not IsMounted() and PeFetch('GatherBot', 'favMount') then C_MountJournal.Summon(0); return end
+				if not ObjectIsNear() then
 					-- This takes the route and creates a infinite loop out of it.
 					if #afTable >= 2 then
 						-- Figure out the nearest waypoint
@@ -181,12 +187,19 @@ local function playPath()
 							afTable = readProfile()
 						end
 					end
+				else
+					print('BUGGED')
+					-- Wipe our current path and generate another one
+					wipe(afTable)
+					--MoveTo(ObjectPosition(FIXME))
 				end
-			else
-				MoveTo(ObjectPosition(FIXME))
 			end
 		else
 			if UnitExists('target') then
+				-- Dismount if mounted
+				if IsMounted() then Dismount() end
+				-- Wipe our current path and generate another one
+				wipe(afTable)
 				MoveTo(ObjectPosition('target'))
 			end
 		end
