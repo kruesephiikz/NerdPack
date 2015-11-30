@@ -112,7 +112,7 @@ ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow
 		{'17', '!player.buff(17)', 'player'}, -- PW:Shield
 		{Buffs},
 		{Survival, "player.health < 100"},
-		{Cooldowns, , 'modifier.cooldowns'},
+		{Cooldowns, 'modifier.cooldowns'},
 		{AoE, (function() return SAoE(3, 40) end)},
 		{inCombat}
 	}, outCombat, lib)
