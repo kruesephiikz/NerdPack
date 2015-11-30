@@ -18,7 +18,7 @@ local pX, pY, pZ = 0,0,0,0
 local function readProfile()
 	if FireHack then
 		-- Requires a check if file exists
-		local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
+		local fileLoc = 'Interface\\AddOns\\NerdPack\\GatheringProfiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
 		local str = ReadFile(fileLoc) or ''
 		local obj, pos, err = json.decode(str, 1, nil)
 		return obj
@@ -88,7 +88,7 @@ NeP.Core.BuildGUI('GatherBot', {
 				if _Recording then
 					self:SetText("Stop Recording")
 					-- Save the profile to file
-					local fileLoc = 'Interface\\AddOns\\NerdPack\\Gathering Profiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
+					local fileLoc = 'Interface\\AddOns\\NerdPack\\GatheringProfiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
 					local str = json.encode (currentPath, { indent = true })
 					WriteFile(fileLoc, str)
 					wipe(currentPath)
