@@ -58,7 +58,7 @@ LibDraw.Sync(function()
 			local playerX, playerY, playerZ = ObjectPosition('player')
 			--local cx, cy, cz = GetCameraPosition()
 
-			if UnitExists('target') then
+			if ObjectExists('target') then
 				local targetX, targetY, targetZ = ObjectPosition("target")
 				local distance = NeP.Core.Distance('player', 'target')
 				local name = UnitName("target")
