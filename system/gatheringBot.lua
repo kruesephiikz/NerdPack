@@ -68,6 +68,8 @@ local objLM = {
 }
 
 local objOre = {
+	--[[ //// Classic //// ]]
+	[1731] = 'Ore', --Copper Vein
 	--[[ //// WOD //// ]]
 	[228510] = 'Ore', 	--[[ Rich True Iron Deposit ]]
 	[228493] = 'Ore', 	--[[ True Iron Deposit ]]
@@ -403,11 +405,11 @@ local Textures = {
 
 local function drawObj(Obj, oX, oY, oZ, distance)
 	if distance < 50 then
-		LibDraw.Texture(Textures[Obj.."_big"], oX, oY, oZ + zOffset, alpha)
+		LibDraw.Texture(Textures[Obj.."_big"], oX, oY, oZ + 3, 1)
 	elseif distance > 200 then
-		LibDraw.Texture(Textures[Obj.."_small"], oX, oY, oZ + zOffset, alpha)
+		LibDraw.Texture(Textures[Obj.."_small"], oX, oY, oZ + 3, 1)
 	else
-		LibDraw.Texture(Textures[Obj..""], oX, oY, oZ + zOffset, alpha)
+		LibDraw.Texture(Textures[Obj..""], oX, oY, oZ + 3, 1)
 	end
 end
 
@@ -421,12 +423,13 @@ LibDraw.Sync(function()
 		if PeFetch('GatherBot', 'drawObjs') then
 			for i=1, ObjectCount() do
 				local Obj = ObjectWithIndex(i)
-				if UnitGUID (Obj) ~= nil and ObjectExists(Obj) then
+				if UnitGUID(Obj) ~= nil and ObjectExists(Obj) then
 					if ObjectIsType(Obj, ObjectTypes.GameObject) then
 						local oX, oY, oZ = ObjectPosition(Obj)
 						local distance = pathDistance(oX, oY, oZ)
 						local name = ObjectName(Obj)
-						local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj) or '0')
+						local objectType, _, _, _, _, _id, _ = strsplit("-", UnitGUID(Obj))
+						local ObjID = tonumber(_id)
 						local _text = addonColor..name.."|r\n"..distance..' yards'
 						if PeFetch('GatherBot', 'debugAllObjsIDs') then
 							LibDraw.Text(addonColor..name..'|r ID:'..ObjID, "SystemFont_Tiny", oX, oY, oZ+1)
