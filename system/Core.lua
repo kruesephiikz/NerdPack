@@ -70,15 +70,13 @@ DESC: returns the distance betwen 2 units/objetcs.
 Build By: MTS
 ---------------------------------------------------]]
 function NeP.Core.Distance(a, b)
-	if UnitExists(a) and UnitExists(b) then
-		-- FireHack
-		if FireHack then
-			local ax, ay, az = ObjectPosition(b)
-			local bx, by, bz = ObjectPosition(a)
-			return NeP.Core.Round(math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2)))
-		else
-			return ProbablyEngine.condition['distance'](b)
-		end
+	-- FireHack
+	if FireHack then
+		local ax, ay, az = ObjectPosition(b)
+		local bx, by, bz = ObjectPosition(a)
+		return math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2))
+	else
+		return ProbablyEngine.condition['distance'](b)
 	end
 	return 0
 end
