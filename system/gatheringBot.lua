@@ -62,7 +62,7 @@ NeP.Core.BuildGUI('GatherBot', {
 				-- Start Button
 				{ type = "button", text = "Start", width = 190, height = 20, 
 				callback = function(self) 
-					if _Recording then print('Cant while recording, please stop it.'); return end
+					if _Recording then NeP.Core.Print('Cant while recording, please stop the bot.'); return end
 					if FireHack then
 						wipe(currentRoute)
 						self:SetText("Start")
@@ -83,7 +83,7 @@ NeP.Core.BuildGUI('GatherBot', {
 			callback = function(self)
 				if FireHack then
 					self:SetText("Start Recording")
-					if _Playing then print('Cant while running, please stop it.'); return end
+					if _Playing then NeP.Core.Print('Cant while running, please stop the bot.'); return end
 					if _Recording then
 						-- Save the profile to file
 						local fileLoc = _filePath..'\\'..currentRoute[1].Name..'.lua'
@@ -165,7 +165,6 @@ local function recordPath()
 		local unitSpeed = GetUnitSpeed('player')
 		if unitSpeed ~= 0 then
 			local x, y, z = ObjectPosition('player')
-			print('saved '..x..', '..y..', '..z)
 			currentRoute[#currentRoute+1] = {
 				x = x,
 				y = y,
@@ -206,7 +205,7 @@ local function ObjectIsNear()
 						-- Replace this with moveToLoc once tuned for moving around things
 						MoveTo(x, y, z)
 					else
-						print('1: '..Obj.name..' / '..distance)
+						NeP.Core.Print('1: '..Obj.name..' / '..distance)
 						ObjectInteract(Obj.key)
 					end
 					wantedObject, wX, wY, wZ = Obj.key, x, y, z
