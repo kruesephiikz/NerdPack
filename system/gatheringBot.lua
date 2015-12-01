@@ -1,7 +1,6 @@
 --[[
 Todo:
-* Detect mines/herbs
-* Move to object
+* Move objects hiting LoS
 * Count loot
 * Clean up this shit...
 ]]
@@ -301,10 +300,13 @@ local function ObjectIsNear()
 					local x, y, z = ObjectPosition(Obj)
 					local distance = pathDistance(x, y, z)
 					if distance < 50 then
+						-- Draw a circle in the object we want
 						wantedObject, wX, wY, wZ = Obj, x, y, z
+						-- Move close enough
 						if distance >= 6 then
 							moveToLoc(x, y, z)
 						else
+							-- Stop and interact
 							MoveTo(ObjectPosition('player'))
 							ObjectInteract(Obj)
 						end
