@@ -62,6 +62,7 @@ NeP.Core.BuildGUI('GatherBot', {
 				-- Start Button
 				{ type = "button", text = "Start", width = 190, height = 20, 
 				callback = function(self) 
+					if _Recording then print('Cant while recording, please stop it.'); return end
 					if FireHack then
 						wipe(currentRoute)
 						self:SetText("Start")
@@ -82,16 +83,24 @@ NeP.Core.BuildGUI('GatherBot', {
 			callback = function(self)
 				if FireHack then
 					self:SetText("Start Recording")
+					if _Playing then print('Cant while running, please stop it.'); return end
 					if _Recording then
-						self:SetText("Stop Recording")
 						-- Save the profile to file
 						local fileLoc = _filePath..'\\'..currentRoute[1].Name..'.lua'
 						local str = json.encode (currentRoute, { indent = true })
 						WriteFile(fileLoc, str)
-						wipe(currentRoute)
 						-- We have to reload for our new file to show up...
-							ReloadUI()
+						for i=1,#filesInDir+1 do
+							if i == #filesInDir+1 then 
+								wipe(currentRoute)
+								ReloadUI()
+							elseif filesInDir[i].key == currentRoute[1].Name..'.lua' then 
+								wipe(currentRoute)
+								break
+							end
+						end
 					else
+						self:SetText("Stop Recording")
 						wipe(currentRoute)
 						-- Add profile Info
 						local weekday, month, day, year = CalendarGetDate()
@@ -125,6 +134,9 @@ end
 
 LibDraw.Sync(function()
 	if FireHack then
+		-- Set line style
+		LibDraw.SetColorRaw(1.0, 0.96, 0.41, 0.50)
+		LibDraw.SetWidth(10)
 		-- Draw a end point
 		if _Recording then
 			LibDraw.Text('END HERE!', "SystemFont_Tiny", pX, pY, pZ + 6)
@@ -149,7 +161,7 @@ LibDraw.Sync(function()
 end)
 
 local function recordPath()
-	if _Recording and not _Playing then
+	if _Recording then
 		local unitSpeed = GetUnitSpeed('player')
 		if unitSpeed ~= 0 then
 			local x, y, z = ObjectPosition('player')
@@ -210,9 +222,7 @@ local function ObjectIsNear()
 end
 
 local function playPath()
-	if _Playing  then
-		-- Make sure we're not recording.
-		if _Recording then print('Cant while recording.') return end
+	if _Playing then
 		-- If we're in combat, stop and go kill it.
 		if not InCombatLockdown() then
 			-- Dont run if moving or casting.
