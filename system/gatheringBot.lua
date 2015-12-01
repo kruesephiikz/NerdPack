@@ -109,7 +109,7 @@ NeP.Core.BuildGUI('GatherBot', {
 local function readProfile()
 	if FireHack then
 		if PeFetch('GatherBot', 'gProfile') ~= nil then
-			local fileLoc = _filePath..'\\'..PeFetch('GatherBot', 'gProfile')..'.lua'
+			local fileLoc = _filePath..'\\'..PeFetch('GatherBot', 'gProfile')
 			local str = ReadFile(fileLoc) or ''
 			local obj, pos, err = json.decode(str, 1, nil)
 			return obj
