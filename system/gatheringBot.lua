@@ -174,9 +174,8 @@ local function recordPath()
 	end
 end
 
-local function LoS(bX, bY, bZ)
+local function LoS(aX, aY, aZ, bX, bY, bZ)
 	local losFlags =  bit.bor(HitFlags['M2Collision'], HitFlags['WMOCollision'])
-	local aX, aY, aZ = ObjectPosition('player')
 	return TraceLine(aX, aY, aZ+2.25, bX, bY, bZ+2.25, losFlags)
 end
 
@@ -186,9 +185,24 @@ local function pathDistance(x, y, z)
 end
 
 local function moveToLoc(x, y, z)
-	if not LoS(x, y, z) then
-		MoveTo(x, y, z)
-	-- else -- (FIXME: TODO) Generate a path around the object hitting LoS
+	local aX, aY, aZ = ObjectPosition('player')
+	local bX, bY, bZ = x, y, z
+	-- If nothing is in the way
+	if not LoS(aX, aY, aZ, bX, bY, bZ) then
+		MoveTo(bX, bY, bZ)
+	else
+		-- Generate a path around (retarded way)
+		for i=1,99 do
+			-- bX and BY need to be the location of the object which hit LoS...
+			-- Then we random try go to the side of the object, and then try going to the original Location.
+			-- If we fail after moving to the side, we try moving again to the side and repeat.
+			-- FIXME: get the location of pbject hiting LoS.
+			local bX2, bY2 = bX + math.random(-0.25, 0.25), bY + math.random(-0.10, 0.10)
+			if not LoS(aX, aY, aZ, bX2, bY2, bZ) then
+				print('hit')
+				MoveTo(bX2, bY2, bZ)
+			end 
+		end
 	end
 end
 
@@ -202,8 +216,7 @@ local function ObjectIsNear()
 				local distance = Obj.distance
 				if (Obj.is == 'Ore' or Obj.is == 'Herb') and distance < 50 then
 					if distance >= 5 then
-						-- Replace this with moveToLoc once tuned for moving around things
-						MoveTo(x, y, z)
+						moveToLoc(x, y, z)
 					else
 						NeP.Core.Print('1: '..Obj.name..' / '..distance)
 						ObjectInteract(Obj.key)
