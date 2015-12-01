@@ -14,14 +14,20 @@ local _Playing = false
 local currentPath = {} -- Temp for recording ( gets saved into a file and wiped )
 local afTable = {} -- Temp for looping the selected route
 local pX, pY, pZ = 0,0,0,0
+local _filePath = 'Interface\\AddOns\\NerdPack\\GatheringProfiles'
 
-local function readProfile()
+local function getProfiles()
 	if FireHack then
-		-- Requires a check if file exists
-		local fileLoc = 'Interface\\AddOns\\NerdPack\\GatheringProfiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
-		local str = ReadFile(fileLoc) or ''
-		local obj, pos, err = json.decode(str, 1, nil)
-		return obj
+		local kTable = {}
+		for key,value in pairs({GetDirectoryFiles('Interface\\AddOns\\NerdPack\\GatheringProfiles\\*.lua')}) do
+			kTable[#kTable+1] = {
+				text = tostring(value), 
+				key = tostring(value)
+			}
+		end
+		return kTable
+	else
+		return {{text = "REQUIRES FIREHACK", key = 'nl'}}
 	end
 end
 
@@ -34,17 +40,7 @@ NeP.Core.BuildGUI('GatherBot', {
     height = 350,
     config = {
 	    	-- Select Profile
-			{ type = "dropdown", text = "Profile:", key = "gProfile", width = 170, list = {
-				{text = "1", key = 1},	
-				{text = "2", key = 2},
-				{text = "3", key = 3},
-				{text = "4", key = 4},
-				{text = "5", key = 5},
-				{text = "6", key = 6},
-				{text = "7", key = 7},
-				{text = "8", key = 8},
-				{text = "9", key = 9},
-			}, default = 1 },
+			{ type = "dropdown", text = "Profile:", key = "gProfile", width = 170, list = getProfiles(), default = nil },
 			-- Profile Info
 			{ type = 'spacer' },{ type = 'rule' },
 			{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Profile Information:", size = 25, align = "Center"},
@@ -79,8 +75,8 @@ NeP.Core.BuildGUI('GatherBot', {
 		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Create a profile:", size = 25, align = "Center"},
 			{ type = 'spacer' },
-			{ type = "input", text = 'Profile Name:', key = 'nameInput', default = '???' },
-			{ type = "input", text = 'Profile Author:', key = 'authorInput', default = '???' },
+			{ type = "input", text = 'Profile Name:', key = 'nameInput', default = 'profile1' },
+			{ type = "input", text = 'Profile Author:', key = 'authorInput', default = 'ImSoCoolz' },
 			{ type = 'spacer' },
 			{ type = "button", text = "Record Path", width = 190, height = 20, 
 			callback = function(self)
@@ -88,10 +84,12 @@ NeP.Core.BuildGUI('GatherBot', {
 				if _Recording then
 					self:SetText("Stop Recording")
 					-- Save the profile to file
-					local fileLoc = 'Interface\\AddOns\\NerdPack\\GatheringProfiles\\profile'..PeFetch('GatherBot', 'gProfile')..'.lua'
+					local fileLoc = _filePath..'\\'..currentPath[1].Name..'.lua'
 					local str = json.encode (currentPath, { indent = true })
 					WriteFile(fileLoc, str)
 					wipe(currentPath)
+					-- We have to reload for our new file to show up...
+					ReloadUI()
 				else
 					-- Add profile Info
 					local weekday, month, day, year = CalendarGetDate()
@@ -107,6 +105,17 @@ NeP.Core.BuildGUI('GatherBot', {
 			end },
     }
 })
+
+local function readProfile()
+	if FireHack then
+		if PeFetch('GatherBot', 'gProfile') ~= nil then
+			local fileLoc = _filePath..'\\'..PeFetch('GatherBot', 'gProfile')..'.lua'
+			local str = ReadFile(fileLoc) or ''
+			local obj, pos, err = json.decode(str, 1, nil)
+			return obj
+		end
+	end
+end
 
 LibDraw.Sync(function()
 	if FireHack then
@@ -162,9 +171,9 @@ local function moveToLoc(x, y, z)
 end
 
 local function playPath()
-	-- Make sure we're not recording
-	if _Recording then print('Cant while recording.') return end
 	if _Playing  then
+		-- Make sure we're not recording.
+		if _Recording then print('Cant while recording.') return end
 		-- If we're in combat, stop and go kill it.
 		if not InCombatLockdown() then
 			-- Dont run if moving or casting.
