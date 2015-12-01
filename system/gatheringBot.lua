@@ -148,7 +148,7 @@ NeP.Core.BuildGUI('GatherBot', {
 			{ type = 'spacer' },
 				-- Draw waypoint checkbox
 				{ type = "checkbox", text = "Draw Waypoint", key = "drawWay", default = false },
-				{ type = "checkbox", text = "Draw Waypoint", key = "drawObjs", default = true },
+				{ type = "checkbox", text = "Draw Objects", key = "drawObjs", default = true },
 				{ type = "checkbox", text = "Use random favorite mount", key = "favMount", default = false },
 				-- Start Button
 				{ type = "button", text = "Start", width = 190, height = 20, 
