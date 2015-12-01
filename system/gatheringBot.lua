@@ -15,6 +15,7 @@ local currentPath = {} -- Temp for recording ( gets saved into a file and wiped 
 local afTable = {} -- Temp for looping the selected route
 local pX, pY, pZ = 0,0,0,0
 local _filePath = 'Interface\\AddOns\\NerdPack\\GatheringProfiles'
+local wantedObject, wX, wY, wZ = nil, nil, nil, nil -- these are used to display circle in the wanted object
 
 local function getProfiles()
 	if FireHack then
@@ -40,7 +41,7 @@ NeP.Core.BuildGUI('GatherBot', {
     height = 350,
     config = {
 	    	-- Select Profile
-			{ type = "dropdown", text = "Profile:", key = "gProfile", width = 170, list = getProfiles(), default = nil },
+			{ type = "dropdown", text = "Profile:", key = "gProfile", width = 170, list = getProfiles(), default = 'nl' },
 			-- Profile Info
 			{ type = 'spacer' },{ type = 'rule' },
 			{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Profile Information:", size = 25, align = "Center"},
@@ -129,10 +130,16 @@ LibDraw.Sync(function()
 		end
 		-- Create a visual route
 		if PeFetch('GatherBot', 'drawWay') then
+			-- Draw our route
 			for i=2,#afTable-1 do
 				local aX, aY, aZ = afTable[i].x, afTable[i].y, afTable[i].z
 				local bX, bY, bZ = afTable[i+1].x, afTable[i+1].y, afTable[i+1].z
 				LibDraw.Line(aX, aY, aZ, bX, bY, bZ)	 
+			end
+			-- Draw our wantec object
+			if wantedObject ~= nil then 
+				LibDraw.Line(aX, aY, aZ, wX, wY, wZ)
+				LibDraw.Circle(wX, wY, wZ, 2) 
 			end
 		end
 	end
@@ -166,16 +173,39 @@ local function pathDistance(x, y, z)
 	return math.sqrt(((x-aX)^2) + ((y-aY)^2) + ((z-aZ)^2))
 end
 
-local function ObjectIsNear(x, y, z)
-	-- not build yet...
-	return false
-end
-
 local function moveToLoc(x, y, z)
-	if not LoS(x, y, z) and pathDistance(x, y, z) > 6 then
+	if not LoS(x, y, z) then
 		MoveTo(x, y, z)
 	-- else -- (FIXME: TODO) Generate a path around the object hitting LoS
 	end
+end
+
+-- Change this to allow profiles to specify what they want.
+local function ObjectIsNear()
+	if #NeP.OM.GameObjects > 0 then
+		for i=1,#NeP.OM.GameObjects do
+			local Obj = NeP.OM.GameObjects[i]
+			if ObjectExists(Obj.key) then
+				local x, y, z = ObjectPosition(Obj.key)
+				local distance = Obj.distance
+				if (Obj.is == 'Ore' or Obj.is == 'Herb') and distance < 50 then
+					if distance >= 5 then
+						-- Replace this with moveToLoc once tuned for moving around things
+						MoveTo(x, y, z)
+					else
+						print('1: '..Obj.name..' / '..distance)
+						ObjectInteract(Obj.key)
+					end
+					wantedObject, wX, wY, wZ = Obj.key, x, y, z
+					wipe(afTable)
+					return true
+				end
+			end
+		end
+	end
+	-- Nothing wanted
+	wantedObject, wX, wY, wZ = nil, nil, nil, nil
+	return false
 end
 
 local function playPath()
@@ -208,8 +238,10 @@ local function playPath()
 						end
 						table.sort(_rtable, function(a,b) return a.dis < b.dis end)
 						-- Move to nearest waypoint
-						local _bX, _bY, _bZ = _rtable[1].x + math.random(-0.5, 0.5), _rtable[1].y + math.random(-0.5, 0.5), _rtable[1].z
-						moveToLoc(_bX, _bY, _bZ)
+						if _rtable[1].dis >= 10 then
+							local _bX, _bY, _bZ = _rtable[1].x + math.random(-0.5, 0.5), _rtable[1].y + math.random(-0.5, 0.5), _rtable[1].z
+							moveToLoc(_bX, _bY, _bZ)
+						end
 						-- Remove the used waypoint from our temp route
 						table.remove(afTable, _rtable[1].id)
 					else
@@ -218,11 +250,6 @@ local function playPath()
 							afTable = readProfile()
 						end
 					end
-				else
-					print('BUGGED')
-					-- Wipe our current path and generate another one
-					wipe(afTable)
-					--moveToLoc(ObjectPosition(FIXME))
 				end
 			end
 		else
