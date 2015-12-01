@@ -11,24 +11,21 @@ local LibDraw = LibStub("LibDraw-1.0")
 
 local _Recording = false
 local _Playing = false
-local currentPath = {} -- Temp for recording ( gets saved into a file and wiped )
-local afTable = {} -- Temp for looping the selected route
-local pX, pY, pZ = 0,0,0,0
 local _filePath = 'Interface\\AddOns\\NerdPack\\GatheringProfiles'
-local wantedObject, wX, wY, wZ = nil, nil, nil, nil -- these are used to display circle in the wanted object
 
-local function getProfiles()
-	if FireHack then
-		local kTable = {}
-		for key,value in pairs({GetDirectoryFiles(_filePath..'\\*.lua')}) do
-			kTable[#kTable+1] = {
-				text = value, 
-				key = value
-			}
-		end
-		return kTable
-	else
-		return {{text = "REQUIRES FIREHACK", key = 'nl'}}
+local currentRoute = {} -- Temp route table.
+local filesInDir = {{text = "No Files", key = 'nl'}} -- Our files.
+local pX, pY, pZ = 0,0,0,0 -- This is to draw our end point
+local wantedObject, wX, wY, wZ = nil, nil, nil, nil -- these are used to display circle in the wanted object.
+
+-- Get our files in the dir.
+if FireHack then
+	wipe(filesInDir)
+	for key,value in pairs({GetDirectoryFiles(_filePath..'\\*.lua')}) do
+		filesInDir[#filesInDir+1] = {
+			text = value, 
+			key = value
+		}
 	end
 end
 
@@ -41,7 +38,7 @@ NeP.Core.BuildGUI('GatherBot', {
     height = 350,
     config = {
 	    	-- Select Profile
-			{ type = "dropdown", text = "Profile:", key = "gProfile", width = 170, list = getProfiles(), default = 'nl' },
+			{ type = "dropdown", text = "Profile:", key = "gProfile", list = filesInDir, default = 'nl' },
 			-- Profile Info
 			{ type = 'spacer' },{ type = 'rule' },
 			{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Profile Information:", size = 25, align = "Center"},
@@ -65,60 +62,65 @@ NeP.Core.BuildGUI('GatherBot', {
 				-- Start Button
 				{ type = "button", text = "Start", width = 190, height = 20, 
 				callback = function(self) 
-					wipe(afTable)
-					self:SetText("Start")
-					_Playing = not _Playing
-					if _Playing then
-						self:SetText("Stop")
+					if FireHack then
+						wipe(currentRoute)
+						self:SetText("Start")
+						_Playing = not _Playing
+						if _Playing then
+							self:SetText("Stop")
+						end
 					end
 				end },
 		-- Build Profile tools
 		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Create a profile:", size = 25, align = "Center"},
 			{ type = 'spacer' },
-			{ type = "input", text = 'Profile Name:', key = 'nameInput', default = 'profile1' },
-			{ type = "input", text = 'Profile Author:', key = 'authorInput', default = 'ImSoCoolz' },
+			{ type = "input", text = 'Profile Name:', width = 110, key = 'nameInput', default = 'profile1' },
+			{ type = "input", text = 'Profile Author:', width = 110,  key = 'authorInput', default = 'ImSoCoolz' },
 			{ type = 'spacer' },
 			{ type = "button", text = "Record Path", width = 190, height = 20, 
 			callback = function(self)
-				self:SetText("Start Recording")
-				if _Recording then
-					self:SetText("Stop Recording")
-					-- Save the profile to file
-					local fileLoc = _filePath..'\\'..currentPath[1].Name..'.lua'
-					local str = json.encode (currentPath, { indent = true })
-					WriteFile(fileLoc, str)
-					wipe(currentPath)
-					-- We have to reload for our new file to show up...
-					ReloadUI()
-				else
-					-- Add profile Info
-					local weekday, month, day, year = CalendarGetDate()
-					currentPath[1] = {
-						Name = PeFetch('GatherBot', 'nameInput'),
-						Author = PeFetch('GatherBot', 'authorInput'),
-						Date = 'D:'..day..' /M:'..month..' /Y:'..year,
-						Zone = GetZoneText()
-					}
-					pX, pY, pZ = ObjectPosition('player')
+				if FireHack then
+					self:SetText("Start Recording")
+					if _Recording then
+						self:SetText("Stop Recording")
+						-- Save the profile to file
+						local fileLoc = _filePath..'\\'..currentRoute[1].Name..'.lua'
+						local str = json.encode (currentRoute, { indent = true })
+						WriteFile(fileLoc, str)
+						wipe(currentRoute)
+						-- We have to reload for our new file to show up...
+							ReloadUI()
+					else
+						wipe(currentRoute)
+						-- Add profile Info
+						local weekday, month, day, year = CalendarGetDate()
+						currentRoute[1] = {
+							Name = PeFetch('GatherBot', 'nameInput'),
+							Author = PeFetch('GatherBot', 'authorInput'),
+							Date = 'D:'..day..' /M:'..month..' /Y:'..year,
+							Zone = GetZoneText()
+						}
+						-- This is to draw our end point
+						pX, pY, pZ = ObjectPosition('player')
+					end
+					_Recording = not _Recording
 				end
-				_Recording = not _Recording
 			end },
     }
 })
 
 local function readProfile()
 	if FireHack and PeFetch('GatherBot', 'gProfile') ~= nil then
-		local pName = PeFetch('GatherBot', 'gProfile')
-		local fileLoc = _filePath..'\\'..pName
+		local fileLoc = _filePath..'\\'..PeFetch('GatherBot', 'gProfile')
 		local str = ReadFile(fileLoc)
 		local obj, pos, err = json.decode(str, 1, nil)
 		if obj ~= nil then
 			return obj
-		else
-			return {[1] = {Name = '...', Author = '...', Zone = '...', Date = '...'}}
 		end
 	end
+	-- Fail safe...
+	return {[1] = {Name = '...', Author = '...', Zone = '...', Date = '...'}}
 end
 
 LibDraw.Sync(function()
@@ -131,9 +133,9 @@ LibDraw.Sync(function()
 		-- Create a visual route
 		if PeFetch('GatherBot', 'drawWay') then
 			-- Draw our route
-			for i=2,#afTable-1 do
-				local aX, aY, aZ = afTable[i].x, afTable[i].y, afTable[i].z
-				local bX, bY, bZ = afTable[i+1].x, afTable[i+1].y, afTable[i+1].z
+			for i=2,#currentRoute-1 do
+				local aX, aY, aZ = currentRoute[i].x, currentRoute[i].y, currentRoute[i].z
+				local bX, bY, bZ = currentRoute[i+1].x, currentRoute[i+1].y, currentRoute[i+1].z
 				LibDraw.Line(aX, aY, aZ, bX, bY, bZ)	 
 			end
 			-- Draw our wantec object
@@ -152,7 +154,7 @@ local function recordPath()
 		if unitSpeed ~= 0 then
 			local x, y, z = ObjectPosition('player')
 			print('saved '..x..', '..y..', '..z)
-			currentPath[#currentPath+1] = {
+			currentRoute[#currentRoute+1] = {
 				x = x,
 				y = y,
 				z = z
@@ -160,8 +162,6 @@ local function recordPath()
 		end
 	end
 end
-
-
 
 local function LoS(bX, bY, bZ)
 	local losFlags =  bit.bor(HitFlags['M2Collision'], HitFlags['WMOCollision'])
@@ -198,7 +198,7 @@ local function ObjectIsNear()
 						ObjectInteract(Obj.key)
 					end
 					wantedObject, wX, wY, wZ = Obj.key, x, y, z
-					--wipe(afTable)
+					--wipe(currentRoute)
 					return true
 				end
 			end
@@ -223,11 +223,11 @@ local function playPath()
 				if not IsMounted() and PeFetch('GatherBot', 'favMount') then C_MountJournal.Summon(0); return end
 				if not ObjectIsNear() then
 					-- This takes the route and creates a infinite loop out of it.
-					if #afTable >= 2 then
+					if #currentRoute >= 2 then
 						-- Figure out the nearest waypoint
 						local _rtable = {}
-						for i=2,#afTable do
-							local bX, bY, bZ = afTable[i].x, afTable[i].y, afTable[i].z
+						for i=2,#currentRoute do
+							local bX, bY, bZ = currentRoute[i].x, currentRoute[i].y, currentRoute[i].z
 							local distance = pathDistance(bX, bY, bZ)
 							_rtable[#_rtable+1] = {
 								x = bX,
@@ -244,11 +244,11 @@ local function playPath()
 							moveToLoc(_bX, _bY, _bZ)
 						end
 						-- Remove the used waypoint from our temp route
-						table.remove(afTable, _rtable[1].id)
+						table.remove(currentRoute, _rtable[1].id)
 					else
 						if FireHack then
 							-- We have to create a temp table so we can remove once we've move there
-							afTable = readProfile()
+							currentRoute = readProfile()
 						end
 					end
 				end
@@ -258,7 +258,7 @@ local function playPath()
 				-- Dismount if mounted
 				if IsMounted() then Dismount() end
 				-- Wipe our current path and generate another one
-				wipe(afTable)
+				wipe(currentRoute)
 				moveToLoc(ObjectPosition('target'))
 			end
 		end
