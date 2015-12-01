@@ -74,56 +74,56 @@ local objLM = {
 
 local objOre = {
 	--[[ //// Classic //// ]]
-	[1731] = 'Ore', --Copper Vein
+	[1731] = { is = 'Ore', name = 'Copper Vein' },
 	--[[ //// WOD //// ]]
-	[228510] = 'Ore', 	--[[ Rich True Iron Deposit ]]
-	[228493] = 'Ore', 	--[[ True Iron Deposit ]]
-	[228564] = 'Ore', 	--[[ Rich Blackrock Deposit ]]
-	[228563] = 'Ore', 	--[[ Blackrock Deposit ]]
-	[232544] = 'Ore', 	--[[ True Iron Deposit ]]
-	[232545] = 'Ore', 	--[[ Rich True Iron Deposit ]]
-	[232542] = 'Ore',	--[[ Blackrock Deposit ]]
-	[232543] = 'Ore',	--[[ Rich Blackrock Deposit ]]
-	[232541] = 'Ore',	--[[ Mine Cart ]]
+	[228510] = { is = 'Ore', name = 'Rich True Iron Deposit' },
+	[228493] = { is = 'Ore', name = 'True Iron Deposit' },
+	[228564] = { is = 'Ore', name = 'Rich Blackrock Deposit' },
+	[228563] = { is = 'Ore', name = 'Blackrock Deposit' },
+	[232544] = { is = 'Ore', name = 'True Iron Deposit' },
+	[232545] = { is = 'Ore', name = 'Rich True Iron Deposit' },
+	[232542] = { is = 'Ore', name = 'Blackrock Deposit' },
+	[232543] = { is = 'Ore', name = 'Rich Blackrock Deposit' },
+	[232541] = { is = 'Ore', name = 'Mine Cart' },
 }
 
 local objHerb = {
 	--[[ //// WOD //// ]]
-	[237400] = 'Herb',
-	[228576] = 'Herb',
-	[235391] = 'Herb',
-	[237404] = 'Herb',
-	[228574] = 'Herb',
-	[235389] = 'Herb',
-	[228575] = 'Herb',
-	[237406] = 'Herb',
-	[235390] = 'Herb',
-	[235388] = 'Herb',
-	[228573] = 'Herb',
-	[237402] = 'Herb',
-	[228571] = 'Herb',
-	[237398] = 'Herb',
-	[233117] = 'Herb',
-	[235376] = 'Herb',
-	[228991] = 'Herb',
-	[235387] = 'Herb',
-	[237396] = 'Herb',
-	[228572] = 'Herb',
+	[237400] = { is = 'Herb', name = '???' },
+	[228576] = { is = 'Herb', name = '???' },
+	[235391] = { is = 'Herb', name = '???' },
+	[237404] = { is = 'Herb', name = '???' },
+	[228574] = { is = 'Herb', name = '???' },
+	[235389] = { is = 'Herb', name = '???' },
+	[228575] = { is = 'Herb', name = '???' },
+	[237406] = { is = 'Herb', name = '???' },
+	[235390] = { is = 'Herb', name = '???' },
+	[235388] = { is = 'Herb', name = '???' },
+	[228573] = { is = 'Herb', name = '???' },
+	[237402] = { is = 'Herb', name = '???' },
+	[228571] = { is = 'Herb', name = '???' },
+	[237398] = { is = 'Herb', name = '???' },
+	[233117] = { is = 'Herb', name = '???' },
+	[235376] = { is = 'Herb', name = '???' },
+	[228991] = { is = 'Herb', name = '???' },
+	[235387] = { is = 'Herb', name = '???' },
+	[237396] = { is = 'Herb', name = '???' },
+	[228572] = { is = 'Herb', name = '???' },
 }
 
 local objFish = {
 	--[[ //// WOD //// ]]
-	[229072] = 'Fish',
-	[229073] = 'Fish',
-	[229069] = 'Fish',
-	[229068] = 'Fish',
-	[243325] = 'Fish',
-	[243354] = 'Fish',
-	[229070] = 'Fish',
-	[229067] = 'Fish',
-	[236756] = 'Fish',
-	[237295] = 'Fish',
-	[229071] = 'Fish',
+	[229072] = { is = 'Fish', name = '???' },
+	[229073] = { is = 'Fish', name = '???' },
+	[229069] = { is = 'Fish', name = '???' },
+	[229068] = { is = 'Fish', name = '???' },
+	[243325] = { is = 'Fish', name = '???' },
+	[243354] = { is = 'Fish', name = '???' },
+	[229070] = { is = 'Fish', name = '???' },
+	[229067] = { is = 'Fish', name = '???' },
+	[236756] = { is = 'Fish', name = '???' },
+	[237295] = { is = 'Fish', name = '???' },
+	[229071] = { is = 'Fish', name = '???' },
 }
 
 NeP.Core.BuildGUI('GatherBot', {
@@ -293,11 +293,11 @@ local function ObjectIsNear()
 			if ObjectIsType(Obj, ObjectTypes.GameObject) then
 				local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj) or '0')
 				-- If the profile is looking for specific IDs,
-				if currentRoute[1].ids[tostring(ObjID)] ~= nil
+				if currentRoute[1].ids[tonumber(ObjID)] ~= nil
 				-- If the profile wants all known ores.
-				or currentRoute[1].ids['ores'] and objOre[ObjID] 
+				or currentRoute[1].ids['ores'] and objOre[tonumber(ObjID)] 
 				-- If the profile wants all known herbs.
-				or currentRoute[1].ids['herbs'] and objHerb[ObjID]  then
+				or currentRoute[1].ids['herbs'] and objHerb[tonumber(ObjID)]  then
 					local x, y, z = ObjectPosition(Obj)
 					local distance = pathDistance(x, y, z)
 					if distance < 50 then
