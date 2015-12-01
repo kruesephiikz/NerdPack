@@ -302,9 +302,10 @@ local function ObjectIsNear()
 					local distance = pathDistance(x, y, z)
 					if distance < 50 then
 						wantedObject, wX, wY, wZ = Obj, x, y, z
-						if distance >= 5 then
+						if distance >= 6 then
 							moveToLoc(x, y, z)
 						else
+							MoveTo(ObjectPosition('player'))
 							ObjectInteract(Obj)
 						end
 						return true
