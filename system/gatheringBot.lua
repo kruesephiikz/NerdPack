@@ -138,6 +138,7 @@ LibDraw.Sync(function()
 			end
 			-- Draw our wantec object
 			if wantedObject ~= nil then 
+				local aX, aY, aZ = ObjectPosition('player')
 				LibDraw.Line(aX, aY, aZ, wX, wY, wZ)
 				LibDraw.Circle(wX, wY, wZ, 2) 
 			end
@@ -197,7 +198,7 @@ local function ObjectIsNear()
 						ObjectInteract(Obj.key)
 					end
 					wantedObject, wX, wY, wZ = Obj.key, x, y, z
-					wipe(afTable)
+					--wipe(afTable)
 					return true
 				end
 			end
