@@ -169,6 +169,7 @@ NeP.Core.BuildGUI('GatherBot', {
 			{ type = 'spacer' },
 			{ type = "input", text = 'Profile Name:', width = 110, key = 'nameInput', default = 'profile1' },
 			{ type = "input", text = 'Profile Author:', width = 110, key = 'authorInput', default = 'ImSoCoolz' },
+			{ type = "input", text = 'Gather ID:', width = 110, key = 'idInput', default = 'ores' },
 			{ type = 'spacer' },
 			{ type = "button", text = "Record Path", width = 190, height = 20, 
 			callback = function(self)
@@ -200,7 +201,7 @@ NeP.Core.BuildGUI('GatherBot', {
 							Author = PeFetch('GatherBot', 'authorInput'),
 							Date = 'D:'..day..' /M:'..month..' /Y:'..year,
 							Zone = GetZoneText(),
-							ids = {['IDHERE']={Name = 'NAMEHERE'}}
+							ids = {[PeFetch('GatherBot', 'idInput')]={Name = 'NAMEHERE'}}
 						}
 						-- This is to draw our end point
 						pX, pY, pZ = ObjectPosition('player')

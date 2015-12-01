@@ -12,22 +12,6 @@ local basicMarker = {
 }
 
 local Textures = {
-	-- LM
-	["lumbermill"] = { texture = _mediaDir.."mill.blp", width = 64, height = 64 },
-	["lumbermill_big"] = { texture = _mediaDir.."mill.blp", width = 58, height = 58, scale = 1 },
-	["lumbermill_small"] = { texture = _mediaDir.."mill.blp", width = 18, height = 18, scale = 1 },
-	-- Ore
-	["ore"] = { texture = _mediaDir.."mill.blp", width = 64, height = 64 },
-	["ore_big"] = { texture = _mediaDir.."mill.blp", width = 58, height = 58, scale = 1 },
-	["ore_small"] = { texture = _mediaDir.."mill.blp", width = 18, height = 18, scale = 1 },
-	-- Herb
-	["herb"] = { texture = _mediaDir.."herb.blp", width = 64, height = 64 },
-	["herb_big"] = { texture = _mediaDir.."herb.blp", width = 58, height = 58, scale = 1 },
-	["herb_small"] = { texture = _mediaDir.."herb.blp", width = 18, height = 18, scale = 1 },
-	-- Fish
-	["fish"] = { texture = _mediaDir.."fish.blp", width = 64, height = 64 },
-	["fish_big"] = { texture = _mediaDir.."fish.blp", width = 58, height = 58, scale = 1 },
-	["fish_small"] = { texture = _mediaDir.."fish.blp", width = 18, height = 18, scale = 1 },
 	-- Rares
 	["rare"] = { texture = _mediaDir.."elite.blp", width = 64, height = 64 },
 	["rare_big"] = { texture = _mediaDir.."elite.blp", width = 58, height = 58, scale = 1 },
@@ -120,72 +104,6 @@ LibDraw.Sync(function()
 						LibDraw.SetColor(255, 87, 87, 50)
 					end
 					LibDraw.Circle(targetX, targetY, targetZ, NeP.Core.UnitAttackRange('player', 'target', 'ranged'))
-				end
-			end
-			
-			-- Objects (Ores/Herbs/LM)
-			for i=1,#NeP.OM.GameObjects do
-				local object = NeP.OM.GameObjects[i]
-				if UnitGUID(object.key) ~= nil and ObjectExists(object.key) then --Calling ObjectExists in FireHack 2.1.4 with nil can crash the client. Fixed in FireHack 2.2.
-					local distance = object.distance
-					local ox, oy, oz = ObjectPosition(object.key)
-					local name = object.name
-					local id = object.is
-
-					-- Lumbermill
-					if id == 'LM' then
-						if NeP.Core.PeFetch("NePconf_Overlays", "objectsLM") then
-							if distance < 50 then
-								LibDraw.Texture(Textures["lumbermill_big"], ox, oy, oz + zOffset, alpha)
-							elseif distance > 200 then
-								LibDraw.Texture(Textures["lumbermill_small"], ox, oy, oz + zOffset, alpha)
-							else
-								LibDraw.Texture(Textures["lumbermill"], ox, oy, oz + zOffset, alpha)
-							end
-							LibDraw.SetColorRaw(1, 1, 1, alpha)
-							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-						end
-					-- Ores
-					elseif id == 'Ore' then
-						if NeP.Core.PeFetch("NePconf_Overlays", "objectsOres") then
-							if distance < 50 then
-								LibDraw.Texture(Textures["ore_big"], ox, oy, oz + zOffset, alpha)
-							elseif distance > 200 then
-								LibDraw.Texture(Textures["ore_small"], ox, oy, oz + zOffset, alpha)
-							else
-								LibDraw.Texture(Textures["ore"], ox, oy, oz + zOffset, alpha)
-							end
-							LibDraw.SetColorRaw(1, 1, 1, alpha)
-							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-						end
-					-- Herbs
-					elseif id == 'Herb' then
-						if NeP.Core.PeFetch("NePconf_Overlays", "objectsHerbs") then
-							if distance < 50 then
-								LibDraw.Texture(Textures["herb_big"], ox, oy, oz + zOffset, alpha)
-							elseif distance > 200 then
-								LibDraw.Texture(Textures["herb_small"], ox, oy, oz + zOffset, alpha)
-							else
-								LibDraw.Texture(Textures["herb"], ox, oy, oz + zOffset, alpha)
-							end
-							LibDraw.SetColorRaw(1, 1, 1, alpha)
-							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-						end
-					-- Fish Poles
-					elseif id == 'Fish' then
-						if NeP.Core.PeFetch("NePconf_Overlays", "objectsFishs") then
-							local ox, oy, oz = ObjectPosition(object)
-							if distance < 50 then
-								LibDraw.Texture(Textures["fish_big"], ox, oy, oz + zOffset, alpha)
-							elseif distance > 200 then
-								LibDraw.Texture(Textures["fish_small"], ox, oy, oz + zOffset, alpha)
-							else
-								LibDraw.Texture(Textures["fish"], ox, oy, oz + zOffset, alpha)
-							end
-							LibDraw.SetColorRaw(1, 1, 1, alpha)
-							LibDraw.Text(_addonColor..name.."|r\n" .. distance .. ' yards', "SystemFont_Tiny", ox, oy, oz + 1)
-						end
-					end
 				end
 			end
 			
@@ -320,8 +238,7 @@ NeP.Core.BuildGUI('Overlays', {
 	config = {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Overlays:", size = 25, align = "Center" },
 			{ type = "text", text = "Only Works with FireHack ATM!", size = 11, offset = 0, align = "center" },
-		{ type = 'spacer' },
-		{ type = 'rule' },
+		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Player Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Player Melee Range", key = "PlayerMRange", default = false },
 			{ type = "checkbox", text = "Display Player Caster Range", key = "PlayerCRange", default = false },
@@ -333,15 +250,7 @@ NeP.Core.BuildGUI('Overlays', {
 			{ type = "checkbox", text = "Display Player Melee Range", key = "TargetMRange", default = false },
 			{ type = "checkbox", text = "Display Player Caster Range", key = "TargetCRange", default = false },
 			{ type = "checkbox", text = "Display Infront Cone", key = "TargetCone", default = false },
-		{ type = 'spacer' },
-		{ type = 'rule' },
-		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Objects Overlays:", size = 25, align = "Center" },
-			{ type = "checkbox", text = "Display Herb Objects", key = "objectsHerbs", default = false },
-			{ type = "checkbox", text = "Display Ore Objects", key = "objectsOres", default = false },
-			{ type = "checkbox", text = "Display Lumbermill Objects", key = "objectsLM", default = false },
-			{ type = "checkbox", text = "Display Fish Objects", key = "objectsFish", default = false },
-		{ type = 'spacer' },
-		{ type = 'rule' },
+		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Units Overlays:", size = 25, align = "Center" },
 			{ type = "checkbox", text = "Display Friendly Player Units", key = "objectsFriendlyPlayers", default = false },
 			{ type = "checkbox", text = "Display Enemie Player Units", key = "objectsEnemiePlayers", default = false },

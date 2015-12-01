@@ -1,7 +1,6 @@
 NeP.OM = {
 	unitEnemie = {},
 	unitFriend = {},
-	GameObjects = {},
 }
 
 -- Local stuff to reduce global calls
@@ -93,97 +92,6 @@ local function BlacklistedObject(Obj)
 	return BlacklistedObjects[tostring(ObjID)] ~= nil
 end
 
-local TrackGameObjects = {
-	--[[ //// lumbermillIDs //// ]]
-			--[[ //// WOD //// ]]
-		['234127'] = 'LM',
-		['234193'] = 'LM',
-		['234023'] = 'LM',
-		['234099'] = 'LM',
-		['233634'] = 'LM',
-		['237727'] = 'LM',
-		['234126'] = 'LM',
-		['234111'] = 'LM',
-		['233922'] = 'LM',
-		['234128'] = 'LM',
-		['234000'] = 'LM',
-		['234195'] = 'LM',
-		['234196'] = 'LM',
-		['234097'] = 'LM',
-		['234198'] = 'LM',
-		['234197'] = 'LM',
-		['234123'] = 'LM',
-		['234098'] = 'LM',
-		['234022'] = 'LM',
-		['233604'] = 'LM',
-		['234120'] = 'LM',
-		['234194'] = 'LM',
-		['234021'] = 'LM',
-		['234080'] = 'LM',
-		['234110'] = 'LM',
-		['230964'] = 'LM',
-		['233635'] = 'LM',
-		['234119'] = 'LM',
-		['234122'] = 'LM',
-		['234007'] = 'LM',
-		['234199'] = 'LM',
-		['234124'] = 'LM',
-	--[[ //// oresIDs //// ]]
-			--[[ //// WOD //// ]]
-		['228510'] = 'Ore', 		--[[ Rich True Iron Deposit ]]
-		['228493'] = 'Ore', 		--[[ True Iron Deposit ]]
-		['228564'] = 'Ore', 		--[[ Rich Blackrock Deposit ]]
-		['228563'] = 'Ore', 		--[[ Blackrock Deposit ]]
-		['232544'] = 'Ore', 		--[[ True Iron Deposit ]]
-		['232545'] = 'Ore', 		--[[ Rich True Iron Deposit ]]
-		['232542'] = 'Ore',		--[[ Blackrock Deposit ]]
-		['232543'] = 'Ore',		--[[ Rich Blackrock Deposit ]]
-		['232541'] = 'Ore',		--[[ Mine Cart ]]
-	--[[ //// herbsIDs //// ]]
-			--[[ //// WOD //// ]]
-		['237400'] = 'Herb',
-		['228576'] = 'Herb',
-		['235391'] = 'Herb',
-		['237404'] = 'Herb',
-		['228574'] = 'Herb',
-		['235389'] = 'Herb',
-		['228575'] = 'Herb',
-		['237406'] = 'Herb',
-		['235390'] = 'Herb',
-		['235388'] = 'Herb',
-		['228573'] = 'Herb',
-		['237402'] = 'Herb',
-		['228571'] = 'Herb',
-		['237398'] = 'Herb',
-		['233117'] = 'Herb',
-		['235376'] = 'Herb',
-		['228991'] = 'Herb',
-		['235387'] = 'Herb',
-		['237396'] = 'Herb',
-		['228572'] = 'Herb',
-	--[[ //// fishIDs //// ]]
-			--[[ //// WOD //// ]]
-		['229072'] = 'Fish',
-		['229073'] = 'Fish',
-		['229069'] = 'Fish',
-		['229068'] = 'Fish',
-		['243325'] = 'Fish',
-		['243354'] = 'Fish',
-		['229070'] = 'Fish',
-		['229067'] = 'Fish',
-		['236756'] = 'Fish',
-		['237295'] = 'Fish',
-		['229071'] = 'Fish',
-}
-
-local function isGameObject(Obj)
-	local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj) or '0')
-	if TrackGameObjects[ObjID] ~= nil then
-		return TrackGameObjects[tostring(ObjID)], true
-	end
-	return 'nothing', false
-end
-
 local TrackedDummys = {
 	['31144'] = 'dummy',		-- Training Dummy - Lvl 80
 	['31146'] = 'dummy',		-- Raider's Training Dummy - Lvl ??
@@ -222,49 +130,30 @@ end
 	to repeate code over and over again for all unlockers.
 ---------------------------------------------------]]
 local function addToOM(Obj, Dist)
-	if not BlacklistedObject(Obj) then
-		-- Game Object
-		local _type, isGameObject = isGameObject(Obj)
-		if isGameObject then
-			NeP.OM.GameObjects[#NeP.OM.GameObjects+1] = {
-				key = Obj, 
-				distance = Dist, 
-				health = 1, 
-				maxHealth = 1, 
-				actualHealth = 1, 
-				name = UnitName(Obj),
-				is = _type
-			}
-		-- Unit
-		elseif ProbablyEngine.condition['alive'](Obj) then
-			if not BlacklistedDebuffs(Obj) then
-				-- Friendly
-				if UnitIsFriend('player', Obj) then
-					if NeP.Core.PeFetch('ObjectCache', 'FU') then
-						NeP.OM.unitFriend[#NeP.OM.unitFriend+1] = {
-							key = Obj, 
-							distance = Dist, 
-							health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-							maxHealth = UnitHealthMax(Obj), 
-							actualHealth = UnitHealth(Obj), 
-							name = UnitName(Obj),
-							is = 'friendly'
-						}
-					end
-				-- Enemie
-				elseif UnitCanAttack('player', Obj) then
-					if NeP.Core.PeFetch('ObjectCache', 'EU') then
-						NeP.OM.unitEnemie[#NeP.OM.unitEnemie+1] = {
-							key = Obj, 
-							distance = Dist, 
-							health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
-							maxHealth = UnitHealthMax(Obj), 
-							actualHealth = UnitHealth(Obj), 
-							name = UnitName(Obj),
-							is = isDummy(Obj) and 'dummy' or 'enemie'
-						}
-					end
-				end
+	if not BlacklistedObject(Obj) and ProbablyEngine.condition['alive'](Obj) then
+		if not BlacklistedDebuffs(Obj) then
+			-- Friendly
+			if UnitIsFriend('player', Obj) then
+				NeP.OM.unitFriend[#NeP.OM.unitFriend+1] = {
+					key = Obj, 
+					distance = Dist, 
+					health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
+					maxHealth = UnitHealthMax(Obj), 
+					actualHealth = UnitHealth(Obj), 
+					name = UnitName(Obj),
+					is = 'friendly'
+				}
+			-- Enemie
+			elseif UnitCanAttack('player', Obj) then
+				NeP.OM.unitEnemie[#NeP.OM.unitEnemie+1] = {
+					key = Obj, 
+					distance = Dist, 
+					health = math.floor((UnitHealth(Obj) / UnitHealthMax(Obj)) * 100), 
+					maxHealth = UnitHealthMax(Obj), 
+					actualHealth = UnitHealth(Obj), 
+					name = UnitName(Obj),
+					is = isDummy(Obj) and 'dummy' or 'enemie'
+				}
 			end
 		end
 	end
@@ -274,8 +163,8 @@ local function NeP_FireHackOM()
 	local totalObjects = ObjectCount()
 	for i=1, totalObjects do
 		local Obj = ObjectWithIndex(i)
-		if UnitGUID( Obj ) ~= nil and ObjectExists(Obj) then
-			if ObjectIsType(Obj, ObjectTypes.Unit) or ObjectIsType(Obj, ObjectTypes.GameObject) then
+		if UnitGUID(Obj) ~= nil and ObjectExists(Obj) then
+			if ObjectIsType(Obj, ObjectTypes.Unit) then
 				local ObjDistance = objectDistance('player', Obj)
 				if ObjDistance <= (NeP.Core.PeFetch('ObjectCache', 'CD') or 100) then
 					addToOM(Obj, ObjDistance)
@@ -370,7 +259,6 @@ C_Timer.NewTicker(1, (function()
 	-- Wipe Cache
 	wipe(NeP.OM.unitEnemie)
 	wipe(NeP.OM.unitFriend)
-	wipe(NeP.OM.GameObjects)
 
 	if NeP.Core.CurrentCR and peConfig.read('button_states', 'MasterToggle', false) then
 		-- Master Toggle
@@ -386,7 +274,6 @@ C_Timer.NewTicker(1, (function()
 		-- Sort by distance
 		table.sort(NeP.OM.unitEnemie, function(a,b) return a.distance < b.distance end)
 		table.sort(NeP.OM.unitFriend, function(a,b) return a.distance < b.distance end)
-		table.sort(NeP.OM.GameObjects, function(a,b) return a.distance < b.distance end)
 	end
 end), nil)
 
