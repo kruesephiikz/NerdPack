@@ -161,13 +161,18 @@ local function LoS(bX, bY, bZ)
 	return TraceLine(aX, aY, aZ+2.25, bX, bY, bZ+2.25, losFlags)
 end
 
-local function ObjectIsNear()
+local function pathDistance(x, y, z)
+	local aX, aY, aZ = ObjectPosition('player')
+	return math.sqrt(((x-aX)^2) + ((y-aY)^2) + ((z-aZ)^2))
+end
+
+local function ObjectIsNear(x, y, z)
 	-- not build yet...
 	return false
 end
 
 local function moveToLoc(x, y, z)
-	if not LoS(x, y, z) then
+	if not LoS(x, y, z) and pathDistance(x, y, z) > 6 then
 		MoveTo(x, y, z)
 	-- else -- (FIXME: TODO) Generate a path around the object hitting LoS
 	end
@@ -189,11 +194,10 @@ local function playPath()
 					-- This takes the route and creates a infinite loop out of it.
 					if #afTable >= 2 then
 						-- Figure out the nearest waypoint
-						local aX, aY, aZ = ObjectPosition('player')
 						local _rtable = {}
 						for i=2,#afTable do
 							local bX, bY, bZ = afTable[i].x, afTable[i].y, afTable[i].z
-							local distance = math.sqrt(((bX-aX)^2) + ((bY-aY)^2) + ((bZ-aZ)^2))
+							local distance = pathDistance(bX, bY, bZ)
 							_rtable[#_rtable+1] = {
 								x = bX,
 								y = bY,
