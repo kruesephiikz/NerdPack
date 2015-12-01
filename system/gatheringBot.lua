@@ -19,10 +19,10 @@ local _filePath = 'Interface\\AddOns\\NerdPack\\GatheringProfiles'
 local function getProfiles()
 	if FireHack then
 		local kTable = {}
-		for key,value in pairs({GetDirectoryFiles('Interface\\AddOns\\NerdPack\\GatheringProfiles\\*.lua')}) do
+		for key,value in pairs({GetDirectoryFiles(_filePath..'\\*.lua')}) do
 			kTable[#kTable+1] = {
-				text = tostring(value), 
-				key = tostring(value)
+				text = value, 
+				key = value
 			}
 		end
 		return kTable
@@ -107,12 +107,15 @@ NeP.Core.BuildGUI('GatherBot', {
 })
 
 local function readProfile()
-	if FireHack then
-		if PeFetch('GatherBot', 'gProfile') ~= nil then
-			local fileLoc = _filePath..'\\'..PeFetch('GatherBot', 'gProfile')
-			local str = ReadFile(fileLoc) or ''
-			local obj, pos, err = json.decode(str, 1, nil)
+	if FireHack and PeFetch('GatherBot', 'gProfile') ~= nil then
+		local pName = PeFetch('GatherBot', 'gProfile')
+		local fileLoc = _filePath..'\\'..pName
+		local str = ReadFile(fileLoc)
+		local obj, pos, err = json.decode(str, 1, nil)
+		if obj ~= nil then
 			return obj
+		else
+			return {[1] = {Name = '...', Author = '...', Zone = '...', Date = '...'}}
 		end
 	end
 end
@@ -238,7 +241,7 @@ C_Timer.NewTicker(0.5, (function() recordPath() end), nil)
 local gthGUI = NeP.Core.getGUI('GatherBot')
 C_Timer.NewTicker(1, (function()
 	if gthGUI.parent:IsShown() and FireHack then
-		local obj = readProfile() or {[1] = {Name = '...', Author = '...', Zone = '...', Date = '...'}}
+		local obj = readProfile()
 		gthGUI.elements.profileName:SetText(obj[1].Name)
 		gthGUI.elements.profileAuthor:SetText(obj[1].Author)
 		gthGUI.elements.profileZone:SetText(obj[1].Zone)
