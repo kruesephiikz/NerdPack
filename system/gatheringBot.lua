@@ -7,11 +7,13 @@ Todo:
 ]]
 
 local PeFetch = NeP.Core.PeFetch
+local addonColor = '|cff'..NeP.Interface.addonColor
 local LibDraw = LibStub("LibDraw-1.0")
 
 local _Recording = false
 local _Playing = false
 local _filePath = 'Interface\\AddOns\\NerdPack\\GatheringProfiles'
+local _mediaDir = NeP.Interface.mediaDir
 
 local currentRoute = {} -- Temp route table.
 local filesInDir = {{text = "No Files", key = 'nl'}} -- Our files.
@@ -28,6 +30,94 @@ if FireHack then
 		}
 	end
 end
+
+local objLM = {
+	--[[ //// WOD //// ]]
+	[234127] = 'LM',
+	[234193] = 'LM',
+	[234023] = 'LM',
+	[234099] = 'LM',
+	[233634] = 'LM',
+	[237727] = 'LM',
+	[234126] = 'LM',
+	[234111] = 'LM',
+	[233922] = 'LM',
+	[234128] = 'LM',
+	[234000] = 'LM',
+	[234195] = 'LM',
+	[234196] = 'LM',
+	[234097] = 'LM',
+	[234198] = 'LM',
+	[234197] = 'LM',
+	[234123] = 'LM',
+	[234098] = 'LM',
+	[234022] = 'LM',
+	[233604] = 'LM',
+	[234120] = 'LM',
+	[234194] = 'LM',
+	[234021] = 'LM',
+	[234080] = 'LM',
+	[234110] = 'LM',
+	[230964] = 'LM',
+	[233635] = 'LM',
+	[234119] = 'LM',
+	[234122] = 'LM',
+	[234007] = 'LM',
+	[234199] = 'LM',
+	[234124] = 'LM',
+}
+
+local objOre = {
+	--[[ //// WOD //// ]]
+	[228510] = 'Ore', 	--[[ Rich True Iron Deposit ]]
+	[228493] = 'Ore', 	--[[ True Iron Deposit ]]
+	[228564] = 'Ore', 	--[[ Rich Blackrock Deposit ]]
+	[228563] = 'Ore', 	--[[ Blackrock Deposit ]]
+	[232544] = 'Ore', 	--[[ True Iron Deposit ]]
+	[232545] = 'Ore', 	--[[ Rich True Iron Deposit ]]
+	[232542] = 'Ore',	--[[ Blackrock Deposit ]]
+	[232543] = 'Ore',	--[[ Rich Blackrock Deposit ]]
+	[232541] = 'Ore',	--[[ Mine Cart ]]
+}
+
+local objHerb = {
+	--[[ //// WOD //// ]]
+	[237400] = 'Herb',
+	[228576] = 'Herb',
+	[235391] = 'Herb',
+	[237404] = 'Herb',
+	[228574] = 'Herb',
+	[235389] = 'Herb',
+	[228575] = 'Herb',
+	[237406] = 'Herb',
+	[235390] = 'Herb',
+	[235388] = 'Herb',
+	[228573] = 'Herb',
+	[237402] = 'Herb',
+	[228571] = 'Herb',
+	[237398] = 'Herb',
+	[233117] = 'Herb',
+	[235376] = 'Herb',
+	[228991] = 'Herb',
+	[235387] = 'Herb',
+	[237396] = 'Herb',
+	[228572] = 'Herb',
+}
+
+local objFish = {
+	--[[ //// WOD //// ]]
+	[229072] = 'Fish',
+	[229073] = 'Fish',
+	[229069] = 'Fish',
+	[229068] = 'Fish',
+	[243325] = 'Fish',
+	[243354] = 'Fish',
+	[229070] = 'Fish',
+	[229067] = 'Fish',
+	[236756] = 'Fish',
+	[237295] = 'Fish',
+	[229071] = 'Fish',
+}
 
 NeP.Core.BuildGUI('GatherBot', {
     key = "GatherBot",
@@ -58,7 +148,8 @@ NeP.Core.BuildGUI('GatherBot', {
 			{ type = 'spacer' },
 				-- Draw waypoint checkbox
 				{ type = "checkbox", text = "Draw Waypoint", key = "drawWay", default = false },
-				{ type = "checkbox", text = "Use random favorite mount", key = "favMount", default = true },
+				{ type = "checkbox", text = "Draw Waypoint", key = "drawObjs", default = true },
+				{ type = "checkbox", text = "Use random favorite mount", key = "favMount", default = false },
 				-- Start Button
 				{ type = "button", text = "Start", width = 190, height = 20, 
 				callback = function(self) 
@@ -77,7 +168,7 @@ NeP.Core.BuildGUI('GatherBot', {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Create a profile:", size = 25, align = "Center"},
 			{ type = 'spacer' },
 			{ type = "input", text = 'Profile Name:', width = 110, key = 'nameInput', default = 'profile1' },
-			{ type = "input", text = 'Profile Author:', width = 110,  key = 'authorInput', default = 'ImSoCoolz' },
+			{ type = "input", text = 'Profile Author:', width = 110, key = 'authorInput', default = 'ImSoCoolz' },
 			{ type = 'spacer' },
 			{ type = "button", text = "Record Path", width = 190, height = 20, 
 			callback = function(self)
@@ -108,7 +199,8 @@ NeP.Core.BuildGUI('GatherBot', {
 							Name = PeFetch('GatherBot', 'nameInput'),
 							Author = PeFetch('GatherBot', 'authorInput'),
 							Date = 'D:'..day..' /M:'..month..' /Y:'..year,
-							Zone = GetZoneText()
+							Zone = GetZoneText(),
+							ids = {['IDHERE']={Name = 'NAMEHERE'}}
 						}
 						-- This is to draw our end point
 						pX, pY, pZ = ObjectPosition('player')
@@ -116,6 +208,10 @@ NeP.Core.BuildGUI('GatherBot', {
 					_Recording = not _Recording
 				end
 			end },
+		-- Debug tools
+		{ type = 'spacer' },{ type = 'rule' },
+		{ type = 'header', text = '|cff'..NeP.Interface.addonColor.."Debug Tools:", size = 25, align = "Center"},
+			{ type = "checkbox", text = "Draw all object IDs:", key = "debugAllObjsIDs", default = false },
     }
 })
 
@@ -123,42 +219,16 @@ local function readProfile()
 	if FireHack and PeFetch('GatherBot', 'gProfile') ~= nil then
 		local fileLoc = _filePath..'\\'..PeFetch('GatherBot', 'gProfile')
 		local str = ReadFile(fileLoc)
-		local obj, pos, err = json.decode(str, 1, nil)
-		if obj ~= nil then
-			return obj
+		if str ~= nil then
+			local obj, pos, err = json.decode(str, 1, nil)
+			if obj ~= nil then
+				return obj
+			end
 		end
 	end
 	-- Fail safe...
 	return {[1] = {Name = '...', Author = '...', Zone = '...', Date = '...'}}
 end
-
-LibDraw.Sync(function()
-	if FireHack then
-		-- Set line style
-		LibDraw.SetColorRaw(1.0, 0.96, 0.41, 0.50)
-		LibDraw.SetWidth(10)
-		-- Draw a end point
-		if _Recording then
-			LibDraw.Text('END HERE!', "SystemFont_Tiny", pX, pY, pZ + 6)
-			LibDraw.Circle(pX, pY, pZ, 2)				 
-		end
-		-- Create a visual route
-		if PeFetch('GatherBot', 'drawWay') then
-			-- Draw our route
-			for i=2,#currentRoute-1 do
-				local aX, aY, aZ = currentRoute[i].x, currentRoute[i].y, currentRoute[i].z
-				local bX, bY, bZ = currentRoute[i+1].x, currentRoute[i+1].y, currentRoute[i+1].z
-				LibDraw.Line(aX, aY, aZ, bX, bY, bZ)	 
-			end
-			-- Draw our wantec object
-			if wantedObject ~= nil then 
-				local aX, aY, aZ = ObjectPosition('player')
-				LibDraw.Line(aX, aY, aZ, wX, wY, wZ)
-				LibDraw.Circle(wX, wY, wZ, 2) 
-			end
-		end
-	end
-end)
 
 local function recordPath()
 	if _Recording then
@@ -196,7 +266,7 @@ local function moveToLoc(x, y, z)
 			-- bX and BY need to be the location of the object which hit LoS...
 			-- Then we random try go to the side of the object, and then try going to the original Location.
 			-- If we fail after moving to the side, we try moving again to the side and repeat.
-			-- FIXME: get the location of pbject hiting LoS.
+			-- FIXME: get the location of object hiting LoS.
 			local bX2, bY2 = bX + math.random(-0.25, 0.25), bY + math.random(-0.10, 0.10)
 			if not LoS(aX, aY, aZ, bX2, bY2, bZ) then
 				print('hit')
@@ -208,22 +278,29 @@ end
 
 -- Change this to allow profiles to specify what they want.
 local function ObjectIsNear()
-	if #NeP.OM.GameObjects > 0 then
-		for i=1,#NeP.OM.GameObjects do
-			local Obj = NeP.OM.GameObjects[i]
-			if ObjectExists(Obj.key) then
-				local x, y, z = ObjectPosition(Obj.key)
-				local distance = Obj.distance
-				if (Obj.is == 'Ore' or Obj.is == 'Herb') and distance < 50 then
-					if distance >= 5 then
-						moveToLoc(x, y, z)
-					else
-						NeP.Core.Print('1: '..Obj.name..' / '..distance)
-						ObjectInteract(Obj.key)
+	local totalObjects = ObjectCount()
+	for i=1, totalObjects do
+		local Obj = ObjectWithIndex(i)
+		if UnitGUID (Obj) ~= nil and ObjectExists(Obj) then
+			if ObjectIsType(Obj, ObjectTypes.GameObject) then
+				local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj) or '0')
+				-- If the profile is looking for specific IDs,
+				if currentRoute[1].ids[tostring(ObjID)] ~= nil
+				-- If the profile wants all known ores.
+				or currentRoute[1].ids['ores'] and objOre[ObjID] 
+				-- If the profile wants all known herbs.
+				or currentRoute[1].ids['herbs'] and objHerb[ObjID]  then
+					local x, y, z = ObjectPosition(Obj)
+					local distance = pathDistance(x, y, z)
+					if distance < 50 then
+						wantedObject, wX, wY, wZ = Obj, x, y, z
+						if distance >= 5 then
+							moveToLoc(x, y, z)
+						else
+							ObjectInteract(Obj)
+						end
+						return true
 					end
-					wantedObject, wX, wY, wZ = Obj.key, x, y, z
-					--wipe(currentRoute)
-					return true
 				end
 			end
 		end
@@ -243,9 +320,10 @@ local function playPath()
 			if unitSpeed == 0 and casting == nil then
 				-- Get a random favorite mount.
 				if not IsMounted() and PeFetch('GatherBot', 'favMount') then C_MountJournal.Summon(0); return end
-				if not ObjectIsNear() then
-					-- This takes the route and creates a infinite loop out of it.
-					if #currentRoute >= 2 then
+				-- This takes the route and creates a infinite loop out of it.
+				if #currentRoute >= 2 then
+					-- If a object is near, get it instead.
+					if not ObjectIsNear() then
 						-- Figure out the nearest waypoint
 						local _rtable = {}
 						for i=2,#currentRoute do
@@ -267,11 +345,11 @@ local function playPath()
 						end
 						-- Remove the used waypoint from our temp route
 						table.remove(currentRoute, _rtable[1].id)
-					else
-						if FireHack then
-							-- We have to create a temp table so we can remove once we've move there
-							currentRoute = readProfile()
-						end
+					end
+				else
+					if FireHack then
+						-- We have to create a temp table so we can remove once we've move there
+						currentRoute = readProfile()
 					end
 				end
 			end
@@ -302,3 +380,103 @@ C_Timer.NewTicker(1, (function()
 		gthGUI.elements.profileDate:SetText(obj[1].Date)
 	end
 end), nil)
+
+local Textures = {
+	-- LM
+	["lumbermill"] = { texture = _mediaDir.."mill.blp", width = 64, height = 64 },
+	["lumbermill_big"] = { texture = _mediaDir.."mill.blp", width = 58, height = 58, scale = 1 },
+	["lumbermill_small"] = { texture = _mediaDir.."mill.blp", width = 18, height = 18, scale = 1 },
+	-- Ore
+	["ore"] = { texture = _mediaDir.."mill.blp", width = 64, height = 64 },
+	["ore_big"] = { texture = _mediaDir.."mill.blp", width = 58, height = 58, scale = 1 },
+	["ore_small"] = { texture = _mediaDir.."mill.blp", width = 18, height = 18, scale = 1 },
+	-- Herb
+	["herb"] = { texture = _mediaDir.."herb.blp", width = 64, height = 64 },
+	["herb_big"] = { texture = _mediaDir.."herb.blp", width = 58, height = 58, scale = 1 },
+	["herb_small"] = { texture = _mediaDir.."herb.blp", width = 18, height = 18, scale = 1 },
+	-- Fish
+	["fish"] = { texture = _mediaDir.."fish.blp", width = 64, height = 64 },
+	["fish_big"] = { texture = _mediaDir.."fish.blp", width = 58, height = 58, scale = 1 },
+	["fish_small"] = { texture = _mediaDir.."fish.blp", width = 18, height = 18, scale = 1 },
+}
+
+local function drawObj(Obj, oX, oY, oZ, distance)
+	if distance < 50 then
+		LibDraw.Texture(Textures[Obj.."_big"], oX, oY, oZ + zOffset, alpha)
+	elseif distance > 200 then
+		LibDraw.Texture(Textures[Obj.."_small"], oX, oY, oZ + zOffset, alpha)
+	else
+		LibDraw.Texture(Textures[Obj..""], oX, oY, oZ + zOffset, alpha)
+	end
+end
+
+LibDraw.Sync(function()
+	if FireHack then
+		
+		-- Set line style
+		LibDraw.SetColorRaw(1, 1, 1, alpha)
+		
+		-- draw Objects (Ores/Herbs/LM)
+		if PeFetch('GatherBot', 'drawObjs') then
+			for i=1, ObjectCount() do
+				local Obj = ObjectWithIndex(i)
+				if UnitGUID (Obj) ~= nil and ObjectExists(Obj) then
+					if ObjectIsType(Obj, ObjectTypes.GameObject) then
+						local oX, oY, oZ = ObjectPosition(Obj)
+						local distance = pathDistance(oX, oY, oZ)
+						local name = ObjectName(Obj)
+						local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj) or '0')
+						local _text = addonColor..name.."|r\n"..distance..' yards'
+						if PeFetch('GatherBot', 'debugAllObjsIDs') then
+							LibDraw.Text(addonColor..name..'|r ID:'..ObjID, "SystemFont_Tiny", oX, oY, oZ+1)
+						end
+						-- Lumbermill
+						if objLM[ObjID] ~= nil then
+							drawObj('lumbermill', oX, oY, oZ, distance)
+							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
+						-- Ores
+						elseif objOre[ObjID] ~= nil then
+							drawObj('ore', oX, oY, oZ, distance)
+							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
+						-- Herbs
+						elseif objHerb[ObjID] ~= nil then
+							drawObj('herb', oX, oY, oZ, distance)
+							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
+						-- Fish Poles
+						elseif objFish[ObjID] ~= nil then
+							drawObj('fish', oX, oY, oZ, distance)
+							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
+						end
+					end
+				end
+			end
+		end
+
+		-- Set line style
+		LibDraw.SetColorRaw(1.0, 0.96, 0.41, 0.50)
+		LibDraw.SetWidth(10)
+
+		-- Draw a end point
+		if _Recording then
+			LibDraw.Text('END HERE!', "SystemFont_Tiny", pX, pY, pZ + 6)
+			LibDraw.Circle(pX, pY, pZ, 2)				 
+		end
+
+		-- Create a visual route
+		if PeFetch('GatherBot', 'drawWay') then
+			-- Draw our route
+			for i=2,#currentRoute-1 do
+				local aX, aY, aZ = currentRoute[i].x, currentRoute[i].y, currentRoute[i].z
+				local bX, bY, bZ = currentRoute[i+1].x, currentRoute[i+1].y, currentRoute[i+1].z
+				LibDraw.Line(aX, aY, aZ, bX, bY, bZ)	 
+			end
+			-- Draw our wantec object
+			if wantedObject ~= nil then 
+				local aX, aY, aZ = ObjectPosition('player')
+				LibDraw.Line(aX, aY, aZ, wX, wY, wZ)
+				LibDraw.Circle(wX, wY, wZ, 2) 
+			end
+		end
+
+	end
+end)
