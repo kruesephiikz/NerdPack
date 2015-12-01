@@ -20,6 +20,11 @@ local filesInDir = {{text = "No Files", key = 'nl'}} -- Our files.
 local pX, pY, pZ = 0,0,0,0 -- This is to draw our end point
 local wantedObject, wX, wY, wZ = nil, nil, nil, nil -- these are used to display circle in the wanted object.
 
+local function round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
 -- Get our files in the dir.
 if FireHack then
 	wipe(filesInDir)
@@ -254,7 +259,7 @@ end
 
 local function pathDistance(x, y, z)
 	local aX, aY, aZ = ObjectPosition('player')
-	return math.sqrt(((x-aX)^2) + ((y-aY)^2) + ((z-aZ)^2))
+	return round(math.sqrt(((x-aX)^2) + ((y-aY)^2) + ((z-aZ)^2)))
 end
 
 local function moveToLoc(x, y, z)
@@ -390,9 +395,9 @@ local Textures = {
 	["lumbermill_big"] = { texture = _mediaDir.."mill.blp", width = 58, height = 58, scale = 1 },
 	["lumbermill_small"] = { texture = _mediaDir.."mill.blp", width = 18, height = 18, scale = 1 },
 	-- Ore
-	["ore"] = { texture = _mediaDir.."mill.blp", width = 64, height = 64 },
-	["ore_big"] = { texture = _mediaDir.."mill.blp", width = 58, height = 58, scale = 1 },
-	["ore_small"] = { texture = _mediaDir.."mill.blp", width = 18, height = 18, scale = 1 },
+	["ore"] = { texture = _mediaDir.."ore.blp", width = 64, height = 64 },
+	["ore_big"] = { texture = _mediaDir.."ore.blp", width = 58, height = 58, scale = 1 },
+	["ore_small"] = { texture = _mediaDir.."ore.blp", width = 18, height = 18, scale = 1 },
 	-- Herb
 	["herb"] = { texture = _mediaDir.."herb.blp", width = 64, height = 64 },
 	["herb_big"] = { texture = _mediaDir.."herb.blp", width = 58, height = 58, scale = 1 },
@@ -409,7 +414,7 @@ local function drawObj(Obj, oX, oY, oZ, distance)
 	elseif distance > 200 then
 		LibDraw.Texture(Textures[Obj.."_small"], oX, oY, oZ + 3, 1)
 	else
-		LibDraw.Texture(Textures[Obj..""], oX, oY, oZ + 3, 1)
+		LibDraw.Texture(Textures[Obj], oX, oY, oZ + 3, 1)
 	end
 end
 
@@ -429,25 +434,25 @@ LibDraw.Sync(function()
 						local distance = pathDistance(oX, oY, oZ)
 						local name = ObjectName(Obj)
 						local objectType, _, _, _, _, _id, _ = strsplit("-", UnitGUID(Obj))
-						local ObjID = tonumber(_id)
+						local ID = tonumber(_id)
 						local _text = addonColor..name.."|r\n"..distance..' yards'
 						if PeFetch('GatherBot', 'debugAllObjsIDs') then
-							LibDraw.Text(addonColor..name..'|r ID:'..ObjID, "SystemFont_Tiny", oX, oY, oZ+1)
+							LibDraw.Text(addonColor..name..'|r ID:'..ID, "SystemFont_Tiny", oX, oY, oZ+1)
 						end
 						-- Lumbermill
-						if objLM[ObjID] ~= nil then
+						if objLM[ID] ~= nil then
 							drawObj('lumbermill', oX, oY, oZ, distance)
 							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
 						-- Ores
-						elseif objOre[ObjID] ~= nil then
+						elseif objOre[ID] ~= nil then
 							drawObj('ore', oX, oY, oZ, distance)
 							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
 						-- Herbs
-						elseif objHerb[ObjID] ~= nil then
+						elseif objHerb[ID] ~= nil then
 							drawObj('herb', oX, oY, oZ, distance)
 							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
 						-- Fish Poles
-						elseif objFish[ObjID] ~= nil then
+						elseif objFish[ID] ~= nil then
 							drawObj('fish', oX, oY, oZ, distance)
 							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
 						end
