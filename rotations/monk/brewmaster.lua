@@ -21,7 +21,7 @@ NeP.Interface.MonkWw = {
 local castBetwenUnits = function(spell)
 	if UnitExists('target') and FireHack then
 		Cast(spell)
-		CastAtPosition(GetPositionBetweenObjects('player', 'target', GetDistanceBetweenObjects('player', 'target')/2))
+		CastAtPosition(GetPositionBetweenObjects('target', 'player', 10))
 		CancelPendingSpell()
 		return true
 	end
@@ -32,7 +32,7 @@ local exeOnLoad = function()
 	NeP.Splash()
 end
 
-local _All = {
+local All = {
 	-- Keybinds
 	{'pause', 'modifier.shift'},
 	{'119381', 'modifier.control'}, -- Leg Sweep
@@ -40,8 +40,9 @@ local _All = {
 	
 	-- Buffs
 	{'116781', '!player.buffs.stats'}, -- Legacy of the White Tiger
-	
-	-- FREEDOOM!
+}
+
+local FREEDOOM = {
 	{'137562', 'player.state.disorient'}, -- Nimble Brew = 137562
 	{'116841', 'player.state.disorient'}, -- Tiger's Lust = 116841
 	{'137562', 'player.state.fear'}, -- Nimble Brew = 137562
@@ -54,50 +55,75 @@ local _All = {
 	{'116841', 'player.state.snare'}, -- Tiger's Lust = 116841
 }
 
-local _Cooldowns = {
+local Cooldowns = {
 
 }
 
-local _Survival = {
-	{'Expel Harm'},
-	{'Guard'},
+local Survival = {
+	-- Expel Harm
+	{'115072'},
+	-- Guard
+	{'115295'},
 }
 
-local _Interrupts = {
+local Interrupts = {
 
 }
 
-local _Ranged = {
+local Ranged = {
 
 }
 
-local _Melle = {
-	{'Elusive Brew', 'player.buff(Elusive Brew).count > 9', 'target'},
-	-- Purifying Brew to remove your Stagger DoT when Yellow or Red.
-	{'Blackout Kick', '!player.buff(Shuffle)', 'target'},
-	{'Blackout Kick', 'player.chi >= 4', 'target' },
-	{'Tiger Palm', '!player.buff(Tiger Power)', 'target'},
-	{'Keg Smash', 'player.chi <= 2', 'target'},
-	{'Jab'}
+local Taunts = {
+	-- Provoke
+	{'115546', 'target.range <= 35'},
 }
 
-local _AoE = {
+local Melle = {
+	--[[Use Blackout Kick, to maintain high uptime on Shuffle, the self-buff that it applies.]]
+	{'100784', '!player.buff(Shuffle)'},
+
+	--[[Use Keg Smash on cooldown (it generates 2 Chi, so only use when you have 2 or less).]]
+	{'121253', 'player.chi <= 2'},
+
+	--[[Use Jab. This is your default Chi builder, and your primary source of dumping Energy. 
+	It should only be used when you have around 80 Energy, to prevent capping it.]]
+	{'108557', 'player.energy >= 80'},
+
+	--[[Use Tiger Palm to fill any spare global cooldowns. 
+	The ability has no resource cost, and it has the benefit of applying a damage-increasing (rather, armor-ignoring) 
+	self-buff called Tiger Power. Make sure to maintain 100% uptime on this buff.]]
+	{'100787'},
+}
+
+local AoE = {
+	--[[Cast Keg Smash.]]
+	{'121253'},
+	
+	--[[Use Rushing Jade Wind, if you have taken this talent.
+	If you have not taken Rushing Jade Wind, use Spinning Crane Kick as a filler.
+	Against a large number of enemies, you can simply spam Keg Smash and  Rushing Jade Wind/Spinning Crane Kick.]]
+
+	--[[If you have taken Chi Explosion as your tier 7 talent, then use this with 2 Chi in order to build Shuffle, 
+	and once you have enough duration on Shuffle (or you do not need it), use Chi Explosion with 4 Chi.]]
+
+	--[[Breath of Fire Icon Breath of Fire should only be used against adds that you wish to prevent from casting spells, 
+	but it should not otherwise be part of your rotation.]]
 }
 
 ProbablyEngine.rotation.register_custom(268, NeP.Core.GetCrInfo('Monk - Brewmaster'),
 	{-- In-Combat
-		{_All},
-		{_Survival, 'player.health < 100'},
-		{_Interrupts, 'target.NePinterrupt'},
-		{_Cooldowns, 'modifier.cooldowns'},
-		-- Summon Black Ox Statue
-		{'115315' , {
-			'!player.totem(Black Ox Statue)',
-			(function() return castBetwenUnits('115313') end)
-		}},
+		{All},
+		{Survival, 'player.health < 100'},
+		{Interrupts, 'target.NePinterrupt'},
+		{FREEDOOM},
+		{Taunts, (function() return NeP.Core.canTaunt() end)},
+		{Cooldowns, 'modifier.cooldowns'},
+		-- Elusive Brew
+		{'115308', 'player.buff(115308).count >= 10'}
 		{{-- Conditions
-			{_AoE, (function() return NeP.Core.SAoE(3, 8) end)},
-			{_Melle, {'target.inMelee', 'target.NePinfront'}},
-			{_Ranged, {'!target.inMelee', 'target.inRanged'}}
+			{AoE, (function() return NeP.Core.SAoE(3, 8) end)},
+			{Melle, {'target.inMelee', 'target.NePinfront'}},
+			--{Ranged, {'!target.inMelee', 'target.inRanged'}}
 		}, {'target.range <= 40', 'target.exists'}}
-	}, _All, exeOnLoad)
+	}, All, exeOnLoad)

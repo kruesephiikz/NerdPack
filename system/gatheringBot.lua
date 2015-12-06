@@ -482,7 +482,7 @@ LibDraw.Sync(function()
 				local bX, bY, bZ = currentRoute[i+1].x, currentRoute[i+1].y, currentRoute[i+1].z
 				LibDraw.Line(aX, aY, aZ, bX, bY, bZ)	 
 			end
-			-- Draw our wantec object
+			-- Draw our wanted object
 			if wantedObject ~= nil then 
 				local aX, aY, aZ = ObjectPosition('player')
 				LibDraw.Line(aX, aY, aZ, wX, wY, wZ)
