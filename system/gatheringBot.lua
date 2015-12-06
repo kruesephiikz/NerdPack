@@ -422,7 +422,7 @@ local function drawObj(Obj, oX, oY, oZ, distance)
 end
 
 LibDraw.Sync(function()
-	if FireHack then
+	if gthGUI.parent:IsShown() and FireHack then
 		
 		-- Set line style
 		LibDraw.SetColorRaw(1, 1, 1, alpha)
