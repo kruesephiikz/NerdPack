@@ -120,7 +120,7 @@ ProbablyEngine.rotation.register_custom(268, NeP.Core.GetCrInfo('Monk - Brewmast
 		{Taunts, (function() return NeP.Core.canTaunt() end)},
 		{Cooldowns, 'modifier.cooldowns'},
 		-- Elusive Brew
-		{'115308', 'player.buff(115308).count >= 10'}
+		{'115308', 'player.buff(115308).count >= 10'},
 		{{-- Conditions
 			{AoE, (function() return NeP.Core.SAoE(3, 8) end)},
 			{Melle, {'target.inMelee', 'target.NePinfront'}},
