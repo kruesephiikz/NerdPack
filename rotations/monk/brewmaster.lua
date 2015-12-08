@@ -1,4 +1,8 @@
-NeP.Interface.MonkWw = {
+local dynEval = NeP.Core.dynEval
+local PeFetch = NeP.Core.PeFetch
+local addonColor = NeP.Interface.addonColor
+
+NeP.Interface.classGUIs[268] = {
 	key = 'NePConfigMonkBM',
 	profiles = true,
 	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick..' Config',
@@ -7,13 +11,26 @@ NeP.Interface.MonkWw = {
 	width = 250,
 	height = 500,
 	config = {
+		-- Keybinds
+		{type = 'header', text = "|cff"..addonColor..'Keybinds:', align = 'center'},
+			-- Control
+			{type = 'text', text = "|cff"..addonColor..'Control: ', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
+			-- Shift
+			{type = 'text', text = "|cff"..addonColor..'Shift:', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
+			-- Alt
+			{type = 'text', text = "|cff"..addonColor..'Alt:',align = 'left', size = 11, offset = -11},
+			{type = 'text', text = 'Pause Rotation', align = "right", size = 11, offset = 0 },
+
 		-- General
-		{type = 'header',text = 'General', align = 'center' },
+		{type = 'spacer'},{type = 'rule'},
+		{type = 'header', text = "|cff"..addonColor..'General', align = 'center' },
 			-- Nothing yet
 
 		-- Survival
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = 'Survival', align = 'center'},
+		{type = 'header', text = "|cff"..addonColor..'Survival', align = 'center'},
 			{type = 'spinner', text = 'Healthstone', key = 'Healthstone', default = 75},
 	}
 }
@@ -34,9 +51,7 @@ end
 
 local All = {
 	-- Keybinds
-	{'pause', 'modifier.shift'},
-	{'119381', 'modifier.control'}, -- Leg Sweep
-	{'122470', 'modifier.alt'}, -- Touch of Karma
+	{'pause', 'modifier.alt'},
 	
 	-- Buffs
 	{'116781', '!player.buffs.stats'}, -- Legacy of the White Tiger
@@ -64,14 +79,20 @@ local Survival = {
 	{'115072'},
 	-- Guard
 	{'115295'},
+	--Healthstone
+	{'#5512', (function() return dynEval('player.health <= '..PeFetch('NePConfigMonkBM', 'Healthstone')) end)},
+	-- Fortifying Brew
+	{'115203', 'player.health < 30'},
 }
 
 local Interrupts = {
-
+	-- Spear Hand Strike
+	{'116705'},
 }
 
 local Ranged = {
-
+	-- Crackling Jade Lightning
+	{'117952'},
 }
 
 local Taunts = {
@@ -97,17 +118,19 @@ local Melle = {
 }
 
 local AoE = {
-	--[[Cast Keg Smash.]]
+	-- Cast Keg Smash.
 	{'121253'},
 	
-	--[[Use Rushing Jade Wind, if you have taken this talent.
-	If you have not taken Rushing Jade Wind, use Spinning Crane Kick as a filler.
-	Against a large number of enemies, you can simply spam Keg Smash and  Rushing Jade Wind/Spinning Crane Kick.]]
+	-- Use Rushing Jade Wind, if you have taken this talent.
+	{'Rushing Jade Wind'},
+
+	-- If you have not taken Rushing Jade Wind, use Spinning Crane Kick as a filler.]]
+	{'101546'},
 
 	--[[If you have taken Chi Explosion as your tier 7 talent, then use this with 2 Chi in order to build Shuffle, 
 	and once you have enough duration on Shuffle (or you do not need it), use Chi Explosion with 4 Chi.]]
 
-	--[[Breath of Fire Icon Breath of Fire should only be used against adds that you wish to prevent from casting spells, 
+	--[[Breath of Fire should only be used against adds that you wish to prevent from casting spells, 
 	but it should not otherwise be part of your rotation.]]
 }
 

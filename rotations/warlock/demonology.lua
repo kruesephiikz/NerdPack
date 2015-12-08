@@ -7,13 +7,13 @@ NeP.Interface.classGUIs[266] = {
 	width = 250,
 	height = 500,
 	config = {
-		{type = 'text', text = 'Keybinds', align = 'center'},		
+		{type = 'text', text = 'Keybinds:', align = 'center'},		
 			--stuff
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'text', text = 'DPS', align = 'center'},
+		{type = 'text', text = 'DPS:', align = 'center'},
 			--stuff
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'text', text = 'Survival', align = 'center'},
+		{type = 'text', text = 'Survival:', align = 'center'},
 			--stuff
 	}
 }

@@ -1,3 +1,17 @@
+-> 6.2.3.1-Stable
+@MrTheSoulz released this on 08/12/2015
+* Rewrite Paladin-Ret CR
+* Rewrite Priest-Shadow CR
+* Rewrite Monk-Brewmaster CR
+* Fix Dispells
+* Add BattlePet Bot
+* Add Gathering Bot
+* Add Auto accept Ress under general settings
+* Fix hunters lonewolf talent
+
+
+-------------------------------------------------
+
 -> 6.2.2.1-Stable
 @MrTheSoulz released this on 15/11/2015
 

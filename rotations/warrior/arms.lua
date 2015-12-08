@@ -13,31 +13,13 @@ NeP.Interface.classGUIs[71] = {
 		
 		-- General
 		{ type = 'rule' },
-		{ 
-			type = 'header',
-			text = "General settings:", 
-			align = "center" 
-		},
-
+		{ type = 'header',text = "General settings:", align = "center" },
 			-- NOTHING IN HERE YET...
 
 		{ type = "spacer" },
 		{ type = 'rule' },
-		{ 
-			type = "header", 
-			text = "Survival Settings", 
-			align = "center" 
-		},
-			{
-				type = "spinner",
-				text = "Healthstone - HP",
-				key = "Healthstone",
-				width = 50,
-				min = 0,
-				max = 100,
-				default = 75,
-				step = 5
-			},
+		{ type = "header", text = "Survival Settings", align = "center" },
+			{type = "spinner", text = "Healthstone", key = "Healthstone", width = 50, default = 75},
 
 	}
 }
