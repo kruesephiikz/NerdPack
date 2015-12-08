@@ -39,16 +39,6 @@ NeP.Interface.classGUIs[268] = {
 	}
 }
 
-local castBetwenUnits = function(spell)
-	if UnitExists('target') and FireHack then
-		Cast(spell)
-		CastAtPosition(GetPositionBetweenObjects('target', 'player', 10))
-		CancelPendingSpell()
-		return true
-	end
-	return false
-end
-
 local exeOnLoad = function()
 	NeP.Splash()
 end
