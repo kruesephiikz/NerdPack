@@ -54,7 +54,7 @@ local All = {
 	-- Pause
 	{'pause', 'modifier.alt'},
 	-- Dizzying Haze
-	{'115180', 'modifier.shift'},
+	{'115180', 'modifier.shift', 'mouseover.ground'},
 	
 	-- Buffs
 	{'116781', '!player.buffs.stats'}, -- Legacy of the White Tiger
