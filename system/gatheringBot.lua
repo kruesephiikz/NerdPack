@@ -37,38 +37,38 @@ end
 
 local objLM = {
 	--[[ //// WOD //// ]]
-	[234127] = 'LM',
-	[234193] = 'LM',
-	[234023] = 'LM',
-	[234099] = 'LM',
-	[233634] = 'LM',
-	[237727] = 'LM',
-	[234126] = 'LM',
-	[234111] = 'LM',
-	[233922] = 'LM',
-	[234128] = 'LM',
-	[234000] = 'LM',
-	[234195] = 'LM',
-	[234196] = 'LM',
-	[234097] = 'LM',
-	[234198] = 'LM',
-	[234197] = 'LM',
-	[234123] = 'LM',
-	[234098] = 'LM',
-	[234022] = 'LM',
-	[233604] = 'LM',
-	[234120] = 'LM',
-	[234194] = 'LM',
-	[234021] = 'LM',
-	[234080] = 'LM',
-	[234110] = 'LM',
-	[230964] = 'LM',
-	[233635] = 'LM',
-	[234119] = 'LM',
-	[234122] = 'LM',
-	[234007] = 'LM',
-	[234199] = 'LM',
-	[234124] = 'LM',
+	[234127] = { is = 'LM', name = '???' },
+	[234193] = { is = 'LM', name = '???' },
+	[234023] = { is = 'LM', name = '???' },
+	[234099] = { is = 'LM', name = '???' },
+	[233634] = { is = 'LM', name = '???' },
+	[237727] = { is = 'LM', name = '???' },
+	[234126] = { is = 'LM', name = '???' },
+	[234111] = { is = 'LM', name = '???' },
+	[233922] = { is = 'LM', name = '???' },
+	[234128] = { is = 'LM', name = '???' },
+	[234000] = { is = 'LM', name = '???' },
+	[234195] = { is = 'LM', name = '???' },
+	[234196] = { is = 'LM', name = '???' },
+	[234097] = { is = 'LM', name = '???' },
+	[234198] = { is = 'LM', name = '???' },
+	[234197] = { is = 'LM', name = '???' },
+	[234123] = { is = 'LM', name = '???' },
+	[234098] = { is = 'LM', name = '???' },
+	[234022] = { is = 'LM', name = '???' },
+	[233604] = { is = 'LM', name = '???' },
+	[234120] = { is = 'LM', name = '???' },
+	[234194] = { is = 'LM', name = '???' },
+	[234021] = { is = 'LM', name = '???' },
+	[234080] = { is = 'LM', name = '???' },
+	[234110] = { is = 'LM', name = '???' },
+	[230964] = { is = 'LM', name = '???' },
+	[233635] = { is = 'LM', name = '???' },
+	[234119] = { is = 'LM', name = '???' },
+	[234122] = { is = 'LM', name = '???' },
+	[234007] = { is = 'LM', name = '???' },
+	[234199] = { is = 'LM', name = '???' },
+	[234124] = { is = 'LM', name = '???' },
 }
 
 local objOre = {
@@ -267,19 +267,8 @@ local function moveToLoc(x, y, z)
 	-- If nothing is in the way
 	if not LoS(aX, aY, aZ, bX, bY, bZ) then
 		MoveTo(bX, bY, bZ)
-	else
-		-- Generate a path around (retarded way)
-		for i=1,99 do
-			-- bX and BY need to be the location of the object which hit LoS...
-			-- Then we random try go to the side of the object, and then try going to the original Location.
-			-- If we fail after moving to the side, we try moving again to the side and repeat.
-			-- FIXME: get the location of object hiting LoS.
-			local bX2, bY2 = bX + math.random(-0.25, 0.25), bY + math.random(-0.10, 0.10)
-			if not LoS(aX, aY, aZ, bX2, bY2, bZ) then
-				print('hit')
-				MoveTo(bX2, bY2, bZ)
-			end 
-		end
+	--else
+		-- FIXME: Generate a path around
 	end
 end
 
