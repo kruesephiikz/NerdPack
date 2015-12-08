@@ -1,6 +1,6 @@
 local dynEval = NeP.Core.dynEval
 local PeFetch = NeP.Core.PeFetch
-local addonColor = NeP.Interface.addonColor
+local addonColor = "|cff"..NeP.Interface.addonColor
 
 NeP.Interface.classGUIs[268] = {
 	key = 'NePConfigMonkBM',
@@ -12,25 +12,25 @@ NeP.Interface.classGUIs[268] = {
 	height = 500,
 	config = {
 		-- Keybinds
-		{type = 'header', text = "|cff"..addonColor..'Keybinds:', align = 'center'},
+		{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
 			-- Control
-			{type = 'text', text = "|cff"..addonColor..'Control: ', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
 			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
 			-- Shift
-			{type = 'text', text = "|cff"..addonColor..'Shift:', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
 			{type = 'text', text = 'Dizzying Haze', align = "right", size = 11, offset = 0 },
 			-- Alt
-			{type = 'text', text = "|cff"..addonColor..'Alt:',align = 'left', size = 11, offset = -11},
+			{type = 'text', text = addonColor..'Alt:',align = 'left', size = 11, offset = -11},
 			{type = 'text', text = 'Pause Rotation', align = "right", size = 11, offset = 0 },
 
 		-- General
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = "|cff"..addonColor..'General', align = 'center' },
+		{type = 'header', text = addonColor..'General', align = 'center' },
 			-- Nothing yet
 
 		-- Survival
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = "|cff"..addonColor..'Survival', align = 'center'},
+		{type = 'header', text = addonColor..'Survival', align = 'center'},
 			{type = 'spinner', text = 'Healthstone', key = 'Healthstone', default = 75},
 	}
 }

@@ -1,3 +1,40 @@
+local dynEval = NeP.Core.dynEval
+local PeFetch = NeP.Core.PeFetch
+local addonColor = "|cff"..NeP.Interface.addonColor
+
+NeP.Interface.classGUIs[251] = {
+	key = "NePConfDkFrost",
+	profiles = true,
+	title = '|T'..NeP.Info.Logo..':10:10|t'..NeP.Info.Nick.." Config",
+	subtitle = "Deathknight Frost Settings",
+	color = NeP.Core.classColor('player'),
+	width = 250,
+	height = 500,
+	config = {
+		-- Keybinds
+		{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
+			-- Control
+			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
+			-- Shift
+			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
+			-- Alt
+			{type = 'text', text = addonColor..'Alt:',align = 'left', size = 11, offset = -11},
+			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
+
+		-- General
+		{type = 'spacer'},{type = 'rule'},
+		{type = 'header', text = addonColor..'General', align = 'center' },
+			-- Nothing yet
+
+		-- Survival
+		{type = 'spacer'},{type = 'rule'},
+		{type = 'header', text = addonColor..'Survival', align = 'center'},
+			{type = 'spinner', text = 'Healthstone', key = 'Healthstone', default = 75},
+	}
+}
+
 local _DarkSimUnit = function(unit)
 	local _darkSimSpells = {
 		-- Siege of Orgrimmar
