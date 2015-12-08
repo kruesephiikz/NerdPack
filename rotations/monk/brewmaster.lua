@@ -56,21 +56,25 @@ local All = {
 	-- Dizzying Haze
 	{'115180', 'modifier.shift', 'mouseover.ground'},
 	
-	-- Buffs
-	{'116781', '!player.buffs.stats'}, -- Legacy of the White Tiger
+-- Buffs
+	-- Legacy of the White Tiger
+	{'116781', '!player.buffs.stats'},
 }
 
 local FREEDOOM = {
-	{'137562', 'player.state.disorient'}, -- Nimble Brew = 137562
-	{'116841', 'player.state.disorient'}, -- Tiger's Lust = 116841
-	{'137562', 'player.state.fear'}, -- Nimble Brew = 137562
-	{'116841', 'player.state.stun'}, -- Tiger's Lust = 116841
-	{'137562', 'player.state.stun'}, -- Nimble Brew = 137562
-	{'137562', 'player.state.root'}, -- Nimble Brew = 137562
-	{'116841', 'player.state.root'}, -- Tiger's Lust = 116841
-	{'137562', 'player.state.horror'}, -- Nimble Brew = 137562
-	{'137562', 'player.state.snare'}, -- Nimble Brew = 137562
-	{'116841', 'player.state.snare'}, -- Tiger's Lust = 116841
+	-- Nimble Brew
+	{'137562', 'player.state.disorient'},
+	{'137562', 'player.state.stun'}, 
+	{'137562', 'player.state.root'},
+	{'137562', 'player.state.fear'},
+	{'137562', 'player.state.horror'},
+	{'137562', 'player.state.snare'},
+	
+	-- Tiger's Lust
+	{'116841', 'player.state.disorient'},
+	{'116841', 'player.state.stun'},
+	{'116841', 'player.state.root'},
+	{'116841', 'player.state.snare'},
 }
 
 local Cooldowns = {
