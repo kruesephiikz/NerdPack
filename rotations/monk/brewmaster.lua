@@ -1,6 +1,6 @@
 local dynEval = NeP.Core.dynEval
 local PeFetch = NeP.Core.PeFetch
-local addonColor = "|cff"..NeP.Interface.addonColor
+local addonColor = '|cff'..NeP.Interface.addonColor
 
 NeP.Interface.classGUIs[268] = {
 	key = 'NePConfigMonkBM',
@@ -15,23 +15,27 @@ NeP.Interface.classGUIs[268] = {
 		{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
 			-- Control
 			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
-			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
+			{type = 'text', text = 'Summon Balck Ox Statue', align = 'right', size = 11, offset = 0 },
 			-- Shift
 			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
-			{type = 'text', text = 'Dizzying Haze', align = "right", size = 11, offset = 0 },
+			{type = 'text', text = 'Dizzying Haze', align = 'right', size = 11, offset = 0 },
 			-- Alt
 			{type = 'text', text = addonColor..'Alt:',align = 'left', size = 11, offset = -11},
-			{type = 'text', text = 'Pause Rotation', align = "right", size = 11, offset = 0 },
+			{type = 'text', text = 'Pause Rotation', align = 'right', size = 11, offset = 0 },
 
 		-- General
 		{type = 'spacer'},{type = 'rule'},
 		{type = 'header', text = addonColor..'General', align = 'center' },
-			-- Nothing yet
+			{ type = "checkbox", text = "Automated Taunts", key = "canTaunt", default = true },
 
 		-- Survival
 		{type = 'spacer'},{type = 'rule'},
 		{type = 'header', text = addonColor..'Survival', align = 'center'},
-			{type = 'spinner', text = 'Healthstone', key = 'Healthstone', default = 75},
+			{type = 'spinner', text = 'Healthstone', key = 'Healthstone', default = 45},
+			{type = 'spinner', text = 'Expel Harm', key = 'ExpelHarm', default = 100},
+			{type = 'spinner', text = 'Chi Wave', key = 'ChiWave', default = 100},
+			{type = 'spinner', text = 'Guard', key = 'Guard', default = 100},
+			{type = 'spinner', text = 'Fortifying Brew', key = 'FortifyingBrew', default = 30},
 	}
 }
 
@@ -55,7 +59,9 @@ local All = {
 	{'pause', 'modifier.alt'},
 	-- Dizzying Haze
 	{'115180', 'modifier.shift', 'mouseover.ground'},
-	
+	-- Summon Balck Ox Statue
+	{'115315', 'modifier.control', 'mouseover.ground'},
+
 -- Buffs
 	-- Legacy of the White Tiger
 	{'116781', '!player.buffs.stats'},
@@ -83,15 +89,15 @@ local Cooldowns = {
 
 local Survival = {
 	-- Expel Harm
-	{'115072'},
+	{'115072', (function() return dynEval('player.health <= '..PeFetch('NePConfigMonkBM', 'ExpelHarm')) end)},
 	-- Guard
-	{'115295'},
+	{'115295', (function() return dynEval('player.health <= '..PeFetch('NePConfigMonkBM', 'Guard')) end)},
 	-- Chi Wave
-	{'115098'},
+	{'115098', (function() return dynEval('player.health <= '..PeFetch('NePConfigMonkBM', 'ChiWave')) end)},
 	--Healthstone
 	{'#5512', (function() return dynEval('player.health <= '..PeFetch('NePConfigMonkBM', 'Healthstone')) end)},
 	-- Fortifying Brew
-	{'115203', 'player.health < 30'},
+	{'115203', (function() return dynEval('player.health <= '..PeFetch('NePConfigMonkBM', 'FortifyingBrew')) end)},
 }
 
 local Interrupts = {
@@ -156,7 +162,10 @@ ProbablyEngine.rotation.register_custom(268, NeP.Core.GetCrInfo('Monk - Brewmast
 		-- Elusive Brew
 		{'115308', 'player.buff(115308).count >= 10'},
 		{{-- Conditions
-			{AoE, (function() return NeP.Core.SAoE(3, 8) end)},
+			{AoE, {
+				(function() return NeP.Core.SAoE(3, 8) end), 
+				(function() return PeFetch('NePConfigMonkBM', 'canTaunt') end)
+			}},
 			{Melle, {'target.inMelee', 'target.NePinfront'}},
 			--{Ranged, '!target.inMelee'}
 		}, {'target.range <= 40', 'target.exists'}}
