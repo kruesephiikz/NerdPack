@@ -12,75 +12,34 @@ NeP.Interface.classGUIs[259] = {
 	config = {
 		
 		-- General
-		{ 
-			type = 'header',
-			text = 'General:', 
-			align = 'center' 
-		},
+		{ type = 'header', text = 'General:', align = 'center' },
 			-- ...Empty...
-			{ 
-				type = 'text',
-				text = 'Nothing here yet... :C',
-				align = 'center'
-			},
+			{ type = 'text', text = 'Nothing here yet... :C', align = 'center' },
 		-- Poisons
 		{ type = "spacer" },{ type = 'rule' },
-		{ 
-			type = 'header',
-			text = 'Poisons:', 
-			align = 'center' 
-		},
-			{ -- Letal Poison
-		      	type = 'dropdown',
-		      	text = 'Letal Posion',
-		      	key = 'LetalPosion',
+		{ type = 'header', text = 'Poisons:', align = 'center' },
+			-- Letal Poison
+			{ type = 'dropdown', text = 'Letal Posion', key = 'LetalPosion',
 		      	list = {
-			        {
-			          text = 'Wound Posion',
-			          key = 'Wound'
-			        },
-			        {
-			          text = 'Deadly Posion',
-			          key = 'Deadly'
-			        },
+			        {text = 'Wound Posion', key = 'Wound'},
+			        {text = 'Deadly Posion', key = 'Deadly'},
 			    },
 		    	default = 'Deadly',
 		    	desc = 'Select what Letal Posion to use.'
 		    },
-			{ -- Non-Letal Poison
-		      	type = 'dropdown',
-		      	text = 'Non-Letal Posion',
-		      	key = 'NoLetalPosion',
+		    -- Non-Letal Poison
+			{ type = 'dropdown',text = 'Non-Letal Posion',key = 'NoLetalPosion',
 		      	list = {
-			        {
-			          text = 'Crippling Poison',
-			          key = 'Crippling'
-			        },
-			        {
-			          text = 'Leeching Posion',
-			          key = 'Leeching'
-			        },
+			        {text = 'Crippling Poison', key = 'Crippling'},
+			        {text = 'Leeching Posion', key = 'Leeching'},
 			    },
 		    	default = 'Crippling',
 		    	desc = 'Select what Non-Letal Posion to use.'
 		    },
 		-- Survival
 		{ type = 'spacer' },{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = 'Survival:', 
-			align = 'center' 
-		},
-			{
-				type = 'spinner',
-				text = 'Healthstone - HP',
-				key = 'Healthstone',
-				width = 50,
-				min = 0,
-				max = 100,
-				default = 75,
-				step = 5
-			},
+		{ type = 'header', text = 'Survival:', align = 'center'},
+			{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', width = 50, default = 75},
 	}
 }
 
