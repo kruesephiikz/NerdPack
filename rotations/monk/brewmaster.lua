@@ -18,7 +18,7 @@ NeP.Interface.classGUIs[268] = {
 			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
 			-- Shift
 			{type = 'text', text = "|cff"..addonColor..'Shift:', align = 'left', size = 11, offset = -11},
-			{type = 'text', text = '...', align = "right", size = 11, offset = 0 },
+			{type = 'text', text = 'Dizzying Haze', align = "right", size = 11, offset = 0 },
 			-- Alt
 			{type = 'text', text = "|cff"..addonColor..'Alt:',align = 'left', size = 11, offset = -11},
 			{type = 'text', text = 'Pause Rotation', align = "right", size = 11, offset = 0 },
@@ -50,8 +50,11 @@ local exeOnLoad = function()
 end
 
 local All = {
-	-- Keybinds
+-- Keybinds
+	-- Pause
 	{'pause', 'modifier.alt'},
+	-- Dizzying Haze
+	{'115180', 'modifier.shift'},
 	
 	-- Buffs
 	{'116781', '!player.buffs.stats'}, -- Legacy of the White Tiger
@@ -79,6 +82,8 @@ local Survival = {
 	{'115072'},
 	-- Guard
 	{'115295'},
+	-- Chi Wave
+	{'115098'},
 	--Healthstone
 	{'#5512', (function() return dynEval('player.health <= '..PeFetch('NePConfigMonkBM', 'Healthstone')) end)},
 	-- Fortifying Brew
@@ -142,11 +147,13 @@ ProbablyEngine.rotation.register_custom(268, NeP.Core.GetCrInfo('Monk - Brewmast
 		{FREEDOOM},
 		{Taunts, (function() return NeP.Core.canTaunt() end)},
 		{Cooldowns, 'modifier.cooldowns'},
+		-- Touch of Death, Death Note
+		{ '115080', {'player.buff(121125)', 'target.ttd > 5'}, 'target' },
 		-- Elusive Brew
 		{'115308', 'player.buff(115308).count >= 10'},
 		{{-- Conditions
 			{AoE, (function() return NeP.Core.SAoE(3, 8) end)},
 			{Melle, {'target.inMelee', 'target.NePinfront'}},
-			--{Ranged, {'!target.inMelee', 'target.inRanged'}}
+			--{Ranged, '!target.inMelee'}
 		}, {'target.range <= 40', 'target.exists'}}
 	}, All, exeOnLoad)
