@@ -437,7 +437,7 @@ LibDraw.Sync(function()
 						local distance = pathDistance(oX, oY, oZ)
 						local name = ObjectName(Obj)
 						local objectType, _, _, _, _, _id, _ = strsplit("-", UnitGUID(Obj))
-						local ID = tonumber(_id)
+						local ID = tonumber(_id) or '0'
 						local _text = addonColor..name.."|r\n"..distance..' yards'
 						if PeFetch('GatherBot', 'debugAllObjsIDs') then
 							LibDraw.Text(addonColor..name..'|r ID:'..ID, "SystemFont_Tiny", oX, oY, oZ+1)
