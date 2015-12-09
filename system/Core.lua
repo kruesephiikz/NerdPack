@@ -494,7 +494,7 @@ function NeP.Core.autoTarget(unit, name)
 					end
 				end
 			end
-			table.sort(setPrio, function(a,b) return a.bonus < b.bonus end)
+			table.sort(setPrio, function(a,b) return a.bonus > b.bonus end)
 			if setPrio[1] ~= nil then
 				NeP.Core.Alert('Targeting: '..setPrio[1].key) 
 				Macro('/target '..setPrio[1].key)
