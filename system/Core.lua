@@ -487,7 +487,7 @@ function NeP.Core.autoTarget(unit, name)
 				local Obj = NeP.OM.unitEnemie[i]
 				if UnitExists(Obj.key) and Obj.distance <= 40 then
 					if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
-						setPrio[#setPrio] = {
+						setPrio[#setPrio+1] = {
 							key = Obj.key,
 							bonus = getTargetPrio(Obj.key)
 						}
