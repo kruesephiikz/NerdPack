@@ -305,7 +305,7 @@ local function ObjectIsNear()
 					end
 				-- If the profile wants all known herbs.
 				elseif currentRoute[1].ids['herbs'] then
-					if objHerb[tonumber(ObjID)]
+					if objHerb[tonumber(ObjID)] then
 						SetWantedObj(Obj)
 						return true
 					end
@@ -317,8 +317,8 @@ local function ObjectIsNear()
 							SetWantedObj(Obj)
 							return true
 						end
-					end
-				end]]
+					end]]
+				end
 			end
 		end
 	end
