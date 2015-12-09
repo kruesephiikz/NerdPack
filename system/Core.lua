@@ -293,7 +293,6 @@ function NeP.Core.Dispel(Spell)
 			end
 		end
 	end
-	
 	return false
 end
 
@@ -312,30 +311,23 @@ Classifications:
 ]]
 
 function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
-	
 	-- Check if we have the spell before anything else...
 	if not IsUsableSpell(Spell) then return false end
-	
 	-- So we dont need to fill everything
 	if Classification == nil then Classification = 'all' end
 	if Distance == nil then Distance = 40 end
 	if Health == nil then Health = 100 end
 	if Duration == nil then Duration = 0 end
-	
+	-- iterate thru OM
 	for i=1,#NeP.OM.unitEnemie do
 		local Obj = NeP.OM.unitEnemie[i]
-		if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
-			
-			-- Classification WorkArounds
-			local passThruClassification = false
-			if (Classification == 'elite' and NeP_isElite(Obj.key)) or Classification == 'all' then passThruClassification = true end
-			
-			if UnitClassification(Obj.key) == Classification or passThruClassification then
+		if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then	
+			if UnitClassification(Obj.key) == Classification 
+			or ((Classification == 'elite' and NeP_isElite(Obj.key)) or Classification == 'all') then
 				if Obj.health <= Health then
 					local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
 					if not debuff or debuff - GetTime() < Duration then
-						if UnitCanAttack('player', Obj.key)
-						and Obj.distance <= Distance then
+						if UnitCanAttack('player', Obj.key) and Obj.distance <= Distance then
 							if NeP.Core.Infront('player', Obj.key) then
 								ProbablyEngine.dsl.parsedTarget = Obj.key
 								return true
@@ -346,7 +338,6 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 			end
 		end
 	end
-	
 	return false
 end
 
@@ -386,22 +377,18 @@ local function _manualMoving()
 end
 
 function NeP.Core.MoveTo()
-	if NeP.Core.PeFetch('NePConf', 'AutoMove') then
+	if NeP.Core.PeFetch('NePConf', 'AutoMove') and FireHack then
 		if UnitIsVisible('target') and not UnitChannelInfo('player') then
-			if not _manualMoving() then
-				if NeP.Core.LineOfSight('player', 'target') then
-					local _Range = NeP.Core.UnitAttackRange('player', 'target', NeP_rangeTable[select(2, UnitClass('player'))])
-					local unitSpeed = GetUnitSpeed('player')
-					if FireHack then
-						-- Stop Moving
-						if _Range > NeP.Core.Distance('player', 'target') and unitSpeed ~= 0 then 
-							MoveTo(ObjectPosition('player'))
-						-- Start Moving
-						elseif _Range < NeP.Core.Distance('player', 'target') then
-							NeP.Core.Alert('Moving to: '..GetUnitName('target', false)) 
-							MoveTo(ObjectPosition('target'))
-						end
-					end
+			if not _manualMoving() and NeP.Core.LineOfSight('player', 'target') then
+				local _Range = NeP.Core.UnitAttackRange('player', 'target', NeP_rangeTable[select(2, UnitClass('player'))])
+				local unitSpeed = GetUnitSpeed('player')
+				-- Stop Moving
+				if _Range > NeP.Core.Distance('player', 'target') and unitSpeed ~= 0 then 
+					MoveTo(ObjectPosition('player'))
+				-- Start Moving
+				elseif _Range < NeP.Core.Distance('player', 'target') then
+					NeP.Core.Alert('Moving to: '..GetUnitName('target', false)) 
+					MoveTo(ObjectPosition('target'))
 				end
 			end
 		end
@@ -415,17 +402,13 @@ DESC: Checks if unit can/should be faced.
 Build By: MTS
 ---------------------------------------------------]]
 function NeP.Core.FaceTo()
-	if NeP.Core.PeFetch('NePConf', 'AutoFace') then
+	if NeP.Core.PeFetch('NePConf', 'AutoFace') and FireHack then
 		local unitSpeed, _ = GetUnitSpeed('player')
 		if not _manualMoving() and unitSpeed == 0 then
 			if UnitIsVisible('target') and not UnitChannelInfo('player')then
-				if not NeP.Core.Infront('player', 'target') then
-					if NeP.Core.LineOfSight('player', 'target') then
-						if FireHack then
-							NeP.Core.Alert('Facing: '..GetUnitName('target', false)) 
-							FaceUnit('target')
-						end
-					end
+				if not NeP.Core.Infront('player', 'target') and NeP.Core.LineOfSight('player', 'target') then
+					NeP.Core.Alert('Facing: '..GetUnitName('target', false)) 
+					FaceUnit('target')
 				end
 			end
 		end
@@ -440,77 +423,80 @@ Build By: MTS & StinkyTwitch
 ---------------------------------------------------]]
 local NeP_forceTarget = {
 		-- WOD DUNGEONS/RAIDS
-	['75966'] = '',      -- Defiled Spirit (Shadowmoon Burial Grounds)
-	['76220'] = '',      -- Blazing Trickster (Auchindoun Normal)
-	['76222'] = '',      -- Rallying Banner (UBRS Black Iron Grunt)
-	['76267'] = '',      -- Solar Zealot (Skyreach)
-	['76518'] = '',      -- Ritual of Bones (Shadowmoon Burial Grounds)
-	['77252'] = '',      -- Ore Crate (BRF Oregorger)
-	['77665'] = '',      -- Iron Bomber (BRF Blackhand)
-	['77891'] = '',      -- Grasping Earth (BRF Kromog)
-	['77893'] = '',      -- Grasping Earth (BRF Kromog)
-	['86752'] = '',      -- Stone Pillars (BRF Mythic Kromog)
-	['78583'] = '',      -- Dominator Turret (BRF Iron Maidens)
-	['78584'] = '',      -- Dominator Turret (BRF Iron Maidens)
-	['79504'] = '',      -- Ore Crate (BRF Oregorger)
-	['79511'] = '',      -- Blazing Trickster (Auchindoun Heroic)
-	['81638'] = '',      -- Aqueous Globule (The Everbloom)
-	['86644'] = '',      -- Ore Crate (BRF Oregorger)
-	['94873'] = '',      -- Felfire Flamebelcher (HFC)
-	['90432'] = '',      -- Felfire Flamebelcher (HFC)
-	['95586'] = '',      -- Felfire Demolisher (HFC)
-	['93851'] = '',      -- Felfire Crusher (HFC)
-	['90410'] = '',      -- Felfire Crusher (HFC)
-	['94840'] = '',      -- Felfire Artillery (HFC)
-	['90485'] = '',      -- Felfire Artillery (HFC)
-	['93435'] = '',      -- Felfire Transporter (HFC)
-	['93717'] = '',      -- Volatile Firebomb (HFC)
-	['188293'] = '',     -- Reinforced Firebomb (HFC)
-	['94865'] = '',      -- Grasping Hand (HFC)
-	['93838'] = '',      -- Grasping Hand (HFC)
-	['93839'] = '',      -- Dragging Hand (HFC)
-	['91368'] = '',      -- Crushing Hand (HFC)
-	['94455'] = '',      -- Blademaster Jubei'thos (HFC)
-	['90387'] = '',      -- Shadowy Construct (HFC)
-	['90508'] = '',      -- Gorebound Construct (HFC)
-	['90568'] = '',      -- Gorebound Essence (HFC)
-	['94996'] = '',      -- Fragment of the Crone (HFC)
-	['95656'] = '',      -- Carrion Swarm (HFC)
-	['91540'] = '',      -- Illusionary Outcast (HFC)
+	[75966] = 100,      -- Defiled Spirit (Shadowmoon Burial Grounds)
+	[76220] = 100,      -- Blazing Trickster (Auchindoun Normal)
+	[76222] = 100,      -- Rallying Banner (UBRS Black Iron Grunt)
+	[76267] = 100,      -- Solar Zealot (Skyreach)
+	[76518] = 100,      -- Ritual of Bones (Shadowmoon Burial Grounds)
+	[77252] = 100,      -- Ore Crate (BRF Oregorger)
+	[77665] = 100,      -- Iron Bomber (BRF Blackhand)
+	[77891] = 100,      -- Grasping Earth (BRF Kromog)
+	[77893] = 100,      -- Grasping Earth (BRF Kromog)
+	[86752] = 100,      -- Stone Pillars (BRF Mythic Kromog)
+	[78583] = 100,      -- Dominator Turret (BRF Iron Maidens)
+	[78584] = 100,      -- Dominator Turret (BRF Iron Maidens)
+	[79504] = 100,      -- Ore Crate (BRF Oregorger)
+	[79511] = 100,      -- Blazing Trickster (Auchindoun Heroic)
+	[81638] = 100,      -- Aqueous Globule (The Everbloom)
+	[86644] = 100,      -- Ore Crate (BRF Oregorger)
+	[94873] = 100,      -- Felfire Flamebelcher (HFC)
+	[90432] = 100,      -- Felfire Flamebelcher (HFC)
+	[95586] = 100,      -- Felfire Demolisher (HFC)
+	[93851] = 100,      -- Felfire Crusher (HFC)
+	[90410] = 100,      -- Felfire Crusher (HFC)
+	[94840] = 100,      -- Felfire Artillery (HFC)
+	[90485] = 100,      -- Felfire Artillery (HFC)
+	[93435] = 100,      -- Felfire Transporter (HFC)
+	[93717] = 100,      -- Volatile Firebomb (HFC)
+	[188293] = 100,     -- Reinforced Firebomb (HFC)
+	[94865] = 100,      -- Grasping Hand (HFC)
+	[93838] = 100,      -- Grasping Hand (HFC)
+	[93839] = 100,      -- Dragging Hand (HFC)
+	[91368] = 100,      -- Crushing Hand (HFC)
+	[94455] = 100,      -- Blademaster Jubei'thos (HFC)
+	[90387] = 100,      -- Shadowy Construct (HFC)
+	[90508] = 100,      -- Gorebound Construct (HFC)
+	[90568] = 100,      -- Gorebound Essence (HFC)
+	[94996] = 100,      -- Fragment of the Crone (HFC)
+	[95656] = 100,      -- Carrion Swarm (HFC)
+	[91540] = 100,      -- Illusionary Outcast (HFC)
 }
 
+local function getTargetPrio(Obj)
+	local objectType, _, _, _, _, _id, _ = strsplit("-", UnitGUID(Obj))
+	local ID = tonumber(_id) or '0'
+	local prio = 1
+	-- if its elite
+	if NeP_isElite(Obj) then
+		prio = prio + 10
+	end
+	-- If its forced
+	if NeP_forceTarget[tonumber(Obj)] ~= nil then
+		prio = prio + NeP_forceTarget[tonumber(Obj)] 
+	end
+	return prio
+end
+
+-- FIXME: Add forced targets
 function NeP.Core.autoTarget(unit, name)
 	if NeP.Core.PeFetch('NePConf', 'AutoTarget') then
-		local NeP_ForcedTarget = false
-		-- If dont have a target, or target is friendly or dead then
+		-- If dont have a target, target is friendly or dead
 		if not UnitExists('target') or UnitIsFriend('player', 'target') or UnitIsDeadOrGhost('target') then
-			-- Forced Target
+			local setPrio = {}
 			for i=1,#NeP.OM.unitEnemie do
 				local Obj = NeP.OM.unitEnemie[i]
-				local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj.key) or '0')
-				if NeP_forceTarget[tostring(ObjID)] ~= nil then 
-					NeP.Core.Alert('Targeting (S): '..Obj.name) 
-					Macro('/target '..Obj.key)
-					NeP_ForcedTarget = true
-					break
-				end
-
-			end
-			-- Auto Target
-			if not NeP_ForcedTarget then 
-				for i=1,#NeP.OM.unitEnemie do
-					local Obj = NeP.OM.unitEnemie[i]
-					if UnitExists(Obj.key) then
-						if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
-							if Obj.distance <= 40 then
-								NeP.Core.Alert('Targeting: '..Obj.name) 
-								Macro('/target '..Obj.key)
-								break
-							end
-						end
+				if UnitExists(Obj.key) and Obj.distance <= 40 then
+					if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
+						setPrio[#setPrio] = {
+							key = Obj.key
+							bonus = getTargetPrio(Obj.key)
+						}
 					end
 				end
-			end	
+			end
+			table.sort(setPrio, function(a,b) return a.bonus < b.bonus end)
+			NeP.Core.Alert('Targeting: '..setPrio[1].key) 
+			Macro('/target '..setPrio[1].key)
 		end
 	end
 end
@@ -796,170 +782,4 @@ LoadNePData:SetScript('OnEvent', function(self, event, addon)
 	]]
 	LineOfSight = NeP.Core.LineOfSight
 
-end)
-
---[[-----------------------------------------------		
-	** Commands **		
-DESC: Slash commands in-game.		
-		
-Build By: MTS		
---------------------------------------------------]]		
-ProbablyEngine.command.register(NeP.Info.Nick, function(msg, box)		
-	local command, text = msg:match('^(%S*)%s*(.-)$')
-	if command == 'config' or command == 'c' then
-		NeP.Core.displayGUI('Settings')
-	elseif command == 'class' or command == 'cl' then
-		NeP.Interface.ClassGUI('Show')
-	elseif command == 'info' or command == 'i' then
-		NeP.Core.displayGUI('Info')
-	elseif command == 'fish' or command == 'fishingbot' then		
-		NeP.Core.displayGUI('fishingBot')
-	elseif command == 'pet' or command == 'petbot' then		
-		NeP.Core.displayGUI('petBot')
-	elseif command == 'hide' then
-		NeP.Core.HideAll()
-	elseif command == 'show' then
-		if NeP.Core.hiding then
-			NeP.Core.hiding = false
-			ProbablyEngine.buttons.buttonFrame:Show()
-			NeP_Frame:Show()
-			NeP.Core.Print('Now Showing everything again.')
-		end
-	elseif command == 'overlay' or command == 'ov' or command == 'overlays' then
-		NeP.Core.displayGUI('Overlays')
-	else
-		-- Print all available commands.
-		NeP.Core.Print('/config - (Opens General Settings GUI)')
-		NeP.Core.Print('/status - (Opens Status GUI)')
-		NeP.Core.Print('/class - (Opens Class Settings GUI)')
-		NeP.Core.Print('/Info - (Opens Info GUI)')
-		NeP.Core.Print('/pet - (Opens Petbot GUI)')
-		NeP.Core.Print('/fish - (Opens FishBot GUI)')
-		NeP.Core.Print('/hide - (Hides Everything)')
-		NeP.Core.Print('/show - (Shows Everything)')
-		NeP.Core.Print('/overlays - (Opens Overlays Settings GUI)')
-	end
-end)
-
-ProbablyEngine.listener.register("LFG_PROPOSAL_SHOW", function()
-	if NeP.Core.PeFetch('NePConf', 'AutoLFG') then
-		AcceptProposal()
-	end
-end)
-
-ProbablyEngine.listener.register("LFG_ROLE_CHECK_SHOW", function()
-	if NeP.Core.PeFetch('NePConf', 'AutoRole') then
-		if NeP.Core.PeFetch('NePConf', 'RoleSet') == 'DPS' then
-			RolePollPopupRoleButtonDPS:Click()
-		elseif NeP.Core.PeFetch('NePConf', 'RoleSet') == 'TANK' then
-			RolePollPopupRoleButtonTank:Click()
-		elseif NeP.Core.PeFetch('NePConf', 'RoleSet') == 'HEALER' then
-			RolePollPopupRoleButtonHealer:Click()
-		end
-		RolePollPopupAcceptButton:Click()
-		--AcceptProposal()
-	end
-end)
-
-ProbablyEngine.listener.register("RESURRECT_REQUEST", function()
-	if NeP.Core.PeFetch('NePConf', 'AutoARess') then
-		StaticPopup1Button1:Click()
-	end
-end)
-
-ProbablyEngine.condition.register('twohand', function(target)
-  return IsEquippedItemType("Two-Hand")
-end)
-
-ProbablyEngine.condition.register('onehand', function(target)
-  return IsEquippedItemType("One-Hand")
-end)
-
-ProbablyEngine.condition.register('elite', function(target)
-  return UnitClassification(target) == 'elite'
-end)
-
-ProbablyEngine.condition.register("petinmelee", function(target)
-   return (IsSpellInRange(GetSpellInfo(2649), target) == 1)
-end)
-
-ProbablyEngine.condition.register("inMelee", function(target)
-   return NeP.Core.UnitAttackRange('player', target, 'melee')
-end)
-
-ProbablyEngine.condition.register("inRanged", function(target)
-   return NeP.Core.UnitAttackRange('player', target, 'ranged')
-end)
-
-ProbablyEngine.condition.register("power.regen", function(target)
-  return select(2, GetPowerRegen(target))
-end)
-
-ProbablyEngine.condition.register("casttime", function(target, spell)
-    local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
-    return cast_time
-end)
-
-ProbablyEngine.condition.register('NePinterrupt', function (target)
-	if ProbablyEngine.condition['modifier.toggle']('interrupt') then
-		if UnitName('player') == UnitName(target) then return false end
-		local stopAt = NeP.Core.PeFetch('NePConf', 'ItA') or 95
-		local secondsLeft, castLength = ProbablyEngine.condition['casting.delta'](target)
-		return secondsLeft and 100 - (secondsLeft / castLength * 100) > stopAt
-	end
-	return false
-end)
-
-ProbablyEngine.condition.register("isBoss", function (target)
-	local boss = LibStub("LibBossIDs")
-	local classification = UnitClassification(target)
-	if classification == "rareelite" 
-		or classification == "rare" 
-		or classification == "worldboss" 
-		or UnitLevel(target) == -1 
-		or boss.BossIDs[UnitID(target)] then 
-			return true 
-		end
-    return false
-end)
-
-ProbablyEngine.condition.register("isElite", function (target)
-	local boss = LibStub("LibBossIDs")
-	local classification = UnitClassification(target)
-	if classification == "elite" 
-		or classification == "rareelite" 
-		or classification == "rare" 
-		or classification == "worldboss" 
-		or UnitLevel(target) == -1 
-		or boss.BossIDs[UnitID(target)] then 
-			return true 
-		end
-    return false
-end)
-
-ProbablyEngine.condition.register("NePinfront", function(target)
-	return NeP.Core.Infront('player', target)
-end)
-
-ProbablyEngine.condition.register("castwithin", function(target, spell)
-	local SpellID = select(7, GetSpellInfo(spell))
-	for k, v in pairs( ProbablyEngine.actionLog.log ) do
-		local id = select(7, GetSpellInfo(v.description))
-		if (id and id == SpellID and v.event == "Spell Cast Succeed") or tonumber( k ) == 20 then
-			return tonumber( k )
-		end
-	end
-	return 20
-end)
-
-ProbablyEngine.condition.register("ShouldRess", function()
-	for i=1,#NeP.OM.unitFriendDead do
-		local Obj = NeP.OM.unitFriendDead[i]
-		if Obj.distance <= 40 then
-			if not UnitHasIncomingResurrection(Obj.key) then
-				ProbablyEngine.dsl.parsedTarget = Obj.key
-				return true
-			end
-		end
-	end
 end)

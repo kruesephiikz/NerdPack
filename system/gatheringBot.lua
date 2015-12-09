@@ -273,6 +273,23 @@ local function moveToLoc(x, y, z)
 end
 
 -- Change this to allow profiles to specify what they want.
+local function SetWantedObj(Obj)
+	local x, y, z = ObjectPosition(Obj)
+	local distance = pathDistance(x, y, z)
+	if distance < 50 then
+		-- Draw a circle in the object we want
+		wantedObject, wX, wY, wZ = Obj, x, y, z
+		-- Move close enough
+		if distance >= 6 then
+			moveToLoc(x, y, z)
+		else
+			-- Stop and interact
+			MoveTo(ObjectPosition('player'))
+			ObjectInteract(Obj)
+		end
+	end
+end
+
 local function ObjectIsNear()
 	local totalObjects = ObjectCount()
 	for i=1, totalObjects do
@@ -280,28 +297,28 @@ local function ObjectIsNear()
 		if UnitGUID (Obj) ~= nil and ObjectExists(Obj) then
 			if ObjectIsType(Obj, ObjectTypes.GameObject) then
 				local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj) or '0')
-				-- If the profile is looking for specific IDs,
-				if currentRoute[1].ids[tonumber(ObjID)] ~= nil
 				-- If the profile wants all known ores.
-				or currentRoute[1].ids['ores'] and objOre[tonumber(ObjID)] 
-				-- If the profile wants all known herbs.
-				or currentRoute[1].ids['herbs'] and objHerb[tonumber(ObjID)]  then
-					local x, y, z = ObjectPosition(Obj)
-					local distance = pathDistance(x, y, z)
-					if distance < 50 then
-						-- Draw a circle in the object we want
-						wantedObject, wX, wY, wZ = Obj, x, y, z
-						-- Move close enough
-						if distance >= 6 then
-							moveToLoc(x, y, z)
-						else
-							-- Stop and interact
-							MoveTo(ObjectPosition('player'))
-							ObjectInteract(Obj)
-						end
+				if currentRoute[1].ids['ores'] then
+					if objOre[tonumber(ObjID)] then
+						SetWantedObj(Obj)
 						return true
 					end
-				end
+				-- If the profile wants all known herbs.
+				elseif currentRoute[1].ids['herbs'] then
+					if objHerb[tonumber(ObjID)]
+						SetWantedObj(Obj)
+						return true
+					end
+				-- If the profile is looking for specific IDs.
+				--[[FIXME:
+				else
+					for k=1,#currentRoute[1].ids do
+						if currentRoute[k].ids[tonumber(ObjID)] ~= nil then
+							SetWantedObj(Obj)
+							return true
+						end
+					end
+				end]]
 			end
 		end
 	end
