@@ -24,6 +24,7 @@ system\FishingBot.lua
 system\ItemBot.lua
 system\petBot.lua
 system\gatheringBot.lua
+system\peStuff.lua
 interface\splash.lua
 interface\info.lua
 interface\config.lua
