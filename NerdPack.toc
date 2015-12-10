@@ -6,15 +6,15 @@
 ## SavedVariables: NePData
 
 external\LibStub.lua
-external\LibDraw\LibDraw.lua
+external\LibDraw.lua
 external\LibBossIDs.lua
+external\dkjson.lua
 external\DiesalTools-1.0\DiesalTools-1.0.lua
 external\DiesalStyle-1.0\DiesalStyle-1.0.lua
 external\DiesalGUI-1.0\DiesalGUI-1.0.xml
 external\DiesalMenu-1.0\DiesalMenu-1.0.xml
 external\DiesalGUI-1.0\Objects\TableExplorer.lua
 external\LibDispellable\LibDispellable-1.0.lua
-external\dkjson.lua
 system\Core.lua
 interface\tools.lua
 interface\MainFrame.lua

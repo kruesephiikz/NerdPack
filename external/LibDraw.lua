@@ -1,17 +1,20 @@
 -- LubDraw by docbrown on fh-wow.com
 
+-- patch WorldToScreen for 6.2 / 2.1.2 update 
+local WorldToScreen_Original = WorldToScreen;
+local function WorldToScreen (wX, wY, wZ)
+        local sX, sY = WorldToScreen_Original(wX, wY, wZ);
+        if sX and sY then
+                return sX, -(WorldFrame:GetTop() - sY);
+        else
+                return sX, sY;
+        end
+end
+
 local LibDraw
 local sin, cos, atan, atan2, sqrt, rad = math.sin, math.cos, math.atan, math.atan2, math.sqrt, math.rad
+local WorldToScreen, GetCameraPosition = WorldToScreen, GetCameraPosition
 local tinsert, tremove = tinsert, tremove
-
-local function _WorldToScreen(wX, wY, wZ)
-	local sX, sY = WorldToScreen(wX, wY, wZ);
-	if sX and sY then
-		return sX, -(WorldFrame:GetTop() - sY);
-	else
-		return sX, sY;
-	end
-end
 
 if LibStub then
 	-- LibStub version control
@@ -30,7 +33,7 @@ else
 end
 
 LibDraw.line = LibDraw.line or { r = 0, g = 1, b = 0, a = 1, w = 1 }
-LibDraw.texture = "Interface\\AddOns\\NerdPack\\external\\LibDraw\\Media\\LineTemplate"
+LibDraw.texture = "Interface\\AddOns\\NerdPack\\media\\LineTemplate"
 LibDraw.level = "BACKGROUND"
 LibDraw.callbacks = { }
 
@@ -68,8 +71,8 @@ end
 function LibDraw.Line(sx, sy, sz, ex, ey, ez)
 	if not FireHack then return end
 
-	local sx, sy = _WorldToScreen(sx, sy, sz)
-	local ex, ey = _WorldToScreen(ex, ey, ez)
+	local sx, sy = WorldToScreen(sx, sy, sz)
+	local ex, ey = WorldToScreen(ex, ey, ez)
 
 	LibDraw.Draw2DLine(sx, sy, ex, ey)
 end
@@ -128,8 +131,8 @@ function LibDraw.Array(vectors, x, y, z, rotationX, rotationY, rotationZ)
 			ex, ey, ez = LibDraw.rotateZ(x, y, z, ex, ey, ez, rotationZ)
 		end
 
-		local sx, sy = _WorldToScreen(sx, sy, sz)
-		local ex, ey = _WorldToScreen(ex, ey, ez)
+		local sx, sy = WorldToScreen(sx, sy, sz)
+		local ex, ey = WorldToScreen(ex, ey, ez)
 		LibDraw.Draw2DLine(sx, sy, ex, ey)
 	end
 end
@@ -209,28 +212,17 @@ function LibDraw.Draw2DLine(sx, sy, ex, ey)
 end
 
 local full_circle = rad(365)
-local small_circle_step = rad(3)
+local small_circle_step = rad(12)
 
 function LibDraw.Circle(x, y, z, size)
 	local lx, ly, nx, ny, fx, fy = false, false, false, false, false, false
 	for v=0, full_circle, small_circle_step do
-		nx, ny = _WorldToScreen( (x+cos(v)*size), (y+sin(v)*size), z )
-		LibDraw.Draw2DLine(lx, ly, nx, ny)
-		lx, ly = nx, ny
-	end
-end
-
-local flags = bit.bor(0x100)
-
-function LibDraw.GroundCircle(x, y, z, size)
-	local lx, ly, nx, ny, fx, fy, fz = false, false, false, false, false, false, false
-	for v=0, full_circle, small_circle_step do
-		fx, fy, fz = TraceLine(  (x+cos(v)*size), (y+sin(v)*size), z+100, (x+cos(v)*size), (y+sin(v)*size), z-100, flags )
-		if fx == nil then
-			fx, fy, fz = (x+cos(v)*size), (y+sin(v)*size), z
+		nx, ny = WorldToScreen( (x+cos(v)*size), (y+sin(v)*size), z )
+		if lx and ly then
+			LibDraw.Draw2DLine(lx, ly, nx, ny)
+		else
+			fx, fy = nx, ny
 		end
-		nx, ny = _WorldToScreen( (fx+cos(v)*size), (fy+sin(v)*size), fz )
-		LibDraw.Draw2DLine(lx, ly, nx, ny)
 		lx, ly = nx, ny
 	end
 end
@@ -241,7 +233,7 @@ function LibDraw.Arc(x, y, z, size, arc, rotation)
 	local ss = (arc/half_arc)
 	local as, ae = -half_arc, half_arc
 	for v = as, ae, ss do
-		nx, ny = _WorldToScreen( (x+cos(rotation+rad(v))*size), (y+sin(rotation+rad(v))*size), z )
+		nx, ny = WorldToScreen( (x+cos(rotation+rad(v))*size), (y+sin(rotation+rad(v))*size), z )
 		if lx and ly then
 			LibDraw.Draw2DLine(lx, ly, nx, ny)
 		else
@@ -249,7 +241,7 @@ function LibDraw.Arc(x, y, z, size, arc, rotation)
 		end
 		lx, ly = nx, ny
 	end
-	local px, py = _WorldToScreen(x, y, z)
+	local px, py = WorldToScreen(x, y, z)
 	LibDraw.Draw2DLine(px, py, lx, ly)
 	LibDraw.Draw2DLine(px, py, fx, fy)
 end
@@ -272,7 +264,7 @@ function LibDraw.Texture(config, x, y, z, alphaA)
 		scale = width / LibDraw.Distance(x, y, z, cx, cy, cz)
 	end
 
-	local sx, sy = _WorldToScreen(x, y, z)
+	local sx, sy = WorldToScreen(x, y, z)
 	if not sx or not sy then return end
 	local w = width * scale
 	local h = height * scale
@@ -302,7 +294,7 @@ end
 
 function LibDraw.Text(text, font, x, y, z)
 
-	local sx, sy = _WorldToScreen(x, y, z)
+	local sx, sy = WorldToScreen(x, y, z)
 
 	if sx and sy then
 
@@ -425,6 +417,8 @@ function LibDraw.clearCanvas()
 end
 
 local function OnUpdate()
+	if not WorldToScreen and _G['WorldToScreen'] then WorldToScreen = _G['WorldToScreen'] end
+	if not GetCameraPosition and _G['GetCameraPosition'] then GetCameraPosition = _G['GetCameraPosition'] end
 	LibDraw.clearCanvas()
 	for _, callback in ipairs(LibDraw.callbacks) do
 		callback()
@@ -435,14 +429,6 @@ local function OnUpdate()
 	end
 end
 
-function LibDraw.Enable(interval)
-	local timer
-	if not interval then
-		timer = C_Timer.NewTicker(interval, OnUpdate)
-	else
-		timer = C_Timer.NewTicker(interval, OnUpdate)
-	end
-	return timer
-end
+C_Timer.NewTicker(0.01, OnUpdate)
 
 --LibDraw.canvas:SetScript("OnUpdate", OnUpdate)
