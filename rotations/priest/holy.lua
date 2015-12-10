@@ -12,239 +12,74 @@ NeP.Interface.classGUIs[257] = {
 	config = {
 
 		-- General
-		{ 
-			type = 'header', 
-			text = "General settings:", 
-			align = "center"
-		},
+		{ type = 'header', text = "General settings:", align = "center"},
 		{ type = 'spacer' },
-			
 			-- Feathers
-			{ 
-				type = "checkbox",
-				text = "Feathers", 
-				key = "Feathers", 
-				default = true, 
-				desc = "This checkbox enables or disables the use of automatic feathers to move faster."
-			},
-
+			{ type = "checkbox",text = "Feathers", key = "Feathers", default = true, desc = "This checkbox enables or disables the use of automatic feathers to move faster."},
 			 -- Chakra
-			{ 
-				type = "dropdown",
-				text = "Chakra:", 
-				key = "Chakra", 
+			{ type = "dropdown",text = "Chakra:", key = "Chakra", 
 				list = {
-					{
-						text = "Chastise",
-						key = "Chastise"
-					},
-					{
-						text = "Sanctuary",
-						key = "Sanctuary"
-					},
-					{
-						text = "Serenity",
-						key = "Serenity"
-					}
-				}, default = "Serenity", desc = "Select What Chakra to use..." },
-
-		-- Buff
-			{ 
-				type = "checkbox", 
-				text = "Buff", 
-				key = "Buff", 
-				default = true, 
-				desc = "This checkbox enables or disables the use of automatic buffing."
+					{text = "Chastise",key = "Chastise"},
+					{text = "Sanctuary",key = "Sanctuary"},
+					{text = "Serenity",key = "Serenity"}
+				}, 
+				default = "Serenity", 
+				desc = "Select What Chakra to use..." 
 			},
+			-- Buff
+			{ type = "checkbox", text = "Buff", key = "Buff", default = true, desc = "This checkbox enables or disables the use of automatic buffing."},
 
 		-- Focus/Tank
-		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = 'Focus/Tank settings:', 
-			align = "center" 
-		},
-		{ type = 'spacer' },
-
+		{ type = 'spacer' },{ type = 'rule' },
+		{ type = 'header', text = 'Focus/Tank settings:', align = "center" },
 			-- Flash Heal
-			{ 
-				type = "spinner", 
-				text = "Flash Heal", 
-				key = "FlashHealTank", 
-				default = 40
-			},
-
+			{ type = "spinner", text = "Flash Heal", key = "FlashHealTank", default = 40},
 			-- Holy Word Serenity
-			{ 
-				type = "spinner", 
-				text = "Holy Word Serenity", 
-				key = "HolyWordSerenityTank", 
-				default = 90
-			},
-
+			{ type = "spinner", text = "Holy Word Serenity", key = "HolyWordSerenityTank", default = 90},
 			-- Power Word: Shield
-			{ 
-				type = "spinner", 
-				text = "Power Word: Shield", 
-				key = "ShieldTank", 
-				default = 100
-			},
-
+			{ type = "spinner", text = "Power Word: Shield", key = "ShieldTank", default = 100},
 			-- Heal
-			{ 
-				type = "spinner", 
-				text = "Heal", 
-				key = "HealTank", 
-				default = 95
-			},
-
+			{ type = "spinner", text = "Heal", key = "HealTank", default = 95},
 			-- Renew
-			{ 
-				type = "spinner", 
-				text = "Renew", 
-				key = "RenewTank", 
-				default = 100
-			},
-
+			{ type = "spinner", text = "Renew", key = "RenewTank", default = 100},
 			-- Binding Heal
-			{ 
-				type = "spinner", 
-				text = "Binding Heal", 
-				key = "BindingHealTank", 
-				default = 100
-			},
-
+			{ type = "spinner", text = "Binding Heal", key = "BindingHealTank", default = 100},
 			-- Prayer of Mending
-			{ 
-				type = "spinner", 
-				text = "Prayer of Mending", 
-				key = "PrayerofMendingTank", 
-				default = 100
-			},
+			{ type = "spinner", text = "Prayer of Mending", key = "PrayerofMendingTank", default = 100},
 
 		-- Raid/Party
-		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = 'Raid/Party settings:', 
-			align = "center" 
-		},
-		{ type = 'spacer' },
-
+		{ type = 'spacer' },{ type = 'rule' },
+		{ type = 'header', text = 'Raid/Party settings:', align = "center" },
 			-- Flash Heal
-			{ 
-				type = "spinner", 
-				text = "Flash Heal", 
-				key = "FlashHealRaid", 
-				default = 20
-			},
-
+			{ type = "spinner", text = "Flash Heal", key = "FlashHealRaid", default = 20},
 			-- Holy Word Serenity
-			{ 
-				type = "spinner", 
-				text = "Holy Word Serenity", 
-				key = "HolyWordSerenityRaid", 
-				default = 60
-			},
-
+			{ type = "spinner", text = "Holy Word Serenity", key = "HolyWordSerenityRaid", default = 60},
 			-- Renew
-			{
-			 	type = "spinner", 
-			 	text = "Renew", 
-			 	key = "RenewRaid",
-			 	default = 85
-			 },
-
+			{ type = "spinner", text = "Renew", key = "RenewRaid",default = 85},
 			-- Power Word: Shield
-			{ 
-				type = "spinner", 
-				text = "Power Word: Shield", 
-				key = "ShieldRaid", 
-				default = 40
-			},
-
+			{ type = "spinner", text = "Power Word: Shield", key = "ShieldRaid", default = 40},
 			-- Binding Heal
-			{ 
-				type = "spinner", 
-				text = "Binding Heal", 
-				key = "BindingHealRaid", 
-				default = 99
-			},
-
+			{ type = "spinner", text = "Binding Heal", key = "BindingHealRaid", default = 99},
 			-- Heal
-			{ 
-				type = "spinner", 
-				text = "Heal", 
-				key = "HealRaid", 
-				default = 95
-			},
+			{ type = "spinner", text = "Heal", key = "HealRaid", default = 95},
 
 		-- Player
-		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = 'Player settings:', 
-			align = "center" 
-		},
-		{ type = 'spacer' },
-
+		{ type = 'spacer' },{ type = 'rule' },
+		{ type = 'header', text = 'Player settings:', align = "center" },
 			-- Flash Heal
-			{ 
-				type = "spinner", 
-				text = "Flash Heal", 
-				key = "FlashHealPlayer", 
-				default = 40
-			},
-
+			{ type = "spinner", text = "Flash Heal", key = "FlashHealPlayer", default = 40},
 			-- Holy Word Serenity
-			{ 
-				type = "spinner", 
-				text = "Holy Word Serenity", 
-				key = "HolyWordSerenityPlayer", 
-				default = 90
-			},
-
+			{ type = "spinner", text = "Holy Word Serenity", key = "HolyWordSerenityPlayer", default = 90},
 			-- Renew
-			{ 
-				type = "spinner", 
-				text = "Renew",
-				key = "RenewPlayer", 
-				default = 85
-			},
-
+			{ type = "spinner", text = "Renew",key = "RenewPlayer", default = 85},
 			-- Power Word: Shield
-			{ 
-				type = "spinner", 
-				text = "Power Word: Shield", 
-				key = "ShieldPlayer", 
-				default = 70
-			},
-
+			{ type = "spinner", text = "Power Word: Shield", key = "ShieldPlayer", default = 70},
 			-- Desperate Prayer
-			{ 
-				type = "spinner", 
-				text = "Desperate Prayer",
-				key = "DesperatePrayer", 
-				default = 25
-			},
-
+			{ type = "spinner", text = "Desperate Prayer",key = "DesperatePrayer", default = 25},
 			-- Heal
-			{ 
-				type = "spinner", 
-				text = "Heal", 
-				key = "Heal", 
-				default = 95
-			},
-
+			{ type = "spinner", text = "Heal", key = "Heal", default = 95},
 			-- Healthstone
-			{ 
-				type = "spinner", 
-				text = "Healthstone", 
-				key = "Healthstone", 
-				default = 35
-			},
-
-
+			{ type = "spinner", text = "Healthstone", key = "Healthstone", default = 35},
 	}
 }
 
@@ -297,12 +132,6 @@ end
 
 local exeOnLoad = function()
 	NeP.Splash()
-	ProbablyEngine.toggle.create(
-		'dotEverything', 
-		'Interface\\Icons\\Ability_creature_cursed_05.png', 
-		'Dot All The Things! (SOLO)', 
-		'Click here to dot all the things while in Solo mode!\nSome Spells require Multitarget enabled also.')
-	
 end
 
 local All = {
@@ -593,10 +422,8 @@ local SoloCombat = {
 		"!player.buff(139)"
 	}, "player" },
 	
-	{{-- Auto Dotting
-		{ "32379", (function() return NeP.Core.AutoDots('32379', 20) end) }, -- SW:D
-		{ "589", (function() return NeP.Core.AutoDots('589', 100) end) }, -- SW:P 
-	}, "toggle.dotEverything" },
+	{ "32379", (function() return NeP.Core.AutoDots('32379', 20) end) }, -- SW:D
+	{ "589", (function() return NeP.Core.AutoDots('589', 100) end) }, -- SW:P 
 	
 	-- DPS
 		

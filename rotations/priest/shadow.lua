@@ -28,21 +28,13 @@ NeP.Interface.classGUIs[258] = {
 
 local lib = function()
 	NeP.Splash()
-	ProbablyEngine.toggle.create(
-		'autoDots', 
-		'Interface\\Icons\\Ability_creature_cursed_05.png', 
-		'Dot Elites', 
-		'Click here to dot all the things!')
-	ProbablyEngine.toggle.create(
-		'dotEverything', 
-		'Interface\\Icons\\Ability_creature_cursed_06.png', 
-		'Dot all (no VT))', 
-		'Click here to dot all the things!')
 end
 
 local keybinds = {
-	{'pause', 'modifier.alt'}, -- Pause
-	{'127632', 'modifier.lshift'}, -- Cascade (any # of targets)
+	 -- Pause
+	{'pause', 'modifier.alt'},
+	-- Cascade
+	{'127632', 'modifier.lshift'},
 }
 
 local Buffs = {
@@ -52,53 +44,52 @@ local Buffs = {
 }
 
 local Cooldowns = {
-	{'123040'}, -- Mindbender
-	{'34433'}, --Shadowfiend
-	{'15286', '@coreHealing.needsHealing(65, 3)'} -- Vampiric Embrace
+	-- Mindbender
+	{'123040'},
+	 --Shadowfiend
+	{'34433'},
+	-- Vampiric Embrace
+	{'15286', '@coreHealing.needsHealing(65, 3)'}
 }
 
 local Survival = {
-	{'2061', 'player.health < 20', 'player'}, -- Flash Heal
-}
-
-local Dots = {
-	{{-- Toggle ALL
-		{'!32379', (function() return AutoDots('32379', 20) end)}, -- SW:D
-		{'589', (function() return AutoDots('589', 100, 2) end)}, -- SW:P
-		--{'34914', (function() return AutoDots('34914', 100, 3) end)}, -- Vampiric Touch
-	}, 'toggle.dotEverything'},
-	
-	{{-- Toggle Elites
-		{'!32379', (function() return AutoDots('32379', 20, nil, nil, 'elite') end)}, -- SW:D
-		{'589', (function() return AutoDots('589', 100, 2, nil, 'elite') end)}, -- SW:P
-		{'34914', (function() return AutoDots('34914', 100, 3, nil, 'elite') end)} -- Vampiric Touch
-	}, 'toggle.autoDots'},
-	
-	{{-- Toggle off
-		{'!32379', 'target.health < 20', 'target'}, -- SW:D
-		{'589', '!target.debuff(589)', 'target'}, -- SW:P
-		{'34914', '!target.debuff(34914)', 'target'} -- Vampiric Touch
-	}, {'!toggle.autoDots', '!toggle.dotEverything'}},
+	 -- Flash Heal
+	{'2061', 'player.health < 20', 'player'},
 }
 
 local AoE = {
-	{'127632'}, -- Cascade (best target 4+)
-	{'2944', { 'player.shadoworbs >= 3', (function() return AutoDots('2944', 100) end)}}, -- Devouring Plague
-	{'48045',}, -- Mind Sear
+	{'127632'}, -- Cascade
+	{'48045'}, -- Mind Sear
 }
 
 local inCombat = {
-	{'2944', {'player.shadoworbs = 5', (function() return AutoDots('2944', 100) end)}}, -- Devouring Plague
-	{'73510', 'player.buff(Surge of Darkness).count = 3'}, -- Mind Spike
+	-- Cast Devouring Plague with 3 or more Shadow Orbs.
+	{'Devouring Plague', {'player.shadoworbs >= 3', '!target.debuff(2944)'}},
 
-	--Dots	
-	{Dots},
-	
-	{'8092'}, -- Mind Blast
-	{'73510', 'player.buff(Surge of Darkness)'}, -- Mind Spike
-	{'2944', {'player.shadoworbs >= 3', (function() return AutoDots('2944', 100) end)}}, -- Devouring Plague
-	{'129197', 'player.buff(Insanity)'}, -- Mind Flay
-	{'15407'},  -- Mind Flay
+	-- Cast Mind Blast if you have fewer than 5 Shadow Orbs.
+	{'Devouring Plague', 'player.shadoworbs < 5'},
+
+	-- Cast Shadow Word: Death if you have fewer than 5 Shadow Orbs.
+	-- Shadow Word: Death is only usable on targets that are below 20% health.
+	{'Shadow Word: Death', {'player.shadoworbs < 5', (function() return AutoDots('Shadow Word: Death', 20) end)}},
+
+	-- Cast Insanity on the target when you have the Insanity buff (if you are using the Insanity talent).
+	{'Insanity', 'player.buff(Insanity)'},
+
+	-- Cast Mind Spike if you have a Surge of Darkness proc (if you are using this talent).
+	{'Mind Spike', 'player.buff(Surge of Darkness)'},
+
+	-- Apply and maintain Shadow Word: Pain.
+	{'Shadow Word: Pain', (function() return AutoDots('Shadow Word: Pain', 100, 2) end)},
+
+	-- Apply and maintain Vampiric Touch.
+	{'Vampiric Touch', (function() return AutoDots('Vampiric Touch', 100, 3) end)},
+
+	{AoE, (function() return SAoE(3, 40) end)},
+
+	-- Cast Mind Flay as your filler spell.
+	{'Mind Flay'}
+
 } 
 
 local outCombat = {
@@ -113,6 +104,5 @@ ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow
 		{Buffs},
 		{Survival, "player.health < 100"},
 		{Cooldowns, 'modifier.cooldowns'},
-		{AoE, (function() return SAoE(3, 40) end)},
 		{inCombat}
 	}, outCombat, lib)

@@ -39,11 +39,19 @@ local _StartEvents = function()
 		NeP.Core.Print("Load successful.")
 	end
 	
+	-- Auto AoE Toggle
 	ProbablyEngine.toggle.create(
 		'NeP_SAoE', 
 		'Interface\\Icons\\Spell_magic_polymorphrabbit', 
 		'Smart AoE', 
 		'Enable to use Smart AoE.\nTo force AoE use the multitarget toggle.')
+
+	-- Auto Dot's Toggle
+	ProbablyEngine.toggle.create(
+		'NeP_ADots', 
+		'Interface\\Icons\\Ability_creature_cursed_05.png', 
+		'Auto Dot\'s', 
+		'Click here to dot all the things!')
 end
 
 function NeP.Splash()

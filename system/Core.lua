@@ -88,22 +88,22 @@ DESC: returns the LineOfSight betwen 2 units/objetcs.
 Build By: MTS
 ---------------------------------------------------]]
 local ignoreLOS = {
-	['76585'] = '',	-- Ragewing the Untamed (UBRS)
-	['77063'] = '',	-- Ragewing the Untamed (UBRS)
-	['77182'] = '',	-- Oregorger (BRF)
-	['77891'] = '',	-- Grasping Earth (BRF)
-	['77893'] = '',	-- Grasping Earth (BRF)
-	['78981'] = '',	-- Iron Gunnery Sergeant (BRF)
-	['81318'] = '',	-- Iron Gunnery Sergeant (BRF)
-	['83745'] = '',	-- Ragewing Whelp (UBRS)
-	['86252'] = '',	-- Ragewing the Untamed (UBRS)
-	['56173'] = '',	-- Deathwing (DragonSoul)
-	['56471'] = '',	-- Mutated Corruption (Dragon Soul: The Maelstrom)
-	['57962'] = '',	-- Deathwing (Dragon Soul: The Maelstrom)
-	['55294'] = '',	-- Ultraxion (DragonSoul)
-	['56161'] = '',	-- Corruption (DragonSoul)
-	['52409'] = '',	-- Ragnaros (FireLands)
-	['87761'] = '',
+	[76585] = '',	-- Ragewing the Untamed (UBRS)
+	[77063] = '',	-- Ragewing the Untamed (UBRS)
+	[77182] = '',	-- Oregorger (BRF)
+	[77891] = '',	-- Grasping Earth (BRF)
+	[77893] = '',	-- Grasping Earth (BRF)
+	[78981] = '',	-- Iron Gunnery Sergeant (BRF)
+	[81318] = '',	-- Iron Gunnery Sergeant (BRF)
+	[83745] = '',	-- Ragewing Whelp (UBRS)
+	[86252] = '',	-- Ragewing the Untamed (UBRS)
+	[56173] = '',	-- Deathwing (DragonSoul)
+	[56471] = '',	-- Mutated Corruption (Dragon Soul: The Maelstrom)
+	[57962] = '',	-- Deathwing (Dragon Soul: The Maelstrom)
+	[55294] = '',	-- Ultraxion (DragonSoul)
+	[56161] = '',	-- Corruption (DragonSoul)
+	[52409] = '',	-- Ragnaros (FireLands)
+	[87761] = '',
 }
 
 local losFlags =  bit.bor(0x10, 0x100)
@@ -112,8 +112,8 @@ function NeP.Core.LineOfSight(a, b)
 		-- Workaround LoS issues.
 		local aCheck = select(6,strsplit('-',UnitGUID(a)))
 		local bCheck = select(6,strsplit('-',UnitGUID(b)))
-		if ignoreLOS[tostring(aCheck)] ~= nil then return true end
-		if ignoreLOS[tostring(bCheck)] ~= nil then return true end
+		if ignoreLOS[tonumber(aCheck)] ~= nil then return true end
+		if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
 		
 		if FireHack then
 			local ax, ay, az = ObjectPosition(a)
@@ -310,32 +310,54 @@ Classifications:
 	all - All Units
 ]]
 
+local waitForDots = 0
+
 function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
-	-- Check if we have the spell before anything else...
-	if not IsUsableSpell(Spell) then return false end
-	-- So we dont need to fill everything
-	if Classification == nil then Classification = 'all' end
-	if Distance == nil then Distance = 40 end
-	if Health == nil then Health = 100 end
-	if Duration == nil then Duration = 0 end
-	-- iterate thru OM
-	for i=1,#NeP.OM.unitEnemie do
-		local Obj = NeP.OM.unitEnemie[i]
-		if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then	
-			if UnitClassification(Obj.key) == Classification 
-			or ((Classification == 'elite' and NeP_isElite(Obj.key)) or Classification == 'all') then
-				if Obj.health <= Health then
-					local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
-					if not debuff or debuff - GetTime() < Duration then
-						if UnitCanAttack('player', Obj.key) and Obj.distance <= Distance then
-							if NeP.Core.Infront('player', Obj.key) then
-								ProbablyEngine.dsl.parsedTarget = Obj.key
-								return true
-							end					 
+	-- Sometimes it double castes stuff, this is to prevent that.
+	local currentTime = GetTime()
+	if waitForDots < currentTime then
+		-- If toggle is enabled, do automated
+		if peConfig.read('button_states', 'NeP_ADots', false) then
+			-- Check if we have the spell before anything else...
+			if not IsUsableSpell(Spell) then return false end
+			-- So we dont need to fill everything
+			if Health == nil then Health = 100 end
+			if Duration == nil then Duration = 0 end
+			if Distance == nil then Distance = 40 end
+			if Classification == nil then Classification = 'all' end
+			-- Iterate thru OM
+			for i=1,#NeP.OM.unitEnemie do
+				local Obj = NeP.OM.unitEnemie[i]
+				-- Make sure we should attack it
+				if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then	
+					-- Sanity checks
+					if Obj.health <= Health
+					and Obj.distance <= Distance
+					and UnitCanAttack('player', Obj.key)
+					and NeP.Core.Infront('player', Obj.key) then
+						-- Choose who to allow casting on
+						if UnitClassification(Obj.key) == Classification 
+						or ((Classification == 'elite' and NeP_isElite(Obj.key)) 
+						or Classification == 'all') then
+							-- Do we have the debuff and is it expiring?
+							local _,_,_,_,_,dur,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
+							if not debuff or debuff - currentTime < Duration then
+								-- Dont cast if the target is going to die
+								if dur == nil then dur = 0 end
+								if ProbablyEngine.condition['ttd'](Obj.key) > dur + 1.5 then
+									ProbablyEngine.dsl.parsedTarget = Obj.key
+									waitForDots = GetTime() + 1
+									return true
+								end
+							end
 						end
 					end
 				end
 			end
+		-- Fallback to Target only if toggle is disabled
+		else
+			return ProbablyEngine.condition['debuff']('target', Spell) 
+			and ProbablyEngine.condition['health']('target', Health)
 		end
 	end
 	return false
@@ -489,14 +511,15 @@ function NeP.Core.autoTarget(unit, name)
 					if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
 						setPrio[#setPrio+1] = {
 							key = Obj.key,
-							bonus = getTargetPrio(Obj.key)
+							bonus = getTargetPrio(Obj.key),
+							name = Obj.name
 						}
 					end
 				end
 			end
 			table.sort(setPrio, function(a,b) return a.bonus > b.bonus end)
 			if setPrio[1] ~= nil then
-				NeP.Core.Alert('Targeting: '..setPrio[1].key) 
+				NeP.Core.Alert('Targeting: '..setPrio[1].name) 
 				Macro('/target '..setPrio[1].key)
 			end
 		end

@@ -12,210 +12,60 @@ NeP.Interface.classGUIs[256] = {
 	config = {
 		
 		-- General
-		{ 
-			type = 'header', 
-			text = "General Settings:", 
-			align = "center" 
-		},
-			{ 
-				type = "checkbox", 
-				text = "Move Faster", 
-				key = "Feathers", 
-				default = true, 
-				desc = "This checkbox enables or disables the automatic use of feathers & others to move faster."
-			},
-			{ 
-				type = "spinner", 
-				text = "Power Word: Barrier", 
-				key = "PWB", 
-				default = 3,
-				min = 1,
-				max = 5
-			},
-			{ 
-				type = "spinner", 
-				text = "MassDispell", 
-				key = "MDispell", 
-				default = 3,
-				min = 1,
-				max = 5
-			},
-			{ 
-				type = "dropdown",
-				text = "Pain Suppression", 
-				key = "PainSuppression", 
+		{ type = 'header', text = "General Settings:", align = "center" },
+			{ type = "checkbox", text = "Move Faster", key = "Feathers", default = true, desc = "This checkbox enables or disables the automatic use of feathers & others to move faster."},
+			{ type = "spinner", text = "Power Word: Barrier", key = "PWB", default = 3,min = 1,max = 5},
+			{ type = "spinner", text = "MassDispell", key = "MDispell", default = 3,min = 1,max = 5},
+			{ type = "dropdown",
+				text = "Pain Suppression", key = "PainSuppression", 
 				list = {
-			    	{
-			          text = "Lowest",
-			          key = "Lowest"
-			        },
-			        {
-			          text = "Tank",
-			          key = "Tank"
-			    	},
-			    	{
-			    	  text = "Focus",
-			          key = "Focus"
-			    	}
+			    	{text = "Lowest",key = "Lowest"},
+			        {text = "Tank",key = "Tank"},
+			    	{text = "Focus",key = "Focus"}
 		    	}, 
 		    	default = "Lowest", 
 		    	desc = "Select Who to use Pain Suppression on." 
 		    },
-			{ 
-				type = "dropdown",
-				text = "Pain Suppression", 
-				key = "PainSuppressionTG", 
+			{ type = "dropdown",
+				text = "Pain Suppression", key = "PainSuppressionTG", 
 				list = {
-			    	{
-			          text = "Allways",
-			          key = "Allways"
-			        },
-			        {
-			          text = "Boss",
-			          key = "Boss"
-			    	}
+			    	{text = "Allways",key = "Allways"},
+			        {text = "Boss",key = "Boss"}
 		    	}, 
 		    	default = "Allways", 
 		    	desc = "Select When to use Pain Suppression." 
 		    },
-			{ 
-				type = "spinner", 
-				text = "Pain Suppression", 
-				key = "PainSuppressionHP", 
-				default = 25
-			},
-			{ 
-				type = "spinner", 
-				text = "Attonement", 
-				key = "Attonement", 
-				default = 70,
-			},
-			{ 
-				type = "spinner", 
-				text = "Saving Grace", 
-				key = "SavingGrace", 
-				default = 35,
-			},
-			{ 
-				type = "spinner", 
-				text = "Emergency Heals", 
-				key = "FastHeals", 
-				default = 35,
-			},
+			{ type = "spinner", text = "Pain Suppression", key = "PainSuppressionHP", default = 25},
+			{ type = "spinner", text = "Attonement", key = "Attonement", default = 70,},
+			{ type = "spinner", text = "Saving Grace", key = "SavingGrace", default = 35,},
+			{ type = "spinner", text = "Emergency Heals", key = "FastHeals", default = 35,},
+		
 		-- Tank/Focus
-		{ type = 'Spacer' },
-		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = "Tank/Focus Settings:", 
-			align = "center" 
-		},
-			{ 
-				type = "spinner", 
-				text = "Clarity Of Will", 
-				key = "ClarityofWillTank", 
-				default = 100,
-			},
-			{ 
-				type = "spinner", 
-				text = "Power Word: Shield", 
-				key = "PowerShieldTank", 
-				default = 100,
-			},
-			{ 
-				type = "spinner", 
-				text = "Penance", 
-				key = "PenanceTank", 
-				default = 70,
-			},
-			{ 
-				type = "spinner", 
-				text = "Flash Heal", 
-				key = "FlashHealTank", 
-				default = 40,
-			},
-			{ 
-				type = "spinner", 
-				text = "Heal", 
-				key = "HealTank", 
-				default = 100,
-			},
+		{ type = 'spacer' },{ type = 'rule' },
+		{ type = 'header', text = "Tank/Focus Settings:", align = "center" },
+			{ type = "spinner", text = "Clarity Of Will", key = "ClarityofWillTank", default = 100,},
+			{ type = "spinner", text = "Power Word: Shield", key = "PowerShieldTank", default = 100,},
+			{ type = "spinner", text = "Penance", key = "PenanceTank", default = 70,},
+			{ type = "spinner", text = "Flash Heal", key = "FlashHealTank", default = 40,},
+			{ type = "spinner", text = "Heal", key = "HealTank", default = 100,},
+		
 		-- Player
-		{ type = 'Spacer' },
-		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = "Player Settings:", 
-			align = "center" 
-		},
-			{ 
-				type = "spinner", 
-				text = "Clarity Of Will", 
-				key = "ClarityofWillPlayer", 
-				default = 100,
-			},
-			{ 
-				type = "spinner", 
-				text = "Power Word: Shield", 
-				key = "PowerShieldPlayer", 
-				default = 100,
-			},
-			{ 
-				type = "spinner", 
-				text = "Penance", 
-				key = "PenancePlayer", 
-				default = 60,
-			},
-			{ 
-				type = "spinner", 
-				text = "Flash Heal", 
-				key = "FlashHealPlayer", 
-				default = 40,
-			},
-			{ 
-				type = "spinner", 
-				text = "Heal", 
-				key = "HealPlayer", 
-				default = 100,
-			},
+		{ type = 'spacer' },{ type = 'rule' },
+		{ type = 'header', text = "Player Settings:", align = "center" },
+			{ type = "spinner", text = "Clarity Of Will", key = "ClarityofWillPlayer", default = 100,},
+			{ type = "spinner", text = "Power Word: Shield", key = "PowerShieldPlayer", default = 100,},
+			{ type = "spinner", text = "Penance", key = "PenancePlayer", default = 60,},
+			{ type = "spinner", text = "Flash Heal", key = "FlashHealPlayer", default = 40,},
+			{ type = "spinner", text = "Heal", key = "HealPlayer", default = 100,},
+		
 		-- Raid
-		{ type = 'Spacer' },
-		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = "Raid Settings:", 
-			align = "center" 
-		},
-			{ 
-				type = "spinner", 
-				text = "Clarity Of Will", 
-				key = "ClarityofWillRaid", 
-				default = 60,
-			},
-			{ 
-				type = "spinner", 
-				text = "Power Word: Shield", 
-				key = "PowerShieldRaid", 
-				default = 60,
-			},
-			{ 
-				type = "spinner", 
-				text = "Penance", 
-				key = "PenanceRaid", 
-				default = 60,
-			},
-			{ 
-				type = "spinner", 
-				text = "Flash Heal", 
-				key = "FlashHealRaid", 
-				default = 40,
-			},
-			{ 
-				type = "spinner", 
-				text = "Heal", 
-				key = "HealRaid", 
-				default = 100,
-			},
+		{ type = 'spacer' },{ type = 'rule' },
+		{ type = 'header', text = "Raid Settings:", align = "center" },
+			{ type = "spinner", text = "Clarity Of Will", key = "ClarityofWillRaid", default = 60,},
+			{ type = "spinner", text = "Power Word: Shield", key = "PowerShieldRaid", default = 60,},
+			{ type = "spinner", text = "Penance", key = "PenanceRaid", default = 60,},
+			{ type = "spinner", text = "Flash Heal", key = "FlashHealRaid", default = 40,},
+			{ type = "spinner", text = "Heal", key = "HealRaid", default = 100,},
 	}
 }
 
@@ -314,11 +164,6 @@ end
 
 local exeOnLoad = function()
 	NeP.Splash()
-	ProbablyEngine.toggle.create(
-		'dotEverything', 
-		'Interface\\Icons\\Ability_creature_cursed_05.png', 
-		'Dot All The Things! (SOLO)', 
-		'Click here to dot all the things while in Solo mode!\nSome Spells require Multitarget enabled also.')
 	ProbablyEngine.toggle.create(
 		'autoGround', 
 		'Interface\\Icons\\Ability_priest_bindingprayers.png', 
@@ -513,10 +358,8 @@ local _PainSuppression = {
 }
 
 local _Solo = {
-	{{-- Auto Dotting
-		{ "32379", (function() return NeP.Core.AutoDots('32379', 20) end) }, -- SW:D
-		{ "589", (function() return NeP.Core.AutoDots('589', 100) end) }, -- SW:P 
-	}, "toggle.dotEverything" },
+	{ "32379", (function() return NeP.Core.AutoDots('32379', 20) end) }, -- SW:D
+	{ "589", (function() return NeP.Core.AutoDots('589', 100) end) }, -- SW:P 
 
   	-- CD's
 	{ "10060", "modifier.cooldowns" }, --Power Infusion 
