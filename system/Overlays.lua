@@ -44,7 +44,7 @@ LibDraw.Sync(function()
 
 			if UnitGUID('target') ~= nil and ObjectExists('target') then
 				local tX, tY, tZ = ObjectPosition('target')
-				local distance = NeP.Core.Distance('player', 'target')
+				local distance = NeP.Core.Round(NeP.Core.Distance('player', 'target'))
 				local name = UnitName('target')
 				local playerRotation = ObjectFacing('player')
 				local targetRotation = ObjectFacing('target')
@@ -111,7 +111,7 @@ LibDraw.Sync(function()
 			for i=1,#NeP.OM.unitEnemie do
 				local Obj = NeP.OM.unitEnemie[i]
 				if UnitGUID(Obj.key) ~= nil and ObjectExists(Obj.key) then --Calling ObjectExists in FireHack 2.1.4 with nil can crash the client. Fixed in FireHack 2.2.
-					local distance = Obj.distance
+					local distance = NeP.Core.Round(Obj.distance)
 					local oX, oY, oZ = ObjectPosition(Obj.key)
 					local name = Obj.name
 					local _class = Obj.class
@@ -187,7 +187,7 @@ LibDraw.Sync(function()
 			for i=1,#NeP.OM.unitFriend do
 				local Obj = NeP.OM.unitFriend[i]
 				if UnitGUID(Obj.key) ~= nil and ObjectExists(Obj.key) then --Calling ObjectExists in FireHack 2.1.4 with nil can crash the client. Fixed in FireHack 2.2.
-					local distance = Obj.distance
+					local distance = NeP.Core.Round(Obj.distance)
 					local oX, oY, oZ = ObjectPosition(Obj.key)
 					local name = Obj.name
 					local _class = Obj.class
