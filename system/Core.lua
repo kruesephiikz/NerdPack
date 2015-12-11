@@ -321,7 +321,7 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 		if not IsUsableSpell(Spell) then return false end
 		-- So we dont need to fill everything
 		if Health == nil then Health = 100 end
-		if Duration == nil then Duration = 0 end
+		if Duration == nil then Duration = 1.5 end
 		if Distance == nil then Distance = 40 end
 		if Classification == nil then Classification = 'elite' end
 		-- Iterate thru OM
@@ -342,8 +342,8 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 						local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
 						if not debuff or debuff - currentTime < Duration then
 							-- Dont cast if the target is going to die
-							if debuff == nil then debuff = 0 end
-							if ProbablyEngine.condition['ttd'](Obj.key) > debuff + 1.5 then
+							if debuff == nil then debuff = 5 end
+							if ProbablyEngine.condition['ttd'](Obj.key) > debuff + Duration then
 								ProbablyEngine.dsl.parsedTarget = Obj.key
 								--waitForDots = GetTime() + 1
 								return true

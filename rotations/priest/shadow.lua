@@ -69,7 +69,7 @@ local inCombat = {
 	{'Devouring Plague', {'player.shadoworbs >= 3', '!target.debuff(2944)'}},
 
 	-- Cast Mind Blast if you have fewer than 5 Shadow Orbs.
-	{'Devouring Plague', 'player.shadoworbs < 5'},
+	{'Mind Blast', 'player.shadoworbs < 5'},
 
 	-- Cast Shadow Word: Death if you have fewer than 5 Shadow Orbs.
 	-- Shadow Word: Death is only usable on targets that are below 20% health.
@@ -82,15 +82,15 @@ local inCombat = {
 	{'Mind Spike', 'player.buff(Surge of Darkness)'},
 
 	-- Apply and maintain Shadow Word: Pain.
-	{'Shadow Word: Pain', (function() return AutoDots('Shadow Word: Pain', 100, 2) end)},
+	{'589', (function() return AutoDots('589', 100, 2) end)},
 
 	-- Apply and maintain Vampiric Touch.
-	{'Vampiric Touch', (function() return AutoDots('Vampiric Touch', 100, 3) end)},
+	{'34914', (function() return AutoDots('34914', 100, 3) end)},
 
 	{AoE, (function() return SAoE(3, 40) end)},
 
 	-- Cast Mind Flay as your filler spell.
-	{'Mind Flay'}
+	{'15407'}
 
 } 
 
