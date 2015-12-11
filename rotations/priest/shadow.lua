@@ -38,8 +38,10 @@ local keybinds = {
 }
 
 local Buffs = {
-	{'215262', '!player.buff(21562)'}, -- Power Word: Fortitude
-	{'15473', {'player.stance = 0', 'player.health >=40'}}, -- Shadowform
+	-- Power Word: Fortitude
+	{'21562', '!player.buffs.stamina'},
+	-- Shadowform
+	{'15473', 'player.stance = 0'},
 	--{'1706', 'player.falling'} -- Levitate
 }
 
@@ -66,10 +68,10 @@ local AoE = {
 
 local inCombat = {
 	-- Cast Devouring Plague with 3 or more Shadow Orbs.
-	{'Devouring Plague', {'player.shadoworbs >= 3', '!target.debuff(2944)'}},
+	{'2944', {'player.shadoworbs >= 3', '!target.debuff(2944)'}},
 
 	-- Cast Mind Blast if you have fewer than 5 Shadow Orbs.
-	{'Mind Blast', 'player.shadoworbs < 5'},
+	{'8092', 'player.shadoworbs < 5'},
 
 	-- Cast Shadow Word: Death if you have fewer than 5 Shadow Orbs.
 	-- Shadow Word: Death is only usable on targets that are below 20% health.
