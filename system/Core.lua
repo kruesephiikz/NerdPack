@@ -349,9 +349,7 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 			end
 		end
 	end
-	-- Fallback to Target only if toggle is disabled
-	return ProbablyEngine.condition['debuff']('target', Spell) 
-	and ProbablyEngine.condition['health']('target', Health)
+	return false
 end
 
 --[[-----------------------------------------------

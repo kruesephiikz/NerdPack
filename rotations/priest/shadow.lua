@@ -80,8 +80,17 @@ local Survival = {
 }
 
 local AoE = {
-	{'127632'}, -- Cascade
-	{'48045'}, -- Mind Sear
+	-- Cascade
+	{'127632'},
+	-- Mind Sear
+	{'48045'},
+}
+
+local Moving = {
+	-- Shadow Word: Death
+	{'Shadow Word: Death', (function() return AutoDots('Shadow Word: Death', 20) end)},
+	-- Shadow Word: Pain.
+	{'589', (function() return AutoDots('589', 100, 2) end)},
 }
 
 local inCombat = {
@@ -89,7 +98,7 @@ local inCombat = {
 	{'2944', {'player.shadoworbs >= 3', '!target.debuff(2944)'}},
 
 	-- Cast Mind Blast if you have fewer than 5 Shadow Orbs.
-	{'8092', 'player.shadoworbs < 5'},
+	{'8092', {'player.shadoworbs < 5', 'target.ttd > 5'}},
 
 	-- Cast Shadow Word: Death if you have fewer than 5 Shadow Orbs.
 	-- Shadow Word: Death is only usable on targets that are below 20% health.
@@ -123,7 +132,8 @@ ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow
 	{-- In-Combat
 		{keybinds},
 		{Buffs},
+		{Moving, 'player.moving'},
 		{Survival, "player.health < 100"},
 		{Cooldowns, 'modifier.cooldowns'},
-		{inCombat}
+		{inCombat},
 	}, outCombat, lib)
