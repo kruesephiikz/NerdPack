@@ -1,3 +1,7 @@
+local dynEval = NeP.Core.dynEval
+local PeFetch = NeP.Core.PeFetch
+local addonColor = '|cff'..NeP.Interface.addonColor
+
 local SAoE = NeP.Core.SAoE
 local AutoDots = NeP.Core.AutoDots
 
@@ -10,18 +14,26 @@ NeP.Interface.classGUIs[258] = {
 	width = 250,
 	height = 500,
 	config = {
-		-- [[ Keybinds ]]
-		{type = 'text', text = 'Keybinds', align = 'center'},		
-			{type = 'text', text = 'Control: ', align = 'left'},
-			{type = 'text', text = 'Shift: ', align = 'left'},
-			{type = 'text', text = 'Alt: Pause Rotation',align = 'left'},
+		-- Keybinds
+		{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
+			-- Control
+			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = '...', align = 'right', size = 11, offset = 0 },
+			-- Shift
+			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = 'Cascade', align = 'right', size = 11, offset = 0 },
+			-- Alt
+			{type = 'text', text = addonColor..'Alt:',align = 'left', size = 11, offset = -11},
+			{type = 'text', text = 'Pause Rotation', align = 'right', size = 11, offset = 0 },
+		
 		-- [[ General Settings ]]
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = 'General', align = 'center'},
-			-- TODO
+		{type = 'header', text = addonColor..'General', align = 'center'},
+			{ type = "checkbox", text = "Move faster", key = "canMoveF", default = true },
+		
 		-- [[ Survival settings ]]
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = 'Survival', align = 'center'},
+		{type = 'header', text = addonColor..'Survival', align = 'center'},
 			-- TODO
 	}
 }
@@ -34,7 +46,7 @@ local keybinds = {
 	 -- Pause
 	{'pause', 'modifier.alt'},
 	-- Cascade
-	{'127632', 'modifier.lshift'},
+	{'127632', 'modifier.shift'},
 }
 
 local Buffs = {
@@ -43,6 +55,12 @@ local Buffs = {
 	-- Shadowform
 	{'15473', 'player.stance = 0'},
 	--{'1706', 'player.falling'} -- Levitate
+	-- Angelic Feather
+	{'121536', {
+		'player.movingfor > 3',
+		'!player.buff(121557)',
+		(function() return PeFetch('NePConfPriestShadow', 'canMoveF') end)
+	}, 'player.ground'}
 }
 
 local Cooldowns = {
