@@ -310,55 +310,53 @@ Classifications:
 	all - All Units
 ]]
 
-local waitForDots = 0
+--local waitForDots = 0
 
 function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 	-- Sometimes it double castes stuff, this is to prevent that.
 	local currentTime = GetTime()
-	if waitForDots < currentTime then
-		-- If toggle is enabled, do automated
-		if peConfig.read('button_states', 'NeP_ADots', false) then
-			-- Check if we have the spell before anything else...
-			if not IsUsableSpell(Spell) then return false end
-			-- So we dont need to fill everything
-			if Health == nil then Health = 100 end
-			if Duration == nil then Duration = 0 end
-			if Distance == nil then Distance = 40 end
-			if Classification == nil then Classification = 'all' end
-			-- Iterate thru OM
-			for i=1,#NeP.OM.unitEnemie do
-				local Obj = NeP.OM.unitEnemie[i]
-				-- Make sure we should attack it
-				if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then	
-					-- Sanity checks
-					if Obj.health <= Health
-					and Obj.distance <= Distance
-					and UnitCanAttack('player', Obj.key)
-					and NeP.Core.Infront('player', Obj.key) then
-						-- Choose who to allow casting on
-						if UnitClassification(Obj.key) == Classification 
-						or ((Classification == 'elite' and NeP_isElite(Obj.key)) 
-						or Classification == 'all') then
-							-- Do we have the debuff and is it expiring?
-							local _,_,_,_,_,dur,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
-							if not debuff or debuff - currentTime < Duration then
-								-- Dont cast if the target is going to die
-								if dur == nil then dur = 0 end
-								if ProbablyEngine.condition['ttd'](Obj.key) > dur + 1.5 then
-									ProbablyEngine.dsl.parsedTarget = Obj.key
-									waitForDots = GetTime() + 1
-									return true
-								end
+	-- If toggle is enabled, do automated
+	if peConfig.read('button_states', 'NeP_ADots', false) then
+		-- Check if we have the spell before anything else...
+		if not IsUsableSpell(Spell) then return false end
+		-- So we dont need to fill everything
+		if Health == nil then Health = 100 end
+		if Duration == nil then Duration = 0 end
+		if Distance == nil then Distance = 40 end
+		if Classification == nil then Classification = 'all' end
+		-- Iterate thru OM
+		for i=1,#NeP.OM.unitEnemie do
+			local Obj = NeP.OM.unitEnemie[i]
+			-- Make sure we should attack it
+			if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then	
+				-- Sanity checks
+				if Obj.health <= Health
+				and Obj.distance <= Distance
+				and UnitCanAttack('player', Obj.key)
+				and NeP.Core.Infront('player', Obj.key) then
+					-- Choose who to allow casting on
+					if UnitClassification(Obj.key) == Classification 
+					or ((Classification == 'elite' and NeP_isElite(Obj.key)) 
+					or Classification == 'all') then
+						-- Do we have the debuff and is it expiring?
+						local _,_,_,_,_,dur,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
+						if not debuff or debuff - currentTime < Duration then
+							-- Dont cast if the target is going to die
+							if dur == nil then dur = 0 end
+							if ProbablyEngine.condition['ttd'](Obj.key) > dur + 1.5 then
+								ProbablyEngine.dsl.parsedTarget = Obj.key
+								--waitForDots = GetTime() + 1
+								return true
 							end
 						end
 					end
 				end
 			end
-		-- Fallback to Target only if toggle is disabled
-		else
-			return ProbablyEngine.condition['debuff']('target', Spell) 
-			and ProbablyEngine.condition['health']('target', Health)
 		end
+	-- Fallback to Target only if toggle is disabled
+	else
+		return ProbablyEngine.condition['debuff']('target', Spell) 
+		and ProbablyEngine.condition['health']('target', Health)
 	end
 	return false
 end
