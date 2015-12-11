@@ -323,7 +323,7 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 		if Health == nil then Health = 100 end
 		if Duration == nil then Duration = 0 end
 		if Distance == nil then Distance = 40 end
-		if Classification == nil then Classification = 'all' end
+		if Classification == nil then Classification = 'elite' end
 		-- Iterate thru OM
 		for i=1,#NeP.OM.unitEnemie do
 			local Obj = NeP.OM.unitEnemie[i]
@@ -339,11 +339,11 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 					or ((Classification == 'elite' and NeP_isElite(Obj.key)) 
 					or Classification == 'all') then
 						-- Do we have the debuff and is it expiring?
-						local _,_,_,_,_,dur,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
+						local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
 						if not debuff or debuff - currentTime < Duration then
 							-- Dont cast if the target is going to die
-							if dur == nil then dur = 0 end
-							if ProbablyEngine.condition['ttd'](Obj.key) > dur + 1.5 then
+							if debuff == nil then debuff = 0 end
+							if ProbablyEngine.condition['ttd'](Obj.key) > debuff + 1.5 then
 								ProbablyEngine.dsl.parsedTarget = Obj.key
 								--waitForDots = GetTime() + 1
 								return true
