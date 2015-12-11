@@ -309,12 +309,7 @@ Classifications:
 	worldboss - World Boss
 	all - All Units
 ]]
-
---local waitForDots = 0
-
 function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
-	-- Sometimes it double castes stuff, this is to prevent that.
-	local currentTime = GetTime()
 	-- If toggle is enabled, do automated
 	if peConfig.read('button_states', 'NeP_ADots', false) then
 		-- Check if we have the spell before anything else...
@@ -340,7 +335,7 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 					or Classification == 'all') then
 						-- Do we have the debuff and is it expiring?
 						local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
-						if not debuff or debuff - currentTime < Duration then
+						if not debuff or debuff - GetTime() < Duration then
 							-- Dont cast if the target is going to die
 							if debuff == nil then debuff = 5 end
 							if ProbablyEngine.condition['ttd'](Obj.key) > debuff + Duration then
@@ -353,12 +348,10 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 				end
 			end
 		end
-	-- Fallback to Target only if toggle is disabled
-	else
-		return ProbablyEngine.condition['debuff']('target', Spell) 
-		and ProbablyEngine.condition['health']('target', Health)
 	end
-	return false
+	-- Fallback to Target only if toggle is disabled
+	return ProbablyEngine.condition['debuff']('target', Spell) 
+	and ProbablyEngine.condition['health']('target', Health)
 end
 
 --[[-----------------------------------------------
