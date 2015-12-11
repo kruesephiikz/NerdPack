@@ -53,6 +53,8 @@ local Cooldowns = {
 }
 
 local Survival = {
+	-- PW:Shield
+	{'17', '!player.buff(17)', 'player'},
 	 -- Flash Heal
 	{'2061', 'player.health < 20', 'player'},
 }
@@ -100,7 +102,6 @@ local outCombat = {
 ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow'), 
 	{-- In-Combat
 		{keybinds},
-		{'17', '!player.buff(17)', 'player'}, -- PW:Shield
 		{Buffs},
 		{Survival, "player.health < 100"},
 		{Cooldowns, 'modifier.cooldowns'},
