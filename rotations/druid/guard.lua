@@ -1,6 +1,7 @@
 local dynEval 	= NeP.Core.dynEval
 local PeFetch	= NeP.Core.PeFetch
 local SAoE 		= NeP.Core.SAoE
+local canTaunt 	= NeP.Core.canTaunt
 local AutoDots 	= NeP.Core.AutoDots
 local addonColor = '|cff'..NeP.Interface.addonColor
 
@@ -89,9 +90,9 @@ local Cooldowns = {
 
 local inCombat = {
 	-- Trash (AOE)
-	{'Thrash', (function() return NeP.Core.SAoE(3, 8) end)},
+	{'Thrash', (function() return SAoE(3, 8) end)},
 	-- Growl (Taunt)
-	{'Growl', (function() return NeP.Core.canTaunt() end)},
+	{'Growl', (function() return canTaunt() end)},
 	-- Use Mangle on cooldown (its cooldown has a chance to be reset by Lacerate, so you need to watch out for this).
 	{'Mangle'},
 	-- Use Lacerate until it has 3 stacks on the target.
