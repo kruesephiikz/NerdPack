@@ -11,11 +11,10 @@ NeP.Interface.classGUIs[103] = {
 		-- General
 		{ type = 'rule' },
 		{ type = 'header', text = "General settings:", align = "center"},
-
 			-- Buff
 			{ type = "checkbox", text = "Buffs", key = "Buffs", default = true, desc =
 			 "This checkbox enables or disables the use of automatic buffing."},
-
+			-- Form in-combat
 			{ 
 		      	type = "dropdown",
 		      	text = "Form", 
@@ -30,6 +29,7 @@ NeP.Interface.classGUIs[103] = {
 		    	default = "2", 
 		    	desc = "Select What form to use while in of combat" 
 		    },
+		    -- Form Outside-combat
 			{ type = "dropdown", text = "Form OOC", key = "FormOCC", 
 		      	list = {
 					{text = "Cat",key = "2"},
@@ -41,7 +41,6 @@ NeP.Interface.classGUIs[103] = {
 		    	default = "0", 
 		    	desc = "Select What form to use while out of combat" 
 		    },
-
 			-- Prowl
 			{ type = "checkbox", text = "Prowl", key = "Prowl", default = false, desc =
 			 "This checkbox enables or disables the use of automatic Prowl when out of combat."},
