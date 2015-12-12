@@ -18,7 +18,7 @@ NeP.Interface.classGUIs[258] = {
 		{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
 			-- Control
 			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
-			{type = 'text', text = '...', align = 'right', size = 11, offset = 0 },
+			{type = 'text', text = 'Mind Sear', align = 'right', size = 11, offset = 0 },
 			-- Shift
 			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
 			{type = 'text', text = 'Cascade', align = 'right', size = 11, offset = 0 },
@@ -29,12 +29,12 @@ NeP.Interface.classGUIs[258] = {
 		-- [[ General Settings ]]
 		{type = 'spacer'},{type = 'rule'},
 		{type = 'header', text = addonColor..'General', align = 'center'},
-			{ type = "checkbox", text = "Move faster", key = "canMoveF", default = true },
+			{ type = 'checkbox', text = 'Move faster', key = 'canMoveF', default = true },
 		
 		-- [[ Survival settings ]]
 		{type = 'spacer'},{type = 'rule'},
 		{type = 'header', text = addonColor..'Survival', align = 'center'},
-			-- TODO
+			{ type = "spinner", text = "Flash Heal", key = "FlashHeal", default = 35},
 	}
 }
 
@@ -47,6 +47,8 @@ local keybinds = {
 	{'pause', 'modifier.alt'},
 	-- Cascade
 	{'127632', 'modifier.shift'},
+	-- Mind Sear
+	{'48045', 'modifier.control'},
 }
 
 local Buffs = {
@@ -76,7 +78,7 @@ local Survival = {
 	-- PW:Shield
 	{'17', '!player.buff(17)', 'player'},
 	 -- Flash Heal
-	{'2061', 'player.health < 20', 'player'},
+	{'2061', (function() return dynEval('player.health < '..PeFetch('NePConfPriestShadow', 'FlashHeal')) end), 'player'},
 }
 
 local AoE = {
@@ -133,7 +135,7 @@ ProbablyEngine.rotation.register_custom(258, NeP.Core.GetCrInfo('Priest - Shadow
 		{keybinds},
 		{Buffs},
 		{Moving, 'player.moving'},
-		{Survival, "player.health < 100"},
+		{Survival, 'player.health < 100'},
 		{Cooldowns, 'modifier.cooldowns'},
 		{inCombat},
 	}, outCombat, lib)
