@@ -51,10 +51,7 @@ local keybinds = {
 }
 
 local Shared = {
-	-- Cancel player form ( Needed before buffing )
-  	{"/cancelaura Bear Form", '!player.buffs.stats'},
-  	-- Mark of the Wild
-	{"Mark of the Wild", '!player.buffs.stats'}, 
+	{"Mark of the Wild", '!player.buffs.stats'},
 }
 
 local Interrupts = {
