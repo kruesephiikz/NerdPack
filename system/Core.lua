@@ -72,9 +72,12 @@ Build By: MTS
 function NeP.Core.Distance(a, b)
 	-- FireHack
 	if FireHack then
-		local ax, ay, az = ObjectPosition(b)
-		local bx, by, bz = ObjectPosition(a)
-		return math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2))
+		-- Dont crash if invalid pointers
+		if ObjectExists(a) and ObjectExists(b) then
+			local ax, ay, az = ObjectPosition(b)
+			local bx, by, bz = ObjectPosition(a)
+			return math.sqrt(((bx-ax)^2) + ((by-ay)^2) + ((bz-az)^2))
+		end
 	else
 		return ProbablyEngine.condition['distance'](b)
 	end
@@ -116,9 +119,12 @@ function NeP.Core.LineOfSight(a, b)
 		if ignoreLOS[tonumber(bCheck)] ~= nil then return true end
 		
 		if FireHack then
-			local ax, ay, az = ObjectPosition(a)
-			local bx, by, bz = ObjectPosition(b)
-			return not TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags)
+			-- Dont crash if invalid pointers
+			if ObjectExists(a) and ObjectExists(b) then
+				local ax, ay, az = ObjectPosition(a)
+				local bx, by, bz = ObjectPosition(b)
+				return not TraceLine(ax, ay, az+2.25, bx, by, bz+2.25, losFlags)
+			end
 		else
 			-- Since other unlockers dont have LoS, return true
 			return true
@@ -137,11 +143,14 @@ function NeP.Core.Infront(a, b)
 	if (UnitExists(a) and UnitExists(b)) then
 		-- FireHack
 		if FireHack then
-			local aX, aY, aZ = ObjectPosition(b)
-			local bX, bY, bZ = ObjectPosition(a)
-			local playerFacing = GetPlayerFacing()
-			local facing = math.atan2(bY - aY, bX - aX) % 6.2831853071796
-			return math.abs(math.deg(math.abs(playerFacing - (facing)))-180) < 90
+			-- Dont crash if invalid pointers
+			if ObjectExists(a) and ObjectExists(b) then
+				local aX, aY, aZ = ObjectPosition(b)
+				local bX, bY, bZ = ObjectPosition(a)
+				local playerFacing = GetPlayerFacing()
+				local facing = math.atan2(bY - aY, bX - aX) % 6.2831853071796
+				return math.abs(math.deg(math.abs(playerFacing - (facing)))-180) < 90
+			end
 		-- Fallback to PE's
 		else
 			return ProbablyEngine.condition['infront'](b)
@@ -309,38 +318,37 @@ Classifications:
 	worldboss - World Boss
 	all - All Units
 ]]
-function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
+function NeP.Core.AutoDots(Spell, refreshAt)
+	-- Check if we have the spell before anything else...
+	if not IsUsableSpell(Spell) then return false end
 	-- If toggle is enabled, do automated
 	if peConfig.read('button_states', 'NeP_ADots', false) then
-		-- Check if we have the spell before anything else...
-		if not IsUsableSpell(Spell) then return false end
 		-- So we dont need to fill everything
-		if Health == nil then Health = 100 end
-		if Duration == nil then Duration = 1.5 end
-		if Distance == nil then Distance = 40 end
+		if refreshAt == nil then refreshAt = 1.5 end
 		if Classification == nil then Classification = 'elite' end
+		local Spellname, Spellrank, Spellicon, SpellcastingTime, SpellminRange, SpellmaxRange, SpellID = GetSpellInfo(Spell)
+		local SpellcastingTime = SpellcastingTime * 0.001
 		-- Iterate thru OM
 		for i=1,#NeP.OM.unitEnemie do
 			local Obj = NeP.OM.unitEnemie[i]
 			-- Make sure we should attack it
 			if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then	
 				-- Sanity checks
-				if Obj.health <= Health
-				and Obj.distance <= Distance
-				and UnitCanAttack('player', Obj.key)
-				and NeP.Core.Infront('player', Obj.key) then
+				if UnitCanAttack('player', Obj.key)
+				and NeP.Core.Infront('player', Obj.key)
+				and IsSpellInRange(Spellname, Obj.key)then
 					-- Choose who to allow casting on
 					if UnitClassification(Obj.key) == Classification 
 					or ((Classification == 'elite' and NeP_isElite(Obj.key)) 
 					or Classification == 'all') then
 						-- Do we have the debuff and is it expiring?
-						local _,_,_,_,_,_,debuff = UnitDebuff(Obj.key, GetSpellInfo(Spell), nil, 'PLAYER')
-						if not debuff or debuff - GetTime() < Duration then
-							-- Dont cast if the target is going to die
-							if debuff == nil then debuff = 5 end
-							if ProbablyEngine.condition['ttd'](Obj.key) > debuff + Duration then
+						local _,_,_,_,_,_,debuffDuration = UnitDebuff(Obj.key, Spellname, nil, 'PLAYER')
+						if not debuffDuration or  - GetTime() < refreshAt then
+							-- Dont cast if the targedebuffDurationt is going to die
+							if debuffDuration == nil then debuffDuration = 15 end
+							if ProbablyEngine.condition['ttd'](Obj.key) > (debuffDuration + SpellcastingTime) then
+								-- set PEs parsed Target and return true
 								ProbablyEngine.dsl.parsedTarget = Obj.key
-								--waitForDots = GetTime() + 1
 								return true
 							end
 						end
@@ -349,7 +357,8 @@ function NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
 			end
 		end
 	end
-	return false
+	-- Fallbacl to PEs
+	return not ProbablyEngine.condition['debuff']('target', Spell)
 end
 
 --[[-----------------------------------------------
@@ -786,8 +795,7 @@ LoadNePData:SetScript('OnEvent', function(self, event, addon)
 		This is the best way i could think of to make sure nothing
 		wich depends on NePData gets loaded too early.
 	]]
-	StatusGUI_RUN();
-	OMGUI_RUN()
+	StatusGUI_RUN()
 
 	--[[
 		PE's Overwrites.

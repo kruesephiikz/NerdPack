@@ -115,6 +115,11 @@ LibDraw.Sync(function()
 					local oX, oY, oZ = ObjectPosition(Obj.key)
 					local name = Obj.name
 					local _class = Obj.class
+
+					if NeP.Core.PeFetch('NePconf_Overlays', 'enemieTTD') then
+						LibDraw.Text(_addonColor..'TTD:|cffFFFFFF '..NeP.Core.Round(ProbablyEngine.condition['ttd'](Obj.key)), 'SystemFont_Tiny', oX, oY, oZ + 3)
+					end
+					
 					-- Elites
 					if _class == 'elite' then
 						if NeP.Core.PeFetch('NePconf_Overlays', 'objectsElite') then
@@ -257,5 +262,6 @@ NeP.Core.BuildGUI('Overlays', {
 			{ type = 'checkbox', text = 'Display Rare Units', key = 'objectsRares', default = false },
 			{ type = 'checkbox', text = 'Display WorldBoss Units', key = 'objectsWorldBoss', default = false },
 			{ type = 'checkbox', text = 'Display Elite Units', key = 'objectsElite', default = false },
+			{ type = 'checkbox', text = 'Display Infront Cone', key = 'enemieTTD', default = false },
 	}
 })

@@ -89,7 +89,7 @@ function StatusGUI_RUN()
 			OMButton:SetSize(statusText2:GetStringWidth()-10, buttonH)
 			OMButton:SetScript('OnClick', function(self)
 				_handleFrames()
-				NeP_OMLIST:Show()
+				NeP.Core.displayGUI('omSettings')
 			end)
 			
 			-- ItemBot
@@ -227,11 +227,6 @@ function StatusGUI_RUN()
 	-- Handle when stuff should close or open...
 	local openGUIS = {}
 	function _handleFrames()
-		
-		if NeP_OMLIST:IsVisible() then
-			NeP_OMLIST:Hide()
-		end
-			
 		if MenuGUI:IsVisible() then
 			MenuGUI:Hide()
 			minButton.text:SetText('=')
