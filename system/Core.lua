@@ -337,11 +337,12 @@ function NeP.Core.Dispel(Spell)
 	return false
 end
 
-function NeP.Core.AutoDots(Spell, refreshAt)
+function NeP.Core.AutoDots(Spell, refreshAt, health)
 	-- Check if we have the spell before anything else...
 	if not IsUsableSpell(Spell) then return false end
 	local Spellname, Spellrank, Spellicon, SpellcastingTime, SpellminRange, SpellmaxRange, SpellID = GetSpellInfo(Spell)
 	local SpellcastingTime = SpellcastingTime * 0.001
+	if health == nil then health = 100 end
 	-- If toggle is enabled, do automated
 	if peConfig.read('button_states', 'NeP_ADots', false) then
 		-- Iterate thru OM
@@ -350,7 +351,8 @@ function NeP.Core.AutoDots(Spell, refreshAt)
 			-- Affecting combat or Dummy and is elite or above
 			if (UnitAffectingCombat(Obj.key) or Obj.is == 'dummy') and Obj.class >= 3 then	
 				-- Sanity checks
-				if UnitCanAttack('player', Obj.key)
+				if Obj.health < health
+				and UnitCanAttack('player', Obj.key)
 				and NeP.Core.Infront('player', Obj.key)
 				and IsSpellInRange(Spellname, Obj.key)then
 					-- Do we have the debuff and is it expiring?

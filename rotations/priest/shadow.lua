@@ -88,9 +88,9 @@ local AoE = {
 
 local Moving = {
 	-- Shadow Word: Death
-	{'Shadow Word: Death', (function() return AutoDots('Shadow Word: Death', 20) end)},
+	{'32379', (function() return AutoDots('32379', 0, 20) end)},
 	-- Shadow Word: Pain.
-	{'589', (function() return AutoDots('589', 100, 2) end)},
+	{'589', (function() return AutoDots('589', 2) end)},
 }
 
 local inCombat = {
@@ -102,7 +102,7 @@ local inCombat = {
 
 	-- Cast Shadow Word: Death if you have fewer than 5 Shadow Orbs.
 	-- Shadow Word: Death is only usable on targets that are below 20% health.
-	{'Shadow Word: Death', {'player.shadoworbs < 5', (function() return AutoDots('Shadow Word: Death', 20) end)}},
+	{'32379', {'player.shadoworbs < 5', (function() return AutoDots('32379', 0, 20) end)}},
 
 	-- Cast Insanity on the target when you have the Insanity buff (if you are using the Insanity talent).
 	{'Insanity', 'player.buff(Insanity)'},
@@ -111,10 +111,10 @@ local inCombat = {
 	{'Mind Spike', 'player.buff(Surge of Darkness)'},
 
 	-- Apply and maintain Shadow Word: Pain.
-	{'589', (function() return AutoDots('589', 100, 2) end)},
+	{'589', (function() return AutoDots('589', 2) end)},
 
 	-- Apply and maintain Vampiric Touch.
-	{'34914', (function() return AutoDots('34914', 100, 3) end)},
+	{'34914', (function() return AutoDots('34914', 3) end)},
 
 	{AoE, (function() return SAoE(3, 40) end)},
 
