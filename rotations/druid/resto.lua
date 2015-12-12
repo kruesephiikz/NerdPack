@@ -10,51 +10,16 @@ NeP.Interface.classGUIs[105] = {
 		
 		-- General
 		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = "General settings:", 
-			align = "center"
-		},
+		{ type = 'header', text = "General settings:", align = "center"},
 
 		-- Focus
 		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = 'Focus settings:', 
-			align = "center"
-		},
-
-			{ 
-				type = "spinner", 
-				text = "Life Bloom", 
-				key = "LifeBloomTank", 
-				default = 100
-			},
-			{ 
-				type = "spinner", 
-				text = "Swiftmend", 
-				key = "SwiftmendTank", 
-				default = 80
-			},
-			{ 
-				
-				type = "spinner", 
-				text = "Rejuvenation", 
-				key = "RejuvenationTank", 
-				default = 95
-			},
-			{ 
-				type = "spinner", 
-				text = "Wild Mushroom", 
-				key = "WildMushroomTank", 
-				default = 100
-			},
-			{ 
-				type = "spinner", 
-				text = "Healing Touch", 
-				key = "HealingTouchTank", 
-				default = 96
-			},
+		{ type = 'header', text = 'Focus settings:', align = "center"},
+			{ type = "spinner", text = "Life Bloom", key = "LifeBloomTank", default = 100},
+			{ type = "spinner", text = "Swiftmend", key = "SwiftmendTank", default = 80},
+			{ type = "spinner", text = "Rejuvenation", key = "RejuvenationTank", default = 95},
+			{ type = "spinner", text = "Wild Mushroom", key = "WildMushroomTank", default = 100},
+			{ type = "spinner", text = "Healing Touch", key = "HealingTouchTank", default = 96},
 
 	}
 }
