@@ -243,18 +243,20 @@ NeP.Core.BuildGUI('Overlays', {
 	config = {
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor..'Overlays:', size = 25, align = 'Center' },
 			{ type = 'text', text = 'Only Works with FireHack ATM!', size = 11, offset = 0, align = 'center' },
+		
 		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor..'Player Overlays:', size = 25, align = 'Center' },
-			{ type = 'checkbox', text = 'Display Player Melee Range', key = 'PlayerMRange', default = false },
-			{ type = 'checkbox', text = 'Display Player Caster Range', key = 'PlayerCRange', default = false },
+			{ type = 'checkbox', text = 'Display Melee Range', key = 'PlayerMRange', default = false },
+			{ type = 'checkbox', text = 'Display Caster Range', key = 'PlayerCRange', default = false },
 			{ type = 'checkbox', text = 'Display Target Line', key = 'TargetLine', default = false },
 			{ type = 'checkbox', text = 'Display Infront Cone', key = 'PlayerInfrontCone', default = false },
-		{ type = 'spacer' },
-		{ type = 'rule' },
+		
+		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor..'Target Overlays:', size = 25, align = 'Center' },
-			{ type = 'checkbox', text = 'Display Player Melee Range', key = 'TargetMRange', default = false },
-			{ type = 'checkbox', text = 'Display Player Caster Range', key = 'TargetCRange', default = false },
+			{ type = 'checkbox', text = 'Display Melee Range', key = 'TargetMRange', default = false },
+			{ type = 'checkbox', text = 'Display Caster Range', key = 'TargetCRange', default = false },
 			{ type = 'checkbox', text = 'Display Infront Cone', key = 'TargetCone', default = false },
+		
 		{ type = 'spacer' },{ type = 'rule' },
 		{ type = 'header', text = '|cff'..NeP.Interface.addonColor..'Units Overlays:', size = 25, align = 'Center' },
 			{ type = 'checkbox', text = 'Display Friendly Player Units', key = 'objectsFriendlyPlayers', default = false },
@@ -262,6 +264,6 @@ NeP.Core.BuildGUI('Overlays', {
 			{ type = 'checkbox', text = 'Display Rare Units', key = 'objectsRares', default = false },
 			{ type = 'checkbox', text = 'Display WorldBoss Units', key = 'objectsWorldBoss', default = false },
 			{ type = 'checkbox', text = 'Display Elite Units', key = 'objectsElite', default = false },
-			{ type = 'checkbox', text = 'Display Infront Cone', key = 'enemieTTD', default = false },
+			{ type = 'checkbox', text = 'Display TimeToDie', key = 'enemieTTD', default = false },
 	}
 })

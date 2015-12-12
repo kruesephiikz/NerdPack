@@ -59,6 +59,7 @@ C_Timer.NewTicker(0.25, (function()
 				key = Obj.key,
 				name = Obj.Name,
 				is = Obj.is,
+				class = Obj.class,
 				distance = objectDistance('player', Obj.key),
 				health = math.floor((UnitHealth(Obj.key) / UnitHealthMax(Obj.key)) * 100), 
 				maxHealth = UnitHealthMax(Obj.key), 
@@ -75,6 +76,7 @@ C_Timer.NewTicker(0.25, (function()
 				key = Obj.key,
 				name = Obj.Name,
 				is = Obj.is,
+				class = Obj.class,
 				distance = objectDistance('player', Obj.key),
 				health = math.floor((UnitHealth(Obj.key) / UnitHealthMax(Obj.key)) * 100), 
 				maxHealth = UnitHealthMax(Obj.key), 
@@ -219,7 +221,8 @@ local function addToOM(Obj)
 				TempOM.unitFriend[#TempOM.unitFriend+1] = {
 					key = Obj,
 					name = UnitName(Obj),
-					distance = objectDistance('player', Obj.key),
+					distance = objectDistance('player', Obj),
+					class = UnitClassification(Obj),
 					is = 'friendly'
 				}
 			-- Enemie
@@ -227,7 +230,8 @@ local function addToOM(Obj)
 				TempOM.unitEnemie[#TempOM.unitEnemie+1] = {
 					key = Obj,
 					name = UnitName(Obj),
-					distance = objectDistance('player', Obj.key),
+					distance = objectDistance('player', Obj),
+					class = UnitClassification(Obj),
 					is = isDummy(Obj) and 'dummy' or 'enemie'
 				}
 			end
