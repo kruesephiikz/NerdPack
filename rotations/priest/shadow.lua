@@ -1,9 +1,8 @@
 local dynEval = NeP.Core.dynEval
 local PeFetch = NeP.Core.PeFetch
-local addonColor = '|cff'..NeP.Interface.addonColor
-
 local SAoE = NeP.Core.SAoE
 local AutoDots = NeP.Core.AutoDots
+local addonColor = '|cff'..NeP.Interface.addonColor
 
 NeP.Interface.classGUIs[258] = {
 	key = 'NePConfPriestShadow',
@@ -43,7 +42,7 @@ local lib = function()
 end
 
 local keybinds = {
-	 -- Pause
+	-- Pause
 	{'pause', 'modifier.alt'},
 	-- Cascade
 	{'127632', 'modifier.shift'},
