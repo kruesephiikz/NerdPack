@@ -88,7 +88,7 @@ local ST = {
 	{{-- Auto Dotting
 		{'Rupture', {
 			'player.combopoints >= 5',
-			(function() return NeP.Core.AutoDots('Rupture', 100, 7, 5) end)
+			(function() return NeP.Core.AutoDots('Rupture', 7) end)
 		}, 'target' },
 	}, 'toggle.dotEverything' },
 	{ 'Ambush' },

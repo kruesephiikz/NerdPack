@@ -422,8 +422,8 @@ local SoloCombat = {
 		"!player.buff(139)"
 	}, "player" },
 	
-	{ "32379", (function() return NeP.Core.AutoDots('32379', 20) end) }, -- SW:D
-	{ "589", (function() return NeP.Core.AutoDots('589', 100) end) }, -- SW:P 
+	{ "32379", (function() return NeP.Core.AutoDots('32379', 0, 20) end) }, -- SW:D
+	{ "589", (function() return NeP.Core.AutoDots('589') end) }, -- SW:P 
 	
 	-- DPS
 		

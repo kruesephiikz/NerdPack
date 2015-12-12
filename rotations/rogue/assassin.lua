@@ -84,7 +84,7 @@ local inCombat = {
 	{{-- Auto Dotting
 		{'1943', { -- Rupture
 			'player.combopoints >= 5',
-			(function() return NeP.Core.AutoDots('1943', 100, 7, 5) end)
+			(function() return NeP.Core.AutoDots('1943', 7) end)
 		}, 'target' },
 	}, 'toggle.dotEverything' },
 	{{ -- Toggle off

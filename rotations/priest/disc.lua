@@ -358,8 +358,8 @@ local _PainSuppression = {
 }
 
 local _Solo = {
-	{ "32379", (function() return NeP.Core.AutoDots('32379', 20) end) }, -- SW:D
-	{ "589", (function() return NeP.Core.AutoDots('589', 100) end) }, -- SW:P 
+	{ "32379", (function() return NeP.Core.AutoDots('32379', 0, 20) end) }, -- SW:D
+	{ "589", (function() return NeP.Core.AutoDots('589') end) }, -- SW:P 
 
   	-- CD's
 	{ "10060", "modifier.cooldowns" }, --Power Infusion 

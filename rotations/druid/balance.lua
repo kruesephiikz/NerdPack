@@ -137,8 +137,8 @@ local BoomkinForm = {
 	{ "108238", "player.health < 60", "player" }, --Instant renewal when less than 40% health
 	
 	{{ -- Auto Dotting
-		{ "164812", (function() return NeP.Core.AutoDots("164812", 100, 2) end) }, -- moonfire
-		{ "164815", (function() return NeP.Core.AutoDots("164815", 100, 2) end) }, --SunFire
+		{ "164812", (function() return NeP.Core.AutoDots("164812", 2) end) }, -- moonfire
+		{ "164815", (function() return NeP.Core.AutoDots("164815", 2) end) }, --SunFire
 	}, "toggle.dotEverything" },
 
 	-- AoE

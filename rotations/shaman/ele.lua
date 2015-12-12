@@ -211,7 +211,7 @@ ProbablyEngine.rotation.register_custom(262, NeP.Core.GetCrInfo('Shamman - Eleme
 			{_Survival, 'player.health < 100'},
 			{_totems, 'toggle.totems'},
 			{'Earth Shock', { 
-				(function() return NeP.Core.AutoDots('Earth Shock', 100, 0, 40, 'elite') end),
+				(function() return NeP.Core.AutoDots('Earth Shock') end),
 				'toggle.autoDots'
 			}},
 			{_AoE, (function() return NeP.Core.SAoE(8, 5) end)},
