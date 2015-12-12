@@ -342,6 +342,8 @@ function NeP.Core.AutoDots(Spell, refreshAt, health)
 	if not IsUsableSpell(Spell) then return false end
 	local Spellname, Spellrank, Spellicon, SpellcastingTime, SpellminRange, SpellmaxRange, SpellID = GetSpellInfo(Spell)
 	local SpellcastingTime = SpellcastingTime * 0.001
+	-- Dont need to fill everything
+	if refreshAt == nil then refreshAt = 0 end
 	if health == nil then health = 100 end
 	-- If toggle is enabled, do automated
 	if peConfig.read('button_states', 'NeP_ADots', false) then
@@ -371,7 +373,7 @@ function NeP.Core.AutoDots(Spell, refreshAt, health)
 			end
 		end
 	else
-		-- Fallback to PEs
+		-- Fallback to single target
 		local _,_,_,_,_,_,debuffDuration = UnitDebuff('target', Spellname, nil, 'PLAYER')
 		if not debuffDuration or  - GetTime() < refreshAt then
 			if debuffDuration == nil then debuffDuration = 0 end
