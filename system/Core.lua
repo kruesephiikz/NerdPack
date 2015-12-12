@@ -379,6 +379,7 @@ function NeP.Core.AutoDots(Spell, refreshAt, health)
 			if debuffDuration == nil then debuffDuration = 0 end
 			if IsSpellInRange(Spellname, 'target')
 			and NeP.Core.Infront('player', 'target')
+			and NeP_isElite('target')
 			-- FIXME: Add a proper TTD
 			and ProbablyEngine.condition['ttd']('target') > (debuffDuration + SpellcastingTime) then
 				return true
