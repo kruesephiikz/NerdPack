@@ -30,8 +30,8 @@ NeP.Interface.classGUIs[104] = {
 		-- General
 		{type = 'rule'},
 		{type = 'header', text = "General:", align = "center"},
-			{type = "checkbox", text = "Bear Form", key = "Bear", default = true, 
-				desc = "This checkbox enables or disables the use of automatic Bear form."
+			{type = "checkbox", text = "Bear Form", key = "BearV2", default = false, 
+				desc = "Use bear form auto while in combat"
 			},
 
 		-- Player
@@ -86,6 +86,11 @@ local Cooldowns = {
 }
 
 local inCombat = {
+	{'MoonFire', '!target.debuff(MoonFire)'},
+	{'Wrath'}
+}
+
+local BearForm = {
 	-- Trash (AOE)
 	{'Thrash', (function() return SAoE(3, 8) end)},
 	
@@ -117,6 +122,11 @@ local inCombat = {
 	{'Lacerate'},
 }
 
+local CatForm = {
+	{'Shred', '!player.combopoints >= 5'},
+	{'Ferocious Bite'}
+}
+
 local outCombat = {
 	{keybinds},
 	{Shared}
@@ -127,13 +137,15 @@ ProbablyEngine.rotation.register_custom(104, NeP.Core.GetCrInfo('Druid - Guardia
 		{keybinds},
 		{Shared},
 		{Survival, 'player.health < 100'},
-		-- Bear Form
+		{Interrupts, "target.NePinterrupt"},
+		{Cooldowns, 'modifier.cooldowns'},
+		-- Auto Bear Form
 		{"5487", {
 	  		"player.form != 1", 	-- Stop if bear
 	  		"!player.buff(5215)", 	-- Not in Stealth
-	  		(function() return PeFetch('NePConfDruidGuard', 'Bear') end),
-	  	}},	
-		{Interrupts, "target.NePinterrupt"},
-		{Cooldowns, 'modifier.cooldowns'},
-		{inCombat}
+	  		(function() return PeFetch('NePConfDruidGuard', 'BearV2') end),
+	  	}},
+		{inCombat, '!player.form > 0'},
+		{BearForm, 'player.form == 1'},
+		{CatForm, 'player.form == 2'},
 	}, outCombat, exeOnLoad)
