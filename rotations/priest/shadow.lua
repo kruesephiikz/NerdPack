@@ -83,7 +83,7 @@ local AoE = {
 	-- Cascade
 	{'127632'},
 	-- Mind Sear
-	{'48045'},
+	{'48045', (function() return NeP.Core.SAoEObject(2) end)},
 }
 
 local Moving = {

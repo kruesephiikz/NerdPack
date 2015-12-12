@@ -183,6 +183,38 @@ function NeP.Core.dynEval(condition, spell)
 	return _parse(condition, spell or '')
 end
 
+-- test
+local function getUnitsAround(unit)
+	local numberUnits = 0
+	for i=1,#NeP.OM.unitEnemie do
+		local Obj = NeP.OM.unitEnemie[i]
+		if UnitAffectingCombat(unit) and NeP.Core.Distance(unit, Obj.key) <= 10 then
+			numberUnits = numberUnits + 1
+		end
+	end
+	return numberUnits
+end
+
+function NeP.Core.SAoEObject(Units)
+	local UnitsAroundObject = {}
+	for i=1,#NeP.OM.unitEnemie do
+		local Obj = NeP.OM.unitEnemie[i]
+		if UnitAffectingCombat(Obj.key) and Obj.distance <= 40 then
+			UnitsAroundObject[#UnitsAroundObject+1] = {
+				unitsAround = getUnitsAround(Obj.key),
+				key = Obj.key
+			}
+		end
+	end
+	table.sort(UnitsAroundObject, function(a,b) return a.unitsAround < b.unitsAround end)
+	if UnitsAroundObject[1].unitsAround > Units then
+		-- set PEs parsed Target and return true
+		ProbablyEngine.dsl.parsedTarget = UnitsAroundObject[1].key
+		return true
+	end
+	return false
+end
+
 --[[-----------------------------------------------
 ** Smart AoE **
 DESC: PE's way to handle smart AoE does not provide
