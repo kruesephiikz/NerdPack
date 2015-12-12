@@ -1,3 +1,9 @@
+local dynEval 	= NeP.Core.dynEval
+local PeFetch	= NeP.Core.PeFetch
+local SAoE 		= NeP.Core.SAoE
+local AutoDots 	= NeP.Core.AutoDots
+local addonColor = '|cff'..NeP.Interface.addonColor
+
 NeP.Interface.classGUIs[104] = {
 	key = "NePConfDruidGuard",
 	profiles = true,
@@ -8,98 +14,37 @@ NeP.Interface.classGUIs[104] = {
 	height = 500,
 	config = {
 		
+		-- Keybinds
+		{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
+			-- Control
+			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = '...', align = 'right', size = 11, offset = 0 },
+			-- Shift
+			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = '...', align = 'right', size = 11, offset = 0 },
+			-- Alt
+			{type = 'text', text = addonColor..'Alt:',align = 'left', size = 11, offset = -11},
+			{type = 'text', text = 'Pause Rotation', align = 'right', size = 11, offset = 0 },
+
 		-- General
 		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = "General settings:", 
-			align = "center"
-		},
-
-			{ 
-				type = "checkbox", 
-				text = "Buffs", 
-				key = "Buffs", 
-				default = true, 
-				desc = "This checkbox enables or disables the use of automatic buffing."
-			},
-			{ 
-				type = "checkbox", 
-				text = "Bear Form", 
-				key = "Bear", 
-				default = true, 
+		{ type = 'header', text = "General", align = "center"},
+			{type = "checkbox", text = "Bear Form", key = "Bear", default = true, 
 				desc = "This checkbox enables or disables the use of automatic Bear form."
-			},
-			{ 
-				type = "checkbox", 
-				text = "Bear Form OCC", 
-				key = "BearOCC", 
-				default = false, 
-				desc = "This checkbox enables or disables the use of automatic Bear form while out of combat."
 			},
 
 		-- Player
 		{ type = 'rule' },
-		{ 
-			type = 'header', 
-			text = "Player settings:", 
-			align = "center"
-		},
-
-			{ 
-				type = "spinner", 
-				text = "Savage Defense", 
-				key = "SavageDefense", 
-				default = 95
-			},
-			{ 
-				type = "spinner", 
-				text = "Frenzied Regeneration", 
-				key = "FrenziedRegeneration", 
-				default = 70
-			},
-			{ 
-				type = "spinner", 
-				text = "Barkskin", 
-				key = "Barkskin", 
-				default = 70
-			},
-			{ 
-				type = "spinner", 
-				text = "Cenarion Ward", 
-				key = "CenarionWard", 
-				default = 60
-			},
-			{ 
-				type = "spinner", 
-				text = "Survival Instincts", 
-				key = "SurvivalInstincts", 
-				default = 40 
-			},
-			{ 
-				type = "spinner",
-				text = "Renewal", 
-				key = "Renewal", 
-				default = 40 
-			},
-			{ 
-				type = "spinner", 
-				text = "Healthstone", 
-				key = "Healthstone", 
-				default = 50 
-			},
-			{ 
-				type = "spinner", 
-				text = "Healing Tonic", 
-				key = "HealingTonic", 
-				default = 30 
-			},
-			{ 
-				type = "spinner", 
-				text = "Smuggled Tonic", 
-				key = "SmuggledTonic", 
-				default = 30 
-			},	
+		{ type = 'header', text = "Survival", align = "center"},
+			{type = "spinner", text = "Savage Defense", key = "SavageDefense", default = 95},
+			{type = "spinner", text = "Frenzied Regeneration", key = "FrenziedRegeneration", default = 70},
+			{type = "spinner", text = "Barkskin", key = "Barkskin", default = 70},
+			{type = "spinner", text = "Cenarion Ward", key = "CenarionWard", default = 60},
+			{type = "spinner", text = "Survival Instincts", key = "SurvivalInstincts", default = 40 },
+			{type = "spinner", text = "Renewal", key = "Renewal", default = 40 },
+			{type = "spinner", text = "Healthstone", key = "Healthstone", default = 50 },
+			{type = "spinner", text = "Healing Tonic", key = "HealingTonic", default = 30 },
+			{type = "spinner", text = "Smuggled Tonic", key = "SmuggledTonic", default = 30 },	
 
 	}
 }
@@ -108,166 +53,115 @@ local exeOnLoad = function()
 	NeP.Splash()
 end
 
-local inCombat = {
-	
-	--	keybinds
-		{ "77761", "modifier.rshift" }, -- Stampeding Roar
-		{ "5211", "modifier.lcontrol" }, -- Mighty Bash
-		{ "!/focus [target=mouseover]", "modifier.ralt" }, -- Focus
-		-- Rebirth
-			-- Rebirth
-			{ "!/cancelform", { -- remove bear form
-				"player.form > 0", 
-				"player.spell(20484).cooldown < .001", 
-				"modifier.lshift" 
-			}}, 
-			{ "20484", { -- Rebirth
-				"modifier.lshift", 
-				"!target.alive" 
-			}, "target" }, 
-			{ "!/cast Bear Form", {  -- bear form
-				"!player.casting", "!player.form = 1", 
-				"lastcast(20484)", 
-				"modifier.lshift" 
-			}},
-		
-	--	Buffs
-		{ "/cancelaura Bear Form", { -- Cancel player form
-  			"player.form > 0",  -- Is in any fom
-  			"!player.buff(20217).any", -- kings
-			"!player.buff(115921).any", -- Legacy of the Emperor
-			"!player.buff(1126).any",   -- Mark of the Wild
-			"!player.buff(90363).any",  -- embrace of the Shale Spider
-			"!player.buff(69378).any",  -- Blessing of Forgotten Kings
-  			"!player.buff(5215)" -- Not in Stealth
-  		}},
-		{ "1126", {  -- Mark of the Wild
-			"!player.buff(20217).any", -- kings
-			"!player.buff(115921).any", -- Legacy of the Emperor
-			"!player.buff(1126).any",   -- Mark of the Wild
-			"!player.buff(90363).any",  -- embrace of the Shale Spider
-			"!player.buff(69378).any",  -- Blessing of Forgotten Kings
-			"!player.buff(5215)",-- Not in Stealth
-			"player.form = 0" -- Player not in form
-		}}, 
-		{ "5487", { -- Bear Form
-  			"player.form != 1", -- Stop if bear
-  			"!modifier.lalt", -- Stop if pressing left alt
-  			"!player.buff(5215)", -- Not in Stealth
-  			(function() return NeP.Core.PeFetch('NePConfDruidGuard', 'Bear') end),
-  		}},
+local keybinds = {
+	{ "77761", "modifier.rshift" }, -- Stampeding Roar
+	{ "5211", "modifier.lcontrol" }, -- Mighty Bash
+	{ "!/focus [target=mouseover]", "modifier.ralt" }, -- Focus
+	-- Rebirth
+	{ "!/cancelform", { -- remove bear form
+		"player.form > 0", 
+		"player.spell(20484).cooldown < .001", 
+		"modifier.lshift" 
+	}}, 
+	{ "20484", { -- Rebirth
+		"modifier.lshift", 
+		"!target.alive" 
+	}, "target" }, 
+	{ "!/cast Bear Form", {  -- bear form
+		"!player.casting", "!player.form = 1", 
+		"lastcast(20484)", 
+		"modifier.lshift" 
+	}},
+}
 
-	{{-- Interrupts
-		{ "106839" }, -- Skull Bash
-		{ "5211" }, -- Mighty Bash
-	}, "target.NePinterrupt" },
-	
-	-- Items
-		{ "#5512", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Healthstone')) end) }, -- Healthstone
-		{ "#109223", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'HealingTonic')) end) }, --  Healing Tonic
-		{ "#117415", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SmuggledTonic')) end) }, --  Smuggled Tonic
-	
-	-- Cooldowns
-		{ "50334", "modifier.cooldowns" }, -- Berserk
-		{ "124974", "modifier.cooldowns" }, -- Nature's Vigil
-		{ "102558", "modifier.cooldowns" }, -- Incarnation
- 
-	--Defensive
-		{ "62606", { -- Savage Defense
-			"!player.buff", 
-			(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SavageDefense')) end) 
-		}},
-		{ "22842", { -- Frenzied Regeneration
-			"!player.buff",
-			(function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'FrenziedRegeneration')) end),
-			"player.rage >= 20"
-		}},
-		{ "22812",  (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Barkskin')) end) }, -- Barkskin
-		{ "102351",  (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'CenarionWard')) end), "player" }, -- Cenarion Ward
-		{ "61336",  (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'SurvivalInstincts')) end) }, -- Survival Instincts
-		{ "108238", (function() return NeP.Core.dynEval("player.health <= " .. NeP.Core.PeFetch('NePConfDruidGuard', 'Renewal')) end) }, -- Renewal		
+local Shared = {
+-- Buffs
+  	{ "/cancelaura Bear Form", { 	-- Cancel player form
+  		"player.form > 0",  		-- Is in any fom
+  		"!player.buff(20217).any", 	-- kings
+		"!player.buff(115921).any", -- Legacy of the Emperor
+		"!player.buff(1126).any",   -- Mark of the Wild
+		"!player.buff(90363).any",  -- embrace of the Shale Spider
+		"!player.buff(69378).any",  -- Blessing of Forgotten Kings
+  		"!player.buff(5215)" 		-- Not in Stealth
+  	}},
+	{ "1126", {  -- Mark of the Wild
+		"!player.buff(20217).any", 	-- kings
+		"!player.buff(115921).any", -- Legacy of the Emperor
+		"!player.buff(1126).any",   -- Mark of the Wild
+		"!player.buff(90363).any",  -- embrace of the Shale Spider
+		"!player.buff(69378).any",  -- Blessing of Forgotten Kings
+		"!player.buff(5215)",		-- Not in Stealth
+		"player.form = 0" 			-- Player not in form
+	}}, 
+
+}
+
+local Interrupts = {
+	{ "106839" }, -- Skull Bash
+	{ "5211" }, -- Mighty Bash
+}
+
+local Survival = {
+-- Items
+	{ "#5512", (function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'Healthstone')) end) }, -- Healthstone
+	{ "#109223", (function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'HealingTonic')) end) }, --  Healing Tonic
+	{ "#117415", (function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'SmuggledTonic')) end) }, --  Smuggled Tonic
+
+-- Def Cooldowns
+	{ "62606", { -- Savage Defense
+		"!player.buff", 
+		(function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'SavageDefense')) end) 
+	}},
+	{ "22842", { -- Frenzied Regeneration
+		"!player.buff",
+		(function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'FrenziedRegeneration')) end),
+		"player.rage >= 20"
+	}},
+	{ "22812",  (function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'Barkskin')) end) }, -- Barkskin
+	{ "102351", (function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'CenarionWard')) end), "player" }, -- Cenarion Ward
+	{ "61336",  (function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'SurvivalInstincts')) end) }, -- Survival Instincts
+	{ "108238", (function() return dynEval("player.health <= "..PeFetch('NePConfDruidGuard', 'Renewal')) end) }, -- Renewal	
 
 	-- Dream of Cenarious
-		-- Needs a Rebirth here
-		{ "5185", {  -- Healing touch /  RAID/PARTY
-			"lowest.health < 90", 
-			"!player.health < 90",
-			"player.buff(145162)" 
-		}, "lowest" },
-		{ "5185", {  -- Healing touch / PLAYER
-			"player.health < 90", 
-			"player.buff(145162)" 
-		}, "player" },
+	{ "5185", {  -- Healing touch /  RAID/PARTY
+		"lowest.health < 90", 
+		"!player.health < 90",
+		"player.buff(145162)" 
+	}, "lowest" },
+	{ "5185", {  -- Healing touch / PLAYER
+		"player.health < 90", 
+		"player.buff(145162)" 
+	}, "player" },
+}
 
-	-- Procs
-		{ "6807", "player.buff(Tooth and Claw)" }, -- Maul
+local Cooldowns = {
+	{ "50334"}, -- Berserk
+	{ "124974"}, -- Nature's Vigil
+	{ "102558"}, -- Incarnation
+}
 
-	-- Rotation
-		{ "770", { -- Faerie Fire
-			"!target.debuff(770)", 
-			"target.boss"
-		} },
-		{ "158792", { -- Pulverize
-			"target.debuff(33745).count >= 3", 
-			"player.buff(158792).duration <= 3"
-		}},
-		{ "33917" }, -- Mangle
-		-- AoE
-			{ "77758", (function() return NeP.Core.SAoE(3, 40) end) }, -- Thrash	
-		{ "77758", "target.debuff(77758).duration <= 4" }, -- Thrash
-		{ "33745" }, -- Lacerate
-  
+local inCombat = { 
+	
 }
 
 local outCombat = {
-
-	--	keybinds
-		{ "77761", "modifier.rshift" }, -- Stampeding Roar
-		{ "5211", "modifier.lcontrol" }, -- Mighty Bash
-		{ "!/focus [target=mouseover]", "modifier.ralt" }, -- Focus
-		-- Rebirth
-			{ "!/cancelform", { -- remove bear form
-				"player.form > 0", 
-				"player.spell(20484).cooldown < .001", 
-				"modifier.lshift" 
-			}}, 
-			{ "20484", { -- Rebirth
-				"modifier.lshift", 
-				"!target.alive" 
-			}, "target" }, 
-			{ "!/cast Bear Form", {  -- bear form
-				"!player.casting", "!player.form = 1", 
-				"lastcast(20484)", 
-				"modifier.lshift" 
-			}},
-		
-	-- Buffs
-  		{ "/cancelaura Bear Form", { -- Cancel player form
-  			"player.form > 0",  -- Is in any fom
-  			"!player.buff(20217).any", -- kings
-			"!player.buff(115921).any", -- Legacy of the Emperor
-			"!player.buff(1126).any",   -- Mark of the Wild
-			"!player.buff(90363).any",  -- embrace of the Shale Spider
-			"!player.buff(69378).any",  -- Blessing of Forgotten Kings
-  			"!player.buff(5215)" -- Not in Stealth
-  		}},
-		{ "1126", {  -- Mark of the Wild
-			"!player.buff(20217).any", -- kings
-			"!player.buff(115921).any", -- Legacy of the Emperor
-			"!player.buff(1126).any",   -- Mark of the Wild
-			"!player.buff(90363).any",  -- embrace of the Shale Spider
-			"!player.buff(69378).any",  -- Blessing of Forgotten Kings
-			"!player.buff(5215)",-- Not in Stealth
-			"player.form = 0" -- Player not in form
-		}}, 
-		{ "5487", { -- Bear Form
-  			"player.form != 1", -- Stop if bear
-  			"!modifier.lalt", -- Stop if pressing left alt
-  			"!player.buff(5215)", -- Not in Stealth
-  			(function() return NeP.Core.PeFetch('NePConfDruidGuard', 'BearOCC') end),
-  		}},
-
+	{keybinds},
+	{Shared}
 }
 
 ProbablyEngine.rotation.register_custom(104, NeP.Core.GetCrInfo('Druid - Guardian'), 
-	inCombat, outCombat, exeOnLoad)
+	{ -- Incombat
+		{keybinds},
+		{Shared},
+		{Survival, 'player.health < 100'},
+		-- Bear Form
+		{ "5487", { 
+	  		"player.form != 1", 	-- Stop if bear
+	  		"!player.buff(5215)", 	-- Not in Stealth
+	  		(function() return PeFetch('NePConfDruidGuard', 'Bear') end),
+	  	}},	
+		{Interrupts, "target.NePinterrupt"},
+		{Cooldowns, 'modifier.cooldowns'},
+		{inCombat}
+	}, outCombat, exeOnLoad)
