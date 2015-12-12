@@ -12,20 +12,24 @@ NeP.Core.BuildGUI('omSettings', {
     subtitle = "ObjectManager Settings",
     color = addonColor,
     width = 210,
-    height = 350,
+    height = 250,
     config = {
-    	{ type = 'header', text = '|cff'..addonColor.."Cache Options:", size = 25, align = "Center", offset = 0 },
-		{ type = 'rule' },
+    	-- Status
+		{ type = 'text', text = '|cff'..addonColor.."Status", size = 17, align = "Center", offset = 0 },
 		{ type = 'spacer' },
-			{ type = "checkbox", text = "Use Advanced Object Manager:", key = "aOM", default = true },
-			{ type = "spinner", text = "Cache Distance:", key = "CD", width = 90, min = 10, max = 200, default = 100, step = 5},
-
-			{ type = "text", text = "Enemie Units Cached: ", size = 11, offset = -11 },
+	    	-- Friendly Objs counter
+	    	{ type = "text", text = '|cff'..addonColor.."Friendly Units Cached: ", size = 11, offset = -11 },
+			{ key = 'fObjs', type = "text", text = "...", size = 11, align = "right", offset = 0 },
+			-- Enemie Objs counter
+			{ type = "text", text = '|cff'..addonColor.."Enemie Units Cached: ", size = 11, offset = -11 },
 			{ key = 'eObjs', type = "text", text = "...", size = 11, align = "right", offset = 0 },
 
-			{ type = "text", text = "Friendly Units Cached: ", size = 11, offset = -11 },
-			{ key = 'fObjs', type = "text", text = "...", size = 11, align = "right", offset = 0 },
-
+		-- Settings
+    	{ type = 'spacer' },{ type = 'rule' },
+    	{ type = 'text', text = '|cff'..addonColor.."Settings", size = 17, align = "Center", offset = 0 },
+    	{ type = 'spacer' },
+			{ type = "checkbox", text = "Use Advanced Object Manager:", key = "aOM", default = true },
+			{ type = "spinner", text = "Cache Distance:", key = "CD", width = 90, min = 10, max = 200, default = 100, step = 5},
 			--{ type = "button", text = "Objects List", width = 190, height = 20, callback = function() NeP.Interface.OMGUI() end },
     }
 })
