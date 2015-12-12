@@ -208,6 +208,15 @@ local function isDummy(Obj)
 	return TrackedDummys[tonumber(ObjID)] ~= nil
 end
 
+local Classifications = {
+	['minus'] 		= 1,
+	['normal'] 		= 2,
+	['elite' ]		= 3,
+	['rare'] 		= 4,
+	['rareelite' ]	= 5,
+	['worldboss' ]	= 6,
+}
+
 --[[
 	DESC: Places the object in its correct place.
 	This is done in a seperate function so we dont have
@@ -222,7 +231,7 @@ local function addToOM(Obj)
 					key = Obj,
 					name = UnitName(Obj),
 					distance = objectDistance('player', Obj),
-					class = UnitClassification(Obj),
+					class = Classifications[tostring(UnitClassification(Obj))],
 					is = 'friendly'
 				}
 			-- Enemie
@@ -231,7 +240,7 @@ local function addToOM(Obj)
 					key = Obj,
 					name = UnitName(Obj),
 					distance = objectDistance('player', Obj),
-					class = UnitClassification(Obj),
+					class = Classifications[tostring(UnitClassification(Obj))],
 					is = isDummy(Obj) and 'dummy' or 'enemie'
 				}
 			end

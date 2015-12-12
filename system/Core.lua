@@ -305,60 +305,51 @@ function NeP.Core.Dispel(Spell)
 	return false
 end
 
---[[
-Usage:
-NeP.Core.AutoDots(Spell, Health, Duration, Distance, Classification)
-
-Classifications:
-	elite - Elite
-	minus - Minion of another NPC; does not give experience or reputation.
-	normal - Normal
-	rare - Rare
-	rareelite - Rare-Elite
-	worldboss - World Boss
-	all - All Units
-]]
 function NeP.Core.AutoDots(Spell, refreshAt)
 	-- Check if we have the spell before anything else...
 	if not IsUsableSpell(Spell) then return false end
+	local Spellname, Spellrank, Spellicon, SpellcastingTime, SpellminRange, SpellmaxRange, SpellID = GetSpellInfo(Spell)
+	local SpellcastingTime = SpellcastingTime * 0.001
 	-- If toggle is enabled, do automated
 	if peConfig.read('button_states', 'NeP_ADots', false) then
-		-- So we dont need to fill everything
-		if refreshAt == nil then refreshAt = 1.5 end
-		if Classification == nil then Classification = 'elite' end
-		local Spellname, Spellrank, Spellicon, SpellcastingTime, SpellminRange, SpellmaxRange, SpellID = GetSpellInfo(Spell)
-		local SpellcastingTime = SpellcastingTime * 0.001
 		-- Iterate thru OM
 		for i=1,#NeP.OM.unitEnemie do
 			local Obj = NeP.OM.unitEnemie[i]
-			-- Make sure we should attack it
-			if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then	
+			-- Affecting combat or Dummy and is elite or above
+			if (UnitAffectingCombat(Obj.key) or Obj.is == 'dummy') and Obj.class >= 3 then	
 				-- Sanity checks
 				if UnitCanAttack('player', Obj.key)
 				and NeP.Core.Infront('player', Obj.key)
 				and IsSpellInRange(Spellname, Obj.key)then
-					-- Choose who to allow casting on
-					if UnitClassification(Obj.key) == Classification 
-					or ((Classification == 'elite' and NeP_isElite(Obj.key)) 
-					or Classification == 'all') then
-						-- Do we have the debuff and is it expiring?
-						local _,_,_,_,_,_,debuffDuration = UnitDebuff(Obj.key, Spellname, nil, 'PLAYER')
-						if not debuffDuration or  - GetTime() < refreshAt then
-							-- Dont cast if the targedebuffDurationt is going to die
-							if debuffDuration == nil then debuffDuration = 15 end
-							if ProbablyEngine.condition['ttd'](Obj.key) > (debuffDuration + SpellcastingTime) then
-								-- set PEs parsed Target and return true
-								ProbablyEngine.dsl.parsedTarget = Obj.key
-								return true
-							end
+					-- Do we have the debuff and is it expiring?
+					local _,_,_,_,_,_,debuffDuration = UnitDebuff(Obj.key, Spellname, nil, 'PLAYER')
+					if not debuffDuration or  - GetTime() < refreshAt then
+						-- Dont cast if the targedebuffDurationt is going to die
+						-- FIXME: Add a proper TTD
+						if debuffDuration == nil then debuffDuration = 0 end
+						if ProbablyEngine.condition['ttd'](Obj.key) > (debuffDuration + SpellcastingTime) then
+							-- set PEs parsed Target and return true
+							ProbablyEngine.dsl.parsedTarget = Obj.key
+							return true
 						end
 					end
 				end
 			end
 		end
+	else
+		-- Fallback to PEs
+		local _,_,_,_,_,_,debuffDuration = UnitDebuff('target', Spellname, nil, 'PLAYER')
+		if not debuffDuration or  - GetTime() < refreshAt then
+			if debuffDuration == nil then debuffDuration = 0 end
+			if IsSpellInRange(Spellname, 'target')
+			and NeP.Core.Infront('player', 'target')
+			-- FIXME: Add a proper TTD
+			and ProbablyEngine.condition['ttd']('target') > (debuffDuration + SpellcastingTime) then
+				return true
+			end
+		end
 	end
-	-- Fallbacl to PEs
-	return not ProbablyEngine.condition['debuff']('target', Spell)
+	return false
 end
 
 --[[-----------------------------------------------
