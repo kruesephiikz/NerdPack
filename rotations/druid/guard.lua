@@ -141,8 +141,28 @@ local Cooldowns = {
 	{ "102558"}, -- Incarnation
 }
 
-local inCombat = { 
-	
+local inCombat = {
+	-- Trash (AOE)
+	{ 'Thrash', (function() return NeP.Core.SAoE(3, 8) end)},
+	-- Growl (Taunt)
+	{'Growl', (function() return NeP.Core.canTaunt() end)},
+	-- Use Mangle on cooldown (its cooldown has a chance to be reset by Lacerate, so you need to watch out for this).
+	{'Mangle'},
+	-- Use Lacerate until it has 3 stacks on the target.
+	{ 'Lacerate', '!target.debuff(Lacerate).count > 3' }, -- Lacerate
+	-- Use Pulverize (consuming the Lacerate stacks).
+	{'Pulverize'},
+	-- Keep up the Thrash bleed (lasts 16 seconds).
+	{'Thrash', '!target.debuff(Thrash)'},
+	-- Use Maul only when
+		--* you are under the effect of a Tooth and Claw proc;
+		{'Maul', 'player.buff(Tooth and Claw)'},
+	 	--* you are at or very close to maximum Rage;
+	 	{'Maul', 'player.rage >= 80'},
+		--* you do not need to use your active mitigation.
+			-- FIXME: TODO
+	-- Re-stack Lacerate to 3 before the 12-second buff from Pulverize expires.
+	{ 'Lacerate' },
 }
 
 local outCombat = {
