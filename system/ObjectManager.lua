@@ -30,7 +30,7 @@ NeP.Core.BuildGUI('omSettings', {
     	{ type = 'spacer' },
 			{ type = "checkbox", text = "Use Advanced Object Manager:", key = "aOM", default = true },
 			{ type = "spinner", text = "Cache Distance:", key = "CD", width = 90, min = 10, max = 200, default = 100, step = 5},
-			--{ type = "button", text = "Objects List", width = 190, height = 20, callback = function() NeP.Interface.OMGUI() end },
+			{ type = "button", text = "Objects List", width = 190, height = 20, callback = function() NeP_OMLIST:Show() end },
     }
 })
 

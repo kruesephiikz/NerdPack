@@ -787,6 +787,7 @@ LoadNePData:SetScript('OnEvent', function(self, event, addon)
 		wich depends on NePData gets loaded too early.
 	]]
 	StatusGUI_RUN()
+	OMGUI_RUN()
 
 	--[[
 		PE's Overwrites.
