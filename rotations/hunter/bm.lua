@@ -104,7 +104,7 @@ local Survival = {
 
 local AoE = {
 	--Cast Multi-Shot, as often as needed to keep up the Beast Cleave buff on your pet.
-	{'Multi-Shot', 'player.focus > 60'},
+	{'2643', 'player.focus > 60'},
 	--Use Barrage.
 	{'Barrage'},
 	--Use Explosive Trap.
@@ -121,17 +121,17 @@ local inCombat = {
 	-- AoE
 	{AoE, (function() return NeP.Core.SAoE(3, 40) end)},
 	--Cast Kill Command.
-	{'Kill Command', 'pet.exists'},
+	{'34026', 'pet.exists'},
 	--Cast Kill Shot,Only available when the target is below 20% health.
 	{'Kill Shot', (function() return NeP.Core.AutoDots('Kill Shot', 0, 35) end)},
 	--Use Barrage, if you have taken this talent.
 	{'Barrage'},
 	--Cast Arcane Shot to dump any excess Focus.
-	{'Arcane Shot', 'player.focus >= 80'},
+	{'3044', 'player.focus >= 80'},
 	--Cast Cobra Shot to generate Focus.
 	{'Cobra Shot'},
 	-- Steady Shot for low lvl's
-	{'Steady Shot'},
+	{'56641'},
 }
 
 local Interrupts = {
