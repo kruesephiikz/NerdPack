@@ -291,7 +291,7 @@ local function SetWantedObj(Obj)
 end
 
 local function ObjectIsNear()
-	local totalObjects = #NeP.OM.GameObjects
+	local totalObjects = NeP.OM.GameObjects
 	for i=1, totalObjects do
 		local Obj = totalObjects[i]
 		if UnitGUID (Obj.key) ~= nil and ObjectExists(Obj.key) then
@@ -433,7 +433,7 @@ LibDraw.Sync(function()
 		
 		-- draw Objects (Ores/Herbs/LM)
 		if PeFetch('GatherBot', 'drawObjs') then
-			local totalObjects = #NeP.OM.GameObjects
+			local totalObjects = NeP.OM.GameObjects
 			for i=1, #totalObjects do
 				local Obj = totalObjects[i]
 				if UnitGUID(Obj.key) ~= nil and ObjectExists(Obj.key) then
