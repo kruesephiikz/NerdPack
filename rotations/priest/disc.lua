@@ -182,25 +182,25 @@ local Keybinds = {
 }
 
 local Tank = {
-	{'47540', (function() return dynEval('tank.health < ' .. PeFetch('NePconfPriestDisc', 'PenanceTank')) end), 'tank'}, -- Penance
+	{'47540', (function() return dynEval('tank.health < '..PeFetch('NePconfPriestDisc', 'PenanceTank')) end), 'tank'}, -- Penance
 	{'17', { --Power Word: Shield
-		(function() return dynEval('tank.health < ' .. PeFetch('NePconfPriestDisc', 'PowerShieldTank')) end),
+		(function() return dynEval('tank.health < '..PeFetch('NePconfPriestDisc', 'PowerShieldTank')) end),
 		'!focus.debuff(6788).any', 
 		'!focus.buff(17).any',
 	}, 'focus'},
-	{'2061', (function() return dynEval('tank.health < ' .. PeFetch('NePconfPriestDisc', 'FlashHealTank')) end), 'tank'}, --Flash Heal
-	{'2060', (function() return dynEval('tank.health < ' .. PeFetch('NePconfPriestDisc', 'HealTank')) end), 'tank'}, -- Heal
+	{'2061', (function() return dynEval('tank.health < '..PeFetch('NePconfPriestDisc', 'FlashHealTank')) end), 'tank'}, --Flash Heal
+	{'2060', (function() return dynEval('tank.health < '..PeFetch('NePconfPriestDisc', 'HealTank')) end), 'tank'}, -- Heal
 }
 
 local Focus = {
-	{'47540', (function() return dynEval('focus.health < ' .. PeFetch('NePconfPriestDisc', 'PenanceTank')) end), 'focus'}, -- Penance
+	{'47540', (function() return dynEval('focus.health < '..PeFetch('NePconfPriestDisc', 'PenanceTank')) end), 'focus'}, -- Penance
 	{'17', { --Power Word: Shield
-		(function() return dynEval('focus.health < ' .. PeFetch('NePconfPriestDisc', 'PowerShieldTank')) end),
+		(function() return dynEval('focus.health < '..PeFetch('NePconfPriestDisc', 'PowerShieldTank')) end),
 		'!focus.debuff(6788).any', 
 		'!focus.buff(17).any',
 	}, 'focus'},
-	{'2061', (function() return dynEval('focus.health < ' .. PeFetch('NePconfPriestDisc', 'FlashHealTank')) end), 'focus'}, --Flash Heal
-	{'2060', (function() return dynEval('focus.health < ' .. PeFetch('NePconfPriestDisc', 'HealTank')) end), 'focus'}, -- Heal
+	{'2061', (function() return dynEval('focus.health < '..PeFetch('NePconfPriestDisc', 'FlashHealTank')) end), 'focus'}, --Flash Heal
+	{'2060', (function() return dynEval('focus.health < '..PeFetch('NePconfPriestDisc', 'HealTank')) end), 'focus'}, -- Heal
 }
 
 local Player = {
@@ -212,26 +212,26 @@ local Player = {
 	{'34433', 'player.mana < 85', 'target'}, -- Shadowfiend
 	
 	-- Heals
-	{'47540', (function() return dynEval('player.health < ' .. PeFetch('NePconfPriestDisc', 'PenancePlayer')) end), 'player'}, -- Penance
+	{'47540', (function() return dynEval('player.health < '..PeFetch('NePconfPriestDisc', 'PenancePlayer')) end), 'player'}, -- Penance
 	{'17', { --Power Word: Shield
-		(function() return dynEval('player.health < ' .. PeFetch('NePconfPriestDisc', 'PowerShieldPlayer')) end),
+		(function() return dynEval('player.health < '..PeFetch('NePconfPriestDisc', 'PowerShieldPlayer')) end),
 		'!player.debuff(6788).any', 
 		'!player.buff(17).any',
 	}, 'player'},
-	{'2061', (function() return dynEval('player.health < ' .. PeFetch('NePconfPriestDisc', 'FlashHealPlayer')) end), 'player'}, --Flash Heal
-	{'2060', (function() return dynEval('player.health < ' .. PeFetch('NePconfPriestDisc', 'HealPlayer')) end), 'player'}, -- Heal
+	{'2061', (function() return dynEval('player.health < '..PeFetch('NePconfPriestDisc', 'FlashHealPlayer')) end), 'player'}, --Flash Heal
+	{'2060', (function() return dynEval('player.health < '..PeFetch('NePconfPriestDisc', 'HealPlayer')) end), 'player'}, -- Heal
 }
 
 local Raid = {
-	{'47540', (function() return dynEval('lowest.health < ' .. PeFetch('NePconfPriestDisc', 'PenanceRaid')) end), 'lowest'}, -- Penance
+	{'47540', (function() return dynEval('lowest.health < '..PeFetch('NePconfPriestDisc', 'PenanceRaid')) end), 'lowest'}, -- Penance
 	{'17', { --Power Word: Shield
-		(function() return dynEval('lowest.health < ' .. PeFetch('NePconfPriestDisc', 'PowerShieldRaid')) end),
+		(function() return dynEval('lowest.health < '..PeFetch('NePconfPriestDisc', 'PowerShieldRaid')) end),
 		'!lowest.debuff(6788).any', 
 		'!lowest.buff(17).any',
 	}, 'lowest'},
-	{'2061', (function() return dynEval('lowest.health < ' .. PeFetch('NePconfPriestDisc', 'FlashHealRaid')) end), 'lowest'}, --Flash Heal
+	{'2061', (function() return dynEval('lowest.health < '..PeFetch('NePconfPriestDisc', 'FlashHealRaid')) end), 'lowest'}, --Flash Heal
 	{'2060', {-- Heal
-		(function() return dynEval('lowest.health < ' .. PeFetch('NePconfPriestDisc', 'HealRaid')) end),
+		(function() return dynEval('lowest.health < '..PeFetch('NePconfPriestDisc', 'HealRaid')) end),
 		'!player.moving'
 	}, 'lowest'}, 
 }
@@ -291,31 +291,31 @@ local SpiritShell = {
 local ClarityOfWill = {
 	-- tank
 	{'152118', {-- Clarity of Will
-		(function() return dynEval('tank.health <= ' .. PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
+		(function() return dynEval('tank.health <= '..PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
 		'!tank.buff(152118).any'	
 	}, 'tank'},
 	-- focus
 	{'152118', {-- Clarity of Will
-		(function() return dynEval('focus.health <= ' .. PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
+		(function() return dynEval('focus.health <= '..PeFetch('NePconfPriestDisc', 'ClarityofWillTank')) end),
 		'!focus.buff(152118).any'	
 	}, 'focus'},
 	-- player
 	{'152118', {-- Clarity of Will
-		(function() return dynEval('player.health <= ' .. PeFetch('NePconfPriestDisc', 'ClarityofWillPlayer')) end),
+		(function() return dynEval('player.health <= '..PeFetch('NePconfPriestDisc', 'ClarityofWillPlayer')) end),
 		'!player.buff(152118).any'	
 	}, 'player'},
 	-- raid
 	{'152118', {-- Clarity of Will
-		(function() return dynEval('lowest.health <= ' .. PeFetch('NePconfPriestDisc', 'ClarityofWillRaid')) end),
+		(function() return dynEval('lowest.health <= '..PeFetch('NePconfPriestDisc', 'ClarityofWillRaid')) end),
 		'!lowest.buff(152118).any'		
 	}, 'lowest'},
 }
 
 local SavingGrace = {
-	{'!152116', (function() return dynEval('tank.health <= ' .. PeFetch('NePconfPriestDisc', 'SavingGrace')) end), 'tank'}, -- Saving Grace
-	{'!152116', (function() return dynEval('focus.health <= ' .. PeFetch('NePconfPriestDisc', 'SavingGrace')) end), 'lowest'}, -- Saving Grace
-	{'!152116', (function() return dynEval('player.health <= ' .. PeFetch('NePconfPriestDisc', 'SavingGrace')) end), 'lowest'}, -- Saving Grace
-	{'!152116', (function() return dynEval('lowest.health <= ' .. PeFetch('NePconfPriestDisc', 'SavingGrace')) end), 'lowest'}, -- Saving Grace
+	{'!152116', (function() return dynEval('tank.health <= '..PeFetch('NePconfPriestDisc', 'SavingGrace')) end), 'tank'}, -- Saving Grace
+	{'!152116', (function() return dynEval('focus.health <= '..PeFetch('NePconfPriestDisc', 'SavingGrace')) end), 'lowest'}, -- Saving Grace
+	{'!152116', (function() return dynEval('player.health <= '..PeFetch('NePconfPriestDisc', 'SavingGrace')) end), 'lowest'}, -- Saving Grace
+	{'!152116', (function() return dynEval('lowest.health <= '..PeFetch('NePconfPriestDisc', 'SavingGrace')) end), 'lowest'}, -- Saving Grace
 }
 
 local Cooldowns = {
@@ -334,30 +334,30 @@ local PainSuppression = {
 		{{-- ALL
 		{'33206', {
 			(function() return PeFetch('NePconfPriestDisc', 'PainSuppression') == 'Focus' end),
-			(function() return dynEval('focus.health <= ' .. PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+			(function() return dynEval('focus.health <= '..PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
 		}, 'focus'},
 		{'33206', {
 			(function() return PeFetch('NePconfPriestDisc', 'PainSuppression') == 'Tank' end),
-			(function() return dynEval('tank.health <= ' .. PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+			(function() return dynEval('tank.health <= '..PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
 		}, 'tank'},
 		{'33206', {
 			(function() return PeFetch('NePconfPriestDisc', 'PainSuppression') == 'Lowest' end),
-			(function() return dynEval('lowest.health <= ' .. PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
+			(function() return dynEval('lowest.health <= '..PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end)
 		}, 'lowest'},
 	}, (function() return PeFetch('NePconfPriestDisc', 'PainSuppressionTG') == 'Allways' end)},
 
 	{{-- Boss
 		{'33206', {
 			(function() return PeFetch('NePconfPriestDisc', 'PainSuppression') == 'Focus' end),
-			(function() return dynEval('focus.health <= ' .. PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+			(function() return dynEval('focus.health <= '..PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
 		}, 'focus'},
 		{'33206', {
 			(function() return PeFetch('NePconfPriestDisc', 'PainSuppression') == 'Tank' end),
-			(function() return dynEval('tank.health <= ' .. PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+			(function() return dynEval('tank.health <= '..PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
 		}, 'tank'},
 		{'33206', {
 			(function() return PeFetch('NePconfPriestDisc', 'PainSuppression') == 'Lowest' end),
-			(function() return dynEval('lowest.health <= ' .. PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
+			(function() return dynEval('lowest.health <= '..PeFetch('NePconfPriestDisc', 'PainSuppressionHP')) end),
 		}, 'lowest'},
 	}, {'target.boss', (function() return PeFetch('NePconfPriestDisc', 'PainSuppressionTG') == 'Boss' end)}}
 }
@@ -431,7 +431,7 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 		 		{BorrowedTime, 'player.buff(59889).duration <= 2'}, -- BorrowedTime // Passive Buff
 		 		{SpiritShell, 'player.buff(109964)'}, -- SpiritShell // Talent
 				{HealFast, {
-					(function() return dynEval('lowest.health <= ' .. PeFetch('NePconfPriestDisc', 'FastHeals')) end),
+					(function() return dynEval('lowest.health <= '..PeFetch('NePconfPriestDisc', 'FastHeals')) end),
 					'!player.casting.percent >= 40', 
 				}},
 				{Cooldowns, 'modifier.cooldowns'},
@@ -442,7 +442,7 @@ ProbablyEngine.rotation.register_custom(256, NeP.Core.GetCrInfo('Priest - Discip
 					'target.range < 30'
 				}},
 				{Attonement, {
-					(function() return dynEval('lowest.health >= ' .. PeFetch('NePconfPriestDisc', 'Attonement')) end), 
+					(function() return dynEval('lowest.health >= '..PeFetch('NePconfPriestDisc', 'Attonement')) end), 
 					'!player.buff(81661).count = 5', 
 					'!player.mana <= 20', 
 					'target.range < 30'
