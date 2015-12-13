@@ -291,34 +291,32 @@ local function SetWantedObj(Obj)
 end
 
 local function ObjectIsNear()
-	local totalObjects = ObjectCount()
+	local totalObjects = #NeP.OM.GameObjects
 	for i=1, totalObjects do
-		local Obj = ObjectWithIndex(i)
-		if UnitGUID (Obj) ~= nil and ObjectExists(Obj) then
-			if ObjectIsType(Obj, ObjectTypes.GameObject) then
-				local _,_,_,_,_,ObjID = strsplit('-', UnitGUID(Obj) or '0')
-				-- If the profile wants all known ores.
-				if currentRoute[1].ids['ores'] then
-					if objOre[tonumber(ObjID)] then
-						SetWantedObj(Obj)
-						return true
-					end
-				-- If the profile wants all known herbs.
-				elseif currentRoute[1].ids['herbs'] then
-					if objHerb[tonumber(ObjID)] then
-						SetWantedObj(Obj)
-						return true
-					end
-				-- If the profile is looking for specific IDs.
-				--[[FIXME:
-				else
-					for k=1,#currentRoute[1].ids do
-						if currentRoute[k].ids[tonumber(ObjID)] ~= nil then
-							SetWantedObj(Obj)
-							return true
-						end
-					end]]
+		local Obj = totalObjects[i]
+		if UnitGUID (Obj.key) ~= nil and ObjectExists(Obj.key) then
+			local ObjID = Obj.id
+			-- If the profile wants all known ores.
+			if currentRoute[1].ids['ores'] then
+				if objOre[tonumber(Obj.key)] then
+					SetWantedObj(Obj.key)
+					return true
 				end
+			-- If the profile wants all known herbs.
+			elseif currentRoute[1].ids['herbs'] then
+				if objHerb[tonumber(ObjID)] then
+					SetWantedObj(Obj.key)
+					return true
+				end
+			-- If the profile is looking for specific IDs.
+			--[[FIXME:
+			else
+				for k=1,#currentRoute[1].ids do
+					if currentRoute[k].ids[tonumber(ObjID)] ~= nil then
+						SetWantedObj(Obj.key)
+						return true
+					end
+				end]]
 			end
 		end
 	end
@@ -435,18 +433,18 @@ LibDraw.Sync(function()
 		
 		-- draw Objects (Ores/Herbs/LM)
 		if PeFetch('GatherBot', 'drawObjs') then
-			for i=1, ObjectCount() do
-				local Obj = ObjectWithIndex(i)
-				if UnitGUID(Obj) ~= nil and ObjectExists(Obj) then
-					if ObjectIsType(Obj, ObjectTypes.GameObject) then
-						local oX, oY, oZ = ObjectPosition(Obj)
-						local distance = pathDistance(oX, oY, oZ)
-						local name = ObjectName(Obj)
-						local objectType, _, _, _, _, _id, _ = strsplit("-", UnitGUID(Obj))
-						local ID = tonumber(_id) or '0'
+			local totalObjects = #NeP.OM.GameObjects
+			for i=1, #totalObjects do
+				local Obj = totalObjects[i]
+				if UnitGUID(Obj.key) ~= nil and ObjectExists(Obj.key) then
+						local oX, oY, oZ = ObjectPosition(Obj.key)
+						local distance = NeP.Core.Round(Obj.distance)
+						local name = Obj.name
+						local ID = Obj.id
 						local _text = addonColor..name.."|r\n"..distance..' yards'
+						-- Debug
 						if PeFetch('GatherBot', 'debugAllObjsIDs') then
-							LibDraw.Text(addonColor..name..'|r ID:'..ID, "SystemFont_Tiny", oX, oY, oZ+1)
+							LibDraw.Text(addonColor..name..'|r ID:'..ID..'\n Distance: '..distance, "SystemFont_Tiny", oX, oY, oZ+1)
 						end
 						-- Lumbermill
 						if objLM[ID] ~= nil then
@@ -465,7 +463,6 @@ LibDraw.Sync(function()
 							drawObj('fish', oX, oY, oZ, distance)
 							LibDraw.Text(_text, "SystemFont_Tiny", oX, oY, oZ+1)
 						end
-					end
 				end
 			end
 		end

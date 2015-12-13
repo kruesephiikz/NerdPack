@@ -1,6 +1,7 @@
 NeP.OM = {
 	unitEnemie = {},
 	unitFriend = {},
+	GameObjects = {}
 }
 
 local addonColor = NeP.Interface.addonColor;
@@ -44,51 +45,69 @@ local InfoWindow = NeP.Core.getGUI('omSettings')
 local TempOM = {
 	unitEnemie = {},
 	unitFriend = {},
+	GameObjects = {}
 }
 
 -- Refresh OM
 C_Timer.NewTicker(0.25, (function()
-	-- Wipe Cache
-	wipe(NeP.OM.unitEnemie)
-	wipe(NeP.OM.unitFriend)
-	--Refresh Enemine
-	for i=1,#TempOM.unitEnemie do
-		local Obj = TempOM.unitEnemie[i]
-		if FireHack and ObjectExists(Obj.key) or not FireHack and UnitExists(Obj.key) then
-			NeP.OM.unitEnemie[#NeP.OM.unitEnemie+1] = {
-				key = Obj.key,
-				name = Obj.Name,
-				is = Obj.is,
-				class = Obj.class,
-				distance = objectDistance('player', Obj.key),
-				health = math.floor((UnitHealth(Obj.key) / UnitHealthMax(Obj.key)) * 100), 
-				maxHealth = UnitHealthMax(Obj.key), 
-				actualHealth = UnitHealth(Obj.key), 
-				name = UnitName(Obj.key)
-			}
+	-- Make sure we're running
+	if NeP.Core.CurrentCR and peConfig.read('button_states', 'MasterToggle', false) then
+		-- Wipe Cache
+		wipe(NeP.OM.unitEnemie)
+		wipe(NeP.OM.unitFriend)
+		wipe(NeP.OM.GameObjects)
+		--Refresh Enemine
+		for i=1,#TempOM.unitEnemie do
+			local Obj = TempOM.unitEnemie[i]
+			if FireHack and ObjectExists(Obj.key) or not FireHack and UnitExists(Obj.key) then
+				NeP.OM.unitEnemie[#NeP.OM.unitEnemie+1] = {
+					key = Obj.key,
+					name = Obj.name,
+					is = Obj.is,
+					class = Obj.class,
+					distance = objectDistance('player', Obj.key),
+					health = math.floor((UnitHealth(Obj.key) / UnitHealthMax(Obj.key)) * 100), 
+					maxHealth = UnitHealthMax(Obj.key), 
+					actualHealth = UnitHealth(Obj.key), 
+				}
+			end
 		end
-	end
-	--Refresh Friendly
-	for i=1,#TempOM.unitFriend do
-		local Obj = TempOM.unitFriend[i]
-		if FireHack and ObjectExists(Obj.key) or not FireHack and UnitExists(Obj.key) then
-			NeP.OM.unitFriend[#NeP.OM.unitFriend+1] = {
-				key = Obj.key,
-				name = Obj.Name,
-				is = Obj.is,
-				class = Obj.class,
-				distance = objectDistance('player', Obj.key),
-				health = math.floor((UnitHealth(Obj.key) / UnitHealthMax(Obj.key)) * 100), 
-				maxHealth = UnitHealthMax(Obj.key), 
-				actualHealth = UnitHealth(Obj.key), 
-				name = UnitName(Obj.key)
-			}
+		--Refresh Friendly
+		for i=1,#TempOM.unitFriend do
+			local Obj = TempOM.unitFriend[i]
+			if FireHack and ObjectExists(Obj.key) or not FireHack and UnitExists(Obj.key) then
+				NeP.OM.unitFriend[#NeP.OM.unitFriend+1] = {
+					key = Obj.key,
+					name = Obj.name,
+					is = Obj.is,
+					class = Obj.class,
+					distance = objectDistance('player', Obj.key),
+					health = math.floor((UnitHealth(Obj.key) / UnitHealthMax(Obj.key)) * 100), 
+					maxHealth = UnitHealthMax(Obj.key), 
+					actualHealth = UnitHealth(Obj.key), 
+				}
+			end
 		end
-	end
-	-- Update UI info
-	if InfoWindow.parent:IsShown() then
-		InfoWindow.elements.eObjs:SetText(#NeP.OM.unitEnemie)
-		InfoWindow.elements.fObjs:SetText(#NeP.OM.unitFriend)
+		--Refresh Objects
+		for i=1,#TempOM.GameObjects do
+			local Obj = TempOM.GameObjects[i]
+			local objectType, _, _, _, _, _id, _ = strsplit("-", UnitGUID(Obj.key))
+			local ID = tonumber(_id) or '0'
+			if FireHack and ObjectExists(Obj.key) or not FireHack and UnitExists(Obj.key) then
+				NeP.OM.GameObjects[#NeP.OM.GameObjects+1] = {
+					key = Obj.key,
+					name = Obj.name,
+					is = Obj.is,
+					id = ID,
+					distance = objectDistance('player', Obj.key),
+				}
+			end
+		end
+		-- Update UI info
+		if InfoWindow.parent:IsShown() then
+			InfoWindow.elements.eObjs:SetText(#NeP.OM.unitEnemie)
+			InfoWindow.elements.fObjs:SetText(#NeP.OM.unitFriend)
+		end
 	end
 end), nil)
 
@@ -223,25 +242,33 @@ local Classifications = {
 	to repeate code over and over again for all unlockers.
 ---------------------------------------------------]]
 local function addToOM(Obj)
-	if not BlacklistedObject(Obj) and ProbablyEngine.condition['alive'](Obj) then
+	if not BlacklistedObject(Obj) then
 		if not BlacklistedDebuffs(Obj) then
 			-- Friendly
-			if UnitIsFriend('player', Obj) then
+			if UnitIsFriend('player', Obj) and ProbablyEngine.condition['alive'](Obj) then
 				TempOM.unitFriend[#TempOM.unitFriend+1] = {
 					key = Obj,
 					name = UnitName(Obj),
-					distance = objectDistance('player', Obj),
 					class = Classifications[tostring(UnitClassification(Obj))],
+					distance = objectDistance('player', Obj),
 					is = 'friendly'
 				}
 			-- Enemie
-			elseif UnitCanAttack('player', Obj) then
+			elseif UnitCanAttack('player', Obj) and ProbablyEngine.condition['alive'](Obj) then
 				TempOM.unitEnemie[#TempOM.unitEnemie+1] = {
 					key = Obj,
 					name = UnitName(Obj),
-					distance = objectDistance('player', Obj),
 					class = Classifications[tostring(UnitClassification(Obj))],
+					distance = objectDistance('player', Obj),
 					is = isDummy(Obj) and 'dummy' or 'enemie'
+				}
+			-- Object
+			elseif FireHack and ObjectIsType(Obj, ObjectTypes.GameObject) then
+				TempOM.GameObjects[#TempOM.GameObjects+1] = {
+					key = Obj,
+					name = UnitName(Obj) or '',
+					distance = objectDistance('player', Obj),
+					is = 'object'
 				}
 			end
 		end
@@ -253,7 +280,7 @@ local function NeP_FireHackOM()
 	for i=1, totalObjects do
 		local Obj = ObjectWithIndex(i)
 		if UnitGUID(Obj) ~= nil and ObjectExists(Obj) then
-			if ObjectIsType(Obj, ObjectTypes.Unit) then
+			if ObjectIsType(Obj, ObjectTypes.Unit) or ObjectIsType(Obj, ObjectTypes.GameObject) then
 				local ObjDistance = objectDistance('player', Obj)
 				if ObjDistance <= (NeP.Core.PeFetch('ObjectCache', 'CD') or 100) then
 					addToOM(Obj)
@@ -344,6 +371,7 @@ C_Timer.NewTicker(1, (function()
 	-- Wipe Cache
 	wipe(TempOM.unitEnemie)
 	wipe(TempOM.unitFriend)
+	wipe(TempOM.GameObjects)
 	-- Make sure we're running
 	if NeP.Core.CurrentCR and peConfig.read('button_states', 'MasterToggle', false) then
 		-- Master Toggle
@@ -359,5 +387,6 @@ C_Timer.NewTicker(1, (function()
 		-- Sort by distance
 		table.sort(TempOM.unitEnemie, function(a,b) return a.distance < b.distance end)
 		table.sort(TempOM.unitFriend, function(a,b) return a.distance < b.distance end)
+		table.sort(TempOM.GameObjects, function(a,b) return a.distance < b.distance end)
 	end
 end), nil)
