@@ -72,16 +72,16 @@ local _Cooldowns = {
 
 local _Survival = {
 	{'Healing Surge', { 
-		(function() return dynEval('player.health <= ' .. PeFetch('NePConfShamanEle', 'healingsurge_spin')) end), 
+		(function() return dynEval('player.health <= '..PeFetch('NePConfShamanEle', 'healingsurge_spin')) end), 
 		(function() return PeFetch('NePConfShamanEle', 'healingsurge_check') end) 
 	}},
 	{'Healing Stream Totem', { 
 		'!player.totem(Healing Stream Totem)', 
-		(function() return dynEval('player.health <= ' .. PeFetch('NePConfShamanEle', 'healingstreamtotem_spin')) end), 
+		(function() return dynEval('player.health <= '..PeFetch('NePConfShamanEle', 'healingstreamtotem_spin')) end), 
 		(function() return PeFetch('NePConfShamanEle', 'healingstreamtotem_check') end) 
 	}},
 	{'#5512', {-- Healthstone (5512)
-		(function() return dynEval('player.health <= ' .. PeFetch('NePConfShamanEle', 'healthstone_spin')) end), 
+		(function() return dynEval('player.health <= '..PeFetch('NePConfShamanEle', 'healthstone_spin')) end), 
 		(function() return PeFetch('NePConfShamanEle', 'healthstone_check') end)
 	}}, 
 }
@@ -196,7 +196,7 @@ local outCombat = {
 	{_ALL},
 
 	{'Healing Surge', { 
-		(function() return dynEval('player.health <= ' .. PeFetch('NePConfShamanEle', 'healingsurgeOCC_spin')) end), 
+		(function() return dynEval('player.health <= '..PeFetch('NePConfShamanEle', 'healingsurgeOCC_spin')) end), 
 		(function() return PeFetch('NePConfShamanEle', 'healingsurgeOCC_check') end) 
 	}},
 }
