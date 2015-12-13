@@ -285,10 +285,6 @@ end
 DESC: Checks if a enemie in the OM cache can/should
 be taunted.
 
-Classifications:
-	Elite (Includes all above)
-	All
-
 Build By: MTS
 ---------------------------------------------------]]
 function NeP.Core.canTaunt()
