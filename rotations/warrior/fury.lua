@@ -106,14 +106,14 @@ local AoE = {
 
 local inCombat = {
 	{'Berserker Rage', {
-		'!player.buff(Enrage)'
+		'!player.buff(Enrage)',
 		'player.spell(Bloodthirst).cooldown > 5'
-	}}
-	{'Execute', 'player.buff(Sudden Death)'}
+	}},
+	{'Execute', 'player.buff(Sudden Death)'},
 	{'Execute', 'player.rage > 80'},
-	{'Wild Strike', 'player.rage > 90'}
-	{'Wild Strike', 'player.buff(Bloodsurge)'}
-	{'Raging Blow', 'player.spell(Raging Blow).stacks >= 2'}
+	{'Wild Strike', 'player.rage > 90'},
+	{'Wild Strike', 'player.buff(Bloodsurge)'},
+	{'Raging Blow', 'player.spell(Raging Blow).stacks >= 2'},
 	
 	--Use Bloodthirst When you are not Enraged, if you have chosen the Unquenchable Thirst talent.
 
