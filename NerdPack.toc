@@ -58,6 +58,7 @@ rotations\mage\arcane.lua
 rotations\mage\frost.lua
 rotations\shaman\resto.lua
 rotations\shaman\ele.lua
+rotations\shaman\enh.lua
 rotations\rogue\sub.lua
 rotations\rogue\assassin.lua
 rotations\rogue\combat.lua
