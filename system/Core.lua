@@ -739,14 +739,16 @@ prefix and checks if it should print.
 
 Build By: MTS
 ---------------------------------------------------]]
+local printPrefix = '|r['.._addonColor..NeP.Info.Nick..'|r]: '..NeP.Interface.printColor
 local lastPrint = ''
+
 function NeP.Core.Print(txt)
-	if txt ~= lastPrint then
-		if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Prints') then
-			local _name = _addonColor..NeP.Info.Nick
-			lastPrint = txt
-			print('|r['.._name..'|r]: '..NeP.Interface.printColor..txt)
-		end
+	local text = tostring(txt)
+	if text ~= lastPrint 
+	and not NeP.Core.hiding 
+	and NeP.Core.PeFetch('NePConf', 'Prints') then
+		lastPrint = text
+		print(printPrefix..text)
 	end
 end
 
