@@ -1,6 +1,7 @@
 local dynEval = NeP.Core.dynEval
 local PeFetch = NeP.Core.PeFetch
 local Dispel = NeP.Core.Dispel
+local addonColor = NeP.Interface.addonColor
 
 NeP.Interface.classGUIs[264] = {
 	key = 'NePConfigShammanResto',
@@ -11,7 +12,7 @@ NeP.Interface.classGUIs[264] = {
 	width = 250,
 	height = 500,
 	config = {	
-		{type = 'header', text = '|cff'..NeP.Interface.addonColor..'General Settings:', align = 'center'},
+		{type = 'header', text = '|cff'..addonColor..'General Settings:', align = 'center'},
 			{type = 'dropdown', text = 'Earth Shield on ...', key = 'ESo', 
 				list = {
 					{text = 'Tank', key = '1'},
@@ -24,27 +25,27 @@ NeP.Interface.classGUIs[264] = {
 			{type = 'spinner', text = 'Ancestral Swiftness', key = 'AncestralSwiftness', default = 30},
 		
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = '|cff'..NeP.Interface.addonColor..'Items Settings:', align = 'center'},
+		{type = 'header', text = '|cff'..addonColor..'Items Settings:', align = 'center'},
 			{type = 'spinner', text = 'Healthstone', key = 'Healthstone', default = 50},
 			{type = 'spinner', text = 'Trinket 1', key = 'Trinket1', default = 85}, 
 			{type = 'spinner', text = 'Trinket 2', key = 'Trinket2',default = 85},
 		
 		{type = 'spacer'},
 		{type = 'rule'},
-		{type = 'header', text = '|cff'..NeP.Interface.addonColor..'Tank/Focus Settings:', align = 'center'},
+		{type = 'header', text = '|cff'..addonColor..'Tank/Focus Settings:', align = 'center'},
 			{type = 'checkbox', text = 'Riptide', key = 'RiptideTank', default = true,},
 			{type = 'spinner', text = 'Healing Surge #Health', key = 'HealingSurgeTank', default = 45},
 			{type = 'spinner', text = 'Healing Wave #Health', key = 'HealingWaveTank', default = 75},
 		
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = '|cff'..NeP.Interface.addonColor..'Player Settings:', align = 'center'},
+		{type = 'header', text = '|cff'..addonColor..'Player Settings:', align = 'center'},
 			{type = 'spinner', text = 'Astral Shift', key = 'AstralShift', default = 50},
 			{type = 'spinner', text = 'Ancestral Swiftness', key = 'HealingSurgePlayer', default = 35},
 			{type = 'spinner', text = 'Riptide', key = 'RiptidePlayer', default = 95},
 			{type = 'spinner', text = 'Healing Wave', key = 'HealingWavePlayer', default = 65},
 		
 		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = '|cff'..NeP.Interface.addonColor..'Raid Settings:', align = 'center'},
+		{type = 'header', text = '|cff'..addonColor..'Raid Settings:', align = 'center'},
 			{type = 'spinner', text = 'Healing Wave', key = 'HealingWaveRaid', default = 90},
 			{type = 'spinner', text = 'Riptide', key = 'RiptideRaid', default = 95},
 			{type = 'spinner', text = 'Unleash Life', key = 'UnleashLifeRaid', default = 25},
@@ -188,7 +189,7 @@ local General = {
 	}, 'toggle.NeP_Wolf'},
 }
 
-local _Fast = {
+local HealFast = {
 	{'!73685',{	-- Unleash Life	
 		'!player.buff(73685)',
 		(function() return dynEval('lowest.health <= '..PeFetch('NePConfigShammanResto', 'UnleashLifeRaid')) end)
@@ -252,7 +253,7 @@ local RaidHealing = {
 	{'77472', (function() return dynEval('lowest.health <= '..PeFetch('NePConfigShammanResto', 'HealingWaveRaid')) end), 'lowest'}, -- Healing Wave
 }
 
-local _Player = {
+local Player = {
 	-- Survival
 	{'108271', (function() return dynEval('player.health <= '..PeFetch('NePConfigShammanResto', 'AstralShift')) end), nil}, -- Astral Shift
 	{'Stoneform', 'player.health <= 65'}, -- Stoneform // Dwarf Racial
@@ -288,6 +289,11 @@ local DPS= {
 	{'403'}, -- Lightning Bolt	
 }
 
+local outCombat = {
+	{General},
+	{Player}
+}
+
 ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Restoration'), 
 	{-- In-Combat
 		{General},
@@ -300,11 +306,11 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 			{{-- General Conditions
 				{Cooldowns, 'modifier.cooldowns'},
 				{Totems, 'toggle.NeP_Totems'},
-				{_Fast, {'lowest.health < 40', '!player.casting.percent >= 40'}},
+				{HealFast, {'lowest.health < 40', '!player.casting.percent >= 40'}},
 				{AoE, {'modifier.multitarget', '!lowest.health < 60'}},
 				{Tank, {'tank.range <= 40', 'tank.health < 100'}},
 				{Focus, {'focus.range <= 40', 'focus.health < 100'}},
-				{_Player, 'player.health < 100'},
+				{Player, 'player.health < 100'},
 				{RaidHealing, 'lowest.health < 100'},
 				{DPS, {
 					'toggle.dps',
@@ -313,10 +319,7 @@ ProbablyEngine.rotation.register_custom(264, NeP.Core.GetCrInfo('Shamman - Resto
 			}, '!player.moving'},
 		}, 'modifier.party'},
 		{{-- Solo
-			{_Player},
+			{Player},
 			{DPS, 'toggle.dps'}
 		}, '!modifier.party'},
-	},{-- Out-Combat
-		{General},
-		{_Player}
-	}, exeOnLoad)
+	}, outCombat, exeOnLoad)
