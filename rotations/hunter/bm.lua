@@ -95,7 +95,7 @@ local AoE = {
 	--Use Barrage.
 	{'Barrage'},
 	--Use Explosive Trap.
-	{'Explosive Trap', nil, 'target.ground'}
+	{'Explosive Trap', 'player.buff(77769)' , 'target.ground'}
 }
 
 local inCombat = {
