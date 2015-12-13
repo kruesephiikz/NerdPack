@@ -131,8 +131,9 @@ local Pet_InCombat = {
 	{'53271', {'player.state.snare', '!player.debuff(Dazed)'}},
 	-- Mend Pet
 	{'136', { 
-		'pet.health <= 75', 
-		'!pet.buff(136)' 
+		'pet.health < 100', 
+		'!pet.buff(136)',
+		'pet.range < 45' 
 	}}, 
 	-- Missdirect // PET 
 	{'34477', { 
