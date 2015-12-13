@@ -80,6 +80,7 @@ local Pet_InCombat = {
 }
 
 local Cooldowns = {
+	{'Bestial Wrath', {'pet.exists', 'target.petinmelee'}},
 	{'Stampede', 'player.proc.any'},
 	{'Stampede', 'player.hashero'},
 	{'Stampede', 'player.buff(19615).count >= 4'}, -- wt Frenzy
@@ -104,7 +105,7 @@ local Survival = {
 
 local AoE = {
 	--Cast Multi-Shot, as often as needed to keep up the Beast Cleave buff on your pet.
-	{'2643', 'player.focus > 60'},
+	{'2643'},
 	--Use Barrage.
 	{'Barrage'},
 	--Use Explosive Trap.
