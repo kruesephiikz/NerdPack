@@ -121,7 +121,7 @@ local inCombat = {
 	-- AoE
 	{AoE, (function() return NeP.Core.SAoE(3, 40) end)},
 	--Cast Kill Command.
-	{'34026', 'pet.exists'},
+	{'34026', {'pet.exists', 'target.petinmelee'}},
 	--Cast Kill Shot,Only available when the target is below 20% health.
 	{'Kill Shot', (function() return NeP.Core.AutoDots('Kill Shot', 0, 35) end)},
 	--Use Barrage, if you have taken this talent.
