@@ -758,12 +758,14 @@ Build By: MTS
 ---------------------------------------------------]]
 NeP.Interface.Alerts = {}
 local lastAlert = ''
+
 function NeP.Core.Alert(txt)
-	if txt ~= lastPrint then
-		if not NeP.Core.hiding and NeP.Core.PeFetch('NePConf', 'Alerts') then
-			lastAlert = txt
-			table.insert(NeP.Interface.Alerts, txt)
-		end
+	local text = tostring(txt)
+	if text ~= lastAlert
+	and NeP.Core.PeFetch('NePConf', 'Alerts')
+	and not NeP.Core.hiding then
+		lastAlert = text
+		NeP.Interface.Alerts[#NeP.Interface.Alerts+1] = text
 	end
 end
 

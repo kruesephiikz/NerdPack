@@ -400,7 +400,6 @@ local BorrowedTime = {
 		'!lowest.debuff(6788).any',
 		'!lowest.buff(10).any',
 	}, 'lowest'}, 
-
 }
 
 local outCombat = {
