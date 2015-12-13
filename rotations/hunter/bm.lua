@@ -54,29 +54,13 @@ local Pet = {
 	}, {'pet.dead', 'toggle.ressPet'}},
 }
 
-local Pet_InCombat = {
-	-- Master's Call
-	{'53271', 'player.state.stun'}, 
-	{'53271', 'player.state.root'},
-	{'53271', 'player.state.disorient'},
-	{'53271', {'player.state.snare', '!player.debuff(Dazed)'}},
-	-- Mend Pet
-	{'136', { 
-		'pet.health <= 75', 
-		'!pet.buff(136)' 
-	}}, 
-	-- Missdirect // PET 
-	{'34477', { 
-		'!player.buff(35079)', 
-		'!focus.exists', 
-		'target.threat > 85' 
-	}, 'pet'},
-	-- Missdirect // Focus
-	{'34477', { 
-		'focus.exists', 
-		'!player.buff(35079)', 
-		'target.threat > 60' 
-	}, 'focus'},
+local Interrupts = {
+	-- Counter Shot
+	{'!147362'},
+	-- Intimidation
+	{'!19577'},
+	-- Wyrven Sting
+	{'!19386'},
 }
 
 local Cooldowns = {
@@ -135,13 +119,29 @@ local inCombat = {
 	{'56641'},
 }
 
-local Interrupts = {
-	-- Counter Shot
-	{'!147362'},
-	-- Intimidation
-	{'!19577'},
-	-- Wyrven Sting
-	{'!19386'},
+local Pet_InCombat = {
+	-- Master's Call
+	{'53271', 'player.state.stun'}, 
+	{'53271', 'player.state.root'},
+	{'53271', 'player.state.disorient'},
+	{'53271', {'player.state.snare', '!player.debuff(Dazed)'}},
+	-- Mend Pet
+	{'136', { 
+		'pet.health <= 75', 
+		'!pet.buff(136)' 
+	}}, 
+	-- Missdirect // PET 
+	{'34477', { 
+		'!player.buff(35079)', 
+		'!focus.exists', 
+		'target.threat > 85' 
+	}, 'pet'},
+	-- Missdirect // Focus
+	{'34477', { 
+		'focus.exists', 
+		'!player.buff(35079)', 
+		'target.threat > 60' 
+	}, 'focus'},
 }
 
 local outCombat = {

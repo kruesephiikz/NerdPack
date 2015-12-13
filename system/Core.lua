@@ -339,7 +339,7 @@ function NeP.Core.Dispel(Spell)
 	return false
 end
 
-function NeP.Core.AutoDots(Spell, refreshAt, health)
+function NeP.Core.AutoDots(Spell, refreshAt, health, class)
 	-- Check if we have the spell before anything else...
 	if not IsUsableSpell(Spell) then return false end
 	local Spellname, Spellrank, Spellicon, SpellcastingTime, SpellminRange, SpellmaxRange, SpellID = GetSpellInfo(Spell)
@@ -347,13 +347,14 @@ function NeP.Core.AutoDots(Spell, refreshAt, health)
 	-- Dont need to fill everything
 	if refreshAt == nil then refreshAt = 0 end
 	if health == nil then health = 100 end
+	if class == nil then class = 3 end
 	-- If toggle is enabled, do automated
 	if peConfig.read('button_states', 'NeP_ADots', false) then
 		-- Iterate thru OM
 		for i=1,#NeP.OM.unitEnemie do
 			local Obj = NeP.OM.unitEnemie[i]
 			-- Affecting combat or Dummy and is elite or above
-			if (UnitAffectingCombat(Obj.key) or Obj.is == 'dummy') and Obj.class >= 3 then	
+			if (UnitAffectingCombat(Obj.key) or Obj.is == 'dummy') and Obj.class >= class then	
 				-- Sanity checks
 				if Obj.health < health
 				and UnitCanAttack('player', Obj.key)
@@ -363,9 +364,10 @@ function NeP.Core.AutoDots(Spell, refreshAt, health)
 					local _,_,_,_,_,_,debuffDuration = UnitDebuff(Obj.key, Spellname, nil, 'PLAYER')
 					if not debuffDuration or  - GetTime() < refreshAt then
 						-- Dont cast if the targedebuffDurationt is going to die
-						-- FIXME: Add a proper TTD
 						if debuffDuration == nil then debuffDuration = 0 end
-						if ProbablyEngine.condition['ttd'](Obj.key) > (debuffDuration + SpellcastingTime) then
+						if ProbablyEngine.condition['ttd'](Obj.key) > (debuffDuration + SpellcastingTime)
+						-- Instant spells should bypass
+						or SpellcastingTime < 1 then
 							-- set PEs parsed Target and return true
 							ProbablyEngine.dsl.parsedTarget = Obj.key
 							return true
@@ -374,8 +376,8 @@ function NeP.Core.AutoDots(Spell, refreshAt, health)
 				end
 			end
 		end
+	-- Fallback to single target if toggle is disabled.
 	else
-		-- Fallback to single target
 		local _,_,_,_,_,_,debuffDuration = UnitDebuff('target', Spellname, nil, 'PLAYER')
 		-- If Dont have the debuff
 		if not debuffDuration or  - GetTime() < refreshAt then
@@ -383,9 +385,13 @@ function NeP.Core.AutoDots(Spell, refreshAt, health)
 			-- Sanity Checks
 			if IsSpellInRange(Spellname, 'target')
 			and NeP.Core.Infront('player', 'target')
-			and NeP_isElite('target')
-			and ProbablyEngine.condition['ttd']('target') > (debuffDuration + SpellcastingTime) then
-				return true
+			and NeP_isElite('target') then
+				-- Dont cast if the targedebuffDurationt is going to die
+				if ProbablyEngine.condition['ttd']('target') > (debuffDuration + SpellcastingTime)
+				-- Instant spells should bypass
+				or SpellcastingTime < 1 then
+					return true
+				end
 			end
 		end
 	end

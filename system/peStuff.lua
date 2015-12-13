@@ -80,7 +80,12 @@ ProbablyEngine.condition.register('elite', function(target)
 end)
 
 ProbablyEngine.condition.register("petinmelee", function(target)
-   return (IsSpellInRange(GetSpellInfo(2649), target) == 1)
+   if FireHack then 
+		return NeP.Core.Distance('pet', target) < (UnitCombatReach('pet') + UnitCombatReach(target) + 1.5)
+	else
+		-- Unlockers wich dont have UnitCombatReach like functions...
+		return NeP.Core.Distance('pet', target) < 5
+	end
 end)
 
 ProbablyEngine.condition.register("inMelee", function(target)
