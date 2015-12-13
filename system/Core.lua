@@ -158,6 +158,12 @@ function NeP.Core.Infront(a, b)
 	end
 end
 
+--[[-----------------------------------------------
+	** NeP_isElite **
+DESC: returns if a unit is Elit or Above.
+
+Build By: MTS
+---------------------------------------------------]]
 local function NeP_isElite(unit)
 	local boss = LibStub('LibBossIDs')
 	local classification = UnitClassification(unit)
@@ -183,7 +189,12 @@ function NeP.Core.dynEval(condition, spell)
 	return _parse(condition, spell or '')
 end
 
--- test
+--[[-----------------------------------------------
+	** NeP.Core.SAoEObject **
+DESC: returns the number of units around a unit.
+
+Build By: MTS
+---------------------------------------------------]]
 local function getUnitsAround(unit)
 	local numberUnits = 0
 	for i=1,#NeP.OM.unitEnemie do
@@ -223,34 +234,29 @@ across all unlockers.
 
 Build By: MTS
 ---------------------------------------------------]]
-local _SAoE_Time = nil
+local SAoE_Time = nil
 local UnitsTotal = 0
 
 function NeP.Core.SAoE(Units, Distance)
-	if _SAoE_Time == nil or _SAoE_Time + 0.5 <= GetTime() then
-		_SAoE_Time = nil
+	-- This is to prevent iterating too much, since the information dosent change that often.
+	if SAoE_Time == nil or SAoE_Time + 0.5 <= GetTime() then
 		UnitsTotal = 0
-		
 		-- Force AoE
 		if peConfig.read('button_states', 'multitarget', false) then
 			UnitsTotal = UnitsTotal + 99
-		
 		-- SAoE
 		elseif peConfig.read('button_states', 'NeP_SAoE', false) then
 			for i=1,#NeP.OM.unitEnemie do
 				local Obj = NeP.OM.unitEnemie[i]
-				if UnitAffectingCombat(Obj.key) or Obj.is == 'dummy' then
-					if Obj.distance <= Distance then
-						UnitsTotal = UnitsTotal + 1
-					end
+				if (UnitAffectingCombat(Obj.key) or Obj.is == 'dummy')
+				and Obj.distance <= Distance then
+					UnitsTotal = UnitsTotal + 1
 				end
 			end
 		end
-		
-		_SAoE_Time = GetTime()
-		return UnitsTotal >= Units
+		SAoE_Time = GetTime()
 	end
-	
+	-- Return true or false
 	return UnitsTotal >= Units 
 end
 
@@ -268,8 +274,8 @@ local _rangeTable = {
 function NeP.Core.UnitAttackRange(unitA, unitB, _type)
 	if FireHack then 
 		return _rangeTable[_type] + UnitCombatReach(unitA) + UnitCombatReach(unitB)
-	-- Unlockers wich dont have UnitCombatReach like functions...
 	else
+		-- Unlockers wich dont have UnitCombatReach like functions...
 		return _rangeTable[_type] + 3.5
 	end
 end
@@ -375,12 +381,13 @@ function NeP.Core.AutoDots(Spell, refreshAt, health)
 	else
 		-- Fallback to single target
 		local _,_,_,_,_,_,debuffDuration = UnitDebuff('target', Spellname, nil, 'PLAYER')
+		-- If Dont have the debuff
 		if not debuffDuration or  - GetTime() < refreshAt then
 			if debuffDuration == nil then debuffDuration = 0 end
+			-- Sanity Checks
 			if IsSpellInRange(Spellname, 'target')
 			and NeP.Core.Infront('player', 'target')
 			and NeP_isElite('target')
-			-- FIXME: Add a proper TTD
 			and ProbablyEngine.condition['ttd']('target') > (debuffDuration + SpellcastingTime) then
 				return true
 			end
