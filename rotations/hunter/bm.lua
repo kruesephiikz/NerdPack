@@ -66,7 +66,8 @@ local Interrupts = {
 }
 
 local Cooldowns = {
-	{'Bestial Wrath', {'pet.exists', 'target.petinmelee'}},
+	-- Bestial Wrath
+	{'19574', {'pet.exists', 'target.petinmelee'}},
 	{'Stampede', 'player.proc.any'},
 	{'Stampede', 'player.hashero'},
 	{'Stampede', 'player.buff(19615).count >= 4'}, -- wt Frenzy
