@@ -33,12 +33,14 @@ local lib = function()
 end
 
 local Keybinds = {
-	-- Explosive Trap
-	{'82939', 'modifier.alt', 'target.ground'},
-	-- Freezing Trap
-	{'60192', 'modifier.shift', 'target.ground'},
-	-- Ice Trap
-	{'82941', 'modifier.shift', 'target.ground'},
+	{{ -- Has trap Launcher
+		-- Explosive Trap
+		{'82939', 'modifier.alt', 'target.ground'},
+		-- Freezing Trap
+		{'60192', 'modifier.shift', 'target.ground'},
+		-- Ice Trap
+		{'82941', 'modifier.shift', 'target.ground'}
+	}, 'player.buff(77769)' },
 }
 
 local Shared = {
@@ -108,9 +110,11 @@ local inCombat = {
 	--Cast Kill Command.
 	{'34026', {'pet.exists', 'target.petinmelee'}},
 	--Cast Kill Shot,Only available when the target is below 20% health.
-	{'Kill Shot', (function() return NeP.Core.AutoDots('Kill Shot', 0, 35) end)},
+	{'53351', (function() return NeP.Core.AutoDots('Kill Shot', 0, 35) end)},
 	--Use Barrage, if you have taken this talent.
 	{'Barrage'},
+	-- Focus Fire with 5 Frenzy stacks.
+	{'82692', 'player.buff(19615).count >= 5'},
 	--Cast Arcane Shot to dump any excess Focus.
 	{'3044', 'player.focus >= 80'},
 	--Cast Cobra Shot to generate Focus.
