@@ -54,7 +54,7 @@ local _Cooldowns = {
 	{'Storm Elemental Totem'},  
 	{'Elemental Mastery'},
 	{'Unleash Elements'},
-	{'Feral Spirit'}
+	{'Feral Spirit'},
 	{'#trinket1', 'player.buff(Ascendance)'}, 
 	{'#trinket2', 'player.buff(Ascendance)'}, 
 	{'Ascendance', '!player.buff(Ascendance)'}
@@ -72,7 +72,7 @@ local _Survival = {
 	{'Healing Stream Totem', { 
 		'!player.totem(Healing Stream Totem)', 
 		(function() return dynEval('player.health <= '..PeFetch('NePConfShamanEnhance', 'healingstreamtotem_spin')) end), 
-		(function() return PeFetch('NePConfShamanEnhance', 'healingstreamtotem_check') end) 
+		(function() return PeFetch('NePConfShamanEnhance', 'healingstreamtotem_check') end)
 	}},
 	{'#5512', {-- Healthstone (5512)
 		(function() return dynEval('player.health <= '..PeFetch('NePConfShamanEnhance', 'healthstone_spin')) end), 
@@ -181,20 +181,20 @@ local _AoE = {
 		'player.buff(Unleash Flame)'
 	}},
 	{'Stormstrike', {
-		'talent(4, 3)'
+		'talent(4, 3)',
 		'!player.buff(Ascendance)',
 		'player.spell(Stormstrike).charges >= 1',
 		'target.ttd <= 5',
 		'player.spell(Stormstrike).recharge < 1.3'
 	}},
 	{'Windstrike', {
-		'talent(4, 3)'
+		'talent(4, 3)',
 		'player.buff(Ascendance)',
 		'player.spell(Windstrike).charges >= 1',
 		'player.spell(Windstrike).recharge < 1.3'
 	}},
 	{'Lava Lash', {
-		'talent(4, 3)'
+		'talent(4, 3)',
 		'player.spell(Lava Lash).charges >= 1',
 		'target.ttd <= 5',
 		'player.spell(Lava Lash).recharge < 1.3'

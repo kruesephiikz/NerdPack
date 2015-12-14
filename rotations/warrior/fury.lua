@@ -67,12 +67,12 @@ local All = {
 		(function() return PeFetch('NePConfigWarrFury', 'Shout') == 'Commanding Shout' end),
 	}},
 	{Racials},
-	{'Charge',
+	{'Charge', {
 		'modifier.alt',
 		'target.spell(35).range'
 	}},
-	{'Heroic Leap'
-		'modifier.control'
+	{'Heroic Leap', {
+		'modifier.control',
 		'target.ground'
 	}},
 }
